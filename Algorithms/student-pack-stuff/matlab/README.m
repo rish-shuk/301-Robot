@@ -10,6 +10,8 @@ viewmap('map_1.txt',1); % shows track
 plotmap(m);
 %Here   'm' is the map file returned as a matrix
 
+startloc = [1,3];
+targetloc = [15,15];
 
 % Your simulations will use this structure
 [m,v,s]=dfs('map_1.txt',[startloc],[targetloc]);
