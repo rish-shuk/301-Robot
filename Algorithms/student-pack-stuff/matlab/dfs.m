@@ -15,14 +15,15 @@ function [retmap,retvisited,retsteps] = dfs( mapfile,startlocation,targetlocatio
     % Define possible moves (up, down, left, right)
     moves = [0, 1; 0, -1; 1, 0; -1, 0];
     
-    % Define function to check if a move is valid
+    % Define function to check if a move is valid // MAKE SURE MAP(r,c) IS
+    % 0 MEANING PATH
     isValidMove = @(r, c) r >= 1 && r <= rows && c >= 1 && c <= cols && map(r, c) == 0;
 
     % Initialize stack for DFS
     stack = struct('location', startlocation, 'path', []);
     stack.path = [stack.path; startlocation];
     
-    steps = [];
+    steps = []; % REMEMBER STEPS IS A VECTOR OF STEPS OF THE PATH TAKEN
     
     while ~isempty(stack)
         current = stack(end);
@@ -35,9 +36,9 @@ function [retmap,retvisited,retsteps] = dfs( mapfile,startlocation,targetlocatio
             continue;
         end
         
-        visitedMap(row, col) = 0;
-        steps = [steps; row, col];
-        placestep([row, col], size(steps));
+        visitedMap(row, col) = 0; % ADD VISITED TO CURRENT CELL
+        steps = [steps; row, col];   
+        placestep([row, col], size(steps)); % PLACE STEP ON MAP
 
         if isequal([row, col], targetlocation)
             break;
