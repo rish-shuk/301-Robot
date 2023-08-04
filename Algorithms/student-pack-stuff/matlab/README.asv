@@ -9,9 +9,14 @@ viewmap('map_1.txt',1); % shows track
 [m]=map_convert('map_1.txt');
 plotmap(m);
 %Here   'm' is the map file returned as a matrix
-[rows, cols] = size(m);
-startloc = get_random_location(rows, cols, m);
-targetloc = get_random_location(rows, cols, m);
+[rows, cols] = size(map);
+min_row = min(row);
+max_row = max(row);
+
+
+
+startloc = [rand(1,3];
+targetloc = [15,15];
 
 % Your simulations will use this structure
 [m,v,s]=dfs('map_1.txt',[startloc],[targetloc]);

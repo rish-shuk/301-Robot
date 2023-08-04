@@ -16,7 +16,7 @@ function [retmap,retvisited,retsteps] = dfs( mapfile,startlocation,targetlocatio
     moves = [0, 1; 0, -1; 1, 0; -1, 0];
     
     % Define function to check if a move is valid
-    isValidMove = @(r, c) r >= 1 && r <= rows && c >= 1 && c <= cols && map(r, c) == 1;
+    isValidMove = @(r, c) r >= 1 && r <= rows && c >= 1 && c <= cols && map(r, c) == 0;
 
     % Initialize stack for DFS
     stack = struct('location', startlocation, 'path', []);
