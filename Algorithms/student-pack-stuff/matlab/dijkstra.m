@@ -24,7 +24,7 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
     paths{startlocation(1), startlocation(2)} = startlocation;
 
     while ~isempty(pq)
-        % Extract node with the smallest distance from priority queue
+        % Extract location with the smallest distance from priority queue
         [~, idx] = min([pq.distance]);
         current = pq(idx);
         pq(idx) = [];
@@ -35,7 +35,6 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
         % Check if the node has been visited
         if visitedMap(row, col) == 1
             visitedMap(row, col) = 0;
-            % no need to update steps and placestep since we're using distances and paths
             
             % If neighbor is target location, then finish
             if isequal([row, col], targetlocation)
@@ -48,9 +47,10 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
                 newCol = col + moves(i, 2);
 
                 if isValidMove(newRow, newCol) && visitedMap(newRow, newCol) == 1
+                    % increment distance
                     newDistance = distances(row, col) + 1;
 
-                    % Update distance and path if shorter path found
+                    % compare and update distance and path if shorter path found
                     if newDistance < distances(newRow, newCol)
                         distances(newRow, newCol) = newDistance;
                         paths{newRow, newCol} = [paths{row, col}; [newRow, newCol]];

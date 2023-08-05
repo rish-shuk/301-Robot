@@ -14,7 +14,7 @@ startloc = get_random_location(rows, cols, m);
 targetloc = get_random_location(rows, cols, m);
 
 % Your simulations will use this structure
-[m,v,s]=dijkstra('map_1.txt',[startloc],[targetloc]);
+[m,v,s]=dijkstra('map_8.txt',[startloc],[targetloc]);
 %Here   'm' is the map file returned as a matrix
 %       'v' is a matrix that shows which cells have been visited, '0' means
 %       visited, '1' means not visited
