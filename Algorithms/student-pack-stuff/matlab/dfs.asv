@@ -10,19 +10,20 @@
 function [retmap,retvisited,retsteps] = dfs( mapfile,startlocation,targetlocation)
     map = map_convert(mapfile);
     [rows, cols] = size(map);
-    visitedMap = zeros(rows, cols);
+    visitedMap = ones(rows, cols);
     
     % Define possible moves (up, down, left, right)
     moves = [0, 1; 0, -1; 1, 0; -1, 0];
     
-    % Define function to check if a move is valid
+    % Define function to check if a move is valid // MAKE SURE MAP(r,c) IS
+    % 0 MEANING PATH
     isValidMove = @(r, c) r >= 1 && r <= rows && c >= 1 && c <= cols && map(r, c) == 0;
 
     % Initialize stack for DFS
     stack = struct('location', startlocation, 'path', []);
     stack.path = [stack.path; startlocation];
     
-    steps = [];
+    steps = []; % REMEMBER STEPS IS A VECTOR OF STEPS OF THE PATH TAKEN
     
     while ~isempty(stack)
         current = stack(end);
@@ -31,13 +32,14 @@ function [retmap,retvisited,retsteps] = dfs( mapfile,startlocation,targetlocatio
         row = current.location(1);
         col = current.location(2);
         
-        if visitedMap(row, col) == 1
+        if visitedMap(row, col) == 0
             continue;
         end
         
-        visitedMap(row, col) = 1;
-        steps = [steps; row, col];
-        
+        visitedMap(row, col) = 0; % ADD VISITED TO CURRENT CELL
+        steps = [steps; row, col];   
+        placestep([row, col], size(steps)); % PLACE STEP ON MAP
+
         if isequal([row, col], targetlocation)
             break;
         end
@@ -46,7 +48,7 @@ function [retmap,retvisited,retsteps] = dfs( mapfile,startlocation,targetlocatio
             newRow = row + moves(i, 1);
             newCol = col + moves(i, 2);
             
-            if isValidMove(newRow, newCol) && visitedMap(newRow, newCol) == 0
+            if isValidMove(newRow, newCol) && visitedMap(newRow, newCol) == 1
                 newStackItem = struct('location', [newRow, newCol], 'path', current.path);
                 newStackItem.path = [newStackItem.path; newRow, newCol];
                 stack = [stack; newStackItem];
