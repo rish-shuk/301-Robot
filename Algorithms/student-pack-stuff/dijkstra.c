@@ -21,11 +21,11 @@ bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) 
     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == 0);
 }
 
-void dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct Location startlocation, struct Location targetlocation) {
+struct Location dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct Location startlocation, struct Location targetlocation) {
     int visitedMap[MAX_ROWS][MAX_COLS];
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            visitedMap[i][j] = 1;
+            visitedMap[i][j] = 1; // fill visited array with 1s
         }
     }
 
@@ -38,12 +38,12 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct Location s
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            distances[i][j] = INT_MAX;
+            distances[i][j] = INT_MAX; // initialise distances as infinity
         }
     }
 
-    distances[startlocation.row][startlocation.col] = 0;
-    paths[startlocation.row][startlocation.col] = startlocation;
+    distances[startlocation.row][startlocation.col] = 0; // initialise distance of startLoc to 0
+    paths[startlocation.row][startlocation.col] = startlocation; // add start to path
 
     while (pqSize > 0) {
         int idx = 0;
@@ -63,7 +63,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct Location s
             visitedMap[row][col] = 0;
 
             if (row == targetlocation.row && col == targetlocation.col) {
-                break;
+                break; // if reached target destination
             }
 
             for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
@@ -72,14 +72,14 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct Location s
 
                 if (isValidMove(newRow, newCol, rows, cols, map) && visitedMap[newRow][newCol] == 1) {
                     int newDistance = distances[row][col] + 1;
-
+                    // take the shortest distance between new and existing
                     if (newDistance < distances[newRow][newCol]) {
                         distances[newRow][newCol] = newDistance;
                         paths[newRow][newCol] = (struct Location){row, col};
 
-                        pq[pqSize].location.row = newRow;
-                        pq[pqSize].location.col = newCol;
-                        pq[pqSize].distance = newDistance;
+                        pq[pqSize].location.row = newRow; // update location
+                        pq[pqSize].location.col = newCol; // update location
+                        pq[pqSize].distance = newDistance; // update distance
                         pqSize++;
                     }
                 }
@@ -89,6 +89,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct Location s
 
     // Process results and print paths
     // (You'll need to implement the path processing and printing here)
+    return paths;
 }
 
 int main() {
