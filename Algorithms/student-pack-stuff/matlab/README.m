@@ -10,11 +10,11 @@ viewmap('map_1.txt',1); % shows track
 plotmap(m);
 %Here   'm' is the map file returned as a matrix
 [rows, cols] = size(m);
-startloc = get_random_location(rows, cols, m);
-targetloc = get_random_location(rows, cols, m);
+startloc = [2,2] %get_random_location(rows, cols, m);
+targetloc = [6,2]; %get_random_location(rows, cols, m);
 
 % Your simulations will use this structure
-[m,v,s]=astar('map_1.txt',[startloc],[targetloc]);
+[m,v,s]=dfs('map_1.txt',[startloc],[targetloc]);
 %Here   'm' is the map file returned as a matrix
 %       'v' is a matrix that shows which cells have been visited, '0' means
 %       visited, '1' means not visited

@@ -41,8 +41,9 @@ function [retmap,retvisited,retsteps] = astar( mapfile,startlocation,targetlocat
         end
         
         visitedMap(row, col) = 0; % ADD VISITED TO CURRENT CELL
-        steps = [steps; row, col];   
-        placestep([row, col], size(steps)); % PLACE STEP ON MAP
+        
+        %placestep([row, col], size(steps)); % PLACE STEP ON MAP --
+        %irrelavnt
 
         if isequal([row, col], targetlocation)
             break;
@@ -70,6 +71,7 @@ function [retmap,retvisited,retsteps] = astar( mapfile,startlocation,targetlocat
                 for j = 1:length(openList)
                     if isequal(openList(j).location, newLocation.location)
                         inOpenList = true;
+                        steps = [steps; row, col];  % Steps is what will be placed onto the map 
                         break;
                     end
                 end
@@ -96,10 +98,11 @@ function [retmap,retvisited,retsteps] = astar( mapfile,startlocation,targetlocat
         
         closedList = [closedList; current];
     end
-    
+
+
     retmap = map;
     retvisited = visitedMap;
-    retsteps = steps;
+    retsteps = newPath;
 end
 
 
