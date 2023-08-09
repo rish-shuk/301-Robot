@@ -10,7 +10,7 @@ struct Location {
     int col;
 };
 
-struct Location get_random_location(int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
+struct Location get_random_location(int map[MAX_ROWS][MAX_COLS]) {
     struct Location randomLocation;
     int isNotValid = 1; // true
     while(isNotValid) {

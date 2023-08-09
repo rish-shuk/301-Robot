@@ -4,6 +4,11 @@
 #define ROWS 15
 #define COLS 19
 
+struct Location {
+    int row;
+    int col;
+};
+
 void readMap(char *filePath, int map[ROWS][COLS]) {
     FILE *file = fopen(filePath, "r");
 
@@ -45,7 +50,10 @@ int main() {
     readMap("map_1.txt", map);
     printMap(map);
 
-    // call dijkstra's
+    // generate random start and target location
+    struct Location startLocation = getRandomLocation(map);
+    struct Location targetLocation = getRandomLocation(map);
+
     
     return 0;
 }

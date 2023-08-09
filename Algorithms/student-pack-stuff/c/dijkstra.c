@@ -4,6 +4,7 @@
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
+#define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 struct Location {
     int row;
@@ -21,7 +22,7 @@ bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) 
     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == 0);
 }
 
-struct Location dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
+int[MAX_ROWS][MAX_ROWS] dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
     int visitedMap[MAX_ROWS][MAX_COLS];
     for (int i = 0; i < MAX_ROWS; i++) {
         for (int j = 0; j < MAX_COLS; j++) {
@@ -87,21 +88,10 @@ struct Location dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocat
         }
     }
 
-    // Process results and print paths
-    // (You'll need to implement the path processing and printing here)
-    return paths;
+    int pathMap[MAX_ROWS][MAX_COLS]; 
+    printf(ARRAY_LENGTH(paths));
+
+    
+    return pathMap;
 }
 
-int main() {
-    // Define and read the map
-    int map[MAX_ROWS][MAX_COLS];
-    int rows, cols;
-    // Read map and rows, cols values
-
-    struct Location startlocation = { /* Set start row and col */ };
-    struct Location targetlocation = { /* Set target row and col */ };
-
-    dijkstra(map, rows, cols, startlocation, targetlocation);
-
-    return 0;
-}
