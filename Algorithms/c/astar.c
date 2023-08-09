@@ -72,6 +72,14 @@ struct Node get_lowest_f(struct List list) {
     return lowest_f_node;
 }
 
+
+// OPEN - the set of nodes to be evaluated
+// CLOSED - the set of notes already evaluated
+// add the start node to OPEN
+// https://www.youtube.com/watch?v=-L-WgKMFuhE
+
+
+
 // return a pointer to a 2D array of ints -- The steps/coordinates to take to get to the target node
 // take in the start location and end location
 int** astar(struct Location startLocation, struct Location targetLocation) {
