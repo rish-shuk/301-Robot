@@ -46,18 +46,19 @@ struct Location {
 };
 
 struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
-    // Seed the random number generator with the current time
-    srand(time(NULL));
+
     struct Location randomLocation;
     int isNotValid = 1; // true
     while(isNotValid) {
-        int random_row = rand() % MAX_ROWS; // get random row and column
-        int random_col = rand() % MAX_COLS; 
+        // Seed the random number generator with the current time
+        srand(time(NULL));
+        int random_row = rand() % MAX_ROWS; 
+        int random_col = rand() % MAX_COLS; // get random row and column
         // check point on map to see if it's a path
         if(map[random_row][random_col] == 0) {
             randomLocation.row = random_row;
             randomLocation.col = random_col;
-            isNotValid = 0; 
+            isNotValid = 0; // found valid location
         }
     }
     return randomLocation;    
@@ -67,14 +68,18 @@ struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
 int main() {
     int map[MAX_ROWS][MAX_COLS];
     readMap("map_1.txt", map);
-    printMap(map);
+    
 
     // generate random start and target location
     struct Location startLocation = getRandomLocation(map);
     struct Location targetLocation = getRandomLocation(map);
 
-    printf("\n");
-    printf("Start location: %d , %d",startLocation.row, startLocation.col);
+    printf("\n");   
+    printf("Start location: %d , %d", startLocation.row, startLocation.col);
 
+    // reprint map with starting location
+    map[startLocation.row][startLocation.col] = 2;
+
+    printMap(map);
     return 0;
 }
