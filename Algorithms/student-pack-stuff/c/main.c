@@ -134,12 +134,11 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
                 
 
                 if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && visitedMap[newRow][newCol] == 1) {
-                    printf("row: %d, col: %d, newRow: %d, newCol: %d\n", row, col, newRow, newCol); // Add this line
                     int newDistance = distances[row][col] + 1;
                     // take the shortest distance between new and existing
                     if (newDistance < distances[newRow][newCol]) {
                         distances[newRow][newCol] = newDistance; // take new distance if less than existing, otherwise do nothing
-                        paths[stepNum] = (struct Location){row, col}; // add location to path array
+                        paths[stepNum] = (struct Location){newRow, newCol}; // add location to path array
                         
                         pq[pqSize].location.row = newRow; // update location
                         pq[pqSize].location.col = newCol; // update location
@@ -155,8 +154,19 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 
     // create pathMap
     for(int i = 0; i < ARRAY_LENGTH(paths); i++) {
-        // get each path location marked onto the map
-        map[paths[i].row][paths[i].col] = '*';
+        if(paths[i].row == targetlocation.row && paths[i].col == targetlocation.col) {
+            printf("%d,%d\n",paths[i].row, paths[i].col);
+            map[paths[i].row][paths[i].col] = 'x'; // mark end point
+            break;
+        } 
+        if(paths[i].row == startlocation.row && paths[i].col == startlocation.col) {
+            printf("%d,%d\n",paths[i].row, paths[i].col);
+            map[paths[i].row][paths[i].col] = '@'; // mark start point
+        } else {
+            // get each path location marked onto the map
+            printf("%d,%d\n",paths[i].row, paths[i].col);
+            map[paths[i].row][paths[i].col] = '*'; // mark path
+        }
     }
 
     printMap(map);
@@ -177,8 +187,6 @@ int main() {
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col);
 
-    // reprint map with starting location
-    map[startLocation.row][startLocation.col] = '*';
 
     dijkstra(map, startLocation, targetLocation);
     return 0;
