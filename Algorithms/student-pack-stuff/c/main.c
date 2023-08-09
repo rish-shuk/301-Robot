@@ -4,8 +4,8 @@
 #define ROWS 15
 #define COLS 19
 
-void readMap(const char *fileName, int map[ROWS][COLS]) {
-    FILE *file = fopen(fileName, "r");
+void readMap(const char *filePath, int map[ROWS][COLS]) {
+    FILE *file = fopen(filePath, "r");
 
     if (file == NULL) {
         perror("Error opening file");
@@ -27,7 +27,7 @@ void readMap(const char *fileName, int map[ROWS][COLS]) {
 
 int main() {
     int map[ROWS][COLS];
-    readMap("map1.txt", map);
+    readMap("maps/map1.txt", map);
 
     // Print the read array for verification
     for (int i = 0; i < ROWS; i++) {
