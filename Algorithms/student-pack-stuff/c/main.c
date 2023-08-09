@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "functions.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
@@ -41,6 +40,30 @@ void printMap(int map[MAX_ROWS][MAX_COLS]) {
     }
 }
 
+struct Location {
+    int row;
+    int col;
+};
+
+struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
+    // Seed the random number generator with the current time
+    srand(time(NULL));
+    struct Location randomLocation;
+    int isNotValid = 1; // true
+    while(isNotValid) {
+        int random_row = rand() % MAX_ROWS; // get random row and column
+        int random_col = rand() % MAX_COLS; 
+        // check point on map to see if it's a path
+        if(map[random_row][random_col] == 0) {
+            randomLocation.row = random_row;
+            randomLocation.col = random_col;
+            isNotValid = 0; 
+        }
+    }
+    return randomLocation;    
+}
+
+
 int main() {
     int map[MAX_ROWS][MAX_COLS];
     readMap("map_1.txt", map);
@@ -51,7 +74,7 @@ int main() {
     struct Location targetLocation = getRandomLocation(map);
 
     printf("\n");
-    printf("Start location: %d,%d",startLocation.row, startLocation.col);
+    printf("Start location: %d , %d",startLocation.row, startLocation.col);
 
     return 0;
 }

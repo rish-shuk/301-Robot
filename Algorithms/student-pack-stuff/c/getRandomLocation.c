@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <functions.h>
+#include "functions.h"
 
 #define MAX_ROWS 19
 #define MAX_COLS 15
