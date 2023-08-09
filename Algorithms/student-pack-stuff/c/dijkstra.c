@@ -91,7 +91,6 @@ int[MAX_ROWS][MAX_ROWS] dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location st
     int pathMap[MAX_ROWS][MAX_COLS]; 
     printf(ARRAY_LENGTH(paths));
 
-    
     return pathMap;
 }
 
