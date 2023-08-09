@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <functions.h>
 
 #define MAX_ROWS 19
 #define MAX_COLS 15
@@ -10,7 +11,7 @@ struct Location {
     int col;
 };
 
-struct Location get_random_location(int map[MAX_ROWS][MAX_COLS]) {
+struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
     struct Location randomLocation;
     int isNotValid = 1; // true
     while(isNotValid) {
