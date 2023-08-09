@@ -138,10 +138,14 @@ int main() {
     Location path[MAP_HEIGHT * MAP_WIDTH];
     int path_length;
 
-    astar(map_1, start, end, path, &path_length);
 
     printf("Map\n");
     print_map_1();
+
+    
+    astar(map_1, start, end, path, &path_length);
+
+
 
     // print map_1 with path ---
     // copy map
