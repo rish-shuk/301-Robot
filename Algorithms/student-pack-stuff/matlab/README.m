@@ -24,5 +24,5 @@ targetloc = [6,2]; %get_random_location(rows, cols, m);
 %       [targetloc] is also a vector ie [4,18]
 
 %To view the path determined above use 
-plotmap(m,s);
+plotmap(m,s);   
 

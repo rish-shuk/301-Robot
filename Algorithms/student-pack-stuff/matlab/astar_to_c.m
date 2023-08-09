@@ -9,7 +9,7 @@
 % write your own function for the AStar algorithm.
 function [retmap,retvisited,retsteps] = astar_to_c( matrix,startlocation,targetlocation)
     map = matrix;
-    [rows, cols] = size(map);
+    [rows, cols] = size(map);   
     visitedMap = ones(rows, cols);
     
     % Define possible moves (up, down, left, right)
