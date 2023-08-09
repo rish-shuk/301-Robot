@@ -21,10 +21,10 @@ bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) 
     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == 0);
 }
 
-struct Location dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct Location startlocation, struct Location targetlocation) {
+struct Location dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
     int visitedMap[MAX_ROWS][MAX_COLS];
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+    for (int i = 0; i < MAX_ROWS; i++) {
+        for (int j = 0; j < MAX_COLS; j++) {
             visitedMap[i][j] = 1; // fill visited array with 1s
         }
     }
@@ -36,8 +36,8 @@ struct Location dijkstra(int map[MAX_ROWS][MAX_COLS], int rows, int cols, struct
     int distances[MAX_ROWS][MAX_COLS];
     struct Location paths[MAX_ROWS][MAX_COLS];
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+    for (int i = 0; i < MAX_ROWS; i++) {
+        for (int j = 0; j < MAX_COLS; j++) {
             distances[i][j] = INT_MAX; // initialise distances as infinity
         }
     }

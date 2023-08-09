@@ -30,10 +30,7 @@ void readMap(char *filePath, int map[ROWS][COLS]) {
     fclose(file); // Close text file
 }
 
-int main() {
-    int map[ROWS][COLS];
-    readMap("map_1.txt", map);
-
+void printMap(int map[ROWS][COLS]) {
     // Print the map in a grid format
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
@@ -41,6 +38,14 @@ int main() {
         }
         printf("\n");
     }
+}
 
+int main() {
+    int map[ROWS][COLS];
+    readMap("map_1.txt", map);
+    printMap(map);
+
+    // call dijkstra's
+    
     return 0;
 }
