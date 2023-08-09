@@ -18,9 +18,11 @@ function [retmap,retvisited,retsteps] = astar_to_c( matrix,startlocation,targetl
     % Define function to check if a move is valid // MAKE SURE MAP(r,c) IS
     % 0 MEANING PATH
     isValidMove = @(r, c) r >= 1 && r <= rows && c >= 1 && c <= cols && map(r, c) == 0;
-    
+    emptyLocation = zeros(1,2);
+    emptyPath = zeros(1,2);
+    emptyF = zeros(1,1);
     % Initialize open list and closed list
-    openList = struct('location', {zeros(2,300)}, 'path', {zeros(2,300)}, 'f', {});
+    openList = struct('location', {emptyLocation}, 'path', {emptyPath}, 'f', {emptyF});
     openList(1).location = startlocation;
     openList(1).path = startlocation;
     openList(1).f = 0;
@@ -55,6 +57,7 @@ function [retmap,retvisited,retsteps] = astar_to_c( matrix,startlocation,targetl
             
             if isValidMove(newRow, newCol) && visitedMap(newRow, newCol) == 1
                 newPath = [current.path; newRow, newCol];
+                steps = [steps; newRow, newCol];
                 g = size(newPath, 1); % Distance from start
                 h = abs(newRow - targetlocation(1)) + abs(newCol - targetlocation(2)); % Manhattan distance heuristic
                 f = g + h;
@@ -64,7 +67,6 @@ function [retmap,retvisited,retsteps] = astar_to_c( matrix,startlocation,targetl
                 % options.
                 % The goal is to choose the lowest F cost over and over
                 % again until we reach the target location.
-
                 newLocation = struct('location', [newRow, newCol], 'path', newPath, 'f', f);
                 
                 inOpenList = false;
@@ -101,7 +103,7 @@ function [retmap,retvisited,retsteps] = astar_to_c( matrix,startlocation,targetl
 
     retmap = map;
     retvisited = visitedMap;
-    retsteps = newPath;
+    retsteps = steps;
 end
 
 

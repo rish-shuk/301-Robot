@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2023a">
-  <configuration file="C:\Projects\University\301-Robot\Algorithms\student-pack-stuff\matlab\astar_to_c.prj" location="C:\Projects\University\301-Robot\Algorithms\student-pack-stuff\matlab" name="astar_to_c" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration file="G:\GitHub\301-Robot\Algorithms\student-pack-stuff\matlab\astar_to_c.prj" location="G:\GitHub\301-Robot\Algorithms\student-pack-stuff\matlab" name="astar_to_c" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -595,7 +595,9 @@
     </profile>
     <param.objective>option.objective.c</param.objective>
     <param.WorkflowStep>verifyCompatibility</param.WorkflowStep>
-    <param.TestSnippets />
+    <param.TestSnippets>
+      <item>readme</item>
+    </param.TestSnippets>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
     <param.outputfile>${PROJECT_ROOT}\codegen\lib\astar_to_c\astar_to_c.lib</param.outputfile>
@@ -625,10 +627,10 @@
     <var.gc.lastOutputType />
     <var.gc.preBuildChecksum />
     <var.cfi.lastOutputRoot>codegen\mex\astar_to_c</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>2700412332</var.cfi.preBuildChecksum>
+    <var.cfi.preBuildChecksum>2430858522</var.cfi.preBuildChecksum>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
     <var.lastUserSourceChecksum />
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;C:\Projects\University\301-Robot\Algorithms\student-pack-stuff\matlab\astar_to_c.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;G:\GitHub\301-Robot\Algorithms\student-pack-stuff\matlab\astar_to_c.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.NoDefaultJIT>false</param.NoDefaultJIT>
     <param.configImportActive>false</param.configImportActive>
@@ -744,7 +746,6 @@
     <param.FixedPointUseDesignRanges>false</param.FixedPointUseDesignRanges>
     <unset>
       <param.objective />
-      <param.TestSnippets />
       <param.ExternalFcnMajority />
       <param.UseGlobals />
       <param.outputfile />
@@ -886,10 +887,12 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}\astar_to_c.m">
-        <Marker>1691463173404</Marker>
+        <Marker>1691576306712</Marker>
       </file>
     </fileset.entrypoints>
-    <fileset.testbench />
+    <fileset.testbench>
+      <file>${PROJECT_ROOT}\README.m</file>
+    </fileset.testbench>
     <fileset.inputtypes>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}\astar_to_c.m">
         <Inputs fileName="astar_to_c.m" functionName="astar_to_c">
@@ -898,31 +901,33 @@
           <Input Name="targetlocation" typeId="1" />
           <idpTable>
             <type typeId="0">
-              <Class>uint8</Class>
-              <Size>19 x 15</Size>
+              <Class>double</Class>
+              <Size>15 x 19</Size>
               <Value />
               <InitialValue />
-              <UserDefined>true</UserDefined>
+              <UserDefined>false</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
             <type typeId="1">
-              <Class>uint8</Class>
+              <Class>double</Class>
               <Size>1 x 2</Size>
               <Value />
               <InitialValue />
-              <UserDefined>true</UserDefined>
+              <UserDefined>false</UserDefined>
               <Complex>false</Complex>
+              <Sparse>false</Sparse>
             </type>
           </idpTable>
         </Inputs>
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\codegen\lib\astar_to_c" name="astar_to_c.lib" optional="false">C:\Projects\University\301-Robot\Algorithms\student-pack-stuff\matlab\codegen\lib\astar_to_c\astar_to_c.lib</file>
+      <file location="${PROJECT_ROOT}\codegen\lib\astar_to_c" name="astar_to_c.lib" optional="false">G:\GitHub\301-Robot\Algorithms\student-pack-stuff\matlab\codegen\lib\astar_to_c\astar_to_c.lib</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>C:\Program Files\MATLAB\R2023a</root>
+      <root>G:\Program Files\MATLAB\R2023a</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
       </toolboxes>
