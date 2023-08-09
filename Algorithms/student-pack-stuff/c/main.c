@@ -4,7 +4,7 @@
 #define ROWS 15
 #define COLS 19
 
-void readMap(const char *filePath, int map[ROWS][COLS]) {
+void readMap(char *filePath, int map[ROWS][COLS]) {
     FILE *file = fopen(filePath, "r");
 
     if (file == NULL) {
@@ -14,11 +14,8 @@ void readMap(const char *filePath, int map[ROWS][COLS]) {
 
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
-            if (fscanf(file, "%d", &map[i][j]) != 1) {
-                fprintf(stderr, "Error reading data from file");
-                fclose(file);
-                exit(1); // Exit the program if reading data fails
-            }
+            int ch = fgetc(file);
+            map[i][j] = ch;
         }
     }
 
@@ -27,15 +24,18 @@ void readMap(const char *filePath, int map[ROWS][COLS]) {
 
 int main() {
     int map[ROWS][COLS];
-    readMap("maps/map1.txt", map);
+    readMap("map_1.txt", map);
 
-    // Print the read array for verification
+    // Print the characters in the map without newlines
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
-            printf("%d ", map[i][j]);
+            if (map[i][j] != '\n') {
+                printf("%c", map[i][j]);
+            }
         }
         printf("\n");
     }
+
 
     return 0;
 }

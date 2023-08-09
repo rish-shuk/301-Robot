@@ -2,8 +2,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define MAX_ROWS 19;
-#define MAX_COLS 15;
+#define MAX_ROWS 19
+#define MAX_COLS 15
 
 struct Location {
     int row;
