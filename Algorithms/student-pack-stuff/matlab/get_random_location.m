@@ -1,4 +1,4 @@
-function [random_position] = get_random_location( rows, cols, map)
+function [random_position] = get_random_location(rows, cols, map)
 isNotValid = true;
 
 while (isNotValid)

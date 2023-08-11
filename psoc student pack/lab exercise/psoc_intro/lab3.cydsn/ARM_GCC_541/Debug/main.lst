@@ -1,0 +1,690 @@
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.InterruptHandler,"ax",%progbits
+  20              		.align	2
+  21              		.global	InterruptHandler
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	InterruptHandler, %function
+  25              	InterruptHandler:
+  26              	.LFB63:
+  27              		.file 1 "main.c"
+   1:main.c        **** 
+   2:main.c        **** /* ========================================
+   3:main.c        ****  * Laboratory Exercise 3
+   4:main.c        ****  *
+   5:main.c        ****  * Program timer to flash LED at 1Hz, use interrupts
+   6:main.c        ****  *
+   7:main.c        ****  * Copyright Univ of Auckland, 2016
+   8:main.c        ****  * All Rights Reserved
+   9:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+  10:main.c        ****  *
+  11:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+  12:main.c        ****  * WHICH IS THE PROPERTY OF Univ of Auckland.
+  13:main.c        ****  *
+  14:main.c        ****  * ========================================
+  15:main.c        **** */
+  16:main.c        **** #include <project.h>
+  17:main.c        **** 
+  18:main.c        **** CY_ISR(InterruptHandler) {
+  28              		.loc 1 18 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 08B5     		push	{r3, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+  19:main.c        ****     LED_Write(~LED_Read()); // toggle LED
+  36              		.loc 1 19 0
+  37 0002 FFF7FEFF 		bl	LED_Read
+  38              	.LVL0:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 2
+
+
+  39 0006 C043     		mvns	r0, r0
+  40 0008 C0B2     		uxtb	r0, r0
+  41 000a FFF7FEFF 		bl	LED_Write
+  42              	.LVL1:
+  20:main.c        ****     Timer_1_ReadStatusRegister(); // clear interrupt
+  43              		.loc 1 20 0
+  44 000e FFF7FEFF 		bl	Timer_1_ReadStatusRegister
+  45              	.LVL2:
+  46 0012 08BD     		pop	{r3, pc}
+  47              		.cfi_endproc
+  48              	.LFE63:
+  49              		.size	InterruptHandler, .-InterruptHandler
+  50              		.section	.text.main,"ax",%progbits
+  51              		.align	2
+  52              		.global	main
+  53              		.thumb
+  54              		.thumb_func
+  55              		.type	main, %function
+  56              	main:
+  57              	.LFB64:
+  21:main.c        **** }
+  22:main.c        **** 
+  23:main.c        **** int main()
+  24:main.c        **** {
+  58              		.loc 1 24 0
+  59              		.cfi_startproc
+  60              		@ Volatile: function does not return.
+  61              		@ args = 0, pretend = 0, frame = 0
+  62              		@ frame_needed = 0, uses_anonymous_args = 0
+  63 0000 08B5     		push	{r3, lr}
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 3, -8
+  66              		.cfi_offset 14, -4
+  25:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  67              		.loc 1 25 0
+  68              		.syntax unified
+  69              	@ 25 "main.c" 1
+  70 0002 62B6     		CPSIE   i
+  71              	@ 0 "" 2
+  26:main.c        **** 
+  27:main.c        ****     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+  28:main.c        ****     timer_clock_Start(); // start clock
+  72              		.loc 1 28 0
+  73              		.thumb
+  74              		.syntax unified
+  75 0004 FFF7FEFF 		bl	timer_clock_Start
+  76              	.LVL3:
+  29:main.c        ****     Timer_1_Start(); // start timer
+  77              		.loc 1 29 0
+  78 0008 FFF7FEFF 		bl	Timer_1_Start
+  79              	.LVL4:
+  30:main.c        ****     isr_TC_StartEx(InterruptHandler); // start and enable interrupt
+  80              		.loc 1 30 0
+  81 000c 0148     		ldr	r0, .L6
+  82 000e FFF7FEFF 		bl	isr_TC_StartEx
+  83              	.LVL5:
+  84              	.L4:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 3
+
+
+  85 0012 FEE7     		b	.L4
+  86              	.L7:
+  87              		.align	2
+  88              	.L6:
+  89 0014 00000000 		.word	InterruptHandler
+  90              		.cfi_endproc
+  91              	.LFE64:
+  92              		.size	main, .-main
+  93              		.text
+  94              	.Letext0:
+  95              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+  96              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+  97              		.file 4 "Generated_Source\\PSoC5/LED.h"
+  98              		.file 5 "Generated_Source\\PSoC5/Timer_1.h"
+  99              		.file 6 "Generated_Source\\PSoC5/timer_clock.h"
+ 100              		.file 7 "Generated_Source\\PSoC5/isr_TC.h"
+ 101              		.file 8 "Generated_Source\\PSoC5/core_cm3.h"
+ 102              		.section	.debug_info,"",%progbits
+ 103              	.Ldebug_info0:
+ 104 0000 64010000 		.4byte	0x164
+ 105 0004 0400     		.2byte	0x4
+ 106 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 107 000a 04       		.byte	0x4
+ 108 000b 01       		.uleb128 0x1
+ 109 000c 5D000000 		.4byte	.LASF22
+ 110 0010 0C       		.byte	0xc
+ 111 0011 45000000 		.4byte	.LASF23
+ 112 0015 3A010000 		.4byte	.LASF24
+ 113 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 114 001d 00000000 		.4byte	0
+ 115 0021 00000000 		.4byte	.Ldebug_line0
+ 116 0025 02       		.uleb128 0x2
+ 117 0026 01       		.byte	0x1
+ 118 0027 06       		.byte	0x6
+ 119 0028 51000000 		.4byte	.LASF0
+ 120 002c 02       		.uleb128 0x2
+ 121 002d 01       		.byte	0x1
+ 122 002e 08       		.byte	0x8
+ 123 002f C4010000 		.4byte	.LASF1
+ 124 0033 02       		.uleb128 0x2
+ 125 0034 02       		.byte	0x2
+ 126 0035 05       		.byte	0x5
+ 127 0036 22020000 		.4byte	.LASF2
+ 128 003a 02       		.uleb128 0x2
+ 129 003b 02       		.byte	0x2
+ 130 003c 07       		.byte	0x7
+ 131 003d 1E010000 		.4byte	.LASF3
+ 132 0041 03       		.uleb128 0x3
+ 133 0042 12020000 		.4byte	.LASF9
+ 134 0046 02       		.byte	0x2
+ 135 0047 3F       		.byte	0x3f
+ 136 0048 4C000000 		.4byte	0x4c
+ 137 004c 02       		.uleb128 0x2
+ 138 004d 04       		.byte	0x4
+ 139 004e 05       		.byte	0x5
+ 140 004f D7010000 		.4byte	.LASF4
+ 141 0053 02       		.uleb128 0x2
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 4
+
+
+ 142 0054 04       		.byte	0x4
+ 143 0055 07       		.byte	0x7
+ 144 0056 F5000000 		.4byte	.LASF5
+ 145 005a 02       		.uleb128 0x2
+ 146 005b 08       		.byte	0x8
+ 147 005c 05       		.byte	0x5
+ 148 005d 00000000 		.4byte	.LASF6
+ 149 0061 02       		.uleb128 0x2
+ 150 0062 08       		.byte	0x8
+ 151 0063 07       		.byte	0x7
+ 152 0064 07010000 		.4byte	.LASF7
+ 153 0068 04       		.uleb128 0x4
+ 154 0069 04       		.byte	0x4
+ 155 006a 05       		.byte	0x5
+ 156 006b 696E7400 		.ascii	"int\000"
+ 157 006f 02       		.uleb128 0x2
+ 158 0070 04       		.byte	0x4
+ 159 0071 07       		.byte	0x7
+ 160 0072 29000000 		.4byte	.LASF8
+ 161 0076 03       		.uleb128 0x3
+ 162 0077 2C020000 		.4byte	.LASF10
+ 163 007b 03       		.byte	0x3
+ 164 007c 2C       		.byte	0x2c
+ 165 007d 41000000 		.4byte	0x41
+ 166 0081 02       		.uleb128 0x2
+ 167 0082 04       		.byte	0x4
+ 168 0083 04       		.byte	0x4
+ 169 0084 1C020000 		.4byte	.LASF11
+ 170 0088 02       		.uleb128 0x2
+ 171 0089 08       		.byte	0x8
+ 172 008a 04       		.byte	0x4
+ 173 008b E0010000 		.4byte	.LASF12
+ 174 008f 02       		.uleb128 0x2
+ 175 0090 01       		.byte	0x1
+ 176 0091 08       		.byte	0x8
+ 177 0092 D2010000 		.4byte	.LASF13
+ 178 0096 02       		.uleb128 0x2
+ 179 0097 08       		.byte	0x8
+ 180 0098 04       		.byte	0x4
+ 181 0099 06020000 		.4byte	.LASF14
+ 182 009d 02       		.uleb128 0x2
+ 183 009e 04       		.byte	0x4
+ 184 009f 07       		.byte	0x7
+ 185 00a0 45020000 		.4byte	.LASF15
+ 186 00a4 05       		.uleb128 0x5
+ 187 00a5 34020000 		.4byte	.LASF25
+ 188 00a9 01       		.byte	0x1
+ 189 00aa 12       		.byte	0x12
+ 190 00ab 00000000 		.4byte	.LFB63
+ 191 00af 14000000 		.4byte	.LFE63-.LFB63
+ 192 00b3 01       		.uleb128 0x1
+ 193 00b4 9C       		.byte	0x9c
+ 194 00b5 D5000000 		.4byte	0xd5
+ 195 00b9 06       		.uleb128 0x6
+ 196 00ba 06000000 		.4byte	.LVL0
+ 197 00be 25010000 		.4byte	0x125
+ 198 00c2 06       		.uleb128 0x6
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 5
+
+
+ 199 00c3 0E000000 		.4byte	.LVL1
+ 200 00c7 30010000 		.4byte	0x130
+ 201 00cb 06       		.uleb128 0x6
+ 202 00cc 12000000 		.4byte	.LVL2
+ 203 00d0 3B010000 		.4byte	0x13b
+ 204 00d4 00       		.byte	0
+ 205 00d5 07       		.uleb128 0x7
+ 206 00d6 4C000000 		.4byte	.LASF26
+ 207 00da 01       		.byte	0x1
+ 208 00db 17       		.byte	0x17
+ 209 00dc 68000000 		.4byte	0x68
+ 210 00e0 00000000 		.4byte	.LFB64
+ 211 00e4 18000000 		.4byte	.LFE64-.LFB64
+ 212 00e8 01       		.uleb128 0x1
+ 213 00e9 9C       		.byte	0x9c
+ 214 00ea 14010000 		.4byte	0x114
+ 215 00ee 06       		.uleb128 0x6
+ 216 00ef 08000000 		.4byte	.LVL3
+ 217 00f3 46010000 		.4byte	0x146
+ 218 00f7 06       		.uleb128 0x6
+ 219 00f8 0C000000 		.4byte	.LVL4
+ 220 00fc 51010000 		.4byte	0x151
+ 221 0100 08       		.uleb128 0x8
+ 222 0101 12000000 		.4byte	.LVL5
+ 223 0105 5C010000 		.4byte	0x15c
+ 224 0109 09       		.uleb128 0x9
+ 225 010a 01       		.uleb128 0x1
+ 226 010b 50       		.byte	0x50
+ 227 010c 05       		.uleb128 0x5
+ 228 010d 03       		.byte	0x3
+ 229 010e 00000000 		.4byte	InterruptHandler
+ 230 0112 00       		.byte	0
+ 231 0113 00       		.byte	0
+ 232 0114 0A       		.uleb128 0xa
+ 233 0115 E7010000 		.4byte	.LASF27
+ 234 0119 08       		.byte	0x8
+ 235 011a 1207     		.2byte	0x712
+ 236 011c 20010000 		.4byte	0x120
+ 237 0120 0B       		.uleb128 0xb
+ 238 0121 76000000 		.4byte	0x76
+ 239 0125 0C       		.uleb128 0xc
+ 240 0126 31010000 		.4byte	.LASF16
+ 241 012a 31010000 		.4byte	.LASF16
+ 242 012e 04       		.byte	0x4
+ 243 012f 29       		.byte	0x29
+ 244 0130 0C       		.uleb128 0xc
+ 245 0131 EB000000 		.4byte	.LASF17
+ 246 0135 EB000000 		.4byte	.LASF17
+ 247 0139 04       		.byte	0x4
+ 248 013a 26       		.byte	0x26
+ 249 013b 0C       		.uleb128 0xc
+ 250 013c 0E000000 		.4byte	.LASF18
+ 251 0140 0E000000 		.4byte	.LASF18
+ 252 0144 05       		.byte	0x5
+ 253 0145 5E       		.byte	0x5e
+ 254 0146 0C       		.uleb128 0xc
+ 255 0147 F4010000 		.4byte	.LASF19
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 6
+
+
+ 256 014b F4010000 		.4byte	.LASF19
+ 257 014f 06       		.byte	0x6
+ 258 0150 27       		.byte	0x27
+ 259 0151 0C       		.uleb128 0xc
+ 260 0152 B6010000 		.4byte	.LASF20
+ 261 0156 B6010000 		.4byte	.LASF20
+ 262 015a 05       		.byte	0x5
+ 263 015b 5A       		.byte	0x5a
+ 264 015c 0C       		.uleb128 0xc
+ 265 015d 36000000 		.4byte	.LASF21
+ 266 0161 36000000 		.4byte	.LASF21
+ 267 0165 07       		.byte	0x7
+ 268 0166 18       		.byte	0x18
+ 269 0167 00       		.byte	0
+ 270              		.section	.debug_abbrev,"",%progbits
+ 271              	.Ldebug_abbrev0:
+ 272 0000 01       		.uleb128 0x1
+ 273 0001 11       		.uleb128 0x11
+ 274 0002 01       		.byte	0x1
+ 275 0003 25       		.uleb128 0x25
+ 276 0004 0E       		.uleb128 0xe
+ 277 0005 13       		.uleb128 0x13
+ 278 0006 0B       		.uleb128 0xb
+ 279 0007 03       		.uleb128 0x3
+ 280 0008 0E       		.uleb128 0xe
+ 281 0009 1B       		.uleb128 0x1b
+ 282 000a 0E       		.uleb128 0xe
+ 283 000b 55       		.uleb128 0x55
+ 284 000c 17       		.uleb128 0x17
+ 285 000d 11       		.uleb128 0x11
+ 286 000e 01       		.uleb128 0x1
+ 287 000f 10       		.uleb128 0x10
+ 288 0010 17       		.uleb128 0x17
+ 289 0011 00       		.byte	0
+ 290 0012 00       		.byte	0
+ 291 0013 02       		.uleb128 0x2
+ 292 0014 24       		.uleb128 0x24
+ 293 0015 00       		.byte	0
+ 294 0016 0B       		.uleb128 0xb
+ 295 0017 0B       		.uleb128 0xb
+ 296 0018 3E       		.uleb128 0x3e
+ 297 0019 0B       		.uleb128 0xb
+ 298 001a 03       		.uleb128 0x3
+ 299 001b 0E       		.uleb128 0xe
+ 300 001c 00       		.byte	0
+ 301 001d 00       		.byte	0
+ 302 001e 03       		.uleb128 0x3
+ 303 001f 16       		.uleb128 0x16
+ 304 0020 00       		.byte	0
+ 305 0021 03       		.uleb128 0x3
+ 306 0022 0E       		.uleb128 0xe
+ 307 0023 3A       		.uleb128 0x3a
+ 308 0024 0B       		.uleb128 0xb
+ 309 0025 3B       		.uleb128 0x3b
+ 310 0026 0B       		.uleb128 0xb
+ 311 0027 49       		.uleb128 0x49
+ 312 0028 13       		.uleb128 0x13
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 7
+
+
+ 313 0029 00       		.byte	0
+ 314 002a 00       		.byte	0
+ 315 002b 04       		.uleb128 0x4
+ 316 002c 24       		.uleb128 0x24
+ 317 002d 00       		.byte	0
+ 318 002e 0B       		.uleb128 0xb
+ 319 002f 0B       		.uleb128 0xb
+ 320 0030 3E       		.uleb128 0x3e
+ 321 0031 0B       		.uleb128 0xb
+ 322 0032 03       		.uleb128 0x3
+ 323 0033 08       		.uleb128 0x8
+ 324 0034 00       		.byte	0
+ 325 0035 00       		.byte	0
+ 326 0036 05       		.uleb128 0x5
+ 327 0037 2E       		.uleb128 0x2e
+ 328 0038 01       		.byte	0x1
+ 329 0039 3F       		.uleb128 0x3f
+ 330 003a 19       		.uleb128 0x19
+ 331 003b 03       		.uleb128 0x3
+ 332 003c 0E       		.uleb128 0xe
+ 333 003d 3A       		.uleb128 0x3a
+ 334 003e 0B       		.uleb128 0xb
+ 335 003f 3B       		.uleb128 0x3b
+ 336 0040 0B       		.uleb128 0xb
+ 337 0041 27       		.uleb128 0x27
+ 338 0042 19       		.uleb128 0x19
+ 339 0043 11       		.uleb128 0x11
+ 340 0044 01       		.uleb128 0x1
+ 341 0045 12       		.uleb128 0x12
+ 342 0046 06       		.uleb128 0x6
+ 343 0047 40       		.uleb128 0x40
+ 344 0048 18       		.uleb128 0x18
+ 345 0049 9742     		.uleb128 0x2117
+ 346 004b 19       		.uleb128 0x19
+ 347 004c 01       		.uleb128 0x1
+ 348 004d 13       		.uleb128 0x13
+ 349 004e 00       		.byte	0
+ 350 004f 00       		.byte	0
+ 351 0050 06       		.uleb128 0x6
+ 352 0051 898201   		.uleb128 0x4109
+ 353 0054 00       		.byte	0
+ 354 0055 11       		.uleb128 0x11
+ 355 0056 01       		.uleb128 0x1
+ 356 0057 31       		.uleb128 0x31
+ 357 0058 13       		.uleb128 0x13
+ 358 0059 00       		.byte	0
+ 359 005a 00       		.byte	0
+ 360 005b 07       		.uleb128 0x7
+ 361 005c 2E       		.uleb128 0x2e
+ 362 005d 01       		.byte	0x1
+ 363 005e 3F       		.uleb128 0x3f
+ 364 005f 19       		.uleb128 0x19
+ 365 0060 03       		.uleb128 0x3
+ 366 0061 0E       		.uleb128 0xe
+ 367 0062 3A       		.uleb128 0x3a
+ 368 0063 0B       		.uleb128 0xb
+ 369 0064 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 8
+
+
+ 370 0065 0B       		.uleb128 0xb
+ 371 0066 49       		.uleb128 0x49
+ 372 0067 13       		.uleb128 0x13
+ 373 0068 8701     		.uleb128 0x87
+ 374 006a 19       		.uleb128 0x19
+ 375 006b 11       		.uleb128 0x11
+ 376 006c 01       		.uleb128 0x1
+ 377 006d 12       		.uleb128 0x12
+ 378 006e 06       		.uleb128 0x6
+ 379 006f 40       		.uleb128 0x40
+ 380 0070 18       		.uleb128 0x18
+ 381 0071 9742     		.uleb128 0x2117
+ 382 0073 19       		.uleb128 0x19
+ 383 0074 01       		.uleb128 0x1
+ 384 0075 13       		.uleb128 0x13
+ 385 0076 00       		.byte	0
+ 386 0077 00       		.byte	0
+ 387 0078 08       		.uleb128 0x8
+ 388 0079 898201   		.uleb128 0x4109
+ 389 007c 01       		.byte	0x1
+ 390 007d 11       		.uleb128 0x11
+ 391 007e 01       		.uleb128 0x1
+ 392 007f 31       		.uleb128 0x31
+ 393 0080 13       		.uleb128 0x13
+ 394 0081 00       		.byte	0
+ 395 0082 00       		.byte	0
+ 396 0083 09       		.uleb128 0x9
+ 397 0084 8A8201   		.uleb128 0x410a
+ 398 0087 00       		.byte	0
+ 399 0088 02       		.uleb128 0x2
+ 400 0089 18       		.uleb128 0x18
+ 401 008a 9142     		.uleb128 0x2111
+ 402 008c 18       		.uleb128 0x18
+ 403 008d 00       		.byte	0
+ 404 008e 00       		.byte	0
+ 405 008f 0A       		.uleb128 0xa
+ 406 0090 34       		.uleb128 0x34
+ 407 0091 00       		.byte	0
+ 408 0092 03       		.uleb128 0x3
+ 409 0093 0E       		.uleb128 0xe
+ 410 0094 3A       		.uleb128 0x3a
+ 411 0095 0B       		.uleb128 0xb
+ 412 0096 3B       		.uleb128 0x3b
+ 413 0097 05       		.uleb128 0x5
+ 414 0098 49       		.uleb128 0x49
+ 415 0099 13       		.uleb128 0x13
+ 416 009a 3F       		.uleb128 0x3f
+ 417 009b 19       		.uleb128 0x19
+ 418 009c 3C       		.uleb128 0x3c
+ 419 009d 19       		.uleb128 0x19
+ 420 009e 00       		.byte	0
+ 421 009f 00       		.byte	0
+ 422 00a0 0B       		.uleb128 0xb
+ 423 00a1 35       		.uleb128 0x35
+ 424 00a2 00       		.byte	0
+ 425 00a3 49       		.uleb128 0x49
+ 426 00a4 13       		.uleb128 0x13
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 9
+
+
+ 427 00a5 00       		.byte	0
+ 428 00a6 00       		.byte	0
+ 429 00a7 0C       		.uleb128 0xc
+ 430 00a8 2E       		.uleb128 0x2e
+ 431 00a9 00       		.byte	0
+ 432 00aa 3F       		.uleb128 0x3f
+ 433 00ab 19       		.uleb128 0x19
+ 434 00ac 3C       		.uleb128 0x3c
+ 435 00ad 19       		.uleb128 0x19
+ 436 00ae 6E       		.uleb128 0x6e
+ 437 00af 0E       		.uleb128 0xe
+ 438 00b0 03       		.uleb128 0x3
+ 439 00b1 0E       		.uleb128 0xe
+ 440 00b2 3A       		.uleb128 0x3a
+ 441 00b3 0B       		.uleb128 0xb
+ 442 00b4 3B       		.uleb128 0x3b
+ 443 00b5 0B       		.uleb128 0xb
+ 444 00b6 00       		.byte	0
+ 445 00b7 00       		.byte	0
+ 446 00b8 00       		.byte	0
+ 447              		.section	.debug_aranges,"",%progbits
+ 448 0000 24000000 		.4byte	0x24
+ 449 0004 0200     		.2byte	0x2
+ 450 0006 00000000 		.4byte	.Ldebug_info0
+ 451 000a 04       		.byte	0x4
+ 452 000b 00       		.byte	0
+ 453 000c 0000     		.2byte	0
+ 454 000e 0000     		.2byte	0
+ 455 0010 00000000 		.4byte	.LFB63
+ 456 0014 14000000 		.4byte	.LFE63-.LFB63
+ 457 0018 00000000 		.4byte	.LFB64
+ 458 001c 18000000 		.4byte	.LFE64-.LFB64
+ 459 0020 00000000 		.4byte	0
+ 460 0024 00000000 		.4byte	0
+ 461              		.section	.debug_ranges,"",%progbits
+ 462              	.Ldebug_ranges0:
+ 463 0000 00000000 		.4byte	.LFB63
+ 464 0004 14000000 		.4byte	.LFE63
+ 465 0008 00000000 		.4byte	.LFB64
+ 466 000c 18000000 		.4byte	.LFE64
+ 467 0010 00000000 		.4byte	0
+ 468 0014 00000000 		.4byte	0
+ 469              		.section	.debug_line,"",%progbits
+ 470              	.Ldebug_line0:
+ 471 0000 9C010000 		.section	.debug_str,"MS",%progbits,1
+ 471      02007201 
+ 471      00000201 
+ 471      FB0E0D00 
+ 471      01010101 
+ 472              	.LASF6:
+ 473 0000 6C6F6E67 		.ascii	"long long int\000"
+ 473      206C6F6E 
+ 473      6720696E 
+ 473      7400
+ 474              	.LASF18:
+ 475 000e 54696D65 		.ascii	"Timer_1_ReadStatusRegister\000"
+ 475      725F315F 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 10
+
+
+ 475      52656164 
+ 475      53746174 
+ 475      75735265 
+ 476              	.LASF8:
+ 477 0029 756E7369 		.ascii	"unsigned int\000"
+ 477      676E6564 
+ 477      20696E74 
+ 477      00
+ 478              	.LASF21:
+ 479 0036 6973725F 		.ascii	"isr_TC_StartEx\000"
+ 479      54435F53 
+ 479      74617274 
+ 479      457800
+ 480              	.LASF23:
+ 481 0045 6D61696E 		.ascii	"main.c\000"
+ 481      2E6300
+ 482              	.LASF26:
+ 483 004c 6D61696E 		.ascii	"main\000"
+ 483      00
+ 484              	.LASF0:
+ 485 0051 7369676E 		.ascii	"signed char\000"
+ 485      65642063 
+ 485      68617200 
+ 486              	.LASF22:
+ 487 005d 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 487      43313120 
+ 487      352E342E 
+ 487      31203230 
+ 487      31363036 
+ 488 0090 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 488      20726576 
+ 488      6973696F 
+ 488      6E203233 
+ 488      37373135 
+ 489 00c3 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 489      66756E63 
+ 489      74696F6E 
+ 489      2D736563 
+ 489      74696F6E 
+ 490              	.LASF17:
+ 491 00eb 4C45445F 		.ascii	"LED_Write\000"
+ 491      57726974 
+ 491      6500
+ 492              	.LASF5:
+ 493 00f5 6C6F6E67 		.ascii	"long unsigned int\000"
+ 493      20756E73 
+ 493      69676E65 
+ 493      6420696E 
+ 493      7400
+ 494              	.LASF7:
+ 495 0107 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 495      206C6F6E 
+ 495      6720756E 
+ 495      7369676E 
+ 495      65642069 
+ 496              	.LASF3:
+ 497 011e 73686F72 		.ascii	"short unsigned int\000"
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 11
+
+
+ 497      7420756E 
+ 497      7369676E 
+ 497      65642069 
+ 497      6E7400
+ 498              	.LASF16:
+ 499 0131 4C45445F 		.ascii	"LED_Read\000"
+ 499      52656164 
+ 499      00
+ 500              	.LASF24:
+ 501 013a 433A5C55 		.ascii	"C:\\Users\\ikui753\\OneDrive - The University of Au"
+ 501      73657273 
+ 501      5C696B75 
+ 501      69373533 
+ 501      5C4F6E65 
+ 502 016a 636B6C61 		.ascii	"ckland\\Documents\\CS301\\psoc student pack\\lab ex"
+ 502      6E645C44 
+ 502      6F63756D 
+ 502      656E7473 
+ 502      5C435333 
+ 503 0199 65726369 		.ascii	"ercise\\psoc_intro\\lab3.cydsn\000"
+ 503      73655C70 
+ 503      736F635F 
+ 503      696E7472 
+ 503      6F5C6C61 
+ 504              	.LASF20:
+ 505 01b6 54696D65 		.ascii	"Timer_1_Start\000"
+ 505      725F315F 
+ 505      53746172 
+ 505      7400
+ 506              	.LASF1:
+ 507 01c4 756E7369 		.ascii	"unsigned char\000"
+ 507      676E6564 
+ 507      20636861 
+ 507      7200
+ 508              	.LASF13:
+ 509 01d2 63686172 		.ascii	"char\000"
+ 509      00
+ 510              	.LASF4:
+ 511 01d7 6C6F6E67 		.ascii	"long int\000"
+ 511      20696E74 
+ 511      00
+ 512              	.LASF12:
+ 513 01e0 646F7562 		.ascii	"double\000"
+ 513      6C6500
+ 514              	.LASF27:
+ 515 01e7 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 515      52784275 
+ 515      66666572 
+ 515      00
+ 516              	.LASF19:
+ 517 01f4 74696D65 		.ascii	"timer_clock_Start\000"
+ 517      725F636C 
+ 517      6F636B5F 
+ 517      53746172 
+ 517      7400
+ 518              	.LASF14:
+ 519 0206 6C6F6E67 		.ascii	"long double\000"
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccP3FQgi.s 			page 12
+
+
+ 519      20646F75 
+ 519      626C6500 
+ 520              	.LASF9:
+ 521 0212 5F5F696E 		.ascii	"__int32_t\000"
+ 521      7433325F 
+ 521      7400
+ 522              	.LASF11:
+ 523 021c 666C6F61 		.ascii	"float\000"
+ 523      7400
+ 524              	.LASF2:
+ 525 0222 73686F72 		.ascii	"short int\000"
+ 525      7420696E 
+ 525      7400
+ 526              	.LASF10:
+ 527 022c 696E7433 		.ascii	"int32_t\000"
+ 527      325F7400 
+ 528              	.LASF25:
+ 529 0234 496E7465 		.ascii	"InterruptHandler\000"
+ 529      72727570 
+ 529      7448616E 
+ 529      646C6572 
+ 529      00
+ 530              	.LASF15:
+ 531 0245 73697A65 		.ascii	"sizetype\000"
+ 531      74797065 
+ 531      00
+ 532              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

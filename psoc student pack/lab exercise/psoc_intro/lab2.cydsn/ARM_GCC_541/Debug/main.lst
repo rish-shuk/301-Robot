@@ -1,0 +1,494 @@
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.main,"ax",%progbits
+  20              		.align	2
+  21              		.global	main
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	main, %function
+  25              	main:
+  26              	.LFB63:
+  27              		.file 1 "main.c"
+   1:main.c        **** 
+   2:main.c        **** /* ========================================
+   3:main.c        ****  * Laboratory Exercise 2
+   4:main.c        ****  *
+   5:main.c        ****  * Program timer to flash LED at 1Hz, i.e. 0.5s ON and 0.5s sec OFF
+   6:main.c        ****  *
+   7:main.c        ****  * Copyright Univ of Auckland, 2016
+   8:main.c        ****  * All Rights Reserved
+   9:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+  10:main.c        ****  *
+  11:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+  12:main.c        ****  * WHICH IS THE PROPERTY OF Univ of Auckland.
+  13:main.c        ****  *
+  14:main.c        ****  * ========================================
+  15:main.c        **** */
+  16:main.c        **** #include <project.h>
+  17:main.c        **** 
+  18:main.c        **** int main()
+  19:main.c        **** {
+  28              		.loc 1 19 0
+  29              		.cfi_startproc
+  30              		@ Volatile: function does not return.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+  20:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  37              		.loc 1 20 0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 2
+
+
+  38              		.syntax unified
+  39              	@ 20 "main.c" 1
+  40 0002 62B6     		CPSIE   i
+  41              	@ 0 "" 2
+  21:main.c        ****     //timer_clock_SetDivider(1000); // divide clock to 1Hz
+  22:main.c        ****     Timer_1_Start(); // start clock
+  42              		.loc 1 22 0
+  43              		.thumb
+  44              		.syntax unified
+  45 0004 FFF7FEFF 		bl	Timer_1_Start
+  46              	.LVL0:
+  47              	.L2:
+  48 0008 FEE7     		b	.L2
+  49              		.cfi_endproc
+  50              	.LFE63:
+  51              		.size	main, .-main
+  52 000a 00BF     		.text
+  53              	.Letext0:
+  54              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+  55              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+  56              		.file 4 "Generated_Source\\PSoC5/core_cm3.h"
+  57              		.file 5 "Generated_Source\\PSoC5/Timer_1.h"
+  58              		.section	.debug_info,"",%progbits
+  59              	.Ldebug_info0:
+  60 0000 E0000000 		.4byte	0xe0
+  61 0004 0400     		.2byte	0x4
+  62 0006 00000000 		.4byte	.Ldebug_abbrev0
+  63 000a 04       		.byte	0x4
+  64 000b 01       		.uleb128 0x1
+  65 000c B1000000 		.4byte	.LASF16
+  66 0010 0C       		.byte	0xc
+  67 0011 2E000000 		.4byte	.LASF17
+  68 0015 35000000 		.4byte	.LASF18
+  69 0019 00000000 		.4byte	.Ldebug_ranges0+0
+  70 001d 00000000 		.4byte	0
+  71 0021 00000000 		.4byte	.Ldebug_line0
+  72 0025 02       		.uleb128 0x2
+  73 0026 01       		.byte	0x1
+  74 0027 06       		.byte	0x6
+  75 0028 A6010000 		.4byte	.LASF0
+  76 002c 02       		.uleb128 0x2
+  77 002d 01       		.byte	0x1
+  78 002e 08       		.byte	0x8
+  79 002f 76010000 		.4byte	.LASF1
+  80 0033 02       		.uleb128 0x2
+  81 0034 02       		.byte	0x2
+  82 0035 05       		.byte	0x5
+  83 0036 D3010000 		.4byte	.LASF2
+  84 003a 02       		.uleb128 0x2
+  85 003b 02       		.byte	0x2
+  86 003c 07       		.byte	0x7
+  87 003d 0E000000 		.4byte	.LASF3
+  88 0041 03       		.uleb128 0x3
+  89 0042 BE010000 		.4byte	.LASF9
+  90 0046 02       		.byte	0x2
+  91 0047 3F       		.byte	0x3f
+  92 0048 4C000000 		.4byte	0x4c
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 3
+
+
+  93 004c 02       		.uleb128 0x2
+  94 004d 04       		.byte	0x4
+  95 004e 05       		.byte	0x5
+  96 004f 89010000 		.4byte	.LASF4
+  97 0053 02       		.uleb128 0x2
+  98 0054 04       		.byte	0x4
+  99 0055 07       		.byte	0x7
+ 100 0056 3F010000 		.4byte	.LASF5
+ 101 005a 02       		.uleb128 0x2
+ 102 005b 08       		.byte	0x8
+ 103 005c 05       		.byte	0x5
+ 104 005d 00000000 		.4byte	.LASF6
+ 105 0061 02       		.uleb128 0x2
+ 106 0062 08       		.byte	0x8
+ 107 0063 07       		.byte	0x7
+ 108 0064 51010000 		.4byte	.LASF7
+ 109 0068 04       		.uleb128 0x4
+ 110 0069 04       		.byte	0x4
+ 111 006a 05       		.byte	0x5
+ 112 006b 696E7400 		.ascii	"int\000"
+ 113 006f 02       		.uleb128 0x2
+ 114 0070 04       		.byte	0x4
+ 115 0071 07       		.byte	0x7
+ 116 0072 21000000 		.4byte	.LASF8
+ 117 0076 03       		.uleb128 0x3
+ 118 0077 DD010000 		.4byte	.LASF10
+ 119 007b 03       		.byte	0x3
+ 120 007c 2C       		.byte	0x2c
+ 121 007d 41000000 		.4byte	0x41
+ 122 0081 02       		.uleb128 0x2
+ 123 0082 04       		.byte	0x4
+ 124 0083 04       		.byte	0x4
+ 125 0084 CD010000 		.4byte	.LASF11
+ 126 0088 02       		.uleb128 0x2
+ 127 0089 08       		.byte	0x8
+ 128 008a 04       		.byte	0x4
+ 129 008b 92010000 		.4byte	.LASF12
+ 130 008f 02       		.uleb128 0x2
+ 131 0090 01       		.byte	0x1
+ 132 0091 08       		.byte	0x8
+ 133 0092 84010000 		.4byte	.LASF13
+ 134 0096 02       		.uleb128 0x2
+ 135 0097 08       		.byte	0x8
+ 136 0098 04       		.byte	0x4
+ 137 0099 B2010000 		.4byte	.LASF14
+ 138 009d 02       		.uleb128 0x2
+ 139 009e 04       		.byte	0x4
+ 140 009f 07       		.byte	0x7
+ 141 00a0 E5010000 		.4byte	.LASF15
+ 142 00a4 05       		.uleb128 0x5
+ 143 00a5 C8010000 		.4byte	.LASF19
+ 144 00a9 01       		.byte	0x1
+ 145 00aa 12       		.byte	0x12
+ 146 00ab 68000000 		.4byte	0x68
+ 147 00af 00000000 		.4byte	.LFB63
+ 148 00b3 0A000000 		.4byte	.LFE63-.LFB63
+ 149 00b7 01       		.uleb128 0x1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 4
+
+
+ 150 00b8 9C       		.byte	0x9c
+ 151 00b9 C7000000 		.4byte	0xc7
+ 152 00bd 06       		.uleb128 0x6
+ 153 00be 08000000 		.4byte	.LVL0
+ 154 00c2 D8000000 		.4byte	0xd8
+ 155 00c6 00       		.byte	0
+ 156 00c7 07       		.uleb128 0x7
+ 157 00c8 99010000 		.4byte	.LASF20
+ 158 00cc 04       		.byte	0x4
+ 159 00cd 1207     		.2byte	0x712
+ 160 00cf D3000000 		.4byte	0xd3
+ 161 00d3 08       		.uleb128 0x8
+ 162 00d4 76000000 		.4byte	0x76
+ 163 00d8 09       		.uleb128 0x9
+ 164 00d9 68010000 		.4byte	.LASF21
+ 165 00dd 68010000 		.4byte	.LASF21
+ 166 00e1 05       		.byte	0x5
+ 167 00e2 5A       		.byte	0x5a
+ 168 00e3 00       		.byte	0
+ 169              		.section	.debug_abbrev,"",%progbits
+ 170              	.Ldebug_abbrev0:
+ 171 0000 01       		.uleb128 0x1
+ 172 0001 11       		.uleb128 0x11
+ 173 0002 01       		.byte	0x1
+ 174 0003 25       		.uleb128 0x25
+ 175 0004 0E       		.uleb128 0xe
+ 176 0005 13       		.uleb128 0x13
+ 177 0006 0B       		.uleb128 0xb
+ 178 0007 03       		.uleb128 0x3
+ 179 0008 0E       		.uleb128 0xe
+ 180 0009 1B       		.uleb128 0x1b
+ 181 000a 0E       		.uleb128 0xe
+ 182 000b 55       		.uleb128 0x55
+ 183 000c 17       		.uleb128 0x17
+ 184 000d 11       		.uleb128 0x11
+ 185 000e 01       		.uleb128 0x1
+ 186 000f 10       		.uleb128 0x10
+ 187 0010 17       		.uleb128 0x17
+ 188 0011 00       		.byte	0
+ 189 0012 00       		.byte	0
+ 190 0013 02       		.uleb128 0x2
+ 191 0014 24       		.uleb128 0x24
+ 192 0015 00       		.byte	0
+ 193 0016 0B       		.uleb128 0xb
+ 194 0017 0B       		.uleb128 0xb
+ 195 0018 3E       		.uleb128 0x3e
+ 196 0019 0B       		.uleb128 0xb
+ 197 001a 03       		.uleb128 0x3
+ 198 001b 0E       		.uleb128 0xe
+ 199 001c 00       		.byte	0
+ 200 001d 00       		.byte	0
+ 201 001e 03       		.uleb128 0x3
+ 202 001f 16       		.uleb128 0x16
+ 203 0020 00       		.byte	0
+ 204 0021 03       		.uleb128 0x3
+ 205 0022 0E       		.uleb128 0xe
+ 206 0023 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 5
+
+
+ 207 0024 0B       		.uleb128 0xb
+ 208 0025 3B       		.uleb128 0x3b
+ 209 0026 0B       		.uleb128 0xb
+ 210 0027 49       		.uleb128 0x49
+ 211 0028 13       		.uleb128 0x13
+ 212 0029 00       		.byte	0
+ 213 002a 00       		.byte	0
+ 214 002b 04       		.uleb128 0x4
+ 215 002c 24       		.uleb128 0x24
+ 216 002d 00       		.byte	0
+ 217 002e 0B       		.uleb128 0xb
+ 218 002f 0B       		.uleb128 0xb
+ 219 0030 3E       		.uleb128 0x3e
+ 220 0031 0B       		.uleb128 0xb
+ 221 0032 03       		.uleb128 0x3
+ 222 0033 08       		.uleb128 0x8
+ 223 0034 00       		.byte	0
+ 224 0035 00       		.byte	0
+ 225 0036 05       		.uleb128 0x5
+ 226 0037 2E       		.uleb128 0x2e
+ 227 0038 01       		.byte	0x1
+ 228 0039 3F       		.uleb128 0x3f
+ 229 003a 19       		.uleb128 0x19
+ 230 003b 03       		.uleb128 0x3
+ 231 003c 0E       		.uleb128 0xe
+ 232 003d 3A       		.uleb128 0x3a
+ 233 003e 0B       		.uleb128 0xb
+ 234 003f 3B       		.uleb128 0x3b
+ 235 0040 0B       		.uleb128 0xb
+ 236 0041 49       		.uleb128 0x49
+ 237 0042 13       		.uleb128 0x13
+ 238 0043 8701     		.uleb128 0x87
+ 239 0045 19       		.uleb128 0x19
+ 240 0046 11       		.uleb128 0x11
+ 241 0047 01       		.uleb128 0x1
+ 242 0048 12       		.uleb128 0x12
+ 243 0049 06       		.uleb128 0x6
+ 244 004a 40       		.uleb128 0x40
+ 245 004b 18       		.uleb128 0x18
+ 246 004c 9742     		.uleb128 0x2117
+ 247 004e 19       		.uleb128 0x19
+ 248 004f 01       		.uleb128 0x1
+ 249 0050 13       		.uleb128 0x13
+ 250 0051 00       		.byte	0
+ 251 0052 00       		.byte	0
+ 252 0053 06       		.uleb128 0x6
+ 253 0054 898201   		.uleb128 0x4109
+ 254 0057 00       		.byte	0
+ 255 0058 11       		.uleb128 0x11
+ 256 0059 01       		.uleb128 0x1
+ 257 005a 31       		.uleb128 0x31
+ 258 005b 13       		.uleb128 0x13
+ 259 005c 00       		.byte	0
+ 260 005d 00       		.byte	0
+ 261 005e 07       		.uleb128 0x7
+ 262 005f 34       		.uleb128 0x34
+ 263 0060 00       		.byte	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 6
+
+
+ 264 0061 03       		.uleb128 0x3
+ 265 0062 0E       		.uleb128 0xe
+ 266 0063 3A       		.uleb128 0x3a
+ 267 0064 0B       		.uleb128 0xb
+ 268 0065 3B       		.uleb128 0x3b
+ 269 0066 05       		.uleb128 0x5
+ 270 0067 49       		.uleb128 0x49
+ 271 0068 13       		.uleb128 0x13
+ 272 0069 3F       		.uleb128 0x3f
+ 273 006a 19       		.uleb128 0x19
+ 274 006b 3C       		.uleb128 0x3c
+ 275 006c 19       		.uleb128 0x19
+ 276 006d 00       		.byte	0
+ 277 006e 00       		.byte	0
+ 278 006f 08       		.uleb128 0x8
+ 279 0070 35       		.uleb128 0x35
+ 280 0071 00       		.byte	0
+ 281 0072 49       		.uleb128 0x49
+ 282 0073 13       		.uleb128 0x13
+ 283 0074 00       		.byte	0
+ 284 0075 00       		.byte	0
+ 285 0076 09       		.uleb128 0x9
+ 286 0077 2E       		.uleb128 0x2e
+ 287 0078 00       		.byte	0
+ 288 0079 3F       		.uleb128 0x3f
+ 289 007a 19       		.uleb128 0x19
+ 290 007b 3C       		.uleb128 0x3c
+ 291 007c 19       		.uleb128 0x19
+ 292 007d 6E       		.uleb128 0x6e
+ 293 007e 0E       		.uleb128 0xe
+ 294 007f 03       		.uleb128 0x3
+ 295 0080 0E       		.uleb128 0xe
+ 296 0081 3A       		.uleb128 0x3a
+ 297 0082 0B       		.uleb128 0xb
+ 298 0083 3B       		.uleb128 0x3b
+ 299 0084 0B       		.uleb128 0xb
+ 300 0085 00       		.byte	0
+ 301 0086 00       		.byte	0
+ 302 0087 00       		.byte	0
+ 303              		.section	.debug_aranges,"",%progbits
+ 304 0000 1C000000 		.4byte	0x1c
+ 305 0004 0200     		.2byte	0x2
+ 306 0006 00000000 		.4byte	.Ldebug_info0
+ 307 000a 04       		.byte	0x4
+ 308 000b 00       		.byte	0
+ 309 000c 0000     		.2byte	0
+ 310 000e 0000     		.2byte	0
+ 311 0010 00000000 		.4byte	.LFB63
+ 312 0014 0A000000 		.4byte	.LFE63-.LFB63
+ 313 0018 00000000 		.4byte	0
+ 314 001c 00000000 		.4byte	0
+ 315              		.section	.debug_ranges,"",%progbits
+ 316              	.Ldebug_ranges0:
+ 317 0000 00000000 		.4byte	.LFB63
+ 318 0004 0A000000 		.4byte	.LFE63
+ 319 0008 00000000 		.4byte	0
+ 320 000c 00000000 		.4byte	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 7
+
+
+ 321              		.section	.debug_line,"",%progbits
+ 322              	.Ldebug_line0:
+ 323 0000 63010000 		.section	.debug_str,"MS",%progbits,1
+ 323      02004C01 
+ 323      00000201 
+ 323      FB0E0D00 
+ 323      01010101 
+ 324              	.LASF6:
+ 325 0000 6C6F6E67 		.ascii	"long long int\000"
+ 325      206C6F6E 
+ 325      6720696E 
+ 325      7400
+ 326              	.LASF3:
+ 327 000e 73686F72 		.ascii	"short unsigned int\000"
+ 327      7420756E 
+ 327      7369676E 
+ 327      65642069 
+ 327      6E7400
+ 328              	.LASF8:
+ 329 0021 756E7369 		.ascii	"unsigned int\000"
+ 329      676E6564 
+ 329      20696E74 
+ 329      00
+ 330              	.LASF17:
+ 331 002e 6D61696E 		.ascii	"main.c\000"
+ 331      2E6300
+ 332              	.LASF18:
+ 333 0035 433A5C55 		.ascii	"C:\\Users\\ikui753\\OneDrive - The University of Au"
+ 333      73657273 
+ 333      5C696B75 
+ 333      69373533 
+ 333      5C4F6E65 
+ 334 0065 636B6C61 		.ascii	"ckland\\Documents\\CS301\\psoc student pack\\lab ex"
+ 334      6E645C44 
+ 334      6F63756D 
+ 334      656E7473 
+ 334      5C435333 
+ 335 0094 65726369 		.ascii	"ercise\\psoc_intro\\lab2.cydsn\000"
+ 335      73655C70 
+ 335      736F635F 
+ 335      696E7472 
+ 335      6F5C6C61 
+ 336              	.LASF16:
+ 337 00b1 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 337      43313120 
+ 337      352E342E 
+ 337      31203230 
+ 337      31363036 
+ 338 00e4 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 338      20726576 
+ 338      6973696F 
+ 338      6E203233 
+ 338      37373135 
+ 339 0117 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 339      66756E63 
+ 339      74696F6E 
+ 339      2D736563 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 8
+
+
+ 339      74696F6E 
+ 340              	.LASF5:
+ 341 013f 6C6F6E67 		.ascii	"long unsigned int\000"
+ 341      20756E73 
+ 341      69676E65 
+ 341      6420696E 
+ 341      7400
+ 342              	.LASF7:
+ 343 0151 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 343      206C6F6E 
+ 343      6720756E 
+ 343      7369676E 
+ 343      65642069 
+ 344              	.LASF21:
+ 345 0168 54696D65 		.ascii	"Timer_1_Start\000"
+ 345      725F315F 
+ 345      53746172 
+ 345      7400
+ 346              	.LASF1:
+ 347 0176 756E7369 		.ascii	"unsigned char\000"
+ 347      676E6564 
+ 347      20636861 
+ 347      7200
+ 348              	.LASF13:
+ 349 0184 63686172 		.ascii	"char\000"
+ 349      00
+ 350              	.LASF4:
+ 351 0189 6C6F6E67 		.ascii	"long int\000"
+ 351      20696E74 
+ 351      00
+ 352              	.LASF12:
+ 353 0192 646F7562 		.ascii	"double\000"
+ 353      6C6500
+ 354              	.LASF20:
+ 355 0199 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 355      52784275 
+ 355      66666572 
+ 355      00
+ 356              	.LASF0:
+ 357 01a6 7369676E 		.ascii	"signed char\000"
+ 357      65642063 
+ 357      68617200 
+ 358              	.LASF14:
+ 359 01b2 6C6F6E67 		.ascii	"long double\000"
+ 359      20646F75 
+ 359      626C6500 
+ 360              	.LASF9:
+ 361 01be 5F5F696E 		.ascii	"__int32_t\000"
+ 361      7433325F 
+ 361      7400
+ 362              	.LASF19:
+ 363 01c8 6D61696E 		.ascii	"main\000"
+ 363      00
+ 364              	.LASF11:
+ 365 01cd 666C6F61 		.ascii	"float\000"
+ 365      7400
+ 366              	.LASF2:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccRkoE7d.s 			page 9
+
+
+ 367 01d3 73686F72 		.ascii	"short int\000"
+ 367      7420696E 
+ 367      7400
+ 368              	.LASF10:
+ 369 01dd 696E7433 		.ascii	"int32_t\000"
+ 369      325F7400 
+ 370              	.LASF15:
+ 371 01e5 73697A65 		.ascii	"sizetype\000"
+ 371      74797065 
+ 371      00
+ 372              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
