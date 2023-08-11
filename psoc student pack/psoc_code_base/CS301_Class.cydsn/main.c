@@ -95,6 +95,7 @@ int main()
         {
             usbPutString(line);
             flag_KB_string = 0;
+
         }        
     }   
 }
@@ -113,6 +114,7 @@ void rotationAntiClockwise() {
     //usbPutString("turn right\r\n");
     
     while(turnCount < maxTurnCount) {
+        // count PWM pulses
         if(M1_IN1_Read() > 0) {
             turnCount++; // print out turn count
         }
@@ -128,6 +130,7 @@ void rotationClockwise() {
     //usbPutString("turn left\r\n");
     
     while(turnCount < maxTurnCount) {
+        // count PWM pulses
         if(M1_IN1_Read() > 0) {
             turnCount++; // print out turn count
         }
