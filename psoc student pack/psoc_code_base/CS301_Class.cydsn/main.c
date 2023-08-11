@@ -40,9 +40,11 @@ void stopMoving();
 char buffer[69];
 int quadDec1Count = 0;
 int timerInt = 0;
+uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 
 CY_ISR (speedTimer) {
+    timerInt = 1;
     //timerInt = 1;
     quadDec1Count = QuadDec_M1_GetCounter();// store count 
     QuadDec_M1_SetCounter(0); // reset count
@@ -63,6 +65,7 @@ int main()
     PWM_2_Start();
     PWM_2_WritePeriod(100);
     
+    rotationClockwise();
     // start quadrature decoder
     QuadDec_M1_Start();
     //QuadDec_M2_Start();
@@ -73,22 +76,28 @@ int main()
     
     
 // ------USB SETUP ----------------    
+#ifdef USE_USB    
+    USBUART_Start(0,USBUART_5V_OPERATION);
+#endif        
 //#ifdef USE_USB    
 //    USBUART_Start(0,USBUART_5V_OPERATION);
 //#endif        
         
+    RF_BT_SELECT_Write(0);
     //RF_BT_SELECT_Write(0);
 
+    usbPutString(displaystring);
     //usbPutString(displaystring);
     
     for(;;)
     {   
+        if(timerInt == 1) {
         rotationClockwise();
         rotationAntiClockwise();
         
         
         
-        /*if(timerInt == 1) {
+        if(timerInt == 1) {
             timerInt = 0; // reset flag
             float cps = quadDec1Count/57.00;
             int16 rpm = (int16)(cps * 15); // multiply to get rpm and account for timer resolution
@@ -102,7 +111,8 @@ int main()
             usbPutString(line);
             flag_KB_string = 0;
 
-        }  */      
+        }        
+        }     
     }   
 }
 //* ========================================
@@ -117,6 +127,7 @@ void stopMoving() {
 void rotationAntiClockwise() {
     PWM_1_WriteCompare(35);
     PWM_2_WriteCompare(35);
+    //usbPutString("turn right\r\n");
 
     CyDelay(500); // change to quadrature encoder pulses, rather than time delay
     
@@ -127,6 +138,7 @@ void rotationAntiClockwise() {
 void rotationClockwise() {
     PWM_1_WriteCompare(65);
     PWM_2_WriteCompare(65);
+    //usbPutString("turn left\r\n");
 
     CyDelay(500); // change to quadrature encoder pulses, rather than time delay
     //stopMoving(); // stop movement, ready for next instruction
