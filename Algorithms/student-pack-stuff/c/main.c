@@ -155,16 +155,16 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     // create pathMap
     for(int i = 0; i < ARRAY_LENGTH(paths); i++) {
         if(paths[i].row == targetlocation.row && paths[i].col == targetlocation.col) {
-            //printf("%d,%d\n",paths[i].row, paths[i].col);
+            printf("%d,%d\n",paths[i].row, paths[i].col);
             map[paths[i].row][paths[i].col] = 'x'; // mark end point
             break;
         } 
         if(paths[i].row == startlocation.row && paths[i].col == startlocation.col) {
-            //printf("%d,%d\n",paths[i].row, paths[i].col);
+            printf("%d,%d\n",paths[i].row, paths[i].col);
             map[paths[i].row][paths[i].col] = '@'; // mark start point
         } else {
             // get each path location marked onto the map
-            //printf("%d,%d\n",paths[i].row, paths[i].col);
+            printf("%d,%d\n",paths[i].row, paths[i].col);
             map[paths[i].row][paths[i].col] = '*'; // mark path
         }
     }
