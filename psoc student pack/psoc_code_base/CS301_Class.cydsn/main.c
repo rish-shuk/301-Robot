@@ -88,6 +88,8 @@ int main()
     for(;;)
     {
         rotationClockwise();
+        //stopMoving();
+        //CyDelay(1000);
         rotationAntiClockwise();
         
         
@@ -97,13 +99,13 @@ int main()
             float cps = quadDec2Count/57.00;
             int16 rpm = (int16)(cps*15);
             sprintf(buffer, "%d", rpm);
-            usbPutString(buffer);
-            usbPutString("rpm ");
+            //usbPutString(buffer);
+            //usbPutString("rpm ");
         }
         
         if (flag_KB_string == 1)
         {
-            usbPutString(line);
+            //usbPutString(line);
             flag_KB_string = 0;
 
         }           
@@ -114,7 +116,6 @@ int main()
 void stopMoving() {
     PWM_1_WriteCompare(50);
     PWM_2_WriteCompare(50);
-    //usbPutString("stopped\r\n");
 }
 
 // rotate anticlockwise 90deg
@@ -142,7 +143,7 @@ void rotationClockwise() {
     while(quadPulseCount < 110) {
         quadPulseCount = QuadDec_M1_GetCounter();
     }
-    QuadDec_M2_SetCounter(0);
+    QuadDec_M1_SetCounter(0);
     //CyDelay(500); // change to quadrature encoder pulses, rather than time delay
     //stopMoving(); // stop movement, ready for next instruction
 }
