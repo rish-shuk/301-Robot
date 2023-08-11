@@ -44,9 +44,9 @@ int timerInt = 0;
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 
+
 CY_ISR (speedTimer) {
     timerInt = 1;
-    //timerInt = 1;
     quadDec1Count = QuadDec_M1_GetCounter();// store count
     quadDec2Count = QuadDec_M2_GetCounter();
     QuadDec_M1_SetCounter(0); // reset count
@@ -69,10 +69,10 @@ int main()
     PWM_2_Start();
     PWM_2_WritePeriod(100);
     
-    // start quadrature decoder
+    // start quadrature decoders
     QuadDec_M1_Start();
-    //QuadDec_M2_Start();
-    isr_speed_StartEx(speedTimer);
+    QuadDec_M2_Start();
+    //isr_speed_StartEx(speedTimer);
     SpeedTimer_Start();
     SpeedClock_Start();
     
@@ -82,21 +82,17 @@ int main()
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
 #endif        
-//#ifdef USE_USB    
-//    USBUART_Start(0,USBUART_5V_OPERATION);
-//#endif        
+#ifdef USE_USB    
+    USBUART_Start(0,USBUART_5V_OPERATION);
+#endif        
         
     RF_BT_SELECT_Write(0);
-    //RF_BT_SELECT_Write(0);
-
-    usbPutString(displaystring);
-    //usbPutString(displaystring);
     
     for(;;)
     {
         rotationClockwise();
-        stopMoving();
-        CyDelay(1000);
+        //stopMoving();
+        //CyDelay(1000);
         rotationAntiClockwise();
         
         
@@ -137,8 +133,8 @@ void rotationAntiClockwise() {
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
-    while(quadPulseCount < 100) {
-        quadPulseCount = QuadDec_M1_GetCounter();
+    while(quadPulseCount > -120) {
+        quadPulseCount = QuadDec_M1_GetCounter();  
     }
     QuadDec_M1_SetCounter(0);
     //CyDelay(500);
