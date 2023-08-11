@@ -38,7 +38,6 @@ void directionBackward();
 void stopMoving();
 //* ========================================
 char buffer[69];
-int quadDec1Count = 0;
 int quadDec2Count = 0;
 int timerInt = 0;
 uint16 turnCount = 0;
@@ -47,10 +46,8 @@ uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 
 CY_ISR (speedTimer) {
     timerInt = 1;
-    quadDec1Count = QuadDec_M1_GetCounter();// store count
+    // quadDec_M1 used for turning macros
     quadDec2Count = QuadDec_M2_GetCounter();
-    QuadDec_M1_SetCounter(0); // reset count
-    QuadDec_M1_Start(); // restart counter
     QuadDec_M2_SetCounter(0); // reset count
     QuadDec_M2_Start(); // restart counter
     SpeedTimer_ReadStatusRegister(); // clear interrupt
@@ -72,7 +69,7 @@ int main()
     // start quadrature decoders
     QuadDec_M1_Start();
     QuadDec_M2_Start();
-    //isr_speed_StartEx(speedTimer);
+    isr_speed_StartEx(speedTimer);
     SpeedTimer_Start();
     SpeedClock_Start();
     
@@ -91,20 +88,14 @@ int main()
     for(;;)
     {
         rotationClockwise();
-        //stopMoving();
-        //CyDelay(1000);
         rotationAntiClockwise();
         
         
         if(timerInt == 1) {
+            // display RPM of M2
             timerInt = 0; // reset flag
-            float cps = quadDec1Count/57.00;
-            int16 rpm = (int16)(cps * 15); // multiply to get rpm and account for timer resolution
-            sprintf(buffer, "%d", rpm);
-            usbPutString(buffer); // print the rpm
-            usbPutString("rpm ");
-            cps = quadDec2Count/57.00;
-            rpm = (int16)(cps*15);
+            float cps = quadDec2Count/57.00;
+            int16 rpm = (int16)(cps*15);
             sprintf(buffer, "%d", rpm);
             usbPutString(buffer);
             usbPutString("rpm ");
@@ -133,7 +124,7 @@ void rotationAntiClockwise() {
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
-    while(quadPulseCount > -120) {
+    while(quadPulseCount > -105) {
         quadPulseCount = QuadDec_M1_GetCounter();  
     }
     QuadDec_M1_SetCounter(0);
@@ -147,9 +138,9 @@ void rotationClockwise() {
     PWM_2_WriteCompare(65);
     
     int quadPulseCount = 0;
-    QuadDec_M2_SetCounter(0);
-    while(quadPulseCount < 100) {
-        quadPulseCount = QuadDec_M2_GetCounter();
+    QuadDec_M1_SetCounter(0);
+    while(quadPulseCount < 110) {
+        quadPulseCount = QuadDec_M1_GetCounter();
     }
     QuadDec_M2_SetCounter(0);
     //CyDelay(500); // change to quadrature encoder pulses, rather than time delay
