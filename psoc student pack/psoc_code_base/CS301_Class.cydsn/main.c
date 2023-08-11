@@ -39,6 +39,7 @@ void stopMoving();
 //* ========================================
 char buffer[69];
 int quadDec1Count = 0;
+int quadDec2Count = 0;
 int timerInt = 0;
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
@@ -46,9 +47,12 @@ uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 CY_ISR (speedTimer) {
     timerInt = 1;
     //timerInt = 1;
-    quadDec1Count = QuadDec_M1_GetCounter();// store count 
+    quadDec1Count = QuadDec_M1_GetCounter();// store count
+    quadDec2Count = QuadDec_M2_GetCounter();
     QuadDec_M1_SetCounter(0); // reset count
     QuadDec_M1_Start(); // restart counter
+    QuadDec_M2_SetCounter(0); // reset count
+    QuadDec_M2_Start(); // restart counter
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 int main()
@@ -65,7 +69,6 @@ int main()
     PWM_2_Start();
     PWM_2_WritePeriod(100);
     
-    rotationClockwise();
     // start quadrature decoder
     QuadDec_M1_Start();
     //QuadDec_M2_Start();
@@ -90,11 +93,11 @@ int main()
     //usbPutString(displaystring);
     
     for(;;)
-    {   
-        if(timerInt == 1) {
+    {
         rotationClockwise();
+        stopMoving();
+        CyDelay(1000);
         rotationAntiClockwise();
-        
         
         
         if(timerInt == 1) {
@@ -104,6 +107,11 @@ int main()
             sprintf(buffer, "%d", rpm);
             usbPutString(buffer); // print the rpm
             usbPutString("rpm ");
+            cps = quadDec2Count/57.00;
+            rpm = (int16)(cps*15);
+            sprintf(buffer, "%d", rpm);
+            usbPutString(buffer);
+            usbPutString("rpm ");
         }
         
         if (flag_KB_string == 1)
@@ -111,8 +119,7 @@ int main()
             usbPutString(line);
             flag_KB_string = 0;
 
-        }        
-        }     
+        }           
     }   
 }
 //* ========================================
@@ -127,10 +134,14 @@ void stopMoving() {
 void rotationAntiClockwise() {
     PWM_1_WriteCompare(35);
     PWM_2_WriteCompare(35);
-    //usbPutString("turn right\r\n");
-
-    CyDelay(500); // change to quadrature encoder pulses, rather than time delay
     
+    int quadPulseCount = 0;
+    QuadDec_M1_SetCounter(0);
+    while(quadPulseCount < 100) {
+        quadPulseCount = QuadDec_M1_GetCounter();
+    }
+    QuadDec_M1_SetCounter(0);
+    //CyDelay(500);
     //stopMoving(); // stop movement, ready for next instruction
 }
 
@@ -138,9 +149,14 @@ void rotationAntiClockwise() {
 void rotationClockwise() {
     PWM_1_WriteCompare(65);
     PWM_2_WriteCompare(65);
-    //usbPutString("turn left\r\n");
-
-    CyDelay(500); // change to quadrature encoder pulses, rather than time delay
+    
+    int quadPulseCount = 0;
+    QuadDec_M2_SetCounter(0);
+    while(quadPulseCount < 100) {
+        quadPulseCount = QuadDec_M2_GetCounter();
+    }
+    QuadDec_M2_SetCounter(0);
+    //CyDelay(500); // change to quadrature encoder pulses, rather than time delay
     //stopMoving(); // stop movement, ready for next instruction
 }
 
