@@ -36,6 +36,7 @@ void rotationAntiClockwise();
 void directionForward();
 void directionBackward();
 void stopMoving();
+void quadCountToRPM(uint16 count);
 //* ========================================
 char buffer[69];
 int quadDec2Count = 0;
@@ -94,13 +95,8 @@ int main()
         
         
         if(timerInt == 1) {
-            // display RPM of M2
-            timerInt = 0; // reset flag
-            float cps = quadDec2Count/57.00;
-            int16 rpm = (int16)(cps*15);
-            sprintf(buffer, "%d", rpm);
-            //usbPutString(buffer);
-            //usbPutString("rpm ");
+            // calculate RPM of M2
+            quadCountToRPM(quadDec2Count);
         }
         
         if (flag_KB_string == 1)
@@ -111,6 +107,8 @@ int main()
         }           
     }   
 }
+
+// Direction/ Movement macros
 //* ========================================
 // stop moving
 void stopMoving() {
@@ -160,7 +158,19 @@ void directionBackward() {
     PWM_2_WriteCompare(75);
 }
 
+// Calculations
+//* ========================================
+void quadCountToRPM(uint16 count)
+{
+    float cps = count/57.00;
+    int16 rpm = (int16)(cps*15); // rpm value
+    sprintf(buffer, "%d", rpm); // store in buffer
+    //usbPutString(buffer);
+    //usbPutString("rpm ");
+}
 
+// USBUART Operations
+//* ========================================
 void usbPutString(char *s)
 {
 // !! Assumes that *s is a string with allocated space >=64 chars     
