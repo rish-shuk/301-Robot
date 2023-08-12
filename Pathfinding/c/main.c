@@ -157,26 +157,26 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     map[currentRow][currentCol] = 'X'; // mark finish location
     printf("%d,%d\n", currentRow, currentCol); // print optimal step
     // reconstruct path by reversing paths array and taking shortest distance
+    while(shortestDist > 0) {    
+        // make a move, check if valid and is the next step in path
+        for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
+            int newRow = currentRow + moves[i].row;
+            int newCol = currentCol + moves[i].col;
 
-    // make a move, check if valid and is the next step in path
-    for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
-        int newRow = currentRow + moves[i].row;
-        int newCol = currentCol + moves[i].col;
+            if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
+                map[newRow][newCol] = '*'; // mark optimal step
+                shortestDist--;
+                currentRow = newRow; 
+                currentCol = newCol; // change current location
+                printf("%d,%d\n",currentRow,currentCol);
+                if(currentRow == startlocation.row && currentCol == startlocation.col) {
+                    map[currentRow][currentCol] = 'S'; // mark start location
+                    break;
+                }   
+            }
 
-        if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
-            map[newRow][newCol] = '*'; // mark optimal step
-            shortestDist--;
-            currentRow = newRow; 
-            currentCol = newCol; // change current location
-            printf("%d,%d\n",currentRow,currentCol);
-            if(currentRow == startlocation.row && currentCol == startlocation.col) {
-                map[currentRow][currentCol] = 'S'; // mark start location
-                break;
-            }   
         }
-
     }
-
     printMap(map);
 }
 
