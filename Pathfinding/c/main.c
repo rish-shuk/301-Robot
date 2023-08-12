@@ -150,21 +150,31 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
         }
     }
 
-    // create pathMap
-    for(int i = 0; i < ARRAY_LENGTH(paths); i++) {
-        if(paths[i].row == targetlocation.row && paths[i].col == targetlocation.col) {
-            //printf("%d,%d\n",paths[i].row, paths[i].col);
-            map[paths[i].row][paths[i].col] = 'x'; // mark end point
-            break;
-        } 
-        if(paths[i].row == startlocation.row && paths[i].col == startlocation.col) {
-            //printf("%d,%d\n",paths[i].row, paths[i].col);
-            map[paths[i].row][paths[i].col] = '@'; // mark start point
-        } else {
-            // get each path location marked onto the map
-            //printf("%d,%d\n",paths[i].row, paths[i].col);
-            map[paths[i].row][paths[i].col] = '*'; // mark path
+    // initialise shortest dist
+    int shortestDist = distances[targetlocation.row][targetlocation.col];
+    int currentRow = targetlocation.row;
+    int currentCol = targetlocation.col;
+    map[currentRow][currentCol] = 'X'; // mark finish location
+    printf("%d,%d\n", currentRow, currentCol); // print optimal step
+    // reconstruct path by reversing paths array and taking shortest distance
+
+    // make a move, check if valid and is the next step in path
+    for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
+        int newRow = currentRow + moves[i].row;
+        int newCol = currentCol + moves[i].col;
+
+        if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
+            map[newRow][newCol] = '*'; // mark optimal step
+            shortestDist--;
+            currentRow = newRow; 
+            currentCol = newCol; // change current location
+            printf("%d,%d\n",currentRow,currentCol);
+            if(currentRow == startlocation.row && currentCol == startlocation.col) {
+                map[currentRow][currentCol] = 'S'; // mark start location
+                break;
+            }   
         }
+
     }
 
     printMap(map);
