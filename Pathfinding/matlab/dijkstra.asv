@@ -13,8 +13,8 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
 
     % begin implementation of dijkstra's algorithm
     % create heap of locations and their distances
-    pq = struct('location', startlocation, 'distance', 0, 'path', []);
-    pq.path = 
+    pq = struct('location', startlocation, 'distance', 0);
+    
     % Initialize distances and paths arrays
     distances = Inf(rows, cols);
     paths = cell(rows, cols);
@@ -24,7 +24,7 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
     paths{startlocation(1), startlocation(2)} = startlocation;
 
     while ~isempty(pq)
-        % Extract node with the smallest distance from priority queue
+        % Extract location with the smallest distance from priority queue
         [~, idx] = min([pq.distance]);
         current = pq(idx);
         pq(idx) = [];
@@ -35,7 +35,6 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
         % Check if the node has been visited
         if visitedMap(row, col) == 1
             visitedMap(row, col) = 0;
-            % no need to update steps and placestep since we're using distances and paths
             
             % If neighbor is target location, then finish
             if isequal([row, col], targetlocation)
@@ -48,9 +47,10 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
                 newCol = col + moves(i, 2);
 
                 if isValidMove(newRow, newCol) && visitedMap(newRow, newCol) == 1
+                    % increment distance
                     newDistance = distances(row, col) + 1;
 
-                    % Update distance and path if shorter path found
+                    % compare and update distance and path if shorter path found
                     if newDistance < distances(newRow, newCol)
                         distances(newRow, newCol) = newDistance;
                         paths{newRow, newCol} = [paths{row, col}; [newRow, newCol]];
@@ -68,13 +68,18 @@ function [retmap, retvisited, retsteps] = dijkstra(mapfile, startlocation, targe
     retmap = map;
     retvisited = visitedMap;
     retsteps = paths{targetlocation(1), targetlocation(2)};
+
+    % Call placestep function for each step in the path
+    for i = 1:size(retsteps, 1)
+        placestep([retsteps(i, 1), retsteps(i, 2)], i);
+    end
 end
 
 function placestep(position,i)
-    % This function will plot a insert yellow rectangle and also print a number in this rectangle. Use with plotmap/viewmap. 
-    position = [16 - position(1), position(2)];
-    position = [position(2) + 0.1, position(1) + 0.1];
-    rectangle('Position', [position, 0.8, 0.8], 'FaceColor', 'y');
-    c = sprintf('%d', i);
-    text(position(1) + 0.2, position(2) + 0.2, c, 'FontSize', 10);
+% This function will plot a insert yellow rectangle and also print a number in this rectangle. Use with plotmap/viewmap. 
+position = [16 - position(1), position(2)];
+position = [position(2) + 0.1, position(1) + 0.1];
+rectangle('Position', [position, 0.8, 0.8], 'FaceColor', 'y');
+c = sprintf('%d', i);
+text(position(1) + 0.2, position(2) + 0.2, c, 'FontSize', 10);
 end

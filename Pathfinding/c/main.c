@@ -80,16 +80,16 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     int visitedMap[MAX_ROWS][MAX_COLS];
     for (int i = 0; i < MAX_ROWS; i++) {
         for (int j = 0; j < MAX_COLS; j++) {
-            visitedMap[i][j] = 1; // fill visited array with 1s
+            visitedMap[i][j] = 1; // fill visited array with 1s- mark as unvisited
         }
     }
 
-    struct PriorityQueue pq[MAX_ROWS * MAX_COLS];
+    struct PriorityQueue pq[MAX_ROWS * MAX_COLS]; // initialise priority queue
     int pqSize = 0;
 
     // Initialize distances and paths arrays
-    int distances[MAX_ROWS][MAX_COLS];
-    struct Location paths[MAX_ROWS * MAX_COLS];
+    int distances[MAX_ROWS][MAX_COLS]; // array to record distance of each location
+    struct Location paths[MAX_ROWS * MAX_COLS]; // 1d array to record path- each element is a location
 
     for (int i = 0; i < MAX_ROWS; i++) {
         for (int j = 0; j < MAX_COLS; j++) {
@@ -100,17 +100,17 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     int stepNum = 0;
     distances[startlocation.row][startlocation.col] = 0; // initialise distance of startLoc to 0
     paths[stepNum] = startlocation; // add start to path array
-    stepNum++;
+    stepNum++; // increment stepNum
 
-    pq[pqSize].location = startlocation;
-    pq[pqSize].distance = 0;
-    pqSize++;
+    pq[pqSize].location = startlocation; // add startLocation to Priority queue
+    pq[pqSize].distance = 0; // add startlocation distance to priority queue
+    pqSize++; // increment pqSize- pq is not empty
 
     while (pqSize > 0) {
         int idx = 0;
         for (int i = 1; i < pqSize; i++) {
             if (pq[i].distance < pq[idx].distance) {
-                idx = i;
+                idx = i; // find the shortest distance location 
             }
         }
         struct PriorityQueue current = pq[idx]; // record current location
@@ -121,17 +121,15 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
         int col = current.location.col; // get current location details
 
         if (visitedMap[row][col] == 1) {
-            visitedMap[row][col] = 0;
+            visitedMap[row][col] = 0; // mark as visited if unvisited
 
             if (row == targetlocation.row && col == targetlocation.col) {
-                break; // if reached target destination
+                break; // if reached target destination, end
             }
-
+            // make a move, check if valid
             for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
                 int newRow = row + moves[i].row;
                 int newCol = col + moves[i].col;
-
-                
 
                 if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && visitedMap[newRow][newCol] == 1) {
                     int newDistance = distances[row][col] + 1;
@@ -155,16 +153,16 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     // create pathMap
     for(int i = 0; i < ARRAY_LENGTH(paths); i++) {
         if(paths[i].row == targetlocation.row && paths[i].col == targetlocation.col) {
-            printf("%d,%d\n",paths[i].row, paths[i].col);
+            //printf("%d,%d\n",paths[i].row, paths[i].col);
             map[paths[i].row][paths[i].col] = 'x'; // mark end point
             break;
         } 
         if(paths[i].row == startlocation.row && paths[i].col == startlocation.col) {
-            printf("%d,%d\n",paths[i].row, paths[i].col);
+            //printf("%d,%d\n",paths[i].row, paths[i].col);
             map[paths[i].row][paths[i].col] = '@'; // mark start point
         } else {
             // get each path location marked onto the map
-            printf("%d,%d\n",paths[i].row, paths[i].col);
+            //printf("%d,%d\n",paths[i].row, paths[i].col);
             map[paths[i].row][paths[i].col] = '*'; // mark path
         }
     }
