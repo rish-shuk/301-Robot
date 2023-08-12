@@ -89,7 +89,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 
     // Initialize distances and paths arrays
     int distances[MAX_ROWS][MAX_COLS]; // array to record distance of each location
-    struct Location paths[MAX_ROWS * MAX_COLS]; // 1d array to record path- each element is a location
+    //struct Location paths[MAX_ROWS * MAX_COLS]; // 1d array to record path- each element is a location
 
     for (int i = 0; i < MAX_ROWS; i++) {
         for (int j = 0; j < MAX_COLS; j++) {
@@ -99,7 +99,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 
     int stepNum = 0;
     distances[startlocation.row][startlocation.col] = 0; // initialise distance of startLoc to 0
-    paths[stepNum] = startlocation; // add start to path array
+    //paths[stepNum] = startlocation; // add start to path array
     stepNum++; // increment stepNum
 
     pq[pqSize].location = startlocation; // add startLocation to Priority queue
@@ -136,7 +136,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
                     // take the shortest distance between new and existing
                     if (newDistance < distances[newRow][newCol]) {
                         distances[newRow][newCol] = newDistance; // take new distance if less than existing, otherwise do nothing
-                        paths[stepNum] = (struct Location){newRow, newCol}; // add location to path array
+                        //paths[stepNum] = (struct Location){newRow, newCol}; // add location to path array
                         
                         pq[pqSize].location.row = newRow; // update location
                         pq[pqSize].location.col = newCol; // update location
@@ -149,7 +149,8 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
             }
         }
     }
-
+    // PATH RECONSTRUCTION
+    // retsteps can be generated from here
     // initialise shortest dist
     int shortestDist = distances[targetlocation.row][targetlocation.col];
     int currentRow = targetlocation.row;
@@ -165,10 +166,10 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 
             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
                 map[newRow][newCol] = '*'; // mark optimal step
-                shortestDist--;
+                shortestDist--; // decrement distance
                 currentRow = newRow; 
                 currentCol = newCol; // change current location
-                printf("%d,%d\n",currentRow,currentCol);
+                //printf("%d,%d\n",currentRow,currentCol); // print visited step
                 if(currentRow == startlocation.row && currentCol == startlocation.col) {
                     map[currentRow][currentCol] = 'S'; // mark start location
                     break;
@@ -181,21 +182,16 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 }
 
 int main() {
-    // Seed the random number generator with the current time
-    srand(time(NULL));
-
+    srand(time(NULL)); // Seed the random number generator with the current time
     char map[MAX_ROWS][MAX_COLS];
     readMap("map_1.txt", map);
-    printMap(map);
-    // generate random start and target location
-    struct Location startLocation = getRandomLocation(map);
-    struct Location targetLocation = getRandomLocation(map);
-
+    //printMap(map);
+    struct Location startLocation = getRandomLocation(map); 
+    struct Location targetLocation = getRandomLocation(map); // generate random start and target location
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
-    printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col);
+    printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
-
-    dijkstra(map, startLocation, targetLocation);
+    dijkstra(map, startLocation, targetLocation); // find shortest path
     return 0;
 }
