@@ -149,12 +149,16 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
             }
         }
     }
+
     // PATH RECONSTRUCTION
-    // retsteps can be generated from here
-    // initialise shortest dist
+    // initialise maximum distance- will be decremented
     int shortestDist = distances[targetlocation.row][targetlocation.col];
+    // retsteps can be generated from here
+    struct Location retSteps[shortestDist]; // store every step of path
     int currentRow = targetlocation.row;
     int currentCol = targetlocation.col;
+    retSteps[shortestDist].row = currentRow; 
+    retSteps[shortestDist].col = currentCol; // add targetLocation to retSteps
     map[currentRow][currentCol] = 'X'; // mark finish location
     printf("%d,%d\n", currentRow, currentCol); // print optimal step
     // reconstruct path by reversing paths array and taking shortest distance
@@ -170,6 +174,8 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
                 currentRow = newRow; 
                 currentCol = newCol; // change current location
                 //printf("%d,%d\n",currentRow,currentCol); // print visited step
+                retSteps[shortestDist].row = currentRow; 
+                retSteps[shortestDist].col = currentCol; // add currentRow and currentCol to retstep- stores optimal path
                 if(currentRow == startlocation.row && currentCol == startlocation.col) {
                     map[currentRow][currentCol] = 'S'; // mark start location
                     break;
