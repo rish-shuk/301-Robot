@@ -5,8 +5,8 @@
 
 void print_map_1() {
     // Access and print the array data
-    for (int i = 0; i < NUM_ROWS; i++) {
-        for (int j = 0; j < NUM_COLS; j++) {
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
             printf("%d", map_1[i][j]);
         }
         printf("\n");
@@ -15,8 +15,8 @@ void print_map_1() {
 
 void print_map_8() {
     // Access and print the array data
-    for (int i = 0; i < NUM_ROWS; i++) {
-        for (int j = 0; j < NUM_COLS; j++) {
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
             printf("%d", map_8[i][j]);
         }
         printf("\n");
@@ -48,12 +48,8 @@ int manhattan_distance(struct Location startLocation, struct Location targetLoca
     // Manhattan distance is the sum of the absolute values of the horizontal and the vertical distance
     // between two points on a grid
     // We can use this to calculate the heuristic value of a node as our maze will only be in 4 directions.
-    int x1 = startLocation.x;
-    int y1 = startLocation.y;
-    int x2 = targetLocation.x;
-    int y2 = targetLocation.y;
-    int dx = abs(x1 - x2);
-    int dy = abs(y1 - y2);
+    int dx = abs(startLocation.x - targetLocation.x);
+    int dy = abs(startLocation.y - targetLocation.y);
     return dx + dy;
 }
 

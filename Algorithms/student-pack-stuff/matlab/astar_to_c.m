@@ -28,12 +28,12 @@ function [retmap,retvisited,retsteps] = astar_to_c( matrix,startlocation,targetl
     openList(1).f = 0;
     closedList = [];
     
-    steps = [];
+    steps = [0,0];
     
     while ~isempty(openList)
         [~, minIndex] = min([openList.f]);
         current = openList(minIndex);
-        openList(minIndex) = []; % Remove from open list
+        openList(minIndex) = [NaN]; % Remove from open list
         
         row = current.location(1);
         col = current.location(2);
