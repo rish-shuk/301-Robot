@@ -154,13 +154,14 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     // initialise maximum distance- will be decremented
     int shortestDist = distances[targetlocation.row][targetlocation.col];
     // retsteps can be generated from here
-    struct Location retSteps[shortestDist]; // store every step of path
+    struct Location *retSteps = malloc(sizeof(struct Location) * shortestDist); // store every step of path- pointer to array
     int currentRow = targetlocation.row;
     int currentCol = targetlocation.col;
-    retSteps[shortestDist].row = currentRow; 
-    retSteps[shortestDist].col = currentCol; // add targetLocation to retSteps
+    retSteps[shortestDist-1].row = currentRow; 
+    retSteps[shortestDist-1].col = currentCol; // add targetLocation to retSteps
+    //printf("retSteps[%d]: %d,%d\n", shortestDist-1, currentRow, currentCol);
     map[currentRow][currentCol] = 'X'; // mark finish location
-    printf("%d,%d\n", currentRow, currentCol); // print optimal step
+    //printf("%d,%d\n", currentRow, currentCol); // print optimal step
     // reconstruct path by reversing paths array and taking shortest distance
     while(shortestDist > 0) {    
         // make a move, check if valid and is the next step in path
@@ -173,7 +174,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
                 shortestDist--; // decrement distance
                 currentRow = newRow; 
                 currentCol = newCol; // change current location
-                //printf("%d,%d\n",currentRow,currentCol); // print visited step
+                //printf("retSteps[%d]: %d,%d\n", shortestDist,currentRow,currentCol); // print visited step
                 retSteps[shortestDist].row = currentRow; 
                 retSteps[shortestDist].col = currentCol; // add currentRow and currentCol to retstep- stores optimal path
                 if(currentRow == startlocation.row && currentCol == startlocation.col) {
@@ -181,10 +182,22 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
                     break;
                 }   
             }
-
         }
     }
     printMap(map);
+    //return retSteps;
+}
+
+void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
+    int currentRow = startLocation.row;
+    int currentCol = startLocation.col; // get starting location
+    struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
+        // traverse map, check for * or X until targetLocation reachec
+    while (currentRow != targetLocation.row && currentCol != targetLocation.col) {
+        for(int i = 0; i < 4; i++) {
+            
+        }
+    }
 }
 
 int main() {
@@ -199,5 +212,6 @@ int main() {
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
     dijkstra(map, startLocation, targetLocation); // find shortest path
+
     return 0;
 }
