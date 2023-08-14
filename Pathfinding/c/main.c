@@ -207,6 +207,7 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
 
             // check next step in path and rotate and move accordingly- begin traversal
             if(map[newRow][newCol] == 'x' && visited[newRow][newCol] == 0) {
+                visited[newRow][newCol] = 1; // mark new location as visited
                 // move robot NEED TO CALIBRATE FOR DISTANCES AND DETERMINE ORIENTATION TO SEE IF A ROTATION IS NEEDED
                 switch (i)
                 {
