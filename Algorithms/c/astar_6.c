@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "map_1.h"
 #include "map_8.h"
+#include "arraylist.h"
 
 void print_map_1() {
     // Access and print the array data
@@ -30,7 +31,7 @@ typedef struct {
 } Location;
 
 typedef struct {
-    Location parent;
+    Location parent, position;
     int f, g, h;
 } Node;
 
@@ -85,18 +86,18 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
     // OPEN - the set of nodes to be evalutated
     // CLOSED - the set of nodes already evaluated
     // -=-=- this should be fine v
-    Node open_list[MAP_ROWS][MAP_COLS] = {0};
+    
+    // 15/08/23 -- CHANGING OPENLIST AND CLOSED LIST TO BE AN ARRAYLIST
+    //Node open_list[MAP_ROWS][MAP_COLS] = {0};
+    arraylist* open_list = arraylist_create();
+
     bool closed_list[MAP_ROWS][MAP_COLS] = {false};
     Location came_from[MAP_ROWS][MAP_COLS] = {0};
+
+
     // -=-=- this should be fine ^
 
-    // Initialise every node on the open list to be of highest F level
-    for (int y = 0; y < MAP_ROWS; y++) {
-        for (int x = 0; x < MAP_COLS; x++) {
-            open_list[y][x] = (Node){.f = 999};
-            printf("we are here? at %d\n", open_list[y][x].f);
-        }
-    }
+
 
     // Create moves list
     Moves moves_list[4] = {
@@ -113,11 +114,13 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
     // h = distance from current node to the target node.
     Node start_node = {
         .parent = {.x = -1, .y = -1},
+        .position = {.x = start.x, .y = start.y},
         .f = 0,
         .g = 0,
         .h = heuristic(start, end)
     };
-    open_list[start.y][start.x] = start_node;
+    //open_list[start.y][start.x] = start_node;
+    arraylist_add(open_list, &start_node);
     came_from[start.y][start.x] = start_node.parent;
     //closed_list[start.y][start.x] = true;
     // -=-=- this should be fine ^
@@ -125,33 +128,47 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
     // loop
     while (true) {
         Location current = {-1, -1};
-        int min_f = 0;
+        Node* currentNode;
+        int nodeIndex = 0;
+        int min_f = -1;
         // current node = node in open list with lowest f value
         // Find the node with the lowest f value in the open list
-        // -=-=- this should be fine v
-        for (int y = 0; y < MAP_ROWS; y++) {
-            for (int x = 0; x < MAP_COLS; x++) {
-                //printf("before if statement of finding lowet f\n");
-                if (open_list[y][x].f >= 0 && (!closed_list[y][x]) &&
-                    (min_f == -1 || open_list[y][x].f < min_f)) {
-                    min_f = open_list[y][x].f;
-                    current.x = x;
-                    current.y = y;
-                    //printf("YEAH WE IN\n");
-                    printf("FOUND LOWEST F AT (%d, %d) of %d\n", current.x, current.y, open_list[y][x].f);
-                }
+        int openlistlength = arraylist_size(open_list);
+        for (int i = 0; i < openlistlength; i++) {
+            currentNode = (Node*)arraylist_get(open_list, i);
+            if (currentNode->f >= 0 && (!closed_list[currentNode->position.y][currentNode->position.x]) &&
+                (min_f == -1 || currentNode->f < min_f)) {
+                min_f = currentNode->f;
+                current.x = currentNode->position.x;
+                current.y = currentNode->position.y;
+                nodeIndex = i;
             }
         }
-        // -=-=- this should be fine ^
+
+        // -=-=- THIS WORKS BUT THE OPENLIST ITSELF IS NOT WORKING
+        // for (int y = 0; y < MAP_ROWS; y++) {
+        //     for (int x = 0; x < MAP_COLS; x++) {
+        //         //printf("before if statement of finding lowet f\n");
+        //         if (open_list[y][x].f >= 0 && (!closed_list[y][x]) &&
+        //             (min_f == -1 || open_list[y][x].f < min_f)) {
+        //             min_f = open_list[y][x].f;
+        //             current.x = x;
+        //             current.y = y;
+        //             //printf("YEAH WE IN\n");
+        //             printf("FOUND LOWEST F AT (%d, %d) of %d\n", current.x, current.y, open_list[y][x].f);
+        //         }
+        //     }
+        // }
+        // -=-=- 
         //printf("BEFORE PATH FOUND OR NO PATH POSSIBLE\n");
 
         // -=-=- this should be fine v
-        // SPLIT INTO TWO FOR DEBUGGING PURPOSES
-        if (current.x == -1) {
-            printf("NO PATH POSSIBLE!!!!!!\n");
-            // No path possible
-            break;
-        }
+        // SPLIT INTO TWO FOR DEBUGGING PURPOSES // 3:16am me, isn't this breaking things???
+        // if (current.x == -1) {
+        //     printf("NO PATH POSSIBLE!!!!!!\n");
+        //     // No path possible
+        //     break;
+        // }
         // if current is the target node // path has been found 
         if (current.x == end.x && current.y == end.y) {
             printf("PATH FOUND!!!!!!!!!\n");
@@ -161,7 +178,8 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
         // -=-=- this should be fine ^
 
 
-        // "remove current node from open list"
+        // remove current node from open list
+        arraylist_remove(open_list, nodeIndex);
         // add current to closed list
         closed_list[current.y][current.x] = true;
 
@@ -179,6 +197,7 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
         // -- ALSO X VALUE OF LOCATIONS IN came_FROM IS NOT CORRECT -- NEED TO FIND OUT WHY
         // -- CONSIDERING THAT IT BREAKS OUT OF THELOOP, IT MUST HAVE 
 
+        // foreach neighbour of the current node
         // -- THIS IS CHECKING DIAGNOALS, NEED TO ONLY CHECK ADJACENT NODES -- THIS MIGHT BE THE ROOT OF THE PROBLEM
         for (int i = 0; i < 4; i++) {
             int dx = moves_list[i].dx;
@@ -186,6 +205,17 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 
             int neighbor_x = current.x + dx;
             int neighbor_y = current.y + dy;
+
+            int tentative_g = currentNode->g + 1;
+
+            Node neighborNode = {
+                .parent = {.x = current.x, .y = current.y},
+                .position = {.x = neighbor_x, .y = neighbor_y},
+                .f = 0,
+                .g = tentative_g,
+                .h = 0
+            };
+
             //printf("BEFORE WALKABLE\n");
 
             // if neighbour is not travesrable or neighbour is in closed list
@@ -197,33 +227,55 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 
             printf("PASSED THROUGH! NEIGHBOUR COORDS = %d, %d\n", neighbor_x, neighbor_y);
 
-            int tentative_g = open_list[current.y][current.x].g + 1;
-            bool neighbor_is_better = false;
-            // if new path to neighbour is shorter OR neighbour is not in OPEN
-                // set f cost of neighbour
-                // set parent of neighbour t ocurrent
-                // if neighbour is not in OPEN
-                    // add neighbour to OPEN
-            //printf("==-=-==-==before if=-=-=-==-=\n");
-            if (!open_list[neighbor_y][neighbor_x].f || tentative_g < open_list[neighbor_y][neighbor_x].g) {
-                neighbor_is_better = true;
-                open_list[neighbor_y][neighbor_x].g = tentative_g;
-                open_list[neighbor_y][neighbor_x].h = heuristic(
-                    (Location){.x = neighbor_x, .y = neighbor_y},
-                    end
-                );
-                open_list[neighbor_y][neighbor_x].f = open_list[neighbor_y][neighbor_x].g +
-                                                    open_list[neighbor_y][neighbor_x].h;
-                came_from[neighbor_y][neighbor_x] = current;
-                printf("current = %d, %d\n", current.x, current.y);
-                printf("came_from[%d][%d] = %d, %d\n", neighbor_x, neighbor_y, came_from[neighbor_y][neighbor_x].x, came_from[neighbor_y][neighbor_x].y);
+            //int tentative_g = open_list[current.y][current.x].g + 1;
+
+            //bool neighbor_is_better = false;
+
+            // if new path to neighbour is shorter OR 
+            // neighbour is not in OPEN
+            bool isNeighbourInOpen = false;
+            for (int i = 0; i < openlistlength; i++) {
+                currentNode = (Node*)arraylist_get(open_list, i);
+                if (currentNode->position.x == neighbor_x && currentNode->position.y == neighbor_y) {
+                    isNeighbourInOpen = true;
+                }
             }
+
+            if (isNeighbourInOpen){
+                neighborNode.h = heuristic(neighborNode.position, end);
+                // set f cost of neighbour
+                neighborNode.f = neighborNode.g + neighborNode.h;
+                // set parent of neighbour to current
+                neighborNode.parent = current;
+                came_from[neighbor_y][neighbor_x] = current;
+                // if neighbour is not in OPEN
+                // add neighbour to OPEN
+                arraylist_add(open_list, &neighborNode);
+                //     printf("current = %d, %d\n", current.x, current.y);
+                //     printf("came_from[%d][%d] = %d, %d\n", neighbor_x, neighbor_y, came_from[neighbor_y][neighbor_x].x, came_from[neighbor_y][neighbor_x].y);
+
+            }
+
+            //printf("==-=-==-==before if=-=-=-==-=\n");
+            // if (!open_list[neighbor_y][neighbor_x].f || tentative_g < open_list[neighbor_y][neighbor_x].g) {
+            //     neighbor_is_better = true;
+            //     open_list[neighbor_y][neighbor_x].g = tentative_g;
+            //     open_list[neighbor_y][neighbor_x].h = heuristic(
+            //         (Location){.x = neighbor_x, .y = neighbor_y},
+            //         end
+            //     );
+            //     open_list[neighbor_y][neighbor_x].f = open_list[neighbor_y][neighbor_x].g +
+            //                                         open_list[neighbor_y][neighbor_x].h;
+            //     came_from[neighbor_y][neighbor_x] = current;
+            //     printf("current = %d, %d\n", current.x, current.y);
+            //     printf("came_from[%d][%d] = %d, %d\n", neighbor_x, neighbor_y, came_from[neighbor_y][neighbor_x].x, came_from[neighbor_y][neighbor_x].y);
+            // }
             //printf("==-=-==-==after if=-=-=-==-=\n");
 
-            if (neighbor_is_better) {
-                // Add the neighbor to the open list
-                open_list[neighbor_y][neighbor_x].parent = current;
-            }
+            // if (neighbor_is_better) {
+            //     // Add the neighbor to the open list
+            //     open_list[neighbor_y][neighbor_x].parent = current;
+            // }
         }
     }
 

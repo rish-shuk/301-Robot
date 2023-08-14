@@ -5,8 +5,8 @@
 
 void print_map_1() {
     // Access and print the array data
-    for (int i = 0; i < MAP_HEIGHT; i++) {
-        for (int j = 0; j < MAP_WIDTH; j++) {
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
             printf("%d", map_1[i][j]);
         }
         printf("\n");
@@ -15,8 +15,8 @@ void print_map_1() {
 
 void print_map_8() {
     // Access and print the array data
-    for (int i = 0; i < MAP_HEIGHT; i++) {
-        for (int j = 0; j < MAP_WIDTH; j++) {
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
             printf("%d", map_8[i][j]);
         }
         printf("\n");
@@ -73,6 +73,11 @@ struct Node get_lowest_f(struct List list) {
 // CLOSED - the set of notes already evaluated
 // add the start node to OPEN
 // https://www.youtube.com/watch?v=-L-WgKMFuhE
+
+
+
+
+
 
 
 
