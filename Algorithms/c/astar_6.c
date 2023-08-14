@@ -144,6 +144,7 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
         for (int i = 0; i < openlistlength; i++) {
             //printf("ok we are looping through openlistlength\n");
             currentNode = (Node*)arraylist_get(open_list, i);
+            printf("Current Nodes in Open List: %d, %d\n", currentNode->position.x, currentNode->position.y);
             if (currentNode->f >= 0 && (!closed_list[currentNode->position.y][currentNode->position.x]) &&
                 (min_f == -1 || currentNode->f < min_f)) {
                 //printf("ok we set some stuff\n");
@@ -154,6 +155,7 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
             }
             //printf("ok we are ending loop\n");
         }
+        printf("New current node: %d, %d\n", current.x, current.y);
 
         // -=-=- THIS WORKS BUT THE OPENLIST ITSELF IS NOT WORKING
         // for (int y = 0; y < MAP_ROWS; y++) {
@@ -283,11 +285,16 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
                 // if neighbour is not in OPEN
                 // add neighbour to OPEN
                 arraylist_add(open_list, &neighborNode);
+                openlistlength = arraylist_size(open_list);
                 //     printf("current = %d, %d\n", current.x, current.y);
                 //     printf("came_from[%d][%d] = %d, %d\n", neighbor_x, neighbor_y, came_from[neighbor_y][neighbor_x].x, came_from[neighbor_y][neighbor_x].y);
                 printf("ok we add node\n");
                 printf("ok what is current size of openlistlength: %d\n", openlistlength);
                 printf("ok size of openlist is %d\n", arraylist_size(open_list));
+                for (int i = 0; i < openlistlength; i++) {
+                    Node* currentNode = (Node*)arraylist_get(open_list, i);
+                    printf("Current Nodes in Open List (checking inside neighbour check): %d, %d\n", currentNode->position.x, currentNode->position.y);
+                }
             }
 
             //printf("==-=-==-==before if=-=-=-==-=\n");
