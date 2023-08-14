@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include "map_1.h"
 #include "map_8.h"
-#include "arraylist.h"
+#include "arraylist.c"
 
 void print_map_1() {
     // Access and print the array data
@@ -135,14 +135,17 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
         // Find the node with the lowest f value in the open list
         int openlistlength = arraylist_size(open_list);
         for (int i = 0; i < openlistlength; i++) {
+            printf("ok we are looping through openlistlength\n");
             currentNode = (Node*)arraylist_get(open_list, i);
             if (currentNode->f >= 0 && (!closed_list[currentNode->position.y][currentNode->position.x]) &&
                 (min_f == -1 || currentNode->f < min_f)) {
+                printf("ok we set some stuff\n");
                 min_f = currentNode->f;
                 current.x = currentNode->position.x;
                 current.y = currentNode->position.y;
                 nodeIndex = i;
             }
+            printf("ok we are ending loop\n");
         }
 
         // -=-=- THIS WORKS BUT THE OPENLIST ITSELF IS NOT WORKING
@@ -180,6 +183,8 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 
         // remove current node from open list
         arraylist_remove(open_list, nodeIndex);
+        openlistlength = arraylist_size(open_list);
+
         // add current to closed list
         closed_list[current.y][current.x] = true;
 
@@ -235,7 +240,12 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
             // neighbour is not in OPEN
             bool isNeighbourInOpen = false;
             for (int i = 0; i < openlistlength; i++) {
-                currentNode = (Node*)arraylist_get(open_list, i);
+                // printf("ok we loop once more?\n");
+                // printf("ok what is current size of openlistlength: %d\n", openlistlength);
+                // printf("ok size of openlist is %d\n", arraylist_size(open_list));
+                void* result = arraylist_get(open_list, i);
+                Node* currentNode = (Node*)result;
+                //printf("do we crash here?\n");
                 if (currentNode->position.x == neighbor_x && currentNode->position.y == neighbor_y) {
                     isNeighbourInOpen = true;
                 }
