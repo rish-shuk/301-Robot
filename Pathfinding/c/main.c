@@ -192,10 +192,45 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
     int currentRow = startLocation.row;
     int currentCol = startLocation.col; // get starting location
     struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
+    int visited[MAX_ROWS][MAX_COLS];
+    for(int i = 0; i < MAX_ROWS; i++) {
+        for(int j = 0; j < MAX_COLS; j++) {
+            visited[i][j] = 0; // initialise all points as unvisited
+        }
+    }
         // traverse map, check for * or X until targetLocation reachec
     while (currentRow != targetLocation.row && currentCol != targetLocation.col) {
         for(int i = 0; i < 4; i++) {
-            
+            int newRow = currentRow + moves[i].row;
+            int newCol = currentCol + moves[i].col;
+            // if the next step in path has not been visited and is on optimal path, move there
+            if(map[newRow][newCol] == 'x' && visited[newRow][newCol] == 0) {
+                // move robot NEED TO CALIBRATE FOR DISTANCES AND DETERMINE ORIENTATION TO SEE IF A ROTATION IS NEEDED
+                switch (i)
+                {
+                case 0:
+                    // move right DETERMINE ORIENTATION FIRST
+                    // ROTATION_CLOCKWISE
+                    // MOVE FORWARD
+                    // STOP
+                    break;
+                case 1:
+                    // move left DETERMINE ORIENTATION FIRST
+                    // ROTATION_ANTICLOCKWISE
+                    // MOVE FORWARD 
+                    // STOP
+                    break;
+                case 2:
+                    // move up DETERMINE ORIENTATION FIRST
+                    // MOVE FORWARD
+                    break;
+                case 3:
+                    // move down- shouldn't need this one, robot will be driving forward
+                    break;
+                default:
+                    break;
+                }
+            }
         }
     }
 }
