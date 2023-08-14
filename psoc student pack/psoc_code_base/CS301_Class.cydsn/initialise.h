@@ -14,9 +14,6 @@
 #include <stdlib.h>
 #include <project.h>
 //* ========================================
-#include "defines.h"
-#include "vars.h"
-
 
 void init() {
     Clock_PWM_Start();
