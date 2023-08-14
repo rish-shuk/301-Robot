@@ -103,7 +103,20 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
     Location came_from[MAP_ROWS][MAP_COLS] = {0};
     // -=-=- this should be fine ^
 
+    Node *nodes[MAP_ROWS][MAP_COLS] = {0};
 
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
+            nodes[i][j] = (Node*)malloc(sizeof(Node));
+            nodes[i][j]->f = 0;
+            nodes[i][j]->g = 0;
+            nodes[i][j]->h = 0;
+            nodes[i][j]->parent.x = -1;
+            nodes[i][j]->parent.y = -1;
+            nodes[i][j]->position.x = -1;
+            nodes[i][j]->position.y = -1;
+        }
+    }
 
     // Create moves list
     Moves moves_list[4] = {
@@ -126,7 +139,8 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
         .h = heuristic(start, end)
     };
     //open_list[start.y][start.x] = start_node;
-    arraylist_add(open_list, &start_node);
+    nodes[start.y][start.x] = &start_node;
+    arraylist_add(open_list, nodes[start.y][start.x]);
     came_from[start.y][start.x] = start_node.parent;
     path_taken[start.y][start.x] = true;
     //closed_list[start.y][start.x] = true;
@@ -284,11 +298,20 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
                 came_from[neighbor_y][neighbor_x] = current;
                 // if neighbour is not in OPEN
                 // add neighbour to OPEN
-                arraylist_add(open_list, &neighborNode);
+
+                nodes[neighbor_y][neighbor_x]->f = neighborNode.f;
+                nodes[neighbor_y][neighbor_x]->g = neighborNode.g;
+                nodes[neighbor_y][neighbor_x]->h = neighborNode.h;
+                nodes[neighbor_y][neighbor_x]->parent = neighborNode.parent;
+                nodes[neighbor_y][neighbor_x]->position = neighborNode.position;
+
+                arraylist_add(open_list, nodes[neighbor_y][neighbor_x]);
                 openlistlength = arraylist_size(open_list);
                 //     printf("current = %d, %d\n", current.x, current.y);
                 //     printf("came_from[%d][%d] = %d, %d\n", neighbor_x, neighbor_y, came_from[neighbor_y][neighbor_x].x, came_from[neighbor_y][neighbor_x].y);
-                printf("ok we add node\n");
+                printf("ok we add node (%d,%d)\n", neighbor_x, neighbor_y);
+                printf("pointer node (%d,%d)\n", nodes[neighbor_y][neighbor_x]->position.x, nodes[neighbor_y][neighbor_x]->position.y);
+                printf("these should be the same\n");
                 printf("ok what is current size of openlistlength: %d\n", openlistlength);
                 printf("ok size of openlist is %d\n", arraylist_size(open_list));
                 for (int i = 0; i < openlistlength; i++) {
@@ -326,7 +349,7 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 // using map_1
 int main() {
     Location start = {.x = 1, .y = 2};
-    Location end = {.x = 3, .y = 3};
+    Location end = {.x = 3, .y = 1};
     Location path[1000] = {0};
     int path_length = 0;
     bool *path_taken[MAP_ROWS][MAP_COLS] = {false};
