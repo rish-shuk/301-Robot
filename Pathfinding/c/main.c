@@ -191,8 +191,8 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
     int currentRow = startLocation.row;
     int currentCol = startLocation.col; // get starting location
-    bool leftOrient, rightOrient, upOrient = false; // initialise orientation booleans- check which direction they're facing
-    struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves- no need for downward movement
+    bool leftOrient, rightOrient, upOrient, downOrient = false; // initialise orientation booleans- check which direction they're facing
+    struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
     int visited[MAX_ROWS][MAX_COLS];
     for(int i = 0; i < MAX_ROWS; i++) {
         for(int j = 0; j < MAX_COLS; j++) {
@@ -201,7 +201,7 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
     }
         // traverse map, check for * or X until targetLocation reached
     while (currentRow != targetLocation.row && currentCol != targetLocation.col) {
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 4; i++) {
             int newRow = currentRow + moves[i].row;
             int newCol = currentCol + moves[i].col;
 
@@ -211,7 +211,7 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
                 switch (i)
                 {
                 case 0:
-                    // increment a column (move right)
+                    // increment column (move right)
                     if(upOrient) {
                         // rotation clockwise
                     } else if(downOrient) {
@@ -222,7 +222,7 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
                     // STOP
                     break;
                 case 1:
-                    // decrement a column (move left)
+                    // decrement column (move left)
                     if(upOrient) {
                         // rotation anticlockwise
                     } else if(downOrient) {
@@ -234,18 +234,27 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
                     break;
                 case 2:
                     // increment row (move up)
-                    if(leftOrient) {
-                        // rotation clockwise
-                    } else if(rightOrient) {
+                    if(rightOrient) {
                         // rotation anticlockwise
+                    } else if(leftOrient) {
+                        // rotation clockwise
                     }
                     upOrient = true;
                     // MOVE FORWARD
                     // stop
                     break;
-
+                case 3:
+                    // decrement row (move down)
+                    if(rightOrient) {
+                        // rotation clockwise
+                    } else if(leftOrient) {
+                        // rotation anticlockwise
+                    }
+                    downOrient = true;
+                    // MOVE FORWARD
+                    // STOP
+                    break;
                 default:
-                    // no need for down movement macro- robot will be driving forward
                     break;
                 }
             }
