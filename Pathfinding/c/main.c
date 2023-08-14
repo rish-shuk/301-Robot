@@ -66,10 +66,7 @@ struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]) {
     return randomLocation;
 }
 
-struct PriorityQueue {
-    struct Location location;
-    int distance;
-};
+
 
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
@@ -85,6 +82,11 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
             visitedMap[i][j] = 1; // fill visited array with 1s- mark as unvisited
         }
     }
+
+    struct PriorityQueue {
+        struct Location location;
+        int distance;
+    };
 
     struct PriorityQueue pq[MAX_ROWS * MAX_COLS]; // initialise priority queue
     int pqSize = 0;
