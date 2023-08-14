@@ -60,12 +60,13 @@ int heuristic(Location a, Location b) {
 }
 
 // this function is in the works of being fixed.
+// OBJECTIVE: USING THE came_from ARRAY, RECONSTRUCT THE PATH FROM THE END TO THE START
 int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, Location start, Location* path) {
     int path_length = 0;
     printf("========\n");
     for (int y = 0; y < MAP_ROWS; y++) {
         for (int x = 0; x < MAP_COLS; x++) {
-            printf("[%d, %d]", came_from[y][x].x, came_from[y][x].y);
+            printf("[%02d, %02d]", came_from[y][x].x, came_from[y][x].y);
         }
         printf("\n");
     }
