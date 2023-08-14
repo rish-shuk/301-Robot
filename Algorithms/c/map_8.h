@@ -2,11 +2,11 @@
 #define MAP_8_H
 
 // Define the dimensions of the array
-#define MAP_HEIGHT 15
-#define MAP_WIDTH 19
+#define MAP_ROWS 15
+#define MAP_COLS 19
 
 // Define the 2D array with 0s and 1s
-int map_8[MAP_HEIGHT][MAP_WIDTH] = {
+int map_8[MAP_ROWS][MAP_COLS] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1},
 {1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1},
 {1,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1},
