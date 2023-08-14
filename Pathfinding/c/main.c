@@ -191,6 +191,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
     int currentRow = startLocation.row;
     int currentCol = startLocation.col; // get starting location
+    bool leftOrient, rightOrient, upOrient = false; // initialise orientation booleans- check which direction they're facing
     struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
     int visited[MAX_ROWS][MAX_COLS];
     for(int i = 0; i < MAX_ROWS; i++) {
@@ -203,31 +204,48 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
         for(int i = 0; i < 4; i++) {
             int newRow = currentRow + moves[i].row;
             int newCol = currentCol + moves[i].col;
-            // if the next step in path has not been visited and is on optimal path, move there
+
+            // check next step in path and rotate and move accordingly- begin traversal
             if(map[newRow][newCol] == 'x' && visited[newRow][newCol] == 0) {
                 // move robot NEED TO CALIBRATE FOR DISTANCES AND DETERMINE ORIENTATION TO SEE IF A ROTATION IS NEEDED
                 switch (i)
                 {
                 case 0:
-                    // move right DETERMINE ORIENTATION FIRST
-                    // ROTATION_CLOCKWISE
+                    // increment a column (move right)
+                    if(upOrient) {
+                        // rotation clockwise
+                    } else if(downOrient) {
+                        // rotation anticlockwise
+                    }
+                    rightOrient = true;
                     // MOVE FORWARD
                     // STOP
                     break;
                 case 1:
-                    // move left DETERMINE ORIENTATION FIRST
-                    // ROTATION_ANTICLOCKWISE
+                    // decrement a column (move left)
+                    if(upOrient) {
+                        // rotation anticlockwise
+                    } else if(downOrient) {
+                        // rotation clockwise
+                    }
+                    leftOrient = true;
                     // MOVE FORWARD 
                     // STOP
                     break;
                 case 2:
-                    // move up DETERMINE ORIENTATION FIRST
+                    // increment row (move up)
+                    if(leftOrient) {
+                        // rotation clockwise
+                    } else if(rightOrient) {
+                        // rotation anticlockwise
+                    }
+                    upOrient = true;
                     // MOVE FORWARD
+                    // stop
                     break;
-                case 3:
-                    // move down- shouldn't need this one, robot will be driving forward
-                    break;
+
                 default:
+                    // no need for down movement macro- robot will be driving forward
                     break;
                 }
             }
