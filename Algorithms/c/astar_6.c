@@ -70,6 +70,7 @@ int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, L
         printf("\n");
     }
     printf("========\n");
+    int crashindicator = 0;
     while (current.x != -1 && current.y != -1) {
         //printf("while - loop -");
         //printf("current length: %d\n", path_length);
@@ -77,12 +78,19 @@ int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, L
         (path_length)++;
         printf("current location: %d, %d\n", current.x, current.y);
         current = came_from[current.y][current.x];
+        if (current.x == 0 && current.y == 0) {
+            crashindicator++;
+        }
+        if (crashindicator > 3) {
+            printf("INFINTIE LOOP OCCURED: 0,0 EVERYWHERE - CRASH\n");
+            break;
+        }
     }
     printf("WE ARE OUT OF WHILE LOOP IN RECONSTRUCT\n");
 }
 
 // this function is in the works of being fixed. -- some parts are fixed.
-int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* path) {
+int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* path, bool *path_taken[MAP_ROWS][MAP_COLS]) {
     // OPEN - the set of nodes to be evalutated
     // CLOSED - the set of nodes already evaluated
     // -=-=- this should be fine v
@@ -93,8 +101,6 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 
     bool closed_list[MAP_ROWS][MAP_COLS] = {false};
     Location came_from[MAP_ROWS][MAP_COLS] = {0};
-
-
     // -=-=- this should be fine ^
 
 
@@ -122,6 +128,7 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
     //open_list[start.y][start.x] = start_node;
     arraylist_add(open_list, &start_node);
     came_from[start.y][start.x] = start_node.parent;
+    path_taken[start.y][start.x] = true;
     //closed_list[start.y][start.x] = true;
     // -=-=- this should be fine ^
 
@@ -135,17 +142,17 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
         // Find the node with the lowest f value in the open list
         int openlistlength = arraylist_size(open_list);
         for (int i = 0; i < openlistlength; i++) {
-            printf("ok we are looping through openlistlength\n");
+            //printf("ok we are looping through openlistlength\n");
             currentNode = (Node*)arraylist_get(open_list, i);
             if (currentNode->f >= 0 && (!closed_list[currentNode->position.y][currentNode->position.x]) &&
                 (min_f == -1 || currentNode->f < min_f)) {
-                printf("ok we set some stuff\n");
+                //printf("ok we set some stuff\n");
                 min_f = currentNode->f;
                 current.x = currentNode->position.x;
                 current.y = currentNode->position.y;
                 nodeIndex = i;
             }
-            printf("ok we are ending loop\n");
+            //printf("ok we are ending loop\n");
         }
 
         // -=-=- THIS WORKS BUT THE OPENLIST ITSELF IS NOT WORKING
@@ -167,11 +174,11 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 
         // -=-=- this should be fine v
         // SPLIT INTO TWO FOR DEBUGGING PURPOSES // 3:16am me, isn't this breaking things???
-        // if (current.x == -1) {
-        //     printf("NO PATH POSSIBLE!!!!!!\n");
-        //     // No path possible
-        //     break;
-        // }
+        if (current.x <= -1 || current.y <= -1) {
+            printf("NO PATH POSSIBLE!!!!!!\n");
+            // No path possible
+            break;
+        }
         // if current is the target node // path has been found 
         if (current.x == end.x && current.y == end.y) {
             printf("PATH FOUND!!!!!!!!!\n");
@@ -182,9 +189,12 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 
 
         // remove current node from open list
-        arraylist_remove(open_list, nodeIndex);
+        printf("Before Open List Length: %d, Node Index: %d\n", openlistlength, nodeIndex);
+        if (!openlistlength == 0) {
+            arraylist_remove(open_list, nodeIndex);
+        }
         openlistlength = arraylist_size(open_list);
-
+        printf("After Removing Open List Length: %d, Node Index: %d\n", openlistlength, nodeIndex);
         // add current to closed list
         closed_list[current.y][current.x] = true;
 
@@ -203,15 +213,15 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
         // -- CONSIDERING THAT IT BREAKS OUT OF THELOOP, IT MUST HAVE 
 
         // foreach neighbour of the current node
-        // -- THIS IS CHECKING DIAGNOALS, NEED TO ONLY CHECK ADJACENT NODES -- THIS MIGHT BE THE ROOT OF THE PROBLEM
         for (int i = 0; i < 4; i++) {
             int dx = moves_list[i].dx;
             int dy = moves_list[i].dy;
 
             int neighbor_x = current.x + dx;
             int neighbor_y = current.y + dy;
-
             int tentative_g = currentNode->g + 1;
+            printf("Current Position: %d, %d\n", current.x, current.y);
+            printf("Current Neighbour being looked at %d, %d\n", neighbor_x, neighbor_y);
 
             Node neighborNode = {
                 .parent = {.x = current.x, .y = current.y},
@@ -225,24 +235,35 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
 
             // if neighbour is not travesrable or neighbour is in closed list
             // skip to the next neighbour
-            if (!is_walkable(map, neighbor_x, neighbor_y) || closed_list[neighbor_y][neighbor_x]) {
-                printf("UNWALKABLE OR CLOSED LIST! NEIGHBOUR COORDS = %d, %d\n", neighbor_x, neighbor_y);
+            if (!is_walkable(map, neighbor_x, neighbor_y)) {
+                printf("UNWALKABLE! NEIGHBOUR COORDS = %d, %d\n", neighbor_x, neighbor_y);
+                continue;
+            }
+            if (closed_list[neighbor_y][neighbor_x]) {
+                printf("CLOSED LIST! NEIGHBOUR COORDS = %d, %d\n", neighbor_x, neighbor_y);
                 continue;
             }
 
             printf("PASSED THROUGH! NEIGHBOUR COORDS = %d, %d\n", neighbor_x, neighbor_y);
-
+            path_taken[neighbor_y][neighbor_x] = true;
             //int tentative_g = open_list[current.y][current.x].g + 1;
 
             //bool neighbor_is_better = false;
 
             // if new path to neighbour is shorter OR 
             // neighbour is not in OPEN
+            printf("current size of openlistlength: %d\n", openlistlength);
+            printf("size of openlist is %d\n", arraylist_size(open_list));
             bool isNeighbourInOpen = false;
+
+            if (openlistlength == 0) {
+                isNeighbourInOpen = false;
+            }
+            // check if neighbour is in open list
             for (int i = 0; i < openlistlength; i++) {
                 // printf("ok we loop once more?\n");
-                // printf("ok what is current size of openlistlength: %d\n", openlistlength);
-                // printf("ok size of openlist is %d\n", arraylist_size(open_list));
+                printf("ok what is current size of openlistlength: %d\n", openlistlength);
+                printf("ok size of openlist is %d\n", arraylist_size(open_list));
                 void* result = arraylist_get(open_list, i);
                 Node* currentNode = (Node*)result;
                 //printf("do we crash here?\n");
@@ -251,7 +272,8 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
                 }
             }
 
-            if (isNeighbourInOpen){
+            // if neighbour is not in OPEN
+            if (!isNeighbourInOpen){
                 neighborNode.h = heuristic(neighborNode.position, end);
                 // set f cost of neighbour
                 neighborNode.f = neighborNode.g + neighborNode.h;
@@ -263,7 +285,9 @@ int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* p
                 arraylist_add(open_list, &neighborNode);
                 //     printf("current = %d, %d\n", current.x, current.y);
                 //     printf("came_from[%d][%d] = %d, %d\n", neighbor_x, neighbor_y, came_from[neighbor_y][neighbor_x].x, came_from[neighbor_y][neighbor_x].y);
-
+                printf("ok we add node\n");
+                printf("ok what is current size of openlistlength: %d\n", openlistlength);
+                printf("ok size of openlist is %d\n", arraylist_size(open_list));
             }
 
             //printf("==-=-==-==before if=-=-=-==-=\n");
@@ -298,13 +322,13 @@ int main() {
     Location end = {.x = 3, .y = 3};
     Location path[1000] = {0};
     int path_length = 0;
-
+    bool *path_taken[MAP_ROWS][MAP_COLS] = {false};
 
     printf("Map\n");
     print_map_1();
 
     printf("BEFORE ASTAR ALGORTHM?\n");
-    path_length = astar(map_1, start, end, path);
+    path_length = astar(map_1, start, end, path, path_taken);
     printf("AFTER ASTAR ALGORTHM?\n");
 
 
@@ -314,7 +338,7 @@ int main() {
     int map_with_path[MAP_ROWS][MAP_COLS] = {0};
     for (int i = 0; i < MAP_ROWS; i++) {
         for (int j = 0; j < MAP_COLS; j++) {
-            map_with_path[j][i] = map_1[j][i];
+            map_with_path[i][j] = map_1[i][j];
         }
     }
         printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-\n");
@@ -324,6 +348,21 @@ int main() {
         map_with_path[path[i].x][path[i].y] = 5;
     }
     printf("DO WE FINISH?\n");
+    
+    // debug testing, checking where we ended up
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
+            if (path_taken[i][j]) {
+            map_with_path[i][j] = 9;
+            }
+        }
+    }
 
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
+            printf("%d", map_with_path[i][j]);
+        }
+        printf("\n");
+    }
     return 0;
 }
