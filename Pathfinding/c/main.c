@@ -192,16 +192,16 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
     int currentRow = startLocation.row;
     int currentCol = startLocation.col; // get starting location
     bool leftOrient, rightOrient, upOrient = false; // initialise orientation booleans- check which direction they're facing
-    struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
+    struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves- no need for downward movement
     int visited[MAX_ROWS][MAX_COLS];
     for(int i = 0; i < MAX_ROWS; i++) {
         for(int j = 0; j < MAX_COLS; j++) {
             visited[i][j] = 0; // initialise all points as unvisited
         }
     }
-        // traverse map, check for * or X until targetLocation reachec
+        // traverse map, check for * or X until targetLocation reached
     while (currentRow != targetLocation.row && currentCol != targetLocation.col) {
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 3; i++) {
             int newRow = currentRow + moves[i].row;
             int newCol = currentCol + moves[i].col;
 
@@ -265,6 +265,6 @@ int main() {
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
     dijkstra(map, startLocation, targetLocation); // find shortest path
-
+    // traverseMap(map, startLocation, targetLocation);
     return 0;
 }
