@@ -21,6 +21,8 @@
 //* ========================================
 #include "defines.h"
 #include "vars.h"
+#include "pathfinding.h"
+#include "initialise.h"
 
 //* ========================================
 void usbPutString(char *s);
@@ -58,23 +60,8 @@ int main()
 // --------------------------------    
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
-    // hardware task 2- start motor
-    //ADC_Timer_Start();
-    // start motor and PWMs
-    Clock_PWM_Start();
-    PWM_1_Start();
-    PWM_1_WritePeriod(100);
-    PWM_2_Start();
-    PWM_2_WritePeriod(100);
-    
-    // start quadrature decoders
-    QuadDec_M1_Start();
-    QuadDec_M2_Start();
-    isr_speed_StartEx(speedTimer);
-    SpeedTimer_Start();
-    SpeedClock_Start();
-    
-    
+    init(); // initialise clocks, pwms, adc, dac etc- done in header file
+    isr_speed_StartEx(speedTimer); // start interrupt
     
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
@@ -89,10 +76,7 @@ int main()
     for(;;)
     {
         rotationClockwise();
-        //stopMoving();
-        //CyDelay(1000);
         rotationAntiClockwise();
-        
         
         if(timerInt == 1) {
             // calculate RPM of M2
