@@ -3,6 +3,8 @@
 #include <time.h>
 #include <stdbool.h>
 
+#include "pathfinding.h"
+
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
