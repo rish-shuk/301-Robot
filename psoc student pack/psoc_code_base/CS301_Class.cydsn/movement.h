@@ -9,48 +9,24 @@
  *
  * ========================================
 */
+
+#ifndef MOVEMENT_FUNCTIONS_H
+#define MOVEMENT_FUNCTIONS_H
+
 #include "project.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-
 // Direction/ Movement macros
 //* ========================================
-// stop moving
-void stopMoving() {
-    PWM_1_WriteCompare(50);
-    PWM_2_WriteCompare(50);
-}
+// Stop moving
+void stopMoving();
 
-// rotate clockwise 90deg
-void rotationClockwise() {
-    PWM_1_WriteCompare(65);
-    PWM_2_WriteCompare(65);
-    
-    int quadPulseCount = 0;
-    QuadDec_M1_SetCounter(0);
-    while(quadPulseCount < 110) {
-        quadPulseCount = QuadDec_M1_GetCounter();
-    }
-    QuadDec_M1_SetCounter(0);
-    //CyDelay(500); // change to quadrature encoder pulses, rather than time delay
-    //stopMoving(); // stop movement, ready for next instruction
-}
+// Rotate clockwise 90 degrees
+void rotationClockwise();
 
-// rotate anticlockwise 90deg
-void rotationAntiClockwise() {
-    PWM_1_WriteCompare(35);
-    PWM_2_WriteCompare(35);
-    
-    int quadPulseCount = 0;
-    QuadDec_M1_SetCounter(0);
-    while(quadPulseCount > -105) {
-        quadPulseCount = QuadDec_M1_GetCounter();  
-    }
-    QuadDec_M1_SetCounter(0);
-    //CyDelay(500);
-    //stopMoving(); // stop movement, ready for next instruction
-}
+// Rotate anticlockwise 90 degrees
+void rotationAntiClockwise();
 
-/* [] END OF FILE */
+#endif /* MOVEMENT_FUNCTIONS_H */

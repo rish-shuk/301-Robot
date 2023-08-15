@@ -26,26 +26,12 @@
 #include "movement.h"
 
 //* ========================================
-void usbPutString(char *s);
-void usbPutChar(char c);
-void handle_usb();
-void changeDutyCycle(float percentage);
-void reverseRightWheel();
-void forwardRightWheel();
-void forwardLeftWheel();
-void reverseLeftWheel();
-void rotationClockwise();
-void rotationAntiClockwise();
-void directionForward();
-void directionBackward();
-void stopMoving();
 void quadCountToRPM(uint16 count);
 //* ========================================
 char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
-uint16 turnCount = 0;
-uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
+
 char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
 CY_ISR (speedTimer) {
@@ -62,7 +48,7 @@ int main()
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
-    findPath(map, "");// find shortest path- store this in map
+    //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     
 // ------USB SETUP ----------------    
@@ -77,8 +63,9 @@ int main()
     
     for(;;)
     {
-        rotationClockwise();
+        //traverseMap(map);
         rotationAntiClockwise();
+        rotationClockwise();
         
         if(timerInt == 1) {
             // calculate RPM of M2
@@ -91,7 +78,8 @@ int main()
             flag_KB_string = 0;
 
         }           
-    }   
+    }
+    return 0;
 }
 
 // Calculations
@@ -104,5 +92,6 @@ void quadCountToRPM(uint16 count)
     //usbPutString(buffer);
     //usbPutString("rpm ");
 }
+
 
 /* [] END OF FILE */
