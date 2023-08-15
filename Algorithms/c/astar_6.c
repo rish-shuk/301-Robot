@@ -9,7 +9,7 @@ void print_map_1() {
     // Access and print the array data
     for (int i = 0; i < MAP_ROWS; i++) {
         for (int j = 0; j < MAP_COLS; j++) {
-            printf("%d", map_1[i][j]);
+            printf("%c", map_1[i][j]);
         }
         printf("\n");
     }
@@ -48,10 +48,10 @@ bool is_valid_location(int x, int y) {
 
 // this function has been checked and should be fine
 // checks if the current map coordinates are walkable (meaning at map[y][x] == 0)
-bool is_walkable(int map[MAP_ROWS][MAP_COLS], int x, int y) {
+bool is_walkable(char map[MAP_ROWS][MAP_COLS], int x, int y) {
     // 0 = Path
     // 1 = Obstacle
-    return is_valid_location(x, y) && map[y][x] == 0;
+    return is_valid_location(x, y) && map[y][x] == '0';
 }
 
 // this function has been checked and should be fine
@@ -71,7 +71,18 @@ int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, L
         printf("\n");
     }
     printf("========\n");
+
+    char map_with_path[MAP_ROWS][MAP_COLS] = {0};
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
+            map_with_path[i][j] = map_1[i][j];
+        }
+    }
+
     int crashindicator = 0;
+    // we should be at the end
+    map_with_path[current.y][current.x] = 'X';
+
     while (current.x != -1 && current.y != -1) {
         //printf("while - loop -");
         //printf("current length: %d\n", path_length);
@@ -79,6 +90,7 @@ int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, L
         (path_length)++;
         printf("current location: %d, %d\n", current.x, current.y);
         current = came_from[current.y][current.x];
+        map_with_path[current.y][current.x] = '*';
         if (current.x == 0 && current.y == 0) {
             crashindicator++;
         }
@@ -86,12 +98,25 @@ int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, L
             printf("INFINTIE LOOP OCCURED: 0,0 EVERYWHERE - CRASH\n");
             break;
         }
+        // we should be at the start
+        if (current.x == start.x && current.y == start.y) {
+            map_with_path[current.y][current.x] = 'S';
+        }
     }
+
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
+            printf("%c", map_with_path[i][j]);
+        }
+        printf("\n");
+    }
+
+
     printf("WE ARE OUT OF WHILE LOOP IN RECONSTRUCT\n");
 }
 
 // this function is in the works of being fixed. -- some parts are fixed.
-int astar(int map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* path, bool *path_taken[MAP_ROWS][MAP_COLS]) {
+int astar(char map[MAP_ROWS][MAP_COLS], Location start, Location end, Location* path, bool *path_taken[MAP_ROWS][MAP_COLS]) {
     // OPEN - the set of nodes to be evalutated
     // CLOSED - the set of nodes already evaluated
     // -=-=- this should be fine v
