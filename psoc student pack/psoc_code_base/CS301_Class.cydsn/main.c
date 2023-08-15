@@ -46,7 +46,7 @@ int quadDec2Count = 0;
 int timerInt = 0;
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
-
+char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
 CY_ISR (speedTimer) {
     timerInt = 1;
@@ -62,6 +62,7 @@ int main()
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
+    findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     
 // ------USB SETUP ----------------    
