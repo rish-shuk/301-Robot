@@ -14,9 +14,9 @@
 void init() {
     Clock_PWM_Start();
     PWM_1_Start();
-    PWM_1_WritePeriod(255);
+    PWM_1_WritePeriod(100);
     PWM_2_Start();
-    PWM_2_WritePeriod(255);
+    PWM_2_WritePeriod(100);
 
     // start quadrature decoders
     QuadDec_M1_Start();

@@ -64,7 +64,6 @@ int main()
     for(;;)
     {
         //traverseMap(map);
-        //moveForward();
         rotationAntiClockwise();
         rotationClockwise();
         
@@ -93,6 +92,3 @@ void quadCountToRPM(uint16 count)
     //usbPutString(buffer);
     //usbPutString("rpm ");
 }
-
-
-/* [] END OF FILE */

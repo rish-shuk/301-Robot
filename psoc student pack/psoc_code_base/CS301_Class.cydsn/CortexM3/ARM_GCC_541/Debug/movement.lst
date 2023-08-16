@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 1
 
 
    1              		.syntax unified
@@ -54,21 +54,22 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
   10:movement.c    ****  * ========================================
   11:movement.c    **** */
   12:movement.c    **** #include "project.h"
-  13:movement.c    **** #include <stdio.h>
-  14:movement.c    **** #include <string.h>
-  15:movement.c    **** #include <stdlib.h>
-  16:movement.c    **** 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 2
+  13:movement.c    **** 
+  14:movement.c    **** #include <stdio.h>
+  15:movement.c    **** #include <string.h>
+  16:movement.c    **** #include <stdlib.h>
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 2
 
 
-  17:movement.c    **** uint16 turnCount = 0;
-  18:movement.c    **** uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
-  19:movement.c    **** 
-  20:movement.c    **** // Direction/ Movement macros
-  21:movement.c    **** //* ========================================
-  22:movement.c    **** // stop moving
-  23:movement.c    **** void stopMoving() {
-  42              		.loc 1 23 0
+  17:movement.c    **** 
+  18:movement.c    **** uint16 turnCount = 0;
+  19:movement.c    **** uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
+  20:movement.c    **** 
+  21:movement.c    **** // Direction/ Movement macros
+  22:movement.c    **** //* ========================================
+  23:movement.c    **** // stop moving
+  24:movement.c    **** void stopMoving() {
+  42              		.loc 1 24 0
   43              		.cfi_startproc
   44              		@ args = 0, pretend = 0, frame = 0
   45              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -78,16 +79,16 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
   49              		.cfi_offset 14, -4
   50 0002 00AF     		add	r7, sp, #0
   51              		.cfi_def_cfa_register 7
-  24:movement.c    ****     PWM_1_WriteCompare(50);
-  52              		.loc 1 24 0
+  25:movement.c    ****     PWM_1_WriteCompare(50);
+  52              		.loc 1 25 0
   53 0004 3220     		movs	r0, #50
   54 0006 FFF7FEFF 		bl	PWM_1_WriteCompare
-  25:movement.c    ****     PWM_2_WriteCompare(50);
-  55              		.loc 1 25 0
+  26:movement.c    ****     PWM_2_WriteCompare(50);
+  55              		.loc 1 26 0
   56 000a 3220     		movs	r0, #50
   57 000c FFF7FEFF 		bl	PWM_2_WriteCompare
-  26:movement.c    **** }
-  58              		.loc 1 26 0
+  27:movement.c    **** }
+  58              		.loc 1 27 0
   59 0010 00BF     		nop
   60 0012 80BD     		pop	{r7, pc}
   61              		.cfi_endproc
@@ -101,10 +102,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
   69              		.type	rotationClockwise, %function
   70              	rotationClockwise:
   71              	.LFB65:
-  27:movement.c    **** 
-  28:movement.c    **** // rotate clockwise 90deg
-  29:movement.c    **** void rotationClockwise() {
-  72              		.loc 1 29 0
+  28:movement.c    **** 
+  29:movement.c    **** // rotate clockwise 90deg
+  30:movement.c    **** void rotationClockwise() {
+  72              		.loc 1 30 0
   73              		.cfi_startproc
   74              		@ args = 0, pretend = 0, frame = 8
   75              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -116,50 +117,50 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
   81              		.cfi_def_cfa_offset 16
   82 0004 00AF     		add	r7, sp, #0
   83              		.cfi_def_cfa_register 7
-  30:movement.c    ****     PWM_1_WriteCompare(89);
-  84              		.loc 1 30 0
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 3
+  31:movement.c    ****     PWM_1_WriteCompare(65);
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 3
 
 
-  85 0006 5920     		movs	r0, #89
+  84              		.loc 1 31 0
+  85 0006 4120     		movs	r0, #65
   86 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  31:movement.c    ****     PWM_2_WriteCompare(89);
-  87              		.loc 1 31 0
-  88 000c 5920     		movs	r0, #89
+  32:movement.c    ****     PWM_2_WriteCompare(65);
+  87              		.loc 1 32 0
+  88 000c 4120     		movs	r0, #65
   89 000e FFF7FEFF 		bl	PWM_2_WriteCompare
-  32:movement.c    ****     
-  33:movement.c    ****     int quadPulseCount = 0;
-  90              		.loc 1 33 0
+  33:movement.c    ****     
+  34:movement.c    ****     int quadPulseCount = 0;
+  90              		.loc 1 34 0
   91 0012 0023     		movs	r3, #0
   92 0014 7B60     		str	r3, [r7, #4]
-  34:movement.c    ****     QuadDec_M1_SetCounter(0);
-  93              		.loc 1 34 0
+  35:movement.c    ****     QuadDec_M1_SetCounter(0);
+  93              		.loc 1 35 0
   94 0016 0020     		movs	r0, #0
   95 0018 FFF7FEFF 		bl	QuadDec_M1_SetCounter
-  35:movement.c    ****     while(quadPulseCount < 110) {
-  96              		.loc 1 35 0
+  36:movement.c    ****     while(quadPulseCount < 110) {
+  96              		.loc 1 36 0
   97 001c 03E0     		b	.L3
   98              	.L4:
-  36:movement.c    ****         quadPulseCount = QuadDec_M1_GetCounter();
-  99              		.loc 1 36 0
+  37:movement.c    ****         quadPulseCount = QuadDec_M1_GetCounter();
+  99              		.loc 1 37 0
  100 001e FFF7FEFF 		bl	QuadDec_M1_GetCounter
  101 0022 0346     		mov	r3, r0
  102 0024 7B60     		str	r3, [r7, #4]
  103              	.L3:
-  35:movement.c    ****     while(quadPulseCount < 110) {
- 104              		.loc 1 35 0
+  36:movement.c    ****     while(quadPulseCount < 110) {
+ 104              		.loc 1 36 0
  105 0026 7B68     		ldr	r3, [r7, #4]
  106 0028 6D2B     		cmp	r3, #109
  107 002a F8DD     		ble	.L4
-  37:movement.c    ****     }
-  38:movement.c    ****     QuadDec_M1_SetCounter(0);
- 108              		.loc 1 38 0
+  38:movement.c    ****     }
+  39:movement.c    ****     QuadDec_M1_SetCounter(0);
+ 108              		.loc 1 39 0
  109 002c 0020     		movs	r0, #0
  110 002e FFF7FEFF 		bl	QuadDec_M1_SetCounter
-  39:movement.c    ****     //CyDelay(500); // change to quadrature encoder pulses, rather than time delay
-  40:movement.c    ****     //stopMoving(); // stop movement, ready for next instruction
-  41:movement.c    **** }
- 111              		.loc 1 41 0
+  40:movement.c    ****     //CyDelay(500); // change to quadrature encoder pulses, rather than time delay
+  41:movement.c    ****     //stopMoving(); // stop movement, ready for next instruction
+  42:movement.c    **** }
+ 111              		.loc 1 42 0
  112 0032 00BF     		nop
  113 0034 0837     		adds	r7, r7, #8
  114              		.cfi_def_cfa_offset 8
@@ -177,14 +178,14 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  126              		.thumb_func
  127              		.type	rotationAntiClockwise, %function
  128              	rotationAntiClockwise:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 4
+
+
  129              	.LFB66:
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 4
-
-
-  42:movement.c    **** 
-  43:movement.c    **** // rotate anticlockwise 90deg
-  44:movement.c    **** void rotationAntiClockwise() {
- 130              		.loc 1 44 0
+  43:movement.c    **** 
+  44:movement.c    **** // rotate anticlockwise 90deg
+  45:movement.c    **** void rotationAntiClockwise() {
+ 130              		.loc 1 45 0
  131              		.cfi_startproc
  132              		@ args = 0, pretend = 0, frame = 8
  133              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -196,51 +197,51 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  139              		.cfi_def_cfa_offset 16
  140 0004 00AF     		add	r7, sp, #0
  141              		.cfi_def_cfa_register 7
-  45:movement.c    ****     PWM_1_WriteCompare(160);
- 142              		.loc 1 45 0
- 143 0006 A020     		movs	r0, #160
+  46:movement.c    ****     PWM_1_WriteCompare(35);
+ 142              		.loc 1 46 0
+ 143 0006 2320     		movs	r0, #35
  144 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  46:movement.c    ****     PWM_2_WriteCompare(160);
- 145              		.loc 1 46 0
- 146 000c A020     		movs	r0, #160
+  47:movement.c    ****     PWM_2_WriteCompare(35);
+ 145              		.loc 1 47 0
+ 146 000c 2320     		movs	r0, #35
  147 000e FFF7FEFF 		bl	PWM_2_WriteCompare
-  47:movement.c    ****     
-  48:movement.c    ****     int quadPulseCount = 0;
- 148              		.loc 1 48 0
+  48:movement.c    ****     
+  49:movement.c    ****     int quadPulseCount = 0;
+ 148              		.loc 1 49 0
  149 0012 0023     		movs	r3, #0
  150 0014 7B60     		str	r3, [r7, #4]
-  49:movement.c    ****     QuadDec_M1_SetCounter(0);
- 151              		.loc 1 49 0
+  50:movement.c    ****     QuadDec_M1_SetCounter(0);
+ 151              		.loc 1 50 0
  152 0016 0020     		movs	r0, #0
  153 0018 FFF7FEFF 		bl	QuadDec_M1_SetCounter
-  50:movement.c    ****     while(quadPulseCount > -105) {
- 154              		.loc 1 50 0
+  51:movement.c    ****     while(quadPulseCount > -105) {
+ 154              		.loc 1 51 0
  155 001c 03E0     		b	.L6
  156              	.L7:
-  51:movement.c    ****         quadPulseCount = QuadDec_M1_GetCounter();  
- 157              		.loc 1 51 0
+  52:movement.c    ****         quadPulseCount = QuadDec_M1_GetCounter();  
+ 157              		.loc 1 52 0
  158 001e FFF7FEFF 		bl	QuadDec_M1_GetCounter
  159 0022 0346     		mov	r3, r0
  160 0024 7B60     		str	r3, [r7, #4]
  161              	.L6:
-  50:movement.c    ****     while(quadPulseCount > -105) {
- 162              		.loc 1 50 0
+  51:movement.c    ****     while(quadPulseCount > -105) {
+ 162              		.loc 1 51 0
  163 0026 7B68     		ldr	r3, [r7, #4]
  164 0028 13F1680F 		cmn	r3, #104
  165 002c F7DA     		bge	.L7
-  52:movement.c    ****     }
-  53:movement.c    ****     QuadDec_M1_SetCounter(0);
- 166              		.loc 1 53 0
+  53:movement.c    ****     }
+  54:movement.c    ****     QuadDec_M1_SetCounter(0);
+ 166              		.loc 1 54 0
  167 002e 0020     		movs	r0, #0
  168 0030 FFF7FEFF 		bl	QuadDec_M1_SetCounter
-  54:movement.c    ****     //CyDelay(500);
-  55:movement.c    ****     //stopMoving(); // stop movement, ready for next instruction
-  56:movement.c    **** }
- 169              		.loc 1 56 0
+  55:movement.c    ****     //CyDelay(500);
+  56:movement.c    ****     //stopMoving(); // stop movement, ready for next instruction
+  57:movement.c    **** }
+ 169              		.loc 1 57 0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 5
+
+
  170 0034 00BF     		nop
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 5
-
-
  171 0036 0837     		adds	r7, r7, #8
  172              		.cfi_def_cfa_offset 8
  173 0038 BD46     		mov	sp, r7
@@ -258,9 +259,9 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  185              		.type	moveForward, %function
  186              	moveForward:
  187              	.LFB67:
-  57:movement.c    **** 
-  58:movement.c    **** void moveForward() {
- 188              		.loc 1 58 0
+  58:movement.c    **** 
+  59:movement.c    **** void moveForward() {
+ 188              		.loc 1 59 0
  189              		.cfi_startproc
  190              		@ args = 0, pretend = 0, frame = 0
  191              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -270,16 +271,16 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  195              		.cfi_offset 14, -4
  196 0002 00AF     		add	r7, sp, #0
  197              		.cfi_def_cfa_register 7
-  59:movement.c    ****     PWM_1_WriteCompare(160);
- 198              		.loc 1 59 0
- 199 0004 A020     		movs	r0, #160
+  60:movement.c    ****     PWM_1_WriteCompare(65);
+ 198              		.loc 1 60 0
+ 199 0004 4120     		movs	r0, #65
  200 0006 FFF7FEFF 		bl	PWM_1_WriteCompare
-  60:movement.c    ****     PWM_2_WriteCompare(89);
- 201              		.loc 1 60 0
- 202 000a 5920     		movs	r0, #89
+  61:movement.c    ****     PWM_2_WriteCompare(35);
+ 201              		.loc 1 61 0
+ 202 000a 2320     		movs	r0, #35
  203 000c FFF7FEFF 		bl	PWM_2_WriteCompare
-  61:movement.c    **** }
- 204              		.loc 1 61 0
+  62:movement.c    **** }
+ 204              		.loc 1 62 0
  205 0010 00BF     		nop
  206 0012 80BD     		pop	{r7, pc}
  207              		.cfi_endproc
@@ -297,10 +298,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  219 0004 0400     		.2byte	0x4
  220 0006 00000000 		.4byte	.Ldebug_abbrev0
  221 000a 04       		.byte	0x4
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 6
+
+
  222 000b 01       		.uleb128 0x1
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 6
-
-
  223 000c 98000000 		.4byte	.LASF25
  224 0010 0C       		.byte	0xc
  225 0011 8D000000 		.4byte	.LASF26
@@ -357,10 +358,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  276 0077 2C020000 		.4byte	.LASF10
  277 007b 03       		.byte	0x3
  278 007c 2C       		.byte	0x2c
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 7
+
+
  279 007d 41000000 		.4byte	0x41
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 7
-
-
  280 0081 05       		.uleb128 0x5
  281 0082 25020000 		.4byte	.LASF11
  282 0086 04       		.byte	0x4
@@ -389,7 +390,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  305 00b0 06       		.uleb128 0x6
  306 00b1 3D020000 		.4byte	.LASF20
  307 00b5 01       		.byte	0x1
- 308 00b6 17       		.byte	0x17
+ 308 00b6 18       		.byte	0x18
  309 00b7 00000000 		.4byte	.LFB64
  310 00bb 14000000 		.4byte	.LFE64-.LFB64
  311 00bf 01       		.uleb128 0x1
@@ -397,7 +398,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  313 00c1 07       		.uleb128 0x7
  314 00c2 48020000 		.4byte	.LASF17
  315 00c6 01       		.byte	0x1
- 316 00c7 1D       		.byte	0x1d
+ 316 00c7 1E       		.byte	0x1e
  317 00c8 00000000 		.4byte	.LFB65
  318 00cc 3A000000 		.4byte	.LFE65-.LFB65
  319 00d0 01       		.uleb128 0x1
@@ -406,7 +407,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  322 00d6 08       		.uleb128 0x8
  323 00d7 5A000000 		.4byte	.LASF19
  324 00db 01       		.byte	0x1
- 325 00dc 21       		.byte	0x21
+ 325 00dc 22       		.byte	0x22
  326 00dd 68000000 		.4byte	0x68
  327 00e1 02       		.uleb128 0x2
  328 00e2 91       		.byte	0x91
@@ -415,19 +416,19 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  331 00e5 07       		.uleb128 0x7
  332 00e6 21000000 		.4byte	.LASF18
  333 00ea 01       		.byte	0x1
- 334 00eb 2C       		.byte	0x2c
+ 334 00eb 2D       		.byte	0x2d
  335 00ec 00000000 		.4byte	.LFB66
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 8
+
+
  336 00f0 3C000000 		.4byte	.LFE66-.LFB66
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 8
-
-
  337 00f4 01       		.uleb128 0x1
  338 00f5 9C       		.byte	0x9c
  339 00f6 09010000 		.4byte	0x109
  340 00fa 08       		.uleb128 0x8
  341 00fb 5A000000 		.4byte	.LASF19
  342 00ff 01       		.byte	0x1
- 343 0100 30       		.byte	0x30
+ 343 0100 31       		.byte	0x31
  344 0101 68000000 		.4byte	0x68
  345 0105 02       		.uleb128 0x2
  346 0106 91       		.byte	0x91
@@ -436,7 +437,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  349 0109 06       		.uleb128 0x6
  350 010a 4E000000 		.4byte	.LASF21
  351 010e 01       		.byte	0x1
- 352 010f 3A       		.byte	0x3a
+ 352 010f 3B       		.byte	0x3b
  353 0110 00000000 		.4byte	.LFB67
  354 0114 14000000 		.4byte	.LFE67-.LFB67
  355 0118 01       		.uleb128 0x1
@@ -451,7 +452,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  364 012b 0B       		.uleb128 0xb
  365 012c 44000000 		.4byte	.LASF23
  366 0130 01       		.byte	0x1
- 367 0131 11       		.byte	0x11
+ 367 0131 12       		.byte	0x12
  368 0132 81000000 		.4byte	0x81
  369 0136 05       		.uleb128 0x5
  370 0137 03       		.byte	0x3
@@ -459,7 +460,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  372 013c 0B       		.uleb128 0xb
  373 013d 69000000 		.4byte	.LASF24
  374 0141 01       		.byte	0x1
- 375 0142 12       		.byte	0x12
+ 375 0142 13       		.byte	0x13
  376 0143 81000000 		.4byte	0x81
  377 0147 05       		.uleb128 0x5
  378 0148 03       		.byte	0x3
@@ -477,10 +478,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  390 0007 03       		.uleb128 0x3
  391 0008 0E       		.uleb128 0xe
  392 0009 1B       		.uleb128 0x1b
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 9
+
+
  393 000a 0E       		.uleb128 0xe
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 9
-
-
  394 000b 55       		.uleb128 0x55
  395 000c 17       		.uleb128 0x17
  396 000d 11       		.uleb128 0x11
@@ -537,10 +538,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  447 0040 13       		.uleb128 0x13
  448 0041 00       		.byte	0
  449 0042 00       		.byte	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 10
+
+
  450 0043 06       		.uleb128 0x6
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 10
-
-
  451 0044 2E       		.uleb128 0x2e
  452 0045 00       		.byte	0
  453 0046 3F       		.uleb128 0x3f
@@ -597,10 +598,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  504 007b 13       		.uleb128 0x13
  505 007c 02       		.uleb128 0x2
  506 007d 18       		.uleb128 0x18
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 11
+
+
  507 007e 00       		.byte	0
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 11
-
-
  508 007f 00       		.byte	0
  509 0080 09       		.uleb128 0x9
  510 0081 34       		.uleb128 0x34
@@ -657,10 +658,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  561 0018 00000000 		.4byte	.LFB65
  562 001c 3A000000 		.4byte	.LFE65-.LFB65
  563 0020 00000000 		.4byte	.LFB66
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 12
+
+
  564 0024 3C000000 		.4byte	.LFE66-.LFB66
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 12
-
-
  565 0028 00000000 		.4byte	.LFB67
  566 002c 14000000 		.4byte	.LFE67-.LFB67
  567 0030 00000000 		.4byte	0
@@ -717,10 +718,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  596              	.LASF19:
  597 005a 71756164 		.ascii	"quadPulseCount\000"
  597      50756C73 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 13
+
+
  597      65436F75 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 13
-
-
  597      6E7400
  598              	.LASF24:
  599 0069 6D617854 		.ascii	"maxTurnCount\000"
@@ -777,10 +778,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  618              	.LASF27:
  619 015b 433A5C55 		.ascii	"C:\\Users\\ikui753\\OneDrive - The University of Au"
  619      73657273 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 14
+
+
  619      5C696B75 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 14
-
-
  619      69373533 
  619      5C4F6E65 
  620 018b 636B6C61 		.ascii	"ckland\\Documents\\CS301\\github\\301-Robot\\psoc s"
@@ -837,7 +838,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 1
  643      436C6F63 
  643      6B776973 
  643      6500
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccCsIkrK.s 			page 15
+
+
  644              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccnIZQIJ.s 			page 15
-
-

@@ -10,6 +10,7 @@
  * ========================================
 */
 #include "project.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -27,8 +28,8 @@ void stopMoving() {
 
 // rotate clockwise 90deg
 void rotationClockwise() {
-    PWM_1_WriteCompare(89);
-    PWM_2_WriteCompare(89);
+    PWM_1_WriteCompare(65);
+    PWM_2_WriteCompare(65);
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -42,8 +43,8 @@ void rotationClockwise() {
 
 // rotate anticlockwise 90deg
 void rotationAntiClockwise() {
-    PWM_1_WriteCompare(166);
-    PWM_2_WriteCompare(166);
+    PWM_1_WriteCompare(35);
+    PWM_2_WriteCompare(35);
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -56,8 +57,8 @@ void rotationAntiClockwise() {
 }
 
 void moveForward() {
-    PWM_1_WriteCompare(160);
-    PWM_2_WriteCompare(89);
+    PWM_1_WriteCompare(65);
+    PWM_2_WriteCompare(35);
 }
 
 /* [] END OF FILE */
