@@ -64,7 +64,9 @@ int main()
     for(;;)
     {
         //traverseMap(map);
-        moveForward();
+        //moveForward();
+        rotationAntiClockwise();
+        rotationClockwise();
         
         if(timerInt == 1) {
             // calculate RPM of M2
