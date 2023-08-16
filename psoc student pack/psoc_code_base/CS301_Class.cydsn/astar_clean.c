@@ -6,10 +6,10 @@
 typedef struct {
     int x;
     int y;
-} Location;
+} Position;
 
 typedef struct {
-    Location parent, position;
+    Position parent, position;
     int f, g, h;
 } Node;
 
@@ -18,27 +18,25 @@ typedef struct {
     int dy;
 } Moves;
 
-// this function has been checked and should be fine
 // checks if the x, y coordinates are within the map and does not go out of bounds
-bool is_valid_location(int x, int y) {
+bool is_valid_Position(int x, int y) {
     return x >= 0 && x < MAP_COLS && y >= 0 && y < MAP_ROWS;
 }
 
-// this function has been checked and should be fine
 // checks if the current map coordinates are walkable (meaning at map[y][x] == 0)
 bool is_walkable(char map[MAP_ROWS][MAP_COLS], int x, int y) {
     // 0 = Path
     // 1 = Obstacle
-    return is_valid_location(x, y) && map[y][x] == '0';
+    return is_valid_Position(x, y) && map[y][x] == '0';
 }
 
 // manhatten distance between two points
-int heuristic(Location a, Location b) {
+int heuristic(Position a, Position b) {
     return (abs(a.x - b.x) + abs(a.y - b.y)) * 10;
 }
 
 // Reconstructs the path from the target node back to the start node and modifies the map array to show that path.
-int reconstruct_path(char map[MAP_ROWS][MAP_COLS], Location came_from[MAP_ROWS][MAP_COLS], Location current, Location start) {
+int reconstruct_path(char map[MAP_ROWS][MAP_COLS], Position came_from[MAP_ROWS][MAP_COLS], Position current, Position start) {
     printf("========\n");
     for (int y = 0; y < MAP_ROWS; y++) {
         for (int x = 0; x < MAP_COLS; x++) {
@@ -77,12 +75,12 @@ int reconstruct_path(char map[MAP_ROWS][MAP_COLS], Location came_from[MAP_ROWS][
 }
 
 // Astar algorithm. Uses two parameters, G and H, to determine the best path to the target node.
-void astar(char map[MAP_ROWS][MAP_COLS], Location start, Location end) {
+void astar(char map[MAP_ROWS][MAP_COLS], Position start, Position end) {
     // OPEN - the set of nodes to be evalutated
     // CLOSED - the set of nodes already evaluated
     arraylist* open_list = arraylist_create();
     bool closed_list[MAP_ROWS][MAP_COLS] = {false};
-    Location came_from[MAP_ROWS][MAP_COLS] = {0};
+    Position came_from[MAP_ROWS][MAP_COLS] = {0};
     Node *nodes[MAP_ROWS][MAP_COLS] = {0};
 
     for (int i = 0; i < MAP_ROWS; i++) {
@@ -124,7 +122,7 @@ void astar(char map[MAP_ROWS][MAP_COLS], Location start, Location end) {
 
     // loop
     while (true) {
-        Location current = {-1, -1};
+        Position current = {-1, -1};
         Node* currentNode;
         int nodeIndex = 0;
         int min_f = -1;
@@ -246,8 +244,8 @@ void astar(char map[MAP_ROWS][MAP_COLS], Location start, Location end) {
 
 // using map_1
 int main() {
-    Location start = {.x = 1, .y = 2};
-    Location end = {.x = 1, .y = 13};
+    Position start = {.x = 1, .y = 2};
+    Position end = {.x = 1, .y = 13};
 
     char map[MAP_ROWS][MAP_COLS] = {
     {49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49},
