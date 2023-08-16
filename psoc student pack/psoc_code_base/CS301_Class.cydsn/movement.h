@@ -29,4 +29,7 @@ void rotationClockwise();
 // Rotate anticlockwise 90 degrees
 void rotationAntiClockwise();
 
+// Move forward
+void moveForward();
+
 #endif /* MOVEMENT_FUNCTIONS_H */
