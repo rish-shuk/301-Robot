@@ -54,14 +54,13 @@ bool is_walkable(char map[MAP_ROWS][MAP_COLS], int x, int y) {
     return is_valid_location(x, y) && map[y][x] == '0';
 }
 
-// manhatten distance
+// manhatten distance between two points
 int heuristic(Location a, Location b) {
     return (abs(a.x - b.x) + abs(a.y - b.y)) * 10;
 }
 
-// this function is in the works of being fixed.
-// OBJECTIVE: USING THE came_from ARRAY, RECONSTRUCT THE PATH FROM THE END TO THE START
-int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, Location start) {
+// Reconstructs the path from the target node back to the start node and modifies the map array to show that path.
+int reconstruct_path(char map[MAP_ROWS][MAP_COLS], Location came_from[MAP_ROWS][MAP_COLS], Location current, Location start) {
     printf("========\n");
     for (int y = 0; y < MAP_ROWS; y++) {
         for (int x = 0; x < MAP_COLS; x++) {
@@ -71,20 +70,13 @@ int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, L
     }
     printf("========\n");
 
-    char map_with_path[MAP_ROWS][MAP_COLS] = {0};
-    for (int i = 0; i < MAP_ROWS; i++) {
-        for (int j = 0; j < MAP_COLS; j++) {
-            map_with_path[i][j] = map_1[i][j];
-        }
-    }
-
     int crashindicator = 0;
     // we should be at the end
-    map_with_path[current.y][current.x] = 'X';
+    map[current.y][current.x] = 'X';
 
     while (current.x != -1 && current.y != -1) {
         current = came_from[current.y][current.x];
-        map_with_path[current.y][current.x] = '*';
+        map[current.y][current.x] = '*';
         if (current.x == 0 && current.y == 0) {
             crashindicator++;
         }
@@ -94,19 +86,19 @@ int reconstruct_path(Location came_from[MAP_ROWS][MAP_COLS], Location current, L
         }
         // we should be at the start
         if (current.x == start.x && current.y == start.y) {
-            map_with_path[current.y][current.x] = 'S';
+            map[current.y][current.x] = 'S';
         }
     }
 
     for (int i = 0; i < MAP_ROWS; i++) {
         for (int j = 0; j < MAP_COLS; j++) {
-            printf("%c", map_with_path[i][j]);
+            printf("%c", map[i][j]);
         }
         printf("\n");
     }
 }
 
-// astar algorithm
+// Astar algorithm. Uses two parameters, G and H, to determine the best path to the target node.
 void astar(char map[MAP_ROWS][MAP_COLS], Location start, Location end) {
     // OPEN - the set of nodes to be evalutated
     // CLOSED - the set of nodes already evaluated
@@ -271,19 +263,38 @@ void astar(char map[MAP_ROWS][MAP_COLS], Location start, Location end) {
             }
         }
     }
-    reconstruct_path(came_from, end, start);
+    reconstruct_path(map, came_from, end, start);
 }
 
 // using map_1
 int main() {
     Location start = {.x = 1, .y = 2};
-    Location end = {.x = 3, .y = 1};
+    Location end = {.x = 1, .y = 13};
+
+    char map[MAP_ROWS][MAP_COLS] = {
+    {49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49},
+    {49,48,49,48,48,48,49,48,48,48,48,48,49,48,48,48,48,48,49},
+    {49,48,49,49,49,48,49,48,49,49,49,48,49,48,49,49,49,48,49},
+    {49,48,48,48,49,48,48,48,48,48,49,48,48,48,48,48,49,48,49},
+    {49,49,49,48,49,49,49,49,49,49,49,49,49,49,49,49,49,48,49},
+    {49,48,49,48,48,48,48,48,49,48,48,48,48,48,48,48,48,48,49},
+    {49,48,49,49,49,49,49,48,49,48,49,49,49,49,49,49,49,48,49},
+    {49,48,48,48,48,48,49,48,48,48,49,48,48,48,48,48,49,48,49},
+    {49,48,49,48,49,48,49,49,49,49,49,48,49,49,49,48,49,48,49},
+    {49,48,49,48,49,48,49,48,48,48,49,48,49,48,49,48,49,48,49},
+    {49,49,49,48,49,48,49,48,49,48,49,48,49,48,49,48,49,48,49},
+    {49,48,48,48,49,48,49,48,49,48,48,48,49,48,49,48,49,48,49},
+    {49,48,49,49,49,49,49,48,49,49,49,49,49,48,49,48,49,48,49},
+    {49,48,48,48,48,48,48,48,48,48,48,48,48,48,49,48,48,48,49},
+    {49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49},
+    };
+
 
     printf("Map\n");
     print_map_1();
 
     printf("BEFORE ASTAR ALGORTHM?\n");
-    astar(map_1, start, end);
+    astar(map, start, end);
     printf("AFTER ASTAR ALGORTHM?\n");
 
     return 0;
