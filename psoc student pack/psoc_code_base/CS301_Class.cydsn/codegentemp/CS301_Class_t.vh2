@@ -1,5 +1,5 @@
 -- Project:   C:\Users\ikui753\OneDrive - The University of Auckland\Documents\GitHub\301robot\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CS301_Class.cyprj
--- Generated: 08/18/2023 17:05:22
+-- Generated: 08/18/2023 19:00:11
 -- PSoC Creator  4.2
 
 ENTITY CS301_Class IS
@@ -72,7 +72,6 @@ ARCHITECTURE __DEFAULT__ OF CS301_Class IS
     SIGNAL Net_10 : bit;
     ATTRIBUTE global_signal OF Net_10 : SIGNAL IS true;
     SIGNAL Net_10_local : bit;
-    SIGNAL Net_1496 : bit;
     SIGNAL Net_1497 : bit;
     ATTRIBUTE placement_force OF Net_1497 : SIGNAL IS "U(1,1,B)0";
     SIGNAL Net_1614 : bit;
@@ -104,6 +103,7 @@ ARCHITECTURE __DEFAULT__ OF CS301_Class IS
     ATTRIBUTE global_signal OF Net_4410 : SIGNAL IS true;
     SIGNAL Net_4410_local : bit;
     SIGNAL Net_4413 : bit;
+    SIGNAL Net_4453 : bit;
     SIGNAL Net_724 : bit;
     SIGNAL Net_724_SYNCOUT : bit;
     SIGNAL Net_725 : bit;
@@ -4128,7 +4128,7 @@ BEGIN
             clken_mode => 1)
         PORT MAP(
             q => \ADC:bSAR_SEQ:cnt_enable\,
-            main_0 => Net_1496,
+            main_0 => Net_4453,
             main_1 => \ADC:bSAR_SEQ:load_period\);
 
     Net_1880:macrocell
@@ -4696,7 +4696,7 @@ BEGIN
             vn_ctl_udb_1 => open,
             vn_ctl_udb_0 => open,
             irq => \ADC:SAR:Net_252\,
-            next => Net_1496,
+            next => Net_4453,
             data_out_udb_11 => \ADC:SAR:Net_207_11\,
             data_out_udb_10 => \ADC:SAR:Net_207_10\,
             data_out_udb_9 => \ADC:SAR:Net_207_9\,

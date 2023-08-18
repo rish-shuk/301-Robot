@@ -42,14 +42,26 @@ CY_ISR (speedTimer) {
     QuadDec_M2_Start(); // restart counter
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
+
+CY_ISR (ADC_CONV_FINISH) {
+   if(ADC_CountsTo_mVolts(ADC_GetAdcResult()) > 2500) {
+    LED_Write(1u);
+    } else {
+        LED_Write(0u);
+    }
+    ADC_Start();
+}   
+
 int main()
 {
 // --------------------------------    
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
+    isr_eoc_StartEx(ADC_CONV_FINISH);
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
+    ADC_Start();
     
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
