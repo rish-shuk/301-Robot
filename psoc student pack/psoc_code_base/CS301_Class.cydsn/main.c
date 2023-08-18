@@ -63,14 +63,17 @@ int main()
     
     for(;;)
     {
+        if(A0_Read() > 0) {
+            LED_Write(1u);
+        }
         //traverseMap(map);
-        rotationAntiClockwise();
+        /*rotationAntiClockwise();
         rotationClockwise();
         
         if(timerInt == 1) {
             // calculate RPM of M2
             quadCountToRPM(quadDec2Count);
-        }
+        }*/
         
         if (flag_KB_string == 1)
         {
