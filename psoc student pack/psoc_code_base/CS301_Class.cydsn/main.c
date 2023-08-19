@@ -44,14 +44,14 @@ CY_ISR (speedTimer) {
 }
 
 CY_ISR (ADC_CONV_FINISH) {
-    LED_Write(~LED_Read());
+    LED_Write(~LED_Read()); // flash LED on end of conversion 
     // get result from ADC channel 0, if greater than 2.5V
    /*(if(ADC_CountsTo_mVolts(ADC_GetResult16(0)) > 2500) {
     LED_Write(1u);
     } else {
         LED_Write(0u);
     }*/
-    ADC_StartConvert();
+    ADC_StartConvert(); // start conversion again- software trigger
 }   
 
 int main()
