@@ -44,12 +44,14 @@ CY_ISR (speedTimer) {
 }
 
 CY_ISR (ADC_CONV_FINISH) {
-   if(ADC_CountsTo_mVolts(ADC_GetAdcResult()) > 2500) {
+    LED_Write(~LED_Read());
+    // get result from ADC channel 0, if greater than 2.5V
+   /*(if(ADC_CountsTo_mVolts(ADC_GetResult16(0)) > 2500) {
     LED_Write(1u);
     } else {
         LED_Write(0u);
-    }
-    ADC_Start();
+    }*/
+    ADC_StartConvert();
 }   
 
 int main()
@@ -62,22 +64,24 @@ int main()
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     ADC_Start();
+    ADC_StartConvert();
+    //int32 adcVolts = 0;
     
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
-#endif        
-#ifdef USE_USB    
-    USBUART_Start(0,USBUART_5V_OPERATION);
-#endif        
+#endif         
         
     RF_BT_SELECT_Write(0);
     
     for(;;)
-    {
-        if(A0_Read() > 0) {
+    {   
+        //adcVolts = ADC_CountsTo_mVolts(ADC_GetResult16(0));
+        /*if(adcVolts < 2500) {
             LED_Write(1u);
-        }
+        } else {
+            LED_Write(0u);
+        }*/
         //traverseMap(map);
         /*rotationAntiClockwise();
         rotationClockwise();
