@@ -3,7 +3,6 @@
 #include <time.h>
 #include <stdbool.h>
 
-#include "pathfinding.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
@@ -97,7 +96,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
 
     for (int i = 0; i < MAX_ROWS; i++) {
         for (int j = 0; j < MAX_COLS; j++) {
-            distances[i][j] = INT_MAX; // initialise distances as infinity
+            distances[i][j] = 1000; // initialise distances as infinity
         }
     }
 
@@ -270,10 +269,16 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
 int main() {
     srand(time(NULL)); // Seed the random number generator with the current time
     char map[MAX_ROWS][MAX_COLS];
-    readMap("map_1.txt", map);
+    readMap("map_demo.txt", map);
     //printMap(map);
-    struct Location startLocation = getRandomLocation(map); 
-    struct Location targetLocation = getRandomLocation(map); // generate random start and target location
+    //struct Location startLocation = getRandomLocation(map); 
+    //struct Location targetLocation = getRandomLocation(map); // generate random start and target location
+    struct Location startLocation; 
+    startLocation.row = 0;
+    startLocation.col = 13;
+    struct Location targetLocation; // generate random start and target location
+    targetLocation.row = 0;
+    targetLocation.col = 17;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
