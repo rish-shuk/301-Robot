@@ -15,9 +15,12 @@ targetloc = get_random_location(rows, cols, m);
 
 % Your simulations will use this structure
 
-[m,v,s]=dfs('maps/map_1.txt',[startloc],[targetloc]);
-% [m,v,s]=dijkstra('maps/map_1.txt',[startloc],[targetloc]);
-%[m,v,s]=astar('maps/map_1.txt',[startloc],[targetloc]);
+startLocDemo1 = [13, 0];
+targetLocDemo1 = [0, 17];
+
+%[m,v,s]=dfs('maps/map_demo.txt',[startloc],[targetloc]);
+[m,v,s]=dijkstra('maps/map_demo.txt',startLocDemo1,targetLocDemo1);
+%[m,v,s]=astar('maps/map_demo.txt',[startloc],[targetloc]);
 
 
 %Here   'm' is the map file returned as a matrix
