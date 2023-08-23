@@ -31,6 +31,7 @@ void quadCountToRPM(uint16 count);
 char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
+int keepLedOn = 0;
 
 char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
@@ -43,16 +44,25 @@ CY_ISR (speedTimer) {
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
-CY_ISR (ADC_CONV_FINISH) {
-    //LED_Write(~LED_Read()); // flash LED on end of conversion 
-    // get result from ADC channel 0, if greater than 2.5V
-   if(ADC_CountsTo_mVolts(ADC_GetResult16(0)) > 2500) {
-    LED_Write(1u);
+CY_ISR(Sensor_High) {
+    Timer_LED_Start();
+    keepLedOn = 1;
+}
+
+CY_ISR (LED_Timer) {
+    // Every 9ms or whatever period, check if keepLedOn = true and turn on LED if so.
+    // keepLedOn = false initially.
+    // keepLedOn = true whenever pin voltage is above appropriate threshold.
+    
+    // turn on if ADC is greater than 1V
+    if(ADC_GetResult16(0) > 1000) {
+        LED_Write(1u);
     } else {
         LED_Write(0u);
     }
-    ADC_StartConvert(); // start conversion again- software trigger
-}   
+    ADC_StartConvert();
+    Timer_LED_ReadStatusRegister();
+}
 
 int main()
 {
@@ -60,12 +70,18 @@ int main()
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
-    isr_eoc_StartEx(ADC_CONV_FINISH);
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     ADC_Start();
-    ADC_StartConvert();
     //int32 adcVolts = 0;
+    
+    
+    // -- LED TIMER ---------------
+    isr_Timer_LED_StartEx(LED_Timer);
+    keepLedOn = 0;
+    isr_sensor_high_StartEx(Sensor_High);
+    // ----------------------------
+    
     
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
@@ -76,6 +92,13 @@ int main()
     
     for(;;)
     {   
+        // If pin is logic high - turn led on
+        //if (Pin_LED_Check_Read() >= 1u) {
+        //    keepLedOn = 1;
+        //}
+
+        
+        
         //adcVolts = ADC_CountsTo_mVolts(ADC_GetResult16(0));
         /*if(adcVolts < 2500) {
             LED_Write(1u);
