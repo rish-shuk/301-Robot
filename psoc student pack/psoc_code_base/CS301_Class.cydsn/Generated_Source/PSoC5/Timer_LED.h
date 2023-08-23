@@ -168,14 +168,14 @@ void Timer_LED_Wakeup(void)        ;
 *    Initialial Parameter Constants
 ***************************************/
 
-#define Timer_LED_INIT_PERIOD             464u
+#define Timer_LED_INIT_PERIOD             929u
 #define Timer_LED_INIT_CAPTURE_MODE       ((uint8)((uint8)1u << Timer_LED_CTRL_CAP_MODE_SHIFT))
 #define Timer_LED_INIT_TRIGGER_MODE       ((uint8)((uint8)0u << Timer_LED_CTRL_TRIG_MODE_SHIFT))
 #if (Timer_LED_UsingFixedFunction)
-    #define Timer_LED_INIT_INTERRUPT_MODE (((uint8)((uint8)0u << Timer_LED_STATUS_TC_INT_MASK_SHIFT)) | \
+    #define Timer_LED_INIT_INTERRUPT_MODE (((uint8)((uint8)1u << Timer_LED_STATUS_TC_INT_MASK_SHIFT)) | \
                                                   ((uint8)((uint8)0 << Timer_LED_STATUS_CAPTURE_INT_MASK_SHIFT)))
 #else
-    #define Timer_LED_INIT_INTERRUPT_MODE (((uint8)((uint8)0u << Timer_LED_STATUS_TC_INT_MASK_SHIFT)) | \
+    #define Timer_LED_INIT_INTERRUPT_MODE (((uint8)((uint8)1u << Timer_LED_STATUS_TC_INT_MASK_SHIFT)) | \
                                                  ((uint8)((uint8)0 << Timer_LED_STATUS_CAPTURE_INT_MASK_SHIFT)) | \
                                                  ((uint8)((uint8)0 << Timer_LED_STATUS_FIFOFULL_INT_MASK_SHIFT)))
 #endif /* (Timer_LED_UsingFixedFunction) */

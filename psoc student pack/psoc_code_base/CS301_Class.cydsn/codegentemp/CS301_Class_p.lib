@@ -11298,6 +11298,18 @@ library (timing) {
         }
         pin (cs_addr_2) {
             direction : input;
+            timing () {
+                timing_type : setup_rising;
+                related_pin : "clock";
+                intrinsic_rise : 6.06;
+                intrinsic_fall : 6.06;
+            }
+            timing () {
+                timing_type : hold_rising;
+                related_pin : "clock";
+                intrinsic_rise : 0.00;
+                intrinsic_fall : 0.00;
+            }
         }
         pin (route_si) {
             direction : input;
@@ -11656,6 +11668,12 @@ library (timing) {
             }
             timing () {
                 timing_type : combinational;
+                related_pin : "cs_addr_2";
+                intrinsic_rise : 5.13;
+                intrinsic_fall : 5.13;
+            }
+            timing () {
+                timing_type : combinational;
                 related_pin : "cs_addr_0";
                 intrinsic_rise : 1.79;
                 intrinsic_fall : 1.79;
@@ -11663,6 +11681,12 @@ library (timing) {
             timing () {
                 timing_type : combinational;
                 related_pin : "cs_addr_1";
+                intrinsic_rise : 1.79;
+                intrinsic_fall : 1.79;
+            }
+            timing () {
+                timing_type : combinational;
+                related_pin : "cs_addr_2";
                 intrinsic_rise : 1.79;
                 intrinsic_fall : 1.79;
             }
@@ -11755,6 +11779,18 @@ library (timing) {
         }
         pin (cs_addr_2) {
             direction : input;
+            timing () {
+                timing_type : setup_rising;
+                related_pin : "clock";
+                intrinsic_rise : 6.06;
+                intrinsic_fall : 6.06;
+            }
+            timing () {
+                timing_type : hold_rising;
+                related_pin : "clock";
+                intrinsic_rise : 0.00;
+                intrinsic_fall : 0.00;
+            }
         }
         pin (route_si) {
             direction : input;
@@ -12221,6 +12257,12 @@ library (timing) {
             }
             timing () {
                 timing_type : combinational;
+                related_pin : "cs_addr_2";
+                intrinsic_rise : 5.13;
+                intrinsic_fall : 5.13;
+            }
+            timing () {
+                timing_type : combinational;
                 related_pin : "ci";
                 intrinsic_rise : 3.30;
                 intrinsic_fall : 3.30;
@@ -12234,6 +12276,12 @@ library (timing) {
             timing () {
                 timing_type : combinational;
                 related_pin : "cs_addr_1";
+                intrinsic_rise : 1.79;
+                intrinsic_fall : 1.79;
+            }
+            timing () {
+                timing_type : combinational;
+                related_pin : "cs_addr_2";
                 intrinsic_rise : 1.79;
                 intrinsic_fall : 1.79;
             }
@@ -12344,6 +12392,18 @@ library (timing) {
         }
         pin (cs_addr_2) {
             direction : input;
+            timing () {
+                timing_type : setup_rising;
+                related_pin : "clock";
+                intrinsic_rise : 6.06;
+                intrinsic_fall : 6.06;
+            }
+            timing () {
+                timing_type : hold_rising;
+                related_pin : "clock";
+                intrinsic_rise : 0.00;
+                intrinsic_fall : 0.00;
+            }
         }
         pin (route_si) {
             direction : input;

@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: isr_sensor_high.c  
+* File Name: edge_detected.c  
 * Version 1.71
 *
 *  Description:
@@ -18,15 +18,15 @@
 
 #include <cydevice_trm.h>
 #include <CyLib.h>
-#include <isr_sensor_high.h>
+#include <edge_detected.h>
 
 
-#if !defined(isr_sensor_high__REMOVED) /* Check for removal by optimization */
+#if !defined(edge_detected__REMOVED) /* Check for removal by optimization */
 
 /*******************************************************************************
 *  Place your includes, defines and code here 
 ********************************************************************************/
-/* `#START isr_sensor_high_intc` */
+/* `#START edge_detected_intc` */
 
 /* `#END` */
 
@@ -42,7 +42,7 @@ CY_ISR_PROTO(IntDefaultHandler);
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_Start
+* Function Name: edge_detected_Start
 ********************************************************************************
 *
 * Summary:
@@ -58,24 +58,24 @@ CY_ISR_PROTO(IntDefaultHandler);
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_Start(void)
+void edge_detected_Start(void)
 {
     /* For all we know the interrupt is active. */
-    isr_sensor_high_Disable();
+    edge_detected_Disable();
 
-    /* Set the ISR to point to the isr_sensor_high Interrupt. */
-    isr_sensor_high_SetVector(&isr_sensor_high_Interrupt);
+    /* Set the ISR to point to the edge_detected Interrupt. */
+    edge_detected_SetVector(&edge_detected_Interrupt);
 
     /* Set the priority. */
-    isr_sensor_high_SetPriority((uint8)isr_sensor_high_INTC_PRIOR_NUMBER);
+    edge_detected_SetPriority((uint8)edge_detected_INTC_PRIOR_NUMBER);
 
     /* Enable it. */
-    isr_sensor_high_Enable();
+    edge_detected_Enable();
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_StartEx
+* Function Name: edge_detected_StartEx
 ********************************************************************************
 *
 * Summary:
@@ -101,24 +101,24 @@ void isr_sensor_high_Start(void)
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_StartEx(cyisraddress address)
+void edge_detected_StartEx(cyisraddress address)
 {
     /* For all we know the interrupt is active. */
-    isr_sensor_high_Disable();
+    edge_detected_Disable();
 
-    /* Set the ISR to point to the isr_sensor_high Interrupt. */
-    isr_sensor_high_SetVector(address);
+    /* Set the ISR to point to the edge_detected Interrupt. */
+    edge_detected_SetVector(address);
 
     /* Set the priority. */
-    isr_sensor_high_SetPriority((uint8)isr_sensor_high_INTC_PRIOR_NUMBER);
+    edge_detected_SetPriority((uint8)edge_detected_INTC_PRIOR_NUMBER);
 
     /* Enable it. */
-    isr_sensor_high_Enable();
+    edge_detected_Enable();
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_Stop
+* Function Name: edge_detected_Stop
 ********************************************************************************
 *
 * Summary:
@@ -131,22 +131,22 @@ void isr_sensor_high_StartEx(cyisraddress address)
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_Stop(void)
+void edge_detected_Stop(void)
 {
     /* Disable this interrupt. */
-    isr_sensor_high_Disable();
+    edge_detected_Disable();
 
     /* Set the ISR to point to the passive one. */
-    isr_sensor_high_SetVector(&IntDefaultHandler);
+    edge_detected_SetVector(&IntDefaultHandler);
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_Interrupt
+* Function Name: edge_detected_Interrupt
 ********************************************************************************
 *
 * Summary:
-*   The default Interrupt Service Routine for isr_sensor_high.
+*   The default Interrupt Service Routine for edge_detected.
 *
 *   Add custom code between the coments to keep the next version of this file
 *   from over writting your code.
@@ -157,27 +157,27 @@ void isr_sensor_high_Stop(void)
 *   None
 *
 *******************************************************************************/
-CY_ISR(isr_sensor_high_Interrupt)
+CY_ISR(edge_detected_Interrupt)
 {
-    #ifdef isr_sensor_high_INTERRUPT_INTERRUPT_CALLBACK
-        isr_sensor_high_Interrupt_InterruptCallback();
-    #endif /* isr_sensor_high_INTERRUPT_INTERRUPT_CALLBACK */ 
+    #ifdef edge_detected_INTERRUPT_INTERRUPT_CALLBACK
+        edge_detected_Interrupt_InterruptCallback();
+    #endif /* edge_detected_INTERRUPT_INTERRUPT_CALLBACK */ 
 
     /*  Place your Interrupt code here. */
-    /* `#START isr_sensor_high_Interrupt` */
+    /* `#START edge_detected_Interrupt` */
 
     /* `#END` */
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_SetVector
+* Function Name: edge_detected_SetVector
 ********************************************************************************
 *
 * Summary:
-*   Change the ISR vector for the Interrupt. Note calling isr_sensor_high_Start
+*   Change the ISR vector for the Interrupt. Note calling edge_detected_Start
 *   will override any effect this method would have had. To set the vector 
-*   before the component has been started use isr_sensor_high_StartEx instead.
+*   before the component has been started use edge_detected_StartEx instead.
 * 
 *   When defining ISR functions, the CY_ISR and CY_ISR_PROTO macros should be 
 *   used to provide consistent definition across compilers:
@@ -197,18 +197,18 @@ CY_ISR(isr_sensor_high_Interrupt)
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_SetVector(cyisraddress address)
+void edge_detected_SetVector(cyisraddress address)
 {
     cyisraddress * ramVectorTable;
 
     ramVectorTable = (cyisraddress *) *CYINT_VECT_TABLE;
 
-    ramVectorTable[CYINT_IRQ_BASE + (uint32)isr_sensor_high__INTC_NUMBER] = address;
+    ramVectorTable[CYINT_IRQ_BASE + (uint32)edge_detected__INTC_NUMBER] = address;
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_GetVector
+* Function Name: edge_detected_GetVector
 ********************************************************************************
 *
 * Summary:
@@ -221,26 +221,26 @@ void isr_sensor_high_SetVector(cyisraddress address)
 *   Address of the ISR in the interrupt vector table.
 *
 *******************************************************************************/
-cyisraddress isr_sensor_high_GetVector(void)
+cyisraddress edge_detected_GetVector(void)
 {
     cyisraddress * ramVectorTable;
 
     ramVectorTable = (cyisraddress *) *CYINT_VECT_TABLE;
 
-    return ramVectorTable[CYINT_IRQ_BASE + (uint32)isr_sensor_high__INTC_NUMBER];
+    return ramVectorTable[CYINT_IRQ_BASE + (uint32)edge_detected__INTC_NUMBER];
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_SetPriority
+* Function Name: edge_detected_SetPriority
 ********************************************************************************
 *
 * Summary:
 *   Sets the Priority of the Interrupt. 
 *
-*   Note calling isr_sensor_high_Start or isr_sensor_high_StartEx will 
+*   Note calling edge_detected_Start or edge_detected_StartEx will 
 *   override any effect this API would have had. This API should only be called
-*   after isr_sensor_high_Start or isr_sensor_high_StartEx has been called. 
+*   after edge_detected_Start or edge_detected_StartEx has been called. 
 *   To set the initial priority for the component, use the Design-Wide Resources
 *   Interrupt Editor.
 *
@@ -255,14 +255,14 @@ cyisraddress isr_sensor_high_GetVector(void)
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_SetPriority(uint8 priority)
+void edge_detected_SetPriority(uint8 priority)
 {
-    *isr_sensor_high_INTC_PRIOR = priority << 5;
+    *edge_detected_INTC_PRIOR = priority << 5;
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_GetPriority
+* Function Name: edge_detected_GetPriority
 ********************************************************************************
 *
 * Summary:
@@ -277,19 +277,19 @@ void isr_sensor_high_SetPriority(uint8 priority)
 *    PSoC 4: Priority is from 0 to 3.
 *
 *******************************************************************************/
-uint8 isr_sensor_high_GetPriority(void)
+uint8 edge_detected_GetPriority(void)
 {
     uint8 priority;
 
 
-    priority = *isr_sensor_high_INTC_PRIOR >> 5;
+    priority = *edge_detected_INTC_PRIOR >> 5;
 
     return priority;
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_Enable
+* Function Name: edge_detected_Enable
 ********************************************************************************
 *
 * Summary:
@@ -304,15 +304,15 @@ uint8 isr_sensor_high_GetPriority(void)
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_Enable(void)
+void edge_detected_Enable(void)
 {
     /* Enable the general interrupt. */
-    *isr_sensor_high_INTC_SET_EN = isr_sensor_high__INTC_MASK;
+    *edge_detected_INTC_SET_EN = edge_detected__INTC_MASK;
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_GetState
+* Function Name: edge_detected_GetState
 ********************************************************************************
 *
 * Summary:
@@ -325,15 +325,15 @@ void isr_sensor_high_Enable(void)
 *   1 if enabled, 0 if disabled.
 *
 *******************************************************************************/
-uint8 isr_sensor_high_GetState(void)
+uint8 edge_detected_GetState(void)
 {
     /* Get the state of the general interrupt. */
-    return ((*isr_sensor_high_INTC_SET_EN & (uint32)isr_sensor_high__INTC_MASK) != 0u) ? 1u:0u;
+    return ((*edge_detected_INTC_SET_EN & (uint32)edge_detected__INTC_MASK) != 0u) ? 1u:0u;
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_Disable
+* Function Name: edge_detected_Disable
 ********************************************************************************
 *
 * Summary:
@@ -346,15 +346,15 @@ uint8 isr_sensor_high_GetState(void)
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_Disable(void)
+void edge_detected_Disable(void)
 {
     /* Disable the general interrupt. */
-    *isr_sensor_high_INTC_CLR_EN = isr_sensor_high__INTC_MASK;
+    *edge_detected_INTC_CLR_EN = edge_detected__INTC_MASK;
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_SetPending
+* Function Name: edge_detected_SetPending
 ********************************************************************************
 *
 * Summary:
@@ -373,14 +373,14 @@ void isr_sensor_high_Disable(void)
 *   interrupts).
 *
 *******************************************************************************/
-void isr_sensor_high_SetPending(void)
+void edge_detected_SetPending(void)
 {
-    *isr_sensor_high_INTC_SET_PD = isr_sensor_high__INTC_MASK;
+    *edge_detected_INTC_SET_PD = edge_detected__INTC_MASK;
 }
 
 
 /*******************************************************************************
-* Function Name: isr_sensor_high_ClearPending
+* Function Name: edge_detected_ClearPending
 ********************************************************************************
 *
 * Summary:
@@ -398,9 +398,9 @@ void isr_sensor_high_SetPending(void)
 *   None
 *
 *******************************************************************************/
-void isr_sensor_high_ClearPending(void)
+void edge_detected_ClearPending(void)
 {
-    *isr_sensor_high_INTC_CLR_PD = isr_sensor_high__INTC_MASK;
+    *edge_detected_INTC_CLR_PD = edge_detected__INTC_MASK;
 }
 
 #endif /* End check for removal by optimization */

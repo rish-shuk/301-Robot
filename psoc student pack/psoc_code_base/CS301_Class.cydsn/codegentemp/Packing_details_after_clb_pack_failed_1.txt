@@ -4,16 +4,17 @@ UDB 0
 ------------------------------------------------------
 	PLD 0:
 		 Instances:
-			\Timer_LED:TimerUDB:status_tc\
-			\Timer_LED:TimerUDB:trig_disable\
-			\Timer_LED:TimerUDB:timer_enable\
 			\Timer_LED:TimerUDB:run_mode\
+			\Timer_LED:TimerUDB:trig_disable\
+			\Timer_LED:TimerUDB:status_tc\
+			\Timer_LED:TimerUDB:timer_enable\
 
 		 Clock net: ClockBlock_BUS_CLK
 		 Set/Reset net: 
 		 Enable net: ClockBlock_100k__SYNC_OUT
 
 		 Input nets:
+			Net_4667
 			\Timer_LED:TimerUDB:control_7\
 			\Timer_LED:TimerUDB:per_zero\
 			\Timer_LED:TimerUDB:run_mode\
@@ -27,10 +28,11 @@ UDB 0
 			\Timer_LED:TimerUDB:trig_disable\
 
 		 Product terms:
-			!\Timer_LED:TimerUDB:per_zero\ * !\Timer_LED:TimerUDB:trig_disable\ * \Timer_LED:TimerUDB:control_7\
-			!\Timer_LED:TimerUDB:run_mode\ * !\Timer_LED:TimerUDB:trig_disable\ * \Timer_LED:TimerUDB:control_7\
-			!\Timer_LED:TimerUDB:timer_enable\ * !\Timer_LED:TimerUDB:trig_disable\ * \Timer_LED:TimerUDB:control_7\
-			!\Timer_LED:TimerUDB:trig_disable\ * \Timer_LED:TimerUDB:per_zero\ * \Timer_LED:TimerUDB:run_mode\ * \Timer_LED:TimerUDB:timer_enable\
+			!Net_4667 * !\Timer_LED:TimerUDB:per_zero\ * !\Timer_LED:TimerUDB:trig_disable\ * \Timer_LED:TimerUDB:control_7\
+			!Net_4667 * !\Timer_LED:TimerUDB:run_mode\ * !\Timer_LED:TimerUDB:trig_disable\ * \Timer_LED:TimerUDB:control_7\
+			!Net_4667 * !\Timer_LED:TimerUDB:timer_enable\ * !\Timer_LED:TimerUDB:trig_disable\ * \Timer_LED:TimerUDB:control_7\
+			!Net_4667 * \Timer_LED:TimerUDB:per_zero\ * \Timer_LED:TimerUDB:run_mode\ * \Timer_LED:TimerUDB:timer_enable\
+			!Net_4667 * \Timer_LED:TimerUDB:trig_disable\
 			\Timer_LED:TimerUDB:control_7\
 			\Timer_LED:TimerUDB:per_zero\ * \Timer_LED:TimerUDB:run_mode\
 
@@ -82,6 +84,7 @@ UDB 0
 
 		 Input nets:
 			ClockBlock_BUS_CLK
+			Net_4667
 			\Timer_LED:TimerUDB:per_zero\
 			\Timer_LED:TimerUDB:sT24:timerdp:u1.cmsbo__sig\
 			\Timer_LED:TimerUDB:sT24:timerdp:u1.sor__sig\
@@ -155,7 +158,7 @@ UDB 1
 	PLD 1:
 		 Instances:
 			\UART:BUART:rx_bitclk_enable\
-			Net_4631
+			Net_5358
 			\UART:BUART:rx_status_5\
 			\UART:BUART:rx_counter_load\
 
@@ -177,7 +180,7 @@ UDB 1
 			\UART:BUART:tx_ctrl_mark_last\
 
 		 Output nets:
-			Net_4631
+			Net_5358
 			\UART:BUART:rx_bitclk_enable\
 			\UART:BUART:rx_counter_load\
 			\UART:BUART:rx_status_5\
@@ -198,6 +201,7 @@ UDB 1
 
 		 Input nets:
 			ClockBlock_BUS_CLK
+			Net_4667
 			\Timer_LED:TimerUDB:per_zero\
 			\Timer_LED:TimerUDB:sT24:timerdp:u0.ce0__sig\
 			\Timer_LED:TimerUDB:sT24:timerdp:u0.ce1__sig\
@@ -235,7 +239,7 @@ UDB 1
 			\Timer_LED:TimerUDB:rstSts:stsreg\ : statusicell
 
 		 Clock net: ClockBlock_BUS_CLK
-		 Set/Reset net: 
+		 Set/Reset net: Net_4667
 		 Enable net: ClockBlock_100k__SYNC_OUT
 
 		 Input nets:
@@ -247,10 +251,11 @@ UDB 1
 		 Output nets:
 			Net_1832
 			Net_3236
-			Net_4558
+			Net_4667
 
 	Local clock and reset nets:
 			ClockBlock_100k__SYNC_OUT
+			Net_4667
 
 ======================================================
 UDB 10
@@ -1088,6 +1093,7 @@ UDB 2
 
 		 Input nets:
 			ClockBlock_BUS_CLK
+			Net_4667
 			\Timer_LED:TimerUDB:per_zero\
 			\Timer_LED:TimerUDB:sT24:timerdp:u1.ce0__sig\
 			\Timer_LED:TimerUDB:sT24:timerdp:u1.ce1__sig\
@@ -1245,7 +1251,7 @@ UDB 21
 
 		 Input nets:
 			Net_1497
-			Net_4453
+			Net_5316
 			\ADC:Net_3935\
 			\ADC:bSAR_SEQ:bus_clk_nrq_reg\
 			\ADC:bSAR_SEQ:load_period\
@@ -1256,7 +1262,7 @@ UDB 21
 
 		 Product terms:
 			!Net_1497 * \ADC:bSAR_SEQ:bus_clk_nrq_reg\
-			!Net_4453 * !\ADC:bSAR_SEQ:load_period\
+			!Net_5316 * !\ADC:bSAR_SEQ:load_period\
 			\ADC:Net_3935\
 
 	Datapath:

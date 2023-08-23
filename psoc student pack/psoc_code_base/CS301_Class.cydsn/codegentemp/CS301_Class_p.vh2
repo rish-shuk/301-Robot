@@ -1,6 +1,6 @@
 -- Project:   CS301_Class
--- Generated: 08/23/2023 15:33:46
--- PSoC Creator  4.2
+-- Generated: 08/23/2023 18:04:14
+-- PSoC Creator  4.4
 
 ENTITY CS301_Class IS
     PORT(
@@ -103,10 +103,10 @@ ARCHITECTURE __DEFAULT__ OF CS301_Class IS
     ATTRIBUTE global_signal OF Net_4410 : SIGNAL IS true;
     SIGNAL Net_4410_local : bit;
     SIGNAL Net_4413 : bit;
-    SIGNAL Net_4453 : bit;
-    SIGNAL Net_4558 : bit;
     SIGNAL Net_4630 : bit;
-    SIGNAL Net_4631 : bit;
+    SIGNAL Net_4667 : bit;
+    SIGNAL Net_5316 : bit;
+    SIGNAL Net_5358 : bit;
     SIGNAL Net_724 : bit;
     SIGNAL Net_724_SYNCOUT : bit;
     SIGNAL Net_725 : bit;
@@ -565,7 +565,7 @@ ARCHITECTURE __DEFAULT__ OF CS301_Class IS
     ATTRIBUTE lib_model OF \UART:BUART:rx_status_4\ : LABEL IS "macrocell26";
     ATTRIBUTE lib_model OF \UART:BUART:rx_status_5\ : LABEL IS "macrocell27";
     ATTRIBUTE lib_model OF \Timer_LED:TimerUDB:status_tc\ : LABEL IS "macrocell28";
-    ATTRIBUTE lib_model OF Net_4631 : LABEL IS "macrocell29";
+    ATTRIBUTE lib_model OF Net_5358 : LABEL IS "macrocell29";
     ATTRIBUTE lib_model OF __ONE__ : LABEL IS "macrocell30";
     ATTRIBUTE lib_model OF \QuadDec_M1:Cnt16:CounterUDB:sCTRLReg:ctrlreg\ : LABEL IS "controlcell1";
     ATTRIBUTE lib_model OF \QuadDec_M1:Cnt16:CounterUDB:sSTSReg:stsreg\ : LABEL IS "statusicell1";
@@ -3945,7 +3945,7 @@ BEGIN
             clken_mode => 1)
         PORT MAP(
             q => \ADC:bSAR_SEQ:cnt_enable\,
-            main_0 => Net_4453,
+            main_0 => Net_5316,
             main_1 => \ADC:bSAR_SEQ:load_period\);
 
     Net_1880:macrocell
@@ -4056,13 +4056,13 @@ BEGIN
             main_0 => \Timer_LED:TimerUDB:run_mode\,
             main_1 => \Timer_LED:TimerUDB:per_zero\);
 
-    Net_4631:macrocell
+    Net_5358:macrocell
         GENERIC MAP(
             eqn_main => "(!main_0 * main_1)",
             regmode => 0,
             clken_mode => 1)
         PORT MAP(
-            q => Net_4631,
+            q => Net_5358,
             main_0 => \EdgeDetect_1:last\,
             main_1 => Net_4630);
 
@@ -4533,7 +4533,7 @@ BEGIN
             vn_ctl_udb_1 => open,
             vn_ctl_udb_0 => open,
             irq => \ADC:SAR:Net_252\,
-            next => Net_4453,
+            next => Net_5316,
             data_out_udb_11 => \ADC:SAR:Net_207_11\,
             data_out_udb_10 => \ADC:SAR:Net_207_10\,
             data_out_udb_9 => \ADC:SAR:Net_207_9\,
@@ -5073,8 +5073,10 @@ BEGIN
             cy_md_select => "0000011",
             clk_inv => '0',
             clken_inv => '0',
-            clken_mode => 2)
+            clken_mode => 2,
+            reset_inv => '0')
         PORT MAP(
+            reset => Net_4667,
             clock => ClockBlock_BUS_CLK,
             status_6 => open,
             status_5 => open,
@@ -5083,7 +5085,7 @@ BEGIN
             status_2 => \Timer_LED:TimerUDB:status_2\,
             status_1 => open,
             status_0 => \Timer_LED:TimerUDB:status_tc\,
-            interrupt => Net_4558,
+            interrupt => Net_4667,
             clk_en => ClockBlock_100k__SYNC_OUT);
 
     \Timer_LED:TimerUDB:sT24:timerdp:u0\:datapathcell
@@ -5116,6 +5118,7 @@ BEGIN
             clken_mode => 2)
         PORT MAP(
             clock => ClockBlock_BUS_CLK,
+            cs_addr_2 => Net_4667,
             cs_addr_1 => \Timer_LED:TimerUDB:timer_enable\,
             cs_addr_0 => \Timer_LED:TimerUDB:per_zero\,
             clk_en => ClockBlock_100k__SYNC_OUT,
@@ -5164,6 +5167,7 @@ BEGIN
             clken_mode => 2)
         PORT MAP(
             clock => ClockBlock_BUS_CLK,
+            cs_addr_2 => Net_4667,
             cs_addr_1 => \Timer_LED:TimerUDB:timer_enable\,
             cs_addr_0 => \Timer_LED:TimerUDB:per_zero\,
             busclk => ClockBlock_BUS_CLK,
@@ -5225,6 +5229,7 @@ BEGIN
             clken_mode => 2)
         PORT MAP(
             clock => ClockBlock_BUS_CLK,
+            cs_addr_2 => Net_4667,
             cs_addr_1 => \Timer_LED:TimerUDB:timer_enable\,
             cs_addr_0 => \Timer_LED:TimerUDB:per_zero\,
             z0_comb => \Timer_LED:TimerUDB:per_zero\,
@@ -5251,15 +5256,15 @@ BEGIN
             int_type => "10",
             is_nmi => 0)
         PORT MAP(
-            interrupt => Net_4558,
+            interrupt => Net_4667,
             clock => ClockBlock_BUS_CLK);
 
-    isr_sensor_high:interrupt
+    edge_detected:interrupt
         GENERIC MAP(
             int_type => "10",
             is_nmi => 0)
         PORT MAP(
-            interrupt => Net_4631,
+            interrupt => Net_5358,
             clock => ClockBlock_BUS_CLK);
 
     \QuadDec_M1:Net_1251\:macrocell
@@ -7250,7 +7255,7 @@ BEGIN
 
     \Timer_LED:TimerUDB:timer_enable\:macrocell
         GENERIC MAP(
-            eqn_main => "(main_0 * !main_1 * !main_4) + (main_0 * !main_2 * !main_4) + (main_0 * !main_3 * !main_4)",
+            eqn_main => "(!main_0 * main_1 * !main_2 * !main_5) + (!main_0 * main_1 * !main_3 * !main_5) + (!main_0 * main_1 * !main_4 * !main_5)",
             regmode => 1,
             clk_inv => '0',
             clken_inv => '0',
@@ -7259,16 +7264,17 @@ BEGIN
             q => \Timer_LED:TimerUDB:timer_enable\,
             clk_en => ClockBlock_100k__SYNC_OUT,
             clock_0 => ClockBlock_BUS_CLK,
-            main_0 => \Timer_LED:TimerUDB:control_7\,
-            main_1 => \Timer_LED:TimerUDB:timer_enable\,
-            main_2 => \Timer_LED:TimerUDB:run_mode\,
-            main_3 => \Timer_LED:TimerUDB:per_zero\,
-            main_4 => \Timer_LED:TimerUDB:trig_disable\);
+            main_0 => Net_4667,
+            main_1 => \Timer_LED:TimerUDB:control_7\,
+            main_2 => \Timer_LED:TimerUDB:timer_enable\,
+            main_3 => \Timer_LED:TimerUDB:run_mode\,
+            main_4 => \Timer_LED:TimerUDB:per_zero\,
+            main_5 => \Timer_LED:TimerUDB:trig_disable\);
 
     \Timer_LED:TimerUDB:trig_disable\:macrocell
         GENERIC MAP(
-            eqn_main => "(main_0 * main_1 * main_2 * !main_3)",
-            regmode => 2,
+            eqn_main => "(!main_0 * main_1 * main_2 * main_3) + (!main_0 * main_4)",
+            regmode => 1,
             clk_inv => '0',
             clken_inv => '0',
             clken_mode => 2)
@@ -7276,10 +7282,11 @@ BEGIN
             q => \Timer_LED:TimerUDB:trig_disable\,
             clk_en => ClockBlock_100k__SYNC_OUT,
             clock_0 => ClockBlock_BUS_CLK,
-            main_0 => \Timer_LED:TimerUDB:timer_enable\,
-            main_1 => \Timer_LED:TimerUDB:run_mode\,
-            main_2 => \Timer_LED:TimerUDB:per_zero\,
-            main_3 => \Timer_LED:TimerUDB:trig_disable\);
+            main_0 => Net_4667,
+            main_1 => \Timer_LED:TimerUDB:timer_enable\,
+            main_2 => \Timer_LED:TimerUDB:run_mode\,
+            main_3 => \Timer_LED:TimerUDB:per_zero\,
+            main_4 => \Timer_LED:TimerUDB:trig_disable\);
 
     \EdgeDetect_1:last\:macrocell
         GENERIC MAP(

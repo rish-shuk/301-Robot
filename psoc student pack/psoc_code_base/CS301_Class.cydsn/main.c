@@ -32,6 +32,8 @@ char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
 int keepLedOn = 0;
+uint16 adcResultMVprev = 0;
+uint16 adcResultMV;
 
 char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
@@ -44,23 +46,22 @@ CY_ISR (speedTimer) {
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
-CY_ISR(Sensor_High) {
+CY_ISR(EDGE_DETECTED) {
     Timer_LED_Start();
-    keepLedOn = 1;
+    //LED_Write(~LED_Read());
+    //keepLedOn = 1;
 }
 
-CY_ISR (LED_Timer) {
-    // Every 9ms or whatever period, check if keepLedOn = true and turn on LED if so.
-    // keepLedOn = false initially.
-    // keepLedOn = true whenever pin voltage is above appropriate threshold.
-    
-    // turn on if ADC is greater than 1V
-    if(ADC_GetResult16(0) > 1000) {
-        LED_Write(1u);
-    } else {
-        LED_Write(0u);
+CY_ISR(ADC_CONV_FINISH) {
+    adcResultMV = ADC_CountsTo_mVolts(ADC_GetResult16(0));
+    if(adcResultMV > 300) {
+        //LED_Write(1u);
     }
-    ADC_StartConvert();
+}
+
+CY_ISR(TIMER_FINISH) {
+    //ADC_StartConvert();
+    LED_Write(~LED_Read());
     Timer_LED_ReadStatusRegister();
 }
 
@@ -72,14 +73,16 @@ int main()
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
+    isr_Timer_LED_StartEx(TIMER_FINISH);
     ADC_Start();
     //int32 adcVolts = 0;
     
     
     // -- LED TIMER ---------------
-    isr_Timer_LED_StartEx(LED_Timer);
+    isr_eoc_StartEx(ADC_CONV_FINISH);
     keepLedOn = 0;
-    isr_sensor_high_StartEx(Sensor_High);
+    edge_detected_StartEx(EDGE_DETECTED);
+    
     // ----------------------------
     
     
