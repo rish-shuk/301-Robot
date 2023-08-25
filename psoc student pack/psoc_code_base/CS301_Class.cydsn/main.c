@@ -24,6 +24,7 @@
 #include "pathfinding.h"
 #include "initialise.h"
 #include "movement.h"
+#include "usbUART.h"
 
 //* ========================================
 void quadCountToRPM(uint16 count);
@@ -32,8 +33,11 @@ char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
 int keepLedOn = 0;
+uint8 isHigh = 0; // flag to detect high
 uint16 adcResultMVprev = 0;
 uint16 adcResultMV;
+uint8 readings[100] = {0};
+uint8 counter = 0;
 
 char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
@@ -47,8 +51,10 @@ CY_ISR (speedTimer) {
 }
 
 CY_ISR(EDGE_DETECTED) {
-    Timer_LED_Start();
-    //LED_Write(~LED_Read());
+    isHigh = 1;
+    // actual highs
+    //Timer_LED_Stop();
+    //Timer_LED_Start();
     //keepLedOn = 1;
 }
 
@@ -60,8 +66,19 @@ CY_ISR(ADC_CONV_FINISH) {
 }
 
 CY_ISR(TIMER_FINISH) {
-    //ADC_StartConvert();
-    LED_Write(~LED_Read());
+    if(isHigh == 1) {
+        LED_Write(1u);
+    } else {
+        LED_Write(0u);
+    }
+    // rec ishigh
+    
+    if (counter <= 99) {
+        readings[counter] = isHigh;
+    }
+
+    counter++;
+    isHigh = 0; // reset for next rising edge
     Timer_LED_ReadStatusRegister();
 }
 
@@ -74,16 +91,8 @@ int main()
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
-    ADC_Start();
-    //int32 adcVolts = 0;
-    
-    
-    // -- LED TIMER ---------------
-    isr_eoc_StartEx(ADC_CONV_FINISH);
-    keepLedOn = 0;
     edge_detected_StartEx(EDGE_DETECTED);
-    
-    // ----------------------------
+    Timer_LED_Start();
     
     
 // ------USB SETUP ----------------    
@@ -93,29 +102,19 @@ int main()
         
     RF_BT_SELECT_Write(0);
     
-    for(;;)
-    {   
-        // If pin is logic high - turn led on
-        //if (Pin_LED_Check_Read() >= 1u) {
-        //    keepLedOn = 1;
-        //}
-
-        
-        
-        //adcVolts = ADC_CountsTo_mVolts(ADC_GetResult16(0));
-        /*if(adcVolts < 2500) {
-            LED_Write(1u);
-        } else {
-            LED_Write(0u);
-        }*/
-        //traverseMap(map);
-        /*rotationAntiClockwise();
-        rotationClockwise();
-        
-        if(timerInt == 1) {
-            // calculate RPM of M2
-            quadCountToRPM(quadDec2Count);
-        }*/
+    for(;;) {
+        if (counter == 100) {
+            usbPutString("White Samples: ");
+            int whiteCounter = 0;
+            for (int i = 0; i < 100; i++) {
+                if (readings[i] == 1) {
+                    whiteCounter++;   
+                }
+            }
+            char* buffer[64];
+            snprintf(*buffer, 64, "White Counter: ");
+            usbPutString(*buffer);
+        }
         
         if (flag_KB_string == 1)
         {
