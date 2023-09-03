@@ -274,8 +274,8 @@ int main() {
     //struct Location startLocation = getRandomLocation(map); 
     //struct Location targetLocation = getRandomLocation(map); // generate random start and target location
     struct Location startLocation; 
-    startLocation.row = 0;
-    startLocation.col = 13;
+    startLocation.row = 13;
+    startLocation.col = 0;
     struct Location targetLocation; // generate random start and target location
     targetLocation.row = 0;
     targetLocation.col = 17;
