@@ -51,18 +51,7 @@ CY_ISR (speedTimer) {
 }
 
 CY_ISR(EDGE_DETECTED) {
-    isHigh = 1;
-    // actual highs
-    //Timer_LED_Stop();
-    //Timer_LED_Start();
-    //keepLedOn = 1;
-}
-
-CY_ISR(ADC_CONV_FINISH) {
-    adcResultMV = ADC_CountsTo_mVolts(ADC_GetResult16(0));
-    if(adcResultMV > 300) {
-        //LED_Write(1u);
-    }
+    isHigh = 1; // set isHigh to 1
 }
 
 CY_ISR(TIMER_FINISH) {
@@ -71,13 +60,7 @@ CY_ISR(TIMER_FINISH) {
     } else {
         LED_Write(0u);
     }
-    // rec ishigh
-    
-    if (counter <= 99) {
-        readings[counter] = isHigh;
-    }
 
-    counter++;
     isHigh = 0; // reset for next rising edge
     Timer_LED_ReadStatusRegister();
 }
