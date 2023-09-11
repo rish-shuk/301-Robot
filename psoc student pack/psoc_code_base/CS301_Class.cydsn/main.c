@@ -43,8 +43,9 @@ uint8 s5 = 0;
 uint8 s6 = 0;
 //* ========================================
 // Calculating Distance
+#define WHEEL_DIAMETER_MM 64
 uint32 totalMilliseconds = 0;
-uint32 totalDistance = 0; // in mm
+int totalDistance = 0; // in mm
 //* ========================================
 char buffer[69];
 int quadDec2Count = 0;
@@ -103,8 +104,9 @@ CY_ISR(TIMER_FINISH) {
     // FOR CALCULATING DISTANCE
     // Since this timer is every 9.7ms we calculate distance travelled the last 9.7ms
     // We don't calculate if we are currently turning
+    // total distance = total distance + ( RPM * PI * DIAMETER * (TIME SINCE LAST CALCULATATION) )
     if (currentDirection == Forward) {
-        totalDistance = quadCountToRPM(quadDec2Count) * CY_M_PI;
+        totalDistance = totalDistance + abs(quadCountToRPM(quadDec2Count)) * CY_M_PI * WHEEL_DIAMETER_MM * 9.7;
     }
     
     // Reset Sensor Flags for Next rising Eddge
