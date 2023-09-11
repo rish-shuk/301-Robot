@@ -4,9 +4,13 @@
 
 #Version:            1.1
 
-#Build Date:         Sep  9 2019 11:47:43
+#Build Date:         Dec  5 2017 15:35:27
 
+<<<<<<< HEAD
 #File Generated:     Aug 25 2023 13:54:17
+=======
+#File Generated:     Aug 16 2023 13:33:34
+>>>>>>> main
 
 #Purpose:            
 
@@ -14,16 +18,16 @@
 
 #***************************************************************************
 
-Executing : C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\bin/sjplacer.exe --proj-name CS301_Class --netlist-vh2 CS301_Class_p.vh2 --arch p35_udb4x6 --arch-file C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\arch/udbdsi_4x6_24.cydata --ip-file C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\psoc5/psoc5lp/ip_blocks.cydata --rrg-file C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\psoc5/psoc5lp/route_arch-rrg.cydata --irq-file C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\psoc5/psoc5lp/irqconn.cydata --drq-file C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\psoc5/psoc5lp/dmaconn.cydata --dsi-conn-file C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\psoc5/psoc5lp/dsiconn.cydata --pins-file pins_68-QFN.xml --lib-file CS301_Class_p.lib --sdc-file CS301_Class.sdc --io-pcf CS301_Class.pci --outdir .
+Executing : C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\bin/sjplacer.exe --proj-name CS301_Class --netlist-vh2 CS301_Class_p.vh2 --arch p35_udb4x6 --arch-file C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\arch/udbdsi_4x6_24.cydata --ip-file C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\psoc5/psoc5lp/ip_blocks.cydata --rrg-file C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\psoc5/psoc5lp/route_arch-rrg.cydata --irq-file C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\psoc5/psoc5lp/irqconn.cydata --drq-file C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\psoc5/psoc5lp/dmaconn.cydata --dsi-conn-file C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\psoc5/psoc5lp/dsiconn.cydata --pins-file pins_68-QFN.xml --lib-file CS301_Class_p.lib --sdc-file CS301_Class.sdc --io-pcf CS301_Class.pci --outdir .
 
 		Softjin Techologies Placer, Version 1.1
 
-Build Date : Sep  9 2019	11:45:12
+Build Date : Dec  5 2017	15:33:41
 
 D2004: Option and Settings Summary
 =============================================================
 Netlist vh2 file          - CS301_Class_p.vh2
-Architecture file         - C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\arch/udbdsi_4x6_24.cydata
+Architecture file         - C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\arch/udbdsi_4x6_24.cydata
 Package                   - 
 Defparam file             - 
 SDC file                  - CS301_Class.sdc
@@ -34,7 +38,7 @@ IO Placement file         - CS301_Class.pci
 D2050: Starting reading inputs for placer
 =============================================================
 D2065: Reading netlist file : "CS301_Class_p.vh2"
-D2065: Reading arch file : "C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\dev\arch/udbdsi_4x6_24.cydata"
+D2065: Reading arch file : "C:\Users\ikui753\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Devices\arch/udbdsi_4x6_24.cydata"
 D2051: Reading of inputs for placer completed successfully
 
 D2053: Starting placement of the design
@@ -44,8 +48,13 @@ Phase 2
 Phase 3
 
 Design Statistics after Packing
+<<<<<<< HEAD
     Number of Combinational MCs 	:	33
     Number of Sequential MCs    	:	130
+=======
+    Number of Combinational MCs 	:	32
+    Number of Sequential MCs    	:	127
+>>>>>>> main
     Number of DPs               	:	7
     Number of Controls          	:	7
     Number of Status            	:	7
@@ -53,7 +62,11 @@ Design Statistics after Packing
     Number of count7cells       	:	2
 
 Device Utilization Summary after Packing
+<<<<<<< HEAD
     Macrocells                  :	163/192
+=======
+    Macrocells                  :	159/192
+>>>>>>> main
     UDBS                        :	24/24
     IOs                         :	28/72
 
@@ -80,21 +93,34 @@ analysis after routing.
                      Clock Summary 
 ======================================================================
 Number of clocks: 15
+<<<<<<< HEAD
 Clock: ADC_IntClock         | Frequency:  29.2 MHz | Target:   1.0 MHz
+=======
+Clock: ADC_IntClock         | Frequency:  34.1 MHz | Target:   1.0 MHz
+>>>>>>> main
 Clock: ADC_IntClock(routed) | Frequency: N/A       | Target:   1.0 MHz
 Clock: Clock_PWM            | Frequency: N/A       | Target:   0.0 MHz
 Clock: Clock_PWM(fixed-function) | Frequency: N/A       | Target:   0.0 MHz
+<<<<<<< HEAD
 Clock: Clock_QENC           | Frequency:  38.6 MHz | Target:  12.0 MHz
 Clock: CyBUS_CLK            | Frequency:  59.4 MHz | Target:  60.0 MHz
+=======
+Clock: Clock_QENC           | Frequency:  42.6 MHz | Target:  12.0 MHz
+Clock: CyBUS_CLK            | Frequency:  49.7 MHz | Target:  60.0 MHz
+>>>>>>> main
 Clock: CyILO                | Frequency: N/A       | Target:   0.1 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  60.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  60.0 MHz
 Clock: SpeedClock           | Frequency: N/A       | Target:   0.0 MHz
 Clock: SpeedClock(fixed-function) | Frequency: N/A       | Target:   0.0 MHz
+<<<<<<< HEAD
 Clock: UART_IntClock        | Frequency:  47.2 MHz | Target:   0.5 MHz
 Clock: timer_clock          | Frequency: N/A       | Target:   0.1 MHz
 Clock: timer_clock(fixed-function) | Frequency: N/A       | Target:   0.1 MHz
+=======
+Clock: UART_IntClock        | Frequency:  34.7 MHz | Target:   0.5 MHz
+>>>>>>> main
 
 ======================================================================
                      End of Clock Summary
@@ -107,30 +133,51 @@ Phase 7
                      Clock Summary 
 ======================================================================
 Number of clocks: 15
+<<<<<<< HEAD
 Clock: ADC_IntClock         | Frequency:  14.8 MHz | Target:   1.0 MHz
+=======
+Clock: ADC_IntClock         | Frequency:  33.2 MHz | Target:   1.0 MHz
+>>>>>>> main
 Clock: ADC_IntClock(routed) | Frequency: N/A       | Target:   1.0 MHz
 Clock: Clock_PWM            | Frequency: N/A       | Target:   0.0 MHz
 Clock: Clock_PWM(fixed-function) | Frequency: N/A       | Target:   0.0 MHz
+<<<<<<< HEAD
 Clock: Clock_QENC           | Frequency:  35.4 MHz | Target:  12.0 MHz
 Clock: CyBUS_CLK            | Frequency:   7.1 MHz | Target:  60.0 MHz
+=======
+Clock: Clock_QENC           | Frequency:  32.2 MHz | Target:  12.0 MHz
+Clock: CyBUS_CLK            | Frequency:  60.6 MHz | Target:  60.0 MHz
+>>>>>>> main
 Clock: CyILO                | Frequency: N/A       | Target:   0.1 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  60.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  60.0 MHz
 Clock: SpeedClock           | Frequency: N/A       | Target:   0.0 MHz
 Clock: SpeedClock(fixed-function) | Frequency: N/A       | Target:   0.0 MHz
+<<<<<<< HEAD
 Clock: UART_IntClock        | Frequency:   7.1 MHz | Target:   0.5 MHz
 Clock: timer_clock          | Frequency: N/A       | Target:   0.1 MHz
 Clock: timer_clock(fixed-function) | Frequency: N/A       | Target:   0.1 MHz
+=======
+Clock: UART_IntClock        | Frequency:  42.1 MHz | Target:   0.5 MHz
+>>>>>>> main
 
 ======================================================================
                      End of Clock Summary
 ######################################################################
+<<<<<<< HEAD
 D2088: Phase 7, elapsed time : 5.0 (sec)
 
 Final Design Statistics
     Number of Combinational MCs 	:	33
     Number of Sequential MCs    	:	130
+=======
+D2088: Phase 7, elapsed time : 1.9 (sec)
+
+Final Design Statistics
+    Number of Combinational MCs 	:	32
+    Number of Sequential MCs    	:	127
+>>>>>>> main
     Number of DPs               	:	7
     Number of Controls          	:	7
     Number of Status            	:	7
@@ -139,8 +186,13 @@ Final Design Statistics
     Number of IOs       	:	28
 
 Device Utilization Summary
+<<<<<<< HEAD
     Macrocells                  :	163/192
     IOs                         :	28/72
+=======
+    Macrocells                  :	159/192
+    IOs                         :	27/72
+>>>>>>> main
 
 
 
@@ -162,16 +214,24 @@ Clock: ADC_IntClock(routed) | Frequency: N/A       | Target:   1.0 MHz
 Clock: Clock_PWM            | Frequency: N/A       | Target:   0.0 MHz
 Clock: Clock_PWM(fixed-function) | Frequency: N/A       | Target:   0.0 MHz
 Clock: Clock_QENC           | Frequency:  32.5 MHz | Target:  12.0 MHz
+<<<<<<< HEAD
 Clock: CyBUS_CLK            | Frequency:   7.9 MHz | Target:  60.0 MHz
+=======
+Clock: CyBUS_CLK            | Frequency:   7.7 MHz | Target:  60.0 MHz
+>>>>>>> main
 Clock: CyILO                | Frequency: N/A       | Target:   0.1 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  60.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  60.0 MHz
 Clock: SpeedClock           | Frequency: N/A       | Target:   0.0 MHz
 Clock: SpeedClock(fixed-function) | Frequency: N/A       | Target:   0.0 MHz
+<<<<<<< HEAD
 Clock: UART_IntClock        | Frequency:   7.9 MHz | Target:   0.5 MHz
 Clock: timer_clock          | Frequency: N/A       | Target:   0.1 MHz
 Clock: timer_clock(fixed-function) | Frequency: N/A       | Target:   0.1 MHz
+=======
+Clock: UART_IntClock        | Frequency:   7.7 MHz | Target:   0.5 MHz
+>>>>>>> main
 
 ======================================================================
                      End of Clock Summary
@@ -182,5 +242,9 @@ D2088: Phase 8, elapsed time : 0.0 (sec)
 
 D2054: Placement of the design completed successfully
 
+<<<<<<< HEAD
 I2076: Total run-time: 5.9 sec.
+=======
+I2076: Total run-time: 2.6 sec.
+>>>>>>> main
 

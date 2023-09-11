@@ -1,12 +1,12 @@
 %% Function descriptions
 %% To view a map, given a map file
 
-viewmap('c/map_1.txt',0); % shows walls
-viewmap('c/map_1.txt',1); % shows track
+viewmap('maps/map_1.txt',0); % shows walls
+viewmap('maps/map_1.txt',1); % shows track
 
 %or else
 
-[m]=map_convert('c/map_1.txt');
+[m]=map_convert('maps/map_1.txt');
 plotmap(m);
 %Here   'm' is the map file returned as a matrix
 [rows, cols] = size(m);
@@ -14,7 +14,15 @@ startloc = get_random_location(rows, cols, m);
 targetloc = get_random_location(rows, cols, m);
 
 % Your simulations will use this structure
-[m,v,s]=dijkstra('maps/map_8.txt',[startloc],[targetloc]);
+
+startLocDemo1 = [13, 0];
+targetLocDemo1 = [0, 17];
+
+%[m,v,s]=dfs('maps/map_demo.txt',[startloc],[targetloc]);
+[m,v,s]=dijkstra('maps/map_demo.txt',startLocDemo1,targetLocDemo1);
+%[m,v,s]=astar('maps/map_demo.txt',[startloc],[targetloc]);
+
+
 %Here   'm' is the map file returned as a matrix
 %       'v' is a matrix that shows which cells have been visited, '0' means
 %       visited, '1' means not visited

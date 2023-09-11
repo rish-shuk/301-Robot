@@ -49,6 +49,7 @@ CY_ISR (speedTimer) {
     QuadDec_M2_Start(); // restart counter
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
+<<<<<<< HEAD
 
 CY_ISR(EDGE_DETECTED) {
     isHigh = 1; // set isHigh to 1
@@ -65,6 +66,8 @@ CY_ISR(TIMER_FINISH) {
     Timer_LED_ReadStatusRegister();
 }
 
+=======
+>>>>>>> main
 int main()
 {
 // --------------------------------    
@@ -73,18 +76,25 @@ int main()
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
+<<<<<<< HEAD
     isr_Timer_LED_StartEx(TIMER_FINISH);
     edge_detected_StartEx(EDGE_DETECTED);
     Timer_LED_Start();
     
+=======
+>>>>>>> main
     
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
-#endif         
+#endif        
+#ifdef USE_USB    
+    USBUART_Start(0,USBUART_5V_OPERATION);
+#endif        
         
     RF_BT_SELECT_Write(0);
     
+<<<<<<< HEAD
     for(;;) {
         if (counter == 100) {
             usbPutString("White Samples: ");
@@ -97,6 +107,17 @@ int main()
             char* buffer[64];
             snprintf(*buffer, 64, "White Counter: ");
             usbPutString(*buffer);
+=======
+    for(;;)
+    {
+        //traverseMap(map);
+        rotationAntiClockwise();
+        rotationClockwise();
+        
+        if(timerInt == 1) {
+            // calculate RPM of M2
+            quadCountToRPM(quadDec2Count);
+>>>>>>> main
         }
         
         if (flag_KB_string == 1)
