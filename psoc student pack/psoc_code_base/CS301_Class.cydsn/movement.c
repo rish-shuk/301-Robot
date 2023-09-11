@@ -62,7 +62,9 @@ void moveForward() {
 }
 
 void traverseLine() {
-
+    // robot will run this code on a loop based on truth table 
+    
+    
 }
 
 /* [] END OF FILE */

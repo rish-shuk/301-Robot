@@ -29,11 +29,20 @@
 //* ========================================
 void quadCountToRPM(uint16 count);
 //* ========================================
+// Sensors and Booleans
+void ResetSensorFlags();
+enum DirectionState {Forward, TurnRight, TurnLeft, StopToTurnRight, StopToTurnLeft, Stop, Unknown};
+//* ========================================
 char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
 int keepLedOn = 0;
-uint8 isHigh = 0; // flag to detect high
+uint8 s1 = 0; // black = 0, white = 1
+uint8 s2 = 0;
+uint8 s3 = 0;
+uint8 s4 = 0;
+uint8 s5 = 0;
+uint8 s6 = 0;
 uint16 adcResultMVprev = 0;
 uint16 adcResultMV;
 uint8 readings[100] = {0};
@@ -51,17 +60,46 @@ CY_ISR (speedTimer) {
 }
 
 CY_ISR(S1_DETECTED) {
-    isHigh = 1; // set isHigh to 1
+    // Sensor has detected WHITE
+    s1 = 1; // , Black = 0, White = 1
+}
+
+CY_ISR(S2_DETECTED) {
+    // Sensor has detected WHITE
+    s2 = 1; // , Black = 0, White = 1
+}
+
+CY_ISR(S3_DETECTED) {
+    // Sensor has detected WHITE
+    s3 = 1; // , Black = 0, White = 1
+}
+
+CY_ISR(S4_DETECTED) {
+    // Sensor has detected WHITE
+    s4 = 1; // , Black = 0, White = 1
+}
+
+CY_ISR(S5_DETECTED) {
+    // Sensor has detected WHITE
+    s5 = 1; // , Black = 0, White = 1
+}
+
+CY_ISR(S6_DETECTED) {
+    // Sensor has detected WHITE
+    s6 = 1; // , Black = 0, White = 1
 }
 
 CY_ISR(TIMER_FINISH) {
-    if(isHigh == 1) {
+    // Check flags, set LEDs to high
+    if(s1 == 1) {
         LED_Write(1u);
     } else {
         LED_Write(0u);
     }
-
-    isHigh = 0; // reset for next rising edge
+    
+    // Reset Sensor Flags for Next rising Eddge
+    // (s1 = 0, s2 = 0... etc.)
+    ResetSensorFlags();
     Timer_LED_ReadStatusRegister();
 }
 
@@ -119,3 +157,58 @@ void quadCountToRPM(uint16 count)
     //usbPutString(buffer);
     //usbPutString("rpm ");
 }
+
+// Resets all sensor flags to 0
+void ResetSensorFlags() {
+    s1 = 0;
+    s2 = 0;
+    s3 = 0;
+    s4 = 0;
+    s5 = 0;
+}
+
+// This function checks the sensor flags s1-s6 through a boolean truth table and
+// returns a enum direction state depending on the flag configuration
+// if no conditons are met, it returns Unknown -- need to fix this edge case
+// s1 = 0 -- Black
+// s1 = 1 -- White
+enum DirectionState CheckTableDirection() {
+    enum DirectionState directionState = Unknown;
+    directionState = Unknown;
+    
+    //stop to turn left
+    if (s1 && s2 && !s3 && !s4 && !s5 && s6) {
+        directionState = StopToTurnLeft;
+        return directionState;   
+    }
+    
+    //stop to turn right
+    if (s1 && s2 && !s3 && !s4 && s5 && !s6) {
+        directionState = StopToTurnRight;
+        return directionState;   
+    }
+    
+    //forward
+    if (!s1 && !s2 && !s3 && !s4 && s5 && s6) {
+        directionState = Forward;
+        return directionState;   
+    }
+    
+    //turn left
+    if (s5 && !s6) {
+        directionState = TurnLeft;
+        return directionState;
+    }
+    
+    //turn right
+    if (!s5 && s6) {
+        directionState = TurnRight;
+        return directionState;
+    }
+    
+    // If the code gets up to this point then no conditions have been met
+    // The sensors are in a configuration that has not been covered
+    // The currentDirection to turn into is unknown.
+    return directionState;
+}
+
