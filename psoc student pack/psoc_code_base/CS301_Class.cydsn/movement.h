@@ -32,4 +32,7 @@ void rotationAntiClockwise();
 // Move forward
 void moveForward();
 
+// Traverse Line
+void traverseLine();
+
 #endif /* MOVEMENT_FUNCTIONS_H */

@@ -61,4 +61,8 @@ void moveForward() {
     PWM_2_WriteCompare(35);
 }
 
+void traverseLine() {
+
+}
+
 /* [] END OF FILE */
