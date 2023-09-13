@@ -24,8 +24,12 @@
 //#include "pathfinding.h"
 #include "initialise.h"
 #include "movement.h"
-#include "usbUART.h"
-
+//#include "usbUART.h"
+//* ========================================
+// USBUART
+void usbPutString(char *s);
+void usbPutChar(char c);
+void handle_usb();
 //* ========================================
 int16 quadCountToRPM(uint16 count);
 //* ========================================
@@ -44,9 +48,9 @@ uint8 s5 = 0;
 uint8 s6 = 0;
 //* ========================================
 // Calculating Distance
-#define WHEEL_DIAMETER_MM 64
+#define WHEEL_DIAMETER_MM 65
 uint32 totalMilliseconds = 0;
-int totalDistance = 0; // in mm
+uint32 totalDistance = 0; // in mm
 //* ========================================
 char buffer[69];
 int quadDec2Count = 0;
@@ -60,8 +64,15 @@ CY_ISR (speedTimer) {
     timerInt = 1;
     //quadDec_M1 used for turning macros
     quadDec2Count = QuadDec_M2_GetCounter();
+    
+    if (currentDirection == Forward && quadDec2Count != 0) {
+        totalDistance = totalDistance + (abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM;
+    }
+    
     QuadDec_M2_SetCounter(0); // reset count
     QuadDec_M2_Start(); // restart counter
+    
+
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
@@ -114,9 +125,11 @@ CY_ISR(TIMER_FINISH) {
     // Since this timer is every 9.7ms we calculate distance travelled the last 9.7ms
     // We don't calculate if we are currently turning
     // total distance = total distance + ( RPM * PI * DIAMETER * (TIME SINCE LAST CALCULATATION) )
+    /*
     if (currentDirection == Forward) {
         totalDistance = totalDistance + abs(quadCountToRPM(quadDec2Count)) * CY_M_PI * WHEEL_DIAMETER_MM * 9.7;
     }
+    */
     
     // Reset Sensor Flags for Next rising Eddge
     // (s1 = 0, s2 = 0... etc.)
@@ -144,18 +157,14 @@ int main()
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
     stopMoving();
-    
+
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
 #endif        
-#ifdef USE_USB    
-    USBUART_Start(0,USBUART_5V_OPERATION);
-#endif        
-        
     RF_BT_SELECT_Write(0);
     
-    
+    usbPutString("Initialised UART");
     for(;;)
     {
         //traverseMap(map);
@@ -169,16 +178,20 @@ int main()
         
         
         if(timerInt == 1) {
+            timerInt = 0;
             // calculate RPM of M2
             quadCountToRPM(quadDec2Count);
-            //sprintf(buffer, "%d", currentDirection);
+            sprintf(buffer, "%lu", totalDistance);
+            usbPutString(buffer);
+            usbPutString(" ");
         }
-        
+        handle_usb();
         if (flag_KB_string == 1)
         {
-            //usbPutString(line);
+            //usbPutString("Total Distance: ");
+            //sprintf(buffer, "%lu", totalDistance);
+            //usbPutString(buffer);
             flag_KB_string = 0;
-
         }           
     }
     return 0;
@@ -316,5 +329,84 @@ void SetRobotMovement() {
             break;  
     }
 }
+
+// ======================================
+// USBUART
+//* ========================================
+    void usbPutString(char *s)
+{
+// !! Assumes that *s is a string with allocated space >=64 chars     
+//  Since USB implementation retricts data packets to 64 chars, this function truncates the
+//  length to 62 char (63rd char is a '!')
+
+#ifdef USE_USB     
+    while (USBUART_CDCIsReady() == 0);
+    s[63]='\0';
+    s[62]='!';
+    USBUART_PutData((uint8*)s,strlen(s));
+#endif
+}
+//* ========================================
+void usbPutChar(char c)
+{
+#ifdef USE_USB     
+    while (USBUART_CDCIsReady() == 0);
+    USBUART_PutChar(c);
+#endif    
+}
+//* ========================================
+void handle_usb()
+{
+    // handles input at terminal, echos it back to the terminal
+    // turn echo OFF, key emulation: only CR
+    // entered string is made available in 'line' and 'flag_KB_string' is set
+    
+    static uint8 usbStarted = FALSE;
+    static uint16 usbBufCount = 0;
+    uint8 c; 
+    
+
+    if (!usbStarted)
+    {
+        if (USBUART_GetConfiguration())
+        {
+            USBUART_CDC_Init();
+            usbStarted = TRUE;
+        }
+    }
+    else
+    {
+        if (USBUART_DataIsReady() != 0)
+        {  
+            c = USBUART_GetChar();
+
+            if ((c == 13) || (c == 10))
+            {
+//                if (usbBufCount > 0)
+                {
+                    entry[usbBufCount]= '\0';
+                    strcpy(line,entry);
+                    usbBufCount = 0;
+                    flag_KB_string = 1;
+                }
+            }
+            else 
+            {
+                if (((c == CHAR_BACKSP) || (c == CHAR_DEL) ) && (usbBufCount > 0) )
+                    usbBufCount--;
+                else
+                {
+                    if (usbBufCount > (BUF_SIZE-2) ) // one less else strtok triggers a crash
+                    {
+                       USBUART_PutChar('!');        
+                    }
+                    else
+                        entry[usbBufCount++] = c;  
+                }  
+            }
+        }
+    }    
+}
+
 
 

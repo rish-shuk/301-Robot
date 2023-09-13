@@ -9,8 +9,8 @@
  *
  * ========================================
 */
-#ifndef MY_HEADER_FILE_H
-#define MY_HEADER_FILE_H
+#ifndef USBUART_H
+#define USBUART_H
 
 #include "project.h"
 #include "defines.h"
@@ -19,13 +19,11 @@
 #include <string.h>
 #include <stdlib.h>
     
-#ifdef USE_USB
-
+    
 void usbPutString(char *s);
 void usbPutChar(char c);
 void changeDutyCycle(float percentage);
 void handle_usb();
 
-#endif // USE_USB
 
-#endif // MY_HEADER_FILE_H
+#endif // USBUART_H
