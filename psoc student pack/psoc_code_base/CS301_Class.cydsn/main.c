@@ -21,7 +21,7 @@
 //* ========================================
 #include "defines.h"
 #include "vars.h"
-#include "pathfinding.h"
+//#include "pathfinding.h"
 #include "initialise.h"
 #include "movement.h"
 #include "usbUART.h"
@@ -31,6 +31,7 @@ int16 quadCountToRPM(uint16 count);
 //* ========================================
 // Sensors, Course correction and Movement Direction.
 void ResetSensorFlags();
+void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, StopToTurnRight, StopToTurnLeft, Stop, Unknown};
 enum DirectionState currentDirection = Stop;
@@ -53,11 +54,11 @@ int timerInt = 0;
 int keepLedOn = 0;
 
 
-char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
+//char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
 CY_ISR (speedTimer) {
     timerInt = 1;
-    // quadDec_M1 used for turning macros
+    //quadDec_M1 used for turning macros
     quadDec2Count = QuadDec_M2_GetCounter();
     QuadDec_M2_SetCounter(0); // reset count
     QuadDec_M2_Start(); // restart counter
@@ -67,37 +68,45 @@ CY_ISR (speedTimer) {
 CY_ISR(S1_DETECTED) {
     // Sensor has detected WHITE
     s1 = 1; // , Black = 0, White = 1
+    LED_Write(1u);
+    //moveForward();
 }
 
 CY_ISR(S2_DETECTED) {
     // Sensor has detected WHITE
     s2 = 1; // , Black = 0, White = 1
+    LED_Write(1u);
+    //moveForward();
 }
 
 CY_ISR(S3_DETECTED) {
     // Sensor has detected WHITE
     s3 = 1; // , Black = 0, White = 1
+    LED_Write(1u);
 }
 
 CY_ISR(S4_DETECTED) {
     // Sensor has detected WHITE
     s4 = 1; // , Black = 0, White = 1
+    //LED_Write(1u);
 }
 
 CY_ISR(S5_DETECTED) {
     // Sensor has detected WHITE
     s5 = 1; // , Black = 0, White = 1
+    //LED_Write(1u);
 }
 
 CY_ISR(S6_DETECTED) {
     // Sensor has detected WHITE
     s6 = 1; // , Black = 0, White = 1
+    //LED_Write(1u);
 }
 
 CY_ISR(TIMER_FINISH) {
     // Check flags, set LEDs to high
-    if(s1 == 1) {
-        LED_Write(1u);
+    if(s2 || s3 || s4 || s5 || s6) {
+        //LED_Write(1u);
     } else {
         LED_Write(0u);
     }
@@ -111,7 +120,9 @@ CY_ISR(TIMER_FINISH) {
     
     // Reset Sensor Flags for Next rising Eddge
     // (s1 = 0, s2 = 0... etc.)
+    SetRobotMovement();
     ResetSensorFlags();
+
     Timer_LED_ReadStatusRegister();
 }
 
@@ -132,7 +143,7 @@ int main()
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-    
+    stopMoving();
     
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
@@ -144,15 +155,23 @@ int main()
         
     RF_BT_SELECT_Write(0);
     
+    
     for(;;)
     {
         //traverseMap(map);
-        rotationAntiClockwise();
-        rotationClockwise();
+        //rotationAntiClockwise();
+        //rotationClockwise();
+        //stopMoving();
+        //moveForward();
+        //ResetSensorFlags();
+        //SetRobotMovement();
+        
+        
         
         if(timerInt == 1) {
             // calculate RPM of M2
             quadCountToRPM(quadDec2Count);
+            //sprintf(buffer, "%d", currentDirection);
         }
         
         if (flag_KB_string == 1)
@@ -177,13 +196,14 @@ int16 quadCountToRPM(uint16 count)
     //usbPutString("rpm ");
 }
 
-// Resets all sensor flags to 0
+// Resets all sensor flags to 0 - i.e. currently out of map
 void ResetSensorFlags() {
     s1 = 0;
     s2 = 0;
     s3 = 0;
     s4 = 0;
     s5 = 0;
+    s6 = 0;
 }
 
 // This function checks the sensor flags s1-s6 through a boolean truth table and
@@ -192,16 +212,21 @@ void ResetSensorFlags() {
 // s1 = 0 -- Black
 // s1 = 1 -- White
 enum DirectionState CheckSensorDirection() {
-    enum DirectionState directionState = Unknown;
-    directionState = Unknown;
+    enum DirectionState directionState = Stop;
+    //directionState = Unknown;
     
     // go forward if front two sensors are on black
-    if (!s1 && !s2) {
-        directionState = Forward;
-        return directionState;
-    }
+    // S1 and S2 are on black
+    //if (!s1 && !s2) {
+    //    directionState = Forward;
+    //    return directionState;
+    //}
     
+    /*
     //stop to turn left
+    // S1 and S2 are on white
+    // S3 and S4 are on black
+    // S5 is on black, S6 is on white
     if (s1 && s2 && !s3 && !s4 && !s5 && s6) {
         directionState = StopToTurnLeft;
         return directionState;   
@@ -213,12 +238,13 @@ enum DirectionState CheckSensorDirection() {
         return directionState;   
     }
     
-    //forward if front two sensors and back two sensors are on black
-    if (!s1 && !s2 && !s3 && !s4 && s5 && s6) {
+    //forward if all sensors are on white
+    
+    if (s1 && s2 && s3 && s4 & s5 && s6) {
         directionState = Forward;
         return directionState;   
     }
-    
+
     //turn left
     if (!s5 && s6) {
         directionState = TurnLeft;
@@ -230,7 +256,25 @@ enum DirectionState CheckSensorDirection() {
         directionState = TurnRight;
         return directionState;
     }
+    */
+    // ============================ TESTING
+    if (s1) {
+        directionState = Forward;
+        return directionState;   
+    }
     
+    //turn left
+    if (s2) {
+        directionState = TurnLeft;
+        return directionState;
+    }
+    
+    //turn right
+    if (s3) {
+        directionState = TurnRight;
+        return directionState;
+    }
+    // ============================ TESTING
     // If the code gets up to this point then no conditions have been met
     // The sensors are in a configuration that has not been covered
     // The currentDirection to turn into is unknown.
@@ -244,6 +288,7 @@ void SetRobotMovement() {
     switch (currentDirection) {
         //Forward, TurnRight, TurnLeft, StopToTurnRight, StopToTurnLeft, Stop, Unknown
         case Forward:
+            //LED_Write(1u);
             moveForward();
             break;
         case TurnRight:
@@ -256,17 +301,18 @@ void SetRobotMovement() {
             //stopMoving();
             rotationClockwise();
             // need to move forward for a specifed amount of time so that left sensors dont activate old path
-            
             break;
         case StopToTurnLeft:
             //stopMoving();
             rotationAntiClockwise();
             break;
         case Stop:
+            //stopMoving();
             stopMoving();
             break;
         case Unknown:
             // UNKNOWN CONFIGURATION
+            stopMoving();
             break;  
     }
 }

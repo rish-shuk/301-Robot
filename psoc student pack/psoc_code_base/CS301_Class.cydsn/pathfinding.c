@@ -20,6 +20,7 @@
 
 
 // MAP INITIALISATION CODE
+/*
 void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]) {
     FILE *file = fopen(filePath, "r");
 
@@ -295,5 +296,5 @@ void findPath(char map[MAX_ROWS][MAX_COLS], char *filePath) {
     dijkstra(map,getRandomLocation(map),getRandomLocation(map)); // find shortest path
 }
 
-
+*/
 /* [] END OF FILE */
