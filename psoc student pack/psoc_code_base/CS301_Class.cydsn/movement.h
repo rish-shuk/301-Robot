@@ -29,6 +29,12 @@ void rotationClockwise();
 // Rotate anticlockwise 90 degrees
 void rotationAntiClockwise();
 
+// keep rotating clockwise
+void keepRotatingClockwise();
+
+// keep rotating anticlockwise
+void keepRotatingAntiClockwise();
+
 // Move forward
 void moveForward();
 

@@ -56,6 +56,19 @@ void rotationAntiClockwise() {
     //stopMoving(); // stop movement, ready for next instruction
 }
 
+// keep rotating clockwise
+void keepRotatingClockwise() {
+    PWM_1_WriteCompare(65);
+    PWM_2_WriteCompare(65);
+    
+}
+
+// keep rotating anticlockwise
+void keepRotatingAntiClockwise() {
+    PWM_1_WriteCompare(35);
+    PWM_2_WriteCompare(35);
+}
+
 void moveForward() {
     PWM_1_WriteCompare(65);
     PWM_2_WriteCompare(35);

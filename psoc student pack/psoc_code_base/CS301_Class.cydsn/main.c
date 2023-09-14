@@ -37,8 +37,9 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, StopToTurnRight, StopToTurnLeft, Stop, Unknown};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown};
 enum DirectionState currentDirection = Stop;
+enum DirectionState previousDirection = Unknown;
 // ----------------------------------------
 uint8 s1 = 0; // black = 0, white = 1
 uint8 s2 = 0;
@@ -226,72 +227,53 @@ void ResetSensorFlags() {
 // s1 = 1 -- White
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
-    //directionState = Unknown;
-    
-    // go forward if front two sensors are on black
-    // S1 and S2 are on black
-    //if (!s1 && !s2) {
-    //    directionState = Forward;
-    //    return directionState;
-    //}
-    
-    /*
-    //stop to turn left
-    // S1 and S2 are on white
-    // S3 and S4 are on black
-    // S5 is on black, S6 is on white
-    if (s1 && s2 && !s3 && !s4 && !s5 && s6) {
-        directionState = StopToTurnLeft;
-        return directionState;   
-    }
-    
-    //stop to turn right
-    if (s1 && s2 && !s3 && !s4 && s5 && !s6) {
-        directionState = StopToTurnRight;
-        return directionState;   
-    }
+    previousDirection = currentDirection;
     
     //forward if all sensors are on white
-    
     if (s1 && s2 && s3 && s4 & s5 && s6) {
         directionState = Forward;
         return directionState;   
     }
-
+    
+    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
+    
+    // If robot is deviating to the left where top right sensor and bottom left sensor is on black
+    // we turn right until all sensors are on white again
+    if (!s1 && s2 && s3 && s4 && s5 && !s6) {
+        directionState = AdjustToTheRight;
+        return directionState;
+    }
+    
+    // If robot is deviating to the right where top 
+    
+    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
+    
+    // Left sensor is on black and right sensor is on white
     //turn left
-    if (!s5 && s6) {
+    if (!s3 && s4) {
         directionState = TurnLeft;
         return directionState;
     }
     
+    // Right sensor is on white and right sensor is on black
     //turn right
-    if (s5 && !s6) {
+    if (s3 && !s4) {
         directionState = TurnRight;
         return directionState;
     }
-    */
-    // ============================ TESTING
-    if (s1) {
-        directionState = Forward;
-        return directionState;   
-    }
     
-    //turn left
-    if (s2) {
-        directionState = TurnLeft;
-        return directionState;
-    }
-    
-    //turn right
-    if (s3) {
-        directionState = TurnRight;
-        return directionState;
-    }
-    // ============================ TESTING
     // If the code gets up to this point then no conditions have been met
     // The sensors are in a configuration that has not been covered
     // The currentDirection to turn into is unknown.
-    return directionState;
+    
+    // if currentDirection is Unknown, we continue with the previous direction
+    // However, if the previous direction is also Unknown, we will just move forward.
+    if (previousDirection == Unknown) {
+        directionState = Forward;
+        return directionState;
+    }
+            
+    return previousDirection;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
@@ -299,9 +281,8 @@ void SetRobotMovement() {
     currentDirection = CheckSensorDirection();   
     
     switch (currentDirection) {
-        //Forward, TurnRight, TurnLeft, StopToTurnRight, StopToTurnLeft, Stop, Unknown
+        //Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
         case Forward:
-            //LED_Write(1u);
             moveForward();
             break;
         case TurnRight:
@@ -310,22 +291,17 @@ void SetRobotMovement() {
         case TurnLeft:
             rotationAntiClockwise();
             break;
-        case StopToTurnRight:
-            //stopMoving();
-            rotationClockwise();
-            // need to move forward for a specifed amount of time so that left sensors dont activate old path
+        case AdjustToTheRight:
+            keepRotatingClockwise();
             break;
-        case StopToTurnLeft:
-            //stopMoving();
-            rotationAntiClockwise();
+        case AdjustToTheLeft:
+            keepRotatingAntiClockwise();
             break;
         case Stop:
-            //stopMoving();
             stopMoving();
             break;
         case Unknown:
             // UNKNOWN CONFIGURATION
-            stopMoving();
             break;  
     }
 }
