@@ -100,37 +100,28 @@ CY_ISR(S3_DETECTED) {
 CY_ISR(S4_DETECTED) {
     // Sensor has detected WHITE
     s4 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
+    LED_Write(1u);
 }
 
 CY_ISR(S5_DETECTED) {
     // Sensor has detected WHITE
     s5 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
+    LED_Write(1u);
 }
 
 CY_ISR(S6_DETECTED) {
     // Sensor has detected WHITE
     s6 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
+    LED_Write(1u);
 }
 
 CY_ISR(TIMER_FINISH) {
     // Check flags, set LEDs to high
-    if(s2 || s3 || s4 || s5 || s6) {
+    if(s1 || s2 || s3 || s4 || s5 || s6) {
         //LED_Write(1u);
     } else {
         LED_Write(0u);
     }
-    // FOR CALCULATING DISTANCE
-    // Since this timer is every 9.7ms we calculate distance travelled the last 9.7ms
-    // We don't calculate if we are currently turning
-    // total distance = total distance + ( RPM * PI * DIAMETER * (TIME SINCE LAST CALCULATATION) )
-    /*
-    if (currentDirection == Forward) {
-        totalDistance = totalDistance + abs(quadCountToRPM(quadDec2Count)) * CY_M_PI * WHEEL_DIAMETER_MM * 9.7;
-    }
-    */
     
     // Reset Sensor Flags for Next rising Eddge
     // (s1 = 0, s2 = 0... etc.)
@@ -171,10 +162,6 @@ int main()
         //traverseMap(map);
         //rotationAntiClockwise();
         //rotationClockwise();
-        //stopMoving();
-        //moveForward();
-        //ResetSensorFlags();
-        //SetRobotMovement();
         
         
         
@@ -236,16 +223,23 @@ enum DirectionState CheckSensorDirection() {
     }
     
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
+    // Only need to course corrcet when direction state is forward
     
-    // If robot is deviating to the left where top right sensor and bottom left sensor is on black
-    // we turn right until all sensors are on white again
-    if (!s1 && s2 && s3 && s4 && s5 && !s6) {
-        directionState = AdjustToTheRight;
-        return directionState;
+    if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
+        // If robot is deviating to the left where top right sensor and bottom left sensor is on black
+        // we turn right until all sensors are on white again
+        if (!s1 && s2 && s3 && s4 && s5 && !s6) {
+            directionState = AdjustToTheRight;
+            return directionState;
+        }
+        
+        // If robot is deviating to the right where top left sensor and bottom right sensor is on black
+        // we turn left until all sensors are on white again
+        if (s1 && !s2 && s3 && s4 && !s5 && s6) {
+            directionState = AdjustToTheLeft;
+            return directionState;
+        }
     }
-    
-    // If robot is deviating to the right where top 
-    
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     
     // Left sensor is on black and right sensor is on white
@@ -259,6 +253,12 @@ enum DirectionState CheckSensorDirection() {
     //turn right
     if (s3 && !s4) {
         directionState = TurnRight;
+        return directionState;
+    }
+    
+    // if all sensors are on black -- we are currently in darkness so don't move
+    if (!(s1 && s2 && s3 && s4&& s5 && s6)) {
+        directionState = Stop;
         return directionState;
     }
     
