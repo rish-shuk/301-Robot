@@ -219,14 +219,14 @@ enum DirectionState CheckSensorDirection() {
     }
     
     
-    //forward if all sensors are on white
+    //forward if all sensors are on white // if (s1 && s4 && s5 && s6)
     if (s1 && s2) {
         directionState = Forward;
         return directionState;   
     }
     
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
-    // Only need to course corrcet when direction state is forward
+    // Only need to course correct when direction state is forward
     
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         // If robot is deviating to the left where top right sensor and bottom left sensor is on black
