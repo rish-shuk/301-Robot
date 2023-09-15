@@ -23,6 +23,9 @@
 // Stop moving
 void stopMoving();
 
+// Move forward by hard coded amount in function
+void moveForwardForSpecifiedCount();
+
 // Rotate clockwise 90 degrees
 void rotationClockwise();
 

@@ -37,7 +37,7 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
 // --- YIPPE
@@ -209,32 +209,24 @@ void ResetSensorFlags() {
 // s1 = 1 -- White
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
-    previousDirection = currentDirection;
+    previousDirection = currentDirection;    
     
-    // if previous directions were turning directions
-    // we move forward instead
-    if (previousDirection == TurnLeft || previousDirection == TurnRight) {
-        directionState = Forward;
-        return directionState;
-    }
-    
-    
-    //forward if all sensors are on white // if (s1 && s4 && s5 && s6)
-    if (s1 && s2) {
+    //forward if s5 and s6 (front two sensors) are on black and all other sensors are on white 
+    if (s1 && s2 && s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
     }
-    
+
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     // Only need to course correct when direction state is forward
-    
+    /*
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         // If robot is deviating to the left where top right sensor and bottom left sensor is on black
         // we turn right until all sensors are on white again
         if (!s1 && s2 && s3 && s4 && s5 && !s6) {
             directionState = AdjustToTheRight;
             return directionState;
-        }
+        }  
         
         // If robot is deviating to the right where top left sensor and bottom right sensor is on black
         // we turn left until all sensors are on white again
@@ -243,15 +235,17 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         }
     }
+    */
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     
     // Left sensor is on black and right sensor is on white
     
     //turn left
-    if (s1 && s2 && !s3 && s4 && s5 && s6) {
+    /*
+    if (s1 && s2 && !s3 && s4 && s5 && s6) 
         directionState = TurnLeft;
         return directionState;
-    }
+    }*/
     
     // Right sensor is on white and right sensor is on black
     // everything else is on white
@@ -261,17 +255,32 @@ enum DirectionState CheckSensorDirection() {
         return directionState;
     }
     
+    
+    // ====== After Initial turn ======
+    // -- This accounts for the transition period between turning at an intersection --
+    if (previousDirection == TurnRight || previousDirection == TurnLeft) {
+        if ((s1 && s2 && s3 && !s4 && !s5 && !s6) ||
+        (s1 && s2 && !s3 && s4 && !s5 && !s6)) {
+            directionState = HardForward;
+            return directionState;
+        }
+    }
+    
+    
     // if all sensors are on black -- we are currently in darkness so don't move
-    if (!(s1 && s2 && s3 && s4&& s5 && s6)) {
+    // OR, all sensors are on white.
+    if (!(s1 && s2 && s3 && s4 && s5 && s6) ||
+        (s1 && s2 && s3 && s4 && s5 && s6)) {
         directionState = Stop;
         return directionState;
     }
+        
     
     // If the code gets up to this point then no conditions have been met
-    // The sensors are in a configuration that has not been covered
-    // The currentDirection to turn into is unknown.
-    
-    // if currentDirection is Unknown, we continue with the previous direction
+    // The sensors are in a configuration that has not been covered thus
+    // the currentDirection to turn into is unknown.
+        
+    // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
     if (previousDirection == Unknown) {
         directionState = Forward;
@@ -304,6 +313,9 @@ void SetRobotMovement() {
             break;
         case Stop:
             stopMoving();
+            break;
+        case HardForward:
+            moveForwardForSpecifiedCount();
             break;
         case Unknown:
             // UNKNOWN CONFIGURATION

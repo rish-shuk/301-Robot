@@ -22,14 +22,26 @@ uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 //* ========================================
 // stop moving
 void stopMoving() {
-    PWM_1_WriteCompare(50);
-    PWM_2_WriteCompare(50);
+    PWM_1_WriteCompare(32768); // 50%
+    PWM_2_WriteCompare(32768); // 50%
+}
+
+void moveForwardForSpecifiedCount() {
+    PWM_1_WriteCompare(42598); // 65%
+    PWM_2_WriteCompare(22937); // 35%
+    
+    int quadPulseCount = 0;
+    QuadDec_M1_SetCounter(0);
+    while(quadPulseCount < 110) {
+        quadPulseCount = QuadDec_M1_GetCounter();
+    }
+    QuadDec_M1_SetCounter(0);
 }
 
 // rotate clockwise 90deg
 void rotationClockwise() {
-    PWM_1_WriteCompare(65);
-    PWM_2_WriteCompare(65);
+    PWM_1_WriteCompare(42598); // 65%
+    PWM_2_WriteCompare(42598); // 65%
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -43,8 +55,8 @@ void rotationClockwise() {
 
 // rotate anticlockwise 90deg
 void rotationAntiClockwise() {
-    PWM_1_WriteCompare(35);
-    PWM_2_WriteCompare(35);
+    PWM_1_WriteCompare(22937); // 35%
+    PWM_2_WriteCompare(22937); // 35%
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -57,21 +69,23 @@ void rotationAntiClockwise() {
 }
 
 // keep rotating clockwise
+// used for adjusting deviations
 void keepRotatingClockwise() {
-    PWM_1_WriteCompare(65);
-    PWM_2_WriteCompare(65);
+    PWM_1_WriteCompare(36044); // 55%
+    PWM_2_WriteCompare(36044); // 55%
     
 }
 
 // keep rotating anticlockwise
+// used for adjusting deviations
 void keepRotatingAntiClockwise() {
-    PWM_1_WriteCompare(35);
-    PWM_2_WriteCompare(35);
+    PWM_1_WriteCompare(29491); // 45%
+    PWM_2_WriteCompare(29491); // 45%
 }
 
 void moveForward() {
-    PWM_1_WriteCompare(65);
-    PWM_2_WriteCompare(35);
+    PWM_1_WriteCompare(42598); // 65%
+    PWM_2_WriteCompare(22937); // 35%
 }
 
 void traverseLine() {

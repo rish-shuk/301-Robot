@@ -2,7 +2,7 @@
 --	Conversion of CS301_Class.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Thu Sep 14 15:38:39 2023
+--	Fri Sep 15 14:42:32 2023
 --
 
 USE cypress.cypress.all;
@@ -1431,9 +1431,9 @@ Net_5444 <= ((not \EdgeDetect_6:last\ and Net_5443));
 Clock_PWM:cy_clock_v1_0
 	GENERIC MAP(cy_registers=>"",
 		id=>"a546ed34-a261-4a1a-9275-f79fefc0e1bf",
-		source_clock_id=>"39D5E4C2-EBFC-44ab-AE3D-19F9BBFD674D",
+		source_clock_id=>"CEF43CFB-0213-49b9-B980-2FFAB81C5B47",
 		divisor=>0,
-		period=>"50000000000",
+		period=>"41666666.6666667",
 		is_direct=>'0',
 		is_digital=>'1')
 	PORT MAP(clock_out=>CLK24M,
