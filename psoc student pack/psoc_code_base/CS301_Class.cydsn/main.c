@@ -210,6 +210,14 @@ enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;
     
+    // if previous directions were turning directions
+    // we move forward instead
+    if (previousDirection == TurnLeft || previousDirection == TurnRight) {
+        directionState = Forward;
+        return directionState;
+    }
+    
+    
     //forward if all sensors are on white
     if (s1 && s2) {
         directionState = Forward;
