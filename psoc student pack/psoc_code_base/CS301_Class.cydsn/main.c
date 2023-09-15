@@ -40,6 +40,7 @@ enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
+// --- YIPPE
 // ----------------------------------------
 uint8 s1 = 0; // black = 0, white = 1
 uint8 s2 = 0;
