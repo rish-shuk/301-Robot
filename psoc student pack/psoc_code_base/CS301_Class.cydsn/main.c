@@ -223,14 +223,27 @@ enum DirectionState CheckSensorDirection() {
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         // If robot is deviating to the left where top right sensor and bottom left sensor is on black
         // we turn right until all sensors are on white again
-        if (!s1 && s2 && s3 && s4 && s5 && !s6) {
+        if (!s1 && s2 && s5 && !s6) {
             directionState = AdjustToTheRight;
             return directionState;
         }  
         
         // If robot is deviating to the right where top left sensor and bottom right sensor is on black
         // we turn left until all sensors are on white again
-        if (s1 && !s2 && s3 && s4 && !s5 && s6) {
+        if (s1 && !s2 && !s5 && s6) {
+            directionState = AdjustToTheLeft;
+            return directionState;
+        }
+        
+        // OLD COURSE CORRECTION ^^^^^^^^^^
+        // NEW COURSE CORRECTION vvvvvvvvvv
+    
+        if (!s1 || !s6) {
+            directionState = AdjustToTheRight;
+            return directionState;
+        }
+    
+        if (!s2 || !s5) {
             directionState = AdjustToTheLeft;
             return directionState;
         }
