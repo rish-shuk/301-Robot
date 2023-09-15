@@ -116,15 +116,9 @@ CY_ISR(S6_DETECTED) {
 }
 
 CY_ISR(TIMER_FINISH) {
-    // Check flags, set LEDs to high
-    if(s1 || s2 || s3 || s4 || s5 || s6) {
-        //LED_Write(1u);
-    } else {
-        LED_Write(0u);
-    }
-    
     // Reset Sensor Flags for Next rising Eddge
     // (s1 = 0, s2 = 0... etc.)
+    LED_Write(0u);
     SetRobotMovement();
     ResetSensorFlags();
 
@@ -217,7 +211,7 @@ enum DirectionState CheckSensorDirection() {
     previousDirection = currentDirection;
     
     //forward if all sensors are on white
-    if (s1 && s2 && s3 && s4 & s5 && s6) {
+    if (s1 && s2) {
         directionState = Forward;
         return directionState;   
     }
@@ -243,15 +237,17 @@ enum DirectionState CheckSensorDirection() {
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     
     // Left sensor is on black and right sensor is on white
+    
     //turn left
-    if (!s3 && s4) {
+    if (s1 && s2 && !s3 && s4 && s5 && s6) {
         directionState = TurnLeft;
         return directionState;
     }
     
     // Right sensor is on white and right sensor is on black
+    // everything else is on white
     //turn right
-    if (s3 && !s4) {
+    if (s1 && s2 && s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
         return directionState;
     }
