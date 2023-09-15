@@ -291,10 +291,15 @@ void SetRobotMovement() {
             moveForward();
             break;
         case TurnRight:
-            rotationClockwise();
+            while(!((s4 == 0) && s5 && s6)) {
+                rotationAntiClockwise();
+            }
+            break;
             break;
         case TurnLeft:
-            rotationAntiClockwise();
+            while(!((s3 == 0) && s5 && s6)) {
+                rotationAntiClockwise();
+            }
             break;
         case AdjustToTheRight:
             keepRotatingClockwise();
