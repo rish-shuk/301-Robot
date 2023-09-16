@@ -211,7 +211,7 @@ enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;    
     
-    //forward if s5 and s6 (front two sensors) are on black and all other sensors are on white 
+    // forward 111100
     if (s1 && s2 && s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
@@ -262,7 +262,7 @@ enum DirectionState CheckSensorDirection() {
     
     // Right sensor is on white and right sensor is on black
     // everything else is on white
-    //turn right
+    // turn right if 111011
     if (s1 && s2 && s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
         return directionState;
@@ -282,6 +282,7 @@ enum DirectionState CheckSensorDirection() {
     
     // if all sensors are on black -- we are currently in darkness so don't move
     // OR, all sensors are on white.
+    // 111111 || 000000 stop
     if (!(s1 && s2 && s3 && s4 && s5 && s6) ||
         (s1 && s2 && s3 && s4 && s5 && s6)) {
         directionState = Stop;
