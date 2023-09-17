@@ -1,6 +1,6 @@
 // ======================================================================
 // CS301_Class.v generated from TopDesign.cysch
-// 09/17/2023 at 14:54
+// 09/17/2023 at 16:46
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -1521,11 +1521,11 @@ module top ;
           wire  Net_3247;
           wire  Net_3246;
           wire  Net_1849;
+          wire  Net_5372;
           wire  Net_4630;
           wire  Net_4660;
           wire  Net_5389;
           wire  Net_5391;
-          wire  Net_5372;
           wire  Net_4412;
           wire  Net_4410;
           wire  Net_362;

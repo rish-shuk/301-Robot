@@ -115,12 +115,9 @@ CY_ISR(S6_DETECTED) {
 }
 
 CY_ISR(TIMER_FINISH) {
-    // Reset Sensor Flags for Next rising Eddge
-    // (s1 = 0, s2 = 0... etc.)
     //LED_Write(0u);
-    SetRobotMovement();
-    ResetSensorFlags();
-
+    SetRobotMovement(); 
+    ResetSensorFlags(); // Reset Sensor Flags for Next rising Eddge
     Timer_LED_ReadStatusRegister();
 }
 
@@ -162,11 +159,11 @@ int main()
             timerInt = 0;
             // calculate RPM of M2
             quadCountToRPM(quadDec2Count);
-            sprintf(buffer, "%lu", totalDistance);
-            usbPutString(buffer);
-            usbPutString(" ");
+            //sprintf(buffer, "%lu", totalDistance);
+            //usbPutString(buffer);
+            //usbPutString(" ");
         }
-        handle_usb();
+        //handle_usb();
         if (flag_KB_string == 1)
         {
             //usbPutString("Total Distance: ");
@@ -184,7 +181,7 @@ int16 quadCountToRPM(uint16 count)
 {
     float cps = count/57.00;
     int16 rpm = (int16)(cps*15); // rpm value
-    sprintf(buffer, "%d", rpm); // store in buffer
+    //sprintf(buffer, "%d", rpm); // store in buffer
     return rpm;
     //usbPutString(buffer);
     //usbPutString("rpm ");
@@ -210,8 +207,14 @@ enum DirectionState CheckSensorDirection() {
     previousDirection = currentDirection;    
     
     // forward 111100
-    if (s1 && s2 && s3 && s4 && !s5 && !s6) {
+    if (s1 == 1 && s2 == 1 && s3 == 1 && s4 == 1 && s5 == 1 && s6 == 1) {
         directionState = Forward;
+        return directionState;   
+    }
+
+    // stop 000000
+    if ((s1 == 0 && s2 == 0 && s3 == 0 && s4 == 0 && s5 == 0 && s6 == 0)) {
+        directionState = Stop;
         return directionState;   
     }
 
@@ -261,7 +264,7 @@ enum DirectionState CheckSensorDirection() {
     // Right sensor is on white and right sensor is on black
     // everything else is on white
     // turn right if 111011
-    if (s1 && s2 && s3 && !s4 && s5 && s6) {
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!if (s1 && s2 && s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
         return directionState;
     }
@@ -297,7 +300,7 @@ enum DirectionState CheckSensorDirection() {
     if (previousDirection == Unknown) {
         directionState = Forward;
         return directionState;
-    }
+    }*/
             
     return previousDirection;
 }
@@ -309,7 +312,9 @@ void SetRobotMovement() {
     switch (currentDirection) {
         //Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
         case Forward:
-            moveForward();
+            while(s3 == 1 && s4 == 1) {
+                moveForward();
+            }
             break;
         case TurnRight:
             rotationClockwise();
