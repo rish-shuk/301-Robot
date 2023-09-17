@@ -1,5 +1,5 @@
 -- Project:   CS301_Class
--- Generated: 09/17/2023 14:27:03
+-- Generated: 09/17/2023 14:53:34
 -- PSoC Creator  4.2
 
 ENTITY CS301_Class IS
@@ -310,7 +310,7 @@ ARCHITECTURE __DEFAULT__ OF CS301_Class IS
     SIGNAL tmpOE__M1_IN1_net_0 : bit;
     ATTRIBUTE POWER OF tmpOE__M1_IN1_net_0 : SIGNAL IS true;
     SIGNAL \ClockBlock.dclk_glb_ff_0__sig\ : bit;
-    SIGNAL \ClockBlock.dclk_glb_ff_3__sig\ : bit;
+    SIGNAL \ClockBlock.dclk_glb_ff_1__sig\ : bit;
     SIGNAL \ClockBlock.dclk_glb_ff_4__sig\ : bit;
     SIGNAL \QuadDec_M1:Cnt16:CounterUDB:sC16:counterdp:u0.ce0__sig\ : bit;
     SIGNAL \QuadDec_M1:Cnt16:CounterUDB:sC16:counterdp:u0.cl0__sig\ : bit;
@@ -906,16 +906,16 @@ BEGIN
             dsi_glb_div => open,
             dclk_glb_0 => Net_5389,
             dclk_0 => Net_5389_local,
-            dclk_glb_1 => Net_1850,
-            dclk_1 => Net_1850_local,
-            dclk_glb_2 => \UART:Net_9\,
-            dclk_2 => \UART:Net_9_local\,
-            dclk_glb_3 => CLK24M,
-            dclk_3 => CLK24M_local,
+            dclk_glb_1 => CLK24M,
+            dclk_1 => CLK24M_local,
+            dclk_glb_2 => Net_1850,
+            dclk_2 => Net_1850_local,
+            dclk_glb_3 => \UART:Net_9\,
+            dclk_3 => \UART:Net_9_local\,
             dclk_glb_4 => Net_4410,
             dclk_4 => Net_4410_local,
             dclk_glb_ff_0 => \ClockBlock.dclk_glb_ff_0__sig\,
-            dclk_glb_ff_3 => \ClockBlock.dclk_glb_ff_3__sig\,
+            dclk_glb_ff_1 => \ClockBlock.dclk_glb_ff_1__sig\,
             dclk_glb_ff_4 => \ClockBlock.dclk_glb_ff_4__sig\);
 
     M1_IN1:logicalport
@@ -4272,7 +4272,7 @@ BEGIN
         GENERIC MAP(
             cy_registers => "")
         PORT MAP(
-            clock => \ClockBlock.dclk_glb_ff_3__sig\,
+            clock => \ClockBlock.dclk_glb_ff_1__sig\,
             kill => open,
             enable => __ONE__,
             capture => open,
@@ -4285,7 +4285,7 @@ BEGIN
         GENERIC MAP(
             cy_registers => "")
         PORT MAP(
-            clock => \ClockBlock.dclk_glb_ff_3__sig\,
+            clock => \ClockBlock.dclk_glb_ff_1__sig\,
             kill => open,
             enable => __ONE__,
             capture => open,

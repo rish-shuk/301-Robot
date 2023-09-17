@@ -1,6 +1,6 @@
 // ======================================================================
 // CS301_Class.v generated from TopDesign.cysch
-// 09/17/2023 at 14:27
+// 09/17/2023 at 14:53
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -1552,7 +1552,7 @@ module top ;
 		#(.id("a546ed34-a261-4a1a-9275-f79fefc0e1bf"),
 		  .source_clock_id("39D5E4C2-EBFC-44ab-AE3D-19F9BBFD674D"),
 		  .divisor(0),
-		  .period("50000000000"),
+		  .period("41666666.6666667"),
 		  .is_direct(0),
 		  .is_digital(1))
 		Clock_PWM
