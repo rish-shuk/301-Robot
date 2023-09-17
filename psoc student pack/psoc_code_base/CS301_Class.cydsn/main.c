@@ -118,8 +118,7 @@ CY_ISR(SIGNAL_TIMER_FINISH) {
     // Reset Sensor Flags for Next rising Eddge
     // (s1 = 0, s2 = 0... etc.)
     //LED_Write(0u);
-    SetRobotMovement();
-    ResetSensorFlags();
+    
 
     Timer_LED_ReadStatusRegister();
 }
@@ -151,12 +150,12 @@ int main()
     
     //usbPutString("Initialised UART");
     for(;;)
-    {
+    {   
+        SetRobotMovement();
+        ResetSensorFlags();
         //traverseMap(map);
         //rotationAntiClockwise();
         //rotationClockwise();
-        
-        
         
         if(timerInt == 1) {
             timerInt = 0;
@@ -166,7 +165,7 @@ int main()
             //usbPutString(buffer);
             //usbPutString(" ");
         }
-        handle_usb();
+        
         if (flag_KB_string == 1)
         {
             //usbPutString("Total Distance: ");
@@ -239,7 +238,6 @@ enum DirectionState CheckSensorDirection() {
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRECTION */
     
     // Left sensor is on black and right sensor is on white
-    
     //turn left if 110100
     if (s1 && s2 && !s3 && s4 && !s5 && !s6) {
         directionState = TurnLeft;
