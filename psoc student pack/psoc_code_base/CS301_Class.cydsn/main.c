@@ -24,7 +24,7 @@
 //#include "pathfinding.h"
 #include "initialise.h"
 #include "movement.h"
-//#include "usbUART.h"
+#include "usbUART.h"
 //* ========================================
 // USBUART
 void usbPutString(char *s);
@@ -132,7 +132,7 @@ int main()
     CYGlobalIntEnable;
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     //findPath(map, "");// find shortest path- store this in map
-    isr_speed_StartEx(speedTimer); // start interrupt
+    //isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(SIGNAL_TIMER_FINISH);
     S1_detected_StartEx(S1_DETECTED);
     S2_detected_StartEx(S2_DETECTED);
@@ -184,7 +184,7 @@ int16 quadCountToRPM(uint16 count)
 {
     float cps = count/57.00;
     int16 rpm = (int16)(cps*15); // rpm value
-    sprintf(buffer, "%d", rpm); // store in buffer
+    //sprintf(buffer, "%d", rpm); // store in buffer
     return rpm;
     //usbPutString(buffer);
     //usbPutString("rpm ");
@@ -209,17 +209,8 @@ enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;
     
-    // if previous directions were turning directions
-    // we move forward instead
-    /*if (previousDirection == TurnLeft || previousDirection == TurnRight) {
-        directionState = Forward;
-        return directionState;
-    }*/
-    if(s1 && s2 && s3 && s4 && s5) {
-        stopMoving();
-    }
-
-    if (!(s1 && s2 && s3 && s4 && s5)) {
+    // all white
+    if (!(s1 && s2 && s3 && s4 && s5 && s6)) {
         stopMoving();
     }
     
@@ -232,7 +223,7 @@ enum DirectionState CheckSensorDirection() {
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRECTION */
     // Only need to course correct when direction state is forward
     
-    if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
+    if (previousDirection == Forward) {
         // If robot is deviating to the left where top left or bottom right is on white
         if (s5 || !s1) {
             directionState = AdjustToTheRight;
@@ -325,84 +316,4 @@ void SetRobotMovement() {
             break;  
     }
 }
-
-// ======================================
-// USBUART
-//* ========================================
-    void usbPutString(char *s)
-{
-// !! Assumes that *s is a string with allocated space >=64 chars     
-//  Since USB implementation retricts data packets to 64 chars, this function truncates the
-//  length to 62 char (63rd char is a '!')
-
-#ifdef USE_USB     
-    while (USBUART_CDCIsReady() == 0);
-    s[63]='\0';
-    s[62]='!';
-    USBUART_PutData((uint8*)s,strlen(s));
-#endif
-}
-//* ========================================
-void usbPutChar(char c)
-{
-#ifdef USE_USB     
-    while (USBUART_CDCIsReady() == 0);
-    USBUART_PutChar(c);
-#endif    
-}
-//* ========================================
-void handle_usb()
-{
-    // handles input at terminal, echos it back to the terminal
-    // turn echo OFF, key emulation: only CR
-    // entered string is made available in 'line' and 'flag_KB_string' is set
-    
-    static uint8 usbStarted = FALSE;
-    static uint16 usbBufCount = 0;
-    uint8 c; 
-    
-
-    if (!usbStarted)
-    {
-        if (USBUART_GetConfiguration())
-        {
-            USBUART_CDC_Init();
-            usbStarted = TRUE;
-        }
-    }
-    else
-    {
-        if (USBUART_DataIsReady() != 0)
-        {  
-            c = USBUART_GetChar();
-
-            if ((c == 13) || (c == 10))
-            {
-//                if (usbBufCount > 0)
-                {
-                    entry[usbBufCount]= '\0';
-                    strcpy(line,entry);
-                    usbBufCount = 0;
-                    flag_KB_string = 1;
-                }
-            }
-            else 
-            {
-                if (((c == CHAR_BACKSP) || (c == CHAR_DEL) ) && (usbBufCount > 0) )
-                    usbBufCount--;
-                else
-                {
-                    if (usbBufCount > (BUF_SIZE-2) ) // one less else strtok triggers a crash
-                    {
-                       USBUART_PutChar('!');        
-                    }
-                    else
-                        entry[usbBufCount++] = c;  
-                }  
-            }
-        }
-    }    
-}
-
-
 
