@@ -114,7 +114,7 @@ CY_ISR(S6_DETECTED) {
     LED_Write(1u);
 }
 
-CY_ISR(TIMER_FINISH) {
+CY_ISR(SIGNAL_TIMER_FINISH) {
     // Reset Sensor Flags for Next rising Eddge
     // (s1 = 0, s2 = 0... etc.)
     LED_Write(0u);
@@ -133,7 +133,7 @@ int main()
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
-    isr_Timer_LED_StartEx(TIMER_FINISH);
+    isr_Timer_LED_StartEx(SIGNAL_TIMER_FINISH);
     S1_detected_StartEx(S1_DETECTED);
     S2_detected_StartEx(S2_DETECTED);
     S3_detected_StartEx(S3_DETECTED);
