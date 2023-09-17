@@ -74,52 +74,51 @@ CY_ISR (speedTimer) {
     QuadDec_M2_SetCounter(0); // reset count
     QuadDec_M2_Start(); // restart counter
     
-
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
 CY_ISR(S1_DETECTED) {
     // Sensor has detected WHITE
     s1 = 1; // , Black = 0, White = 1
-    LED_Write(1u);
+    //LED_Write(1u);
     //moveForward();
 }
 
 CY_ISR(S2_DETECTED) {
     // Sensor has detected WHITE
     s2 = 1; // , Black = 0, White = 1
-    LED_Write(1u);
+    //LED_Write(1u);
     //moveForward();
 }
 
 CY_ISR(S3_DETECTED) {
     // Sensor has detected WHITE
     s3 = 1; // , Black = 0, White = 1
-    LED_Write(1u);
+    //LED_Write(1u);
 }
 
 CY_ISR(S4_DETECTED) {
     // Sensor has detected WHITE
     s4 = 1; // , Black = 0, White = 1
-    LED_Write(1u);
+    //LED_Write(1u);
 }
 
 CY_ISR(S5_DETECTED) {
     // Sensor has detected WHITE
     s5 = 1; // , Black = 0, White = 1
-    LED_Write(1u);
+    //LED_Write(1u);
 }
 
 CY_ISR(S6_DETECTED) {
     // Sensor has detected WHITE
     s6 = 1; // , Black = 0, White = 1
-    LED_Write(1u);
+    //LED_Write(1u);
 }
 
 CY_ISR(TIMER_FINISH) {
     // Reset Sensor Flags for Next rising Eddge
     // (s1 = 0, s2 = 0... etc.)
-    LED_Write(0u);
+    //LED_Write(0u);
     SetRobotMovement();
     ResetSensorFlags();
 
