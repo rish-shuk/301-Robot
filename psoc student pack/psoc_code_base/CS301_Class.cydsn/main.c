@@ -228,16 +228,14 @@ enum DirectionState CheckSensorDirection() {
     // Only need to course correct when direction state is forward
     
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        // If robot is deviating to the left where top left is on white
-        // we turn right until all sensors are on white again
-        if (s5 == 1) {
+        // If robot is deviating to the left where top left or bottom right is on white
+        if (s5 || !s1) {
             directionState = AdjustToTheRight;
             return directionState;
         }
         
-        // If robot is deviating to the right where top right sensor on white
-        // we turn left until all sensors are on white again
-        if (s6 == 1) {
+        // If robot is deviating to the right where top right sensor or bottom left on white
+        if (s6 || !s2) {
             directionState = AdjustToTheLeft;
             return directionState;
         }
@@ -303,12 +301,12 @@ void SetRobotMovement() {
             }
             break;
         case AdjustToTheRight: // rotate clockwise until s5 is on black
-            while(!(!s5)) {
+            while(!(!s5 && !s6)) {
                 rotationClockwise();
             }
             break;
         case AdjustToTheLeft: // rotate anticlockwise until s6 is on black
-            while(!(!s6)) {
+            while(!(!s6 && !s5)) {
                 rotationAntiClockwise();
             }
             break;
