@@ -213,55 +213,55 @@ enum DirectionState CheckSensorDirection() {
     
     // if previous directions were turning directions
     // we move forward instead
-    if (previousDirection == TurnLeft || previousDirection == TurnRight) {
+    /*if (previousDirection == TurnLeft || previousDirection == TurnRight) {
         directionState = Forward;
         return directionState;
-    }
+    }*/
     
-    
-    //forward if all sensors are on white
-    if (s1 && s2) {
+    //forward if 111100
+    if (s1 && s2 && s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
     }
     
-    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
-    // Only need to course corrcet when direction state is forward
+    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRECTION */
+    // Only need to course correct when direction state is forward
     
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        // If robot is deviating to the left where top right sensor and bottom left sensor is on black
+        // If robot is deviating to the left where top left is on white
         // we turn right until all sensors are on white again
-        if (!s1 && s2 && s3 && s4 && s5 && !s6) {
+        if (s5 == 1) {
             directionState = AdjustToTheRight;
             return directionState;
         }
         
-        // If robot is deviating to the right where top left sensor and bottom right sensor is on black
+        // If robot is deviating to the right where top right sensor on white
         // we turn left until all sensors are on white again
-        if (s1 && !s2 && s3 && s4 && !s5 && s6) {
+        if (s6 == 1) {
             directionState = AdjustToTheLeft;
             return directionState;
         }
     }
-    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
+    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRECTION */
     
     // Left sensor is on black and right sensor is on white
     
-    //turn left
-    if (s1 && s2 && !s3 && s4 && s5 && s6) {
+    //turn left if 110100
+    if (s1 && s2 && !s3 && s4 && !s5 && !s6) {
         directionState = TurnLeft;
         return directionState;
     }
     
     // Right sensor is on white and right sensor is on black
     // everything else is on white
-    //turn right
-    if (s1 && s2 && s3 && !s4 && s5 && s6) {
+    //turn right if 110100
+    if (s1 && s2 && !s3 && s4 && !s5 && !s6) {
         directionState = TurnRight;
         return directionState;
     }
     
     // if all sensors are on black -- we are currently in darkness so don't move
+    // stop 000000
     if (!(s1 && s2 && s3 && s4&& s5 && s6)) {
         directionState = Stop;
         return directionState;
@@ -291,21 +291,26 @@ void SetRobotMovement() {
             moveForward();
             break;
         case TurnRight:
-            while(!((s4 == 0) && s5 && s6)) {
+            // turn until XXX000
+            while(!(!s4 && !s5 && !s6)) {
                 rotationAntiClockwise();
             }
-            break;
             break;
         case TurnLeft:
-            while(!((s3 == 0) && s5 && s6)) {
+            // turn until XX0X00
+            while(!(!s3 && !s5 && !s6)) {
                 rotationAntiClockwise();
             }
             break;
-        case AdjustToTheRight:
-            keepRotatingClockwise();
+        case AdjustToTheRight: // rotate clockwise until s5 is on black
+            while(!(!s5)) {
+                rotationClockwise();
+            }
             break;
-        case AdjustToTheLeft:
-            keepRotatingAntiClockwise();
+        case AdjustToTheLeft: // rotate anticlockwise until s6 is on black
+            while(!(!s6)) {
+                rotationAntiClockwise();
+            }
             break;
         case Stop:
             stopMoving();
