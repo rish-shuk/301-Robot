@@ -289,8 +289,8 @@ void SetRobotMovement() {
             moveForward();
             break;
         case TurnRight:
-            // turn until XXX000
-            while(!(!s4 && !s5 && !s6)) {
+            // turn until 11000
+            while(!(s1 && s2 && !s3 && s4 && !s5 && !s6)) {
                 rotationAntiClockwise();
             }
             break;

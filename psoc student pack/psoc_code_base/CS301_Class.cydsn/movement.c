@@ -22,14 +22,14 @@ uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 //* ========================================
 // stop moving
 void stopMoving() {
-    PWM_1_WriteCompare(50);
-    PWM_2_WriteCompare(50);
+    PWM_1_WriteCompare(32768);
+    PWM_2_WriteCompare(32768);
 }
 
-// rotate clockwise 90deg
+// rotate clockwise 90deg- will repeat until sensors are in relevant positions
 void rotationClockwise() {
-    PWM_1_WriteCompare(65);
-    PWM_2_WriteCompare(65);
+    PWM_1_WriteCompare(42598);
+    PWM_2_WriteCompare(42598); // 65%
     
     /*int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -41,10 +41,10 @@ void rotationClockwise() {
     //stopMoving(); // stop movement, ready for next instruction
 }
 
-// rotate anticlockwise 90deg
+// rotate anticlockwise 90deg- will repeat until sensors are in relevant positions
 void rotationAntiClockwise() {
-    PWM_1_WriteCompare(35);
-    PWM_2_WriteCompare(35);
+    PWM_2_WriteCompare(22937);
+    PWM_1_WriteCompare(22937); // 35%
     
     /*int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -57,7 +57,7 @@ void rotationAntiClockwise() {
 }
 
 // keep rotating clockwise
-void keepRotatingClockwise() {
+/*void keepRotatingClockwise() {
     PWM_1_WriteCompare(65);
     PWM_2_WriteCompare(65);
     
@@ -67,11 +67,11 @@ void keepRotatingClockwise() {
 void keepRotatingAntiClockwise() {
     PWM_1_WriteCompare(35);
     PWM_2_WriteCompare(35);
-}
+}*/
 
 void moveForward() {
-    PWM_1_WriteCompare(65);
-    PWM_2_WriteCompare(35);
+    PWM_1_WriteCompare(42598); // 65%
+    PWM_2_WriteCompare(22937); // 35%
 }
 
 void traverseLine() {
