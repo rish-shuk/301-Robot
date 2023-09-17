@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 1
 
 
    1              		.syntax unified
@@ -58,38 +58,38 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
   16:initialise.c  ****     PWM_1_Start();
   40              		.loc 1 16 0
   41 0008 FFF7FEFF 		bl	PWM_1_Start
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 2
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 2
 
 
-  17:initialise.c  ****     PWM_1_WritePeriod(100);
+  17:initialise.c  ****     PWM_1_WritePeriod(25536);
   42              		.loc 1 17 0
-  43 000c 6420     		movs	r0, #100
-  44 000e FFF7FEFF 		bl	PWM_1_WritePeriod
+  43 000c 46F2C030 		movw	r0, #25536
+  44 0010 FFF7FEFF 		bl	PWM_1_WritePeriod
   18:initialise.c  ****     PWM_2_Start();
   45              		.loc 1 18 0
-  46 0012 FFF7FEFF 		bl	PWM_2_Start
-  19:initialise.c  ****     PWM_2_WritePeriod(100);
+  46 0014 FFF7FEFF 		bl	PWM_2_Start
+  19:initialise.c  ****     PWM_2_WritePeriod(25536);
   47              		.loc 1 19 0
-  48 0016 6420     		movs	r0, #100
-  49 0018 FFF7FEFF 		bl	PWM_2_WritePeriod
+  48 0018 46F2C030 		movw	r0, #25536
+  49 001c FFF7FEFF 		bl	PWM_2_WritePeriod
   20:initialise.c  **** 
   21:initialise.c  ****     // start quadrature decoders
   22:initialise.c  ****     QuadDec_M1_Start();
   50              		.loc 1 22 0
-  51 001c FFF7FEFF 		bl	QuadDec_M1_Start
+  51 0020 FFF7FEFF 		bl	QuadDec_M1_Start
   23:initialise.c  ****     QuadDec_M2_Start();
   52              		.loc 1 23 0
-  53 0020 FFF7FEFF 		bl	QuadDec_M2_Start
+  53 0024 FFF7FEFF 		bl	QuadDec_M2_Start
   24:initialise.c  ****     SpeedTimer_Start();
   54              		.loc 1 24 0
-  55 0024 FFF7FEFF 		bl	SpeedTimer_Start
+  55 0028 FFF7FEFF 		bl	SpeedTimer_Start
   25:initialise.c  ****     SpeedClock_Start();
   56              		.loc 1 25 0
-  57 0028 FFF7FEFF 		bl	SpeedClock_Start
+  57 002c FFF7FEFF 		bl	SpeedClock_Start
   26:initialise.c  **** }
   58              		.loc 1 26 0
-  59 002c 00BF     		nop
-  60 002e 80BD     		pop	{r7, pc}
+  59 0030 00BF     		nop
+  60 0032 80BD     		pop	{r7, pc}
   61              		.cfi_endproc
   62              	.LFE63:
   63              		.size	init, .-init
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
   86 0028 AC010000 		.4byte	.LASF0
   87 002c 02       		.uleb128 0x2
   88 002d 01       		.byte	0x1
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 3
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 3
 
 
   89 002e 08       		.byte	0x8
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
  143 0091 08       		.byte	0x8
  144 0092 7D010000 		.4byte	.LASF13
  145 0096 02       		.uleb128 0x2
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 4
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 4
 
 
  146 0097 08       		.byte	0x8
@@ -193,7 +193,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
  155 00a9 01       		.byte	0x1
  156 00aa 0E       		.byte	0xe
  157 00ab 00000000 		.4byte	.LFB63
- 158 00af 30000000 		.4byte	.LFE63-.LFB63
+ 158 00af 34000000 		.4byte	.LFE63-.LFB63
  159 00b3 01       		.uleb128 0x1
  160 00b4 9C       		.byte	0x9c
  161 00b5 06       		.uleb128 0x6
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
  200 001d 00       		.byte	0
  201 001e 03       		.uleb128 0x3
  202 001f 16       		.uleb128 0x16
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 5
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 5
 
 
  203 0020 00       		.byte	0
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
  257 0057 3F       		.uleb128 0x3f
  258 0058 19       		.uleb128 0x19
  259 0059 3C       		.uleb128 0x3c
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 6
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 6
 
 
  260 005a 19       		.uleb128 0x19
@@ -321,13 +321,13 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
  277 000c 0000     		.2byte	0
  278 000e 0000     		.2byte	0
  279 0010 00000000 		.4byte	.LFB63
- 280 0014 30000000 		.4byte	.LFE63-.LFB63
+ 280 0014 34000000 		.4byte	.LFE63-.LFB63
  281 0018 00000000 		.4byte	0
  282 001c 00000000 		.4byte	0
  283              		.section	.debug_ranges,"",%progbits
  284              	.Ldebug_ranges0:
  285 0000 00000000 		.4byte	.LFB63
- 286 0004 30000000 		.4byte	.LFE63
+ 286 0004 34000000 		.4byte	.LFE63
  287 0008 00000000 		.4byte	0
  288 000c 00000000 		.4byte	0
  289              		.section	.debug_line,"",%progbits
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
  298      6E645C44 
  298      6F63756D 
  298      656E7473 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 7
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 7
 
 
  298      5C476974 
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 1
  317      00
  318              	.LASF4:
  319 018f 6C6F6E67 		.ascii	"long int\000"
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccze3ako.s 			page 8
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cctP9gEa.s 			page 8
 
 
  319      20696E74 

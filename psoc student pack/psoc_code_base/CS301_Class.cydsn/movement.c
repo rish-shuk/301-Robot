@@ -23,7 +23,7 @@ uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 // stop moving
 void stopMoving() {
     PWM_1_WriteCompare(32768);
-    PWM_2_WriteCompare(32768);
+    PWM_2_WriteCompare(32768); // 50%
 }
 
 // rotate clockwise 90deg- will repeat until sensors are in relevant positions
