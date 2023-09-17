@@ -342,7 +342,7 @@
     </register>
     <register name="PWM_1_CONTROL" address="0x40004F00" bitWidth="8" desc="TMRx.CFG0" hidden="false">
       <field name="EN" from="0" to="0" access="RW" resetVal="" desc="Enables timer/comparator." hidden="false" />
-      <field name="MODE" from="1" to="1" access="RW" resetVal="" desc="Mode. (0 = Timer; 1 = Comparator)" hidden="false">
+      <field name="MODE" from="1" to="1" access="R" resetVal="" desc="Mode. (0 = Timer; 1 = Comparator)" hidden="false">
         <value name="Timer" value="0" desc="Timer mode. CNT/CMP register holds timer count value." />
         <value name="Comparator" value="1" desc="Comparator mode. CNT/CMP register holds comparator threshold value." />
       </field>
@@ -384,8 +384,8 @@
       </field>
       <field name="HW_EN" from="7" to="7" access="RW" resetVal="" desc="When set Timer Enable controls counting." hidden="false" />
     </register>
-    <register name="PWM_1_PERIOD" address="0x40004F04" bitWidth="8" desc="TMRx.PER0 - Assigned Period" hidden="false" />
-    <register name="PWM_1_COMPARE" address="0x40004F06" bitWidth="8" desc="TMRx.CNT_CMP0 - Assigned Compare Value" hidden="false" />
+    <register name="PWM_1_PERIOD" address="0x40004F04" bitWidth="16" desc="TMRx.PER0 - Assigned Period" hidden="false" />
+    <register name="PWM_1_COMPARE" address="0x40004F06" bitWidth="16" desc="TMRx.CNT_CMP0 - Assigned Compare Value" hidden="false" />
   </block>
   <block name="LED" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="Clock_QENC" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
@@ -402,7 +402,7 @@
     </register>
     <register name="PWM_2_CONTROL" address="0x40004F0C" bitWidth="8" desc="TMRx.CFG0" hidden="false">
       <field name="EN" from="0" to="0" access="RW" resetVal="" desc="Enables timer/comparator." hidden="false" />
-      <field name="MODE" from="1" to="1" access="RW" resetVal="" desc="Mode. (0 = Timer; 1 = Comparator)" hidden="false">
+      <field name="MODE" from="1" to="1" access="R" resetVal="" desc="Mode. (0 = Timer; 1 = Comparator)" hidden="false">
         <value name="Timer" value="0" desc="Timer mode. CNT/CMP register holds timer count value." />
         <value name="Comparator" value="1" desc="Comparator mode. CNT/CMP register holds comparator threshold value." />
       </field>
@@ -444,8 +444,8 @@
       </field>
       <field name="HW_EN" from="7" to="7" access="RW" resetVal="" desc="When set Timer Enable controls counting." hidden="false" />
     </register>
-    <register name="PWM_2_PERIOD" address="0x40004F10" bitWidth="8" desc="TMRx.PER0 - Assigned Period" hidden="false" />
-    <register name="PWM_2_COMPARE" address="0x40004F12" bitWidth="8" desc="TMRx.CNT_CMP0 - Assigned Compare Value" hidden="false" />
+    <register name="PWM_2_PERIOD" address="0x40004F10" bitWidth="16" desc="TMRx.PER0 - Assigned Period" hidden="false" />
+    <register name="PWM_2_COMPARE" address="0x40004F12" bitWidth="16" desc="TMRx.CNT_CMP0 - Assigned Compare Value" hidden="false" />
   </block>
   <block name="CONTROL" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false">
     <register name="CONTROL_CONTROL_REG" address="0x4000657B" bitWidth="8" desc="" hidden="false" />

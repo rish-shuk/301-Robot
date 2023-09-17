@@ -74,10 +74,4 @@ void moveForward() {
     PWM_2_WriteCompare(22937); // 35%
 }
 
-void traverseLine() {
-    // robot will run this code on a loop based on truth table 
-    
-    
-}
-
 /* [] END OF FILE */

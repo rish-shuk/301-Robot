@@ -73,8 +73,6 @@ CY_ISR (speedTimer) {
     
     QuadDec_M2_SetCounter(0); // reset count
     QuadDec_M2_Start(); // restart counter
-    
-
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
