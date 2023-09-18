@@ -239,9 +239,31 @@ enum DirectionState CheckSensorDirection() {
 
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        if(s6) {
-            directionState = AdjustToTheLeft; // keep adjusting to the left
+        
+        // If both are on white, we assume we are off the line and use the back two sensors as backup c.c
+        if (s5 && s6) {
+            /*
+            if (s1 && s2) {
+                directionState = Forward;
+                return directionState;
+            }
+            if (!s1) {
+                directionState = AdjustToTheRight;
+                return directionState;
+            }
+            if (!s2) {
+                directionState = AdjustToTheLeft;
+                return directionState;
+            }
+            */
+            directionState = Forward;
             return directionState;
+        }
+        
+        
+        if(s6) {
+            //directionState = AdjustToTheLeft; // keep adjusting to the left
+            //return directionState;
         }
         if(s5) {
             directionState = AdjustToTheRight; // keep adjusting to the right
