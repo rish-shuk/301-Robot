@@ -207,13 +207,26 @@ void ResetSensorFlags() {
 // s1 = 1 -- White
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
-    previousDirection = currentDirection;    
+    previousDirection = currentDirection;
 
-    // stop at end of line
-    /*if((previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)) && s5 && s6) {
-        directionState = Stop; // need to wait to check for a black line
+    if(previousDirection == TurnLeft) {
+        if(s5 && s6) {
+            directionState = TurnLeft;
+            return directionState;
+        } 
+        else if (!s5 || !s6) {
+            directionState = Forward;
+            return directionState;
+        }
+    }    
+
+    // wait for turn at end of line
+    if((previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)) && s5 && s6) {
+        directionState = waitForTurn; // need to wait to check for a black line
         return directionState;
-    }*/
+    }
+    // left turn
+
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         if(s6) {
@@ -235,19 +248,16 @@ enum DirectionState CheckSensorDirection() {
     // Left sensor is on black and right sensor is on white
     //turn left 110111
     if (s1 && s2 && !s3 && s4 && s5 && s6) {
-        if (previousDirection == TurnLeft) {
-            directionState = HardForward;
-            return directionState;
-        }
         directionState = TurnLeft;
         return directionState;
     }
     
-    // Right sensor is on white and right sensor is on black
-    // everything else is on white
     // turn right if 111011
-    /*
-    if (s1 && s2 && s3 && !s4 && s5 && s6) {
+    /*if (s1 && s2 && s3 && !s4 && s5 && s6) {
+        if (previousDirection == TurnRight) {
+            directionState = Forward;
+            return directionState;
+        }
         directionState = TurnRight;
         return directionState;
     }*/
@@ -282,10 +292,10 @@ void SetRobotMovement() {
             moveForward();
             break;
         case TurnRight:
-            rotationClockwise();
+            keepRotatingClockwise();
             break;
         case TurnLeft:
-            rotationAntiClockwise();
+            keepRotatingAntiClockwise(); // try course correction methods for L/R turn
             break;
         case AdjustToTheRight:
             keepRotatingClockwise();

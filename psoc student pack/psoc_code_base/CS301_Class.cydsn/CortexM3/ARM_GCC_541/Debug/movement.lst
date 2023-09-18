@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
   14:movement.c    **** #include <stdio.h>
   15:movement.c    **** #include <string.h>
   16:movement.c    **** #include <stdlib.h>
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 2
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 2
 
 
   17:movement.c    **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
   83              		.cfi_def_cfa_register 7
   30:movement.c    ****     PWM_1_WriteCompare(42598); // 65%
   84              		.loc 1 30 0
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 3
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 3
 
 
   85 0006 4AF26660 		movw	r0, #42598
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  129              	.LFB66:
   40:movement.c    **** 
   41:movement.c    **** // rotate clockwise 90deg
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 4
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 4
 
 
   42:movement.c    **** void rotationClockwise() {
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  170 0036 00BF     		nop
  171 0038 0837     		adds	r7, r7, #8
  172              		.cfi_def_cfa_offset 8
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 5
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 5
 
 
  173 003a BD46     		mov	sp, r7
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  217 0026 0346     		mov	r3, r0
  218 0028 7B60     		str	r3, [r7, #4]
  219              	.L9:
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 6
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 6
 
 
   63:movement.c    ****     while(quadPulseCount > -105) {
@@ -351,14 +351,14 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  256              		.loc 1 74 0
  257 0004 4AF26660 		movw	r0, #42598
  258 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  75:movement.c    ****     PWM_2_WriteCompare(30146); // 55% -- Right wheel spins anti clockwise
+  75:movement.c    ****     PWM_2_WriteCompare(29491); // 45%
  259              		.loc 1 75 0
- 260 000c 47F2C250 		movw	r0, #30146
+ 260 000c 47F23330 		movw	r0, #29491
  261 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
   76:movement.c    ****     
   77:movement.c    **** }
  262              		.loc 1 77 0
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 7
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 7
 
 
  263 0014 00BF     		nop
@@ -396,16 +396,18 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  290 000c DBB2     		uxtb	r3, r3
  291 000e 1846     		mov	r0, r3
  292 0010 FFF7FEFF 		bl	LED_Write
-  83:movement.c    ****     PWM_1_WriteCompare(36044); // 55% -- Left Wheel spins Clockwise
+  83:movement.c    ****     PWM_1_WriteCompare(26214); // 40% -- Left Wheel spins Clockwise
  293              		.loc 1 83 0
- 294 0014 48F6CC40 		movw	r0, #36044
+ 294 0014 46F26660 		movw	r0, #26214
  295 0018 FFF7FEFF 		bl	PWM_1_WriteCompare
   84:movement.c    ****     PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
  296              		.loc 1 84 0
  297 001c 46F26660 		movw	r0, #26214
  298 0020 FFF7FEFF 		bl	PWM_2_WriteCompare
-  85:movement.c    **** }
- 299              		.loc 1 85 0
+  85:movement.c    ****     //PWM_1_WriteCompare(36044); // 55% -- Left Wheel spins Clockwise
+  86:movement.c    ****     //PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
+  87:movement.c    **** }
+ 299              		.loc 1 87 0
  300 0024 00BF     		nop
  301 0026 80BD     		pop	{r7, pc}
  302              		.cfi_endproc
@@ -416,15 +418,15 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  307              		.global	moveForward
  308              		.thumb
  309              		.thumb_func
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 8
+
+
  310              		.type	moveForward, %function
  311              	moveForward:
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 8
-
-
  312              	.LFB70:
-  86:movement.c    **** 
-  87:movement.c    **** void moveForward() {
- 313              		.loc 1 87 0
+  88:movement.c    **** 
+  89:movement.c    **** void moveForward() {
+ 313              		.loc 1 89 0
  314              		.cfi_startproc
  315              		@ args = 0, pretend = 0, frame = 0
  316              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -434,16 +436,16 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  320              		.cfi_offset 14, -4
  321 0002 00AF     		add	r7, sp, #0
  322              		.cfi_def_cfa_register 7
-  88:movement.c    ****     PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
- 323              		.loc 1 88 0
+  90:movement.c    ****     PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
+ 323              		.loc 1 90 0
  324 0004 4AF26660 		movw	r0, #42598
  325 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  89:movement.c    ****     PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
- 326              		.loc 1 89 0
+  91:movement.c    ****     PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
+ 326              		.loc 1 91 0
  327 000c 45F69910 		movw	r0, #22937
  328 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
-  90:movement.c    **** }
- 329              		.loc 1 90 0
+  92:movement.c    **** }
+ 329              		.loc 1 92 0
  330 0014 00BF     		nop
  331 0016 80BD     		pop	{r7, pc}
  332              		.cfi_endproc
@@ -476,11 +478,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  359 002c 02       		.uleb128 0x2
  360 002d 01       		.byte	0x1
  361 002e 08       		.byte	0x8
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 9
+
+
  362 002f C3000000 		.4byte	.LASF1
  363 0033 02       		.uleb128 0x2
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 9
-
-
  364 0034 02       		.byte	0x2
  365 0035 05       		.byte	0x5
  366 0036 43020000 		.4byte	.LASF2
@@ -536,11 +538,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  416 0096 04       		.byte	0x4
  417 0097 A0010000 		.4byte	.LASF13
  418 009b 02       		.uleb128 0x2
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 10
+
+
  419 009c 01       		.byte	0x1
  420 009d 08       		.byte	0x8
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 10
-
-
  421 009e 20020000 		.4byte	.LASF14
  422 00a2 02       		.uleb128 0x2
  423 00a3 08       		.byte	0x8
@@ -596,11 +598,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  473 0108 00       		.byte	0
  474 0109 07       		.uleb128 0x7
  475 010a F6000000 		.4byte	.LASF20
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 11
+
+
  476 010e 01       		.byte	0x1
  477 010f 39       		.byte	0x39
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 11
-
-
  478 0110 00000000 		.4byte	.LFB67
  479 0114 40000000 		.4byte	.LFE67-.LFB67
  480 0118 01       		.uleb128 0x1
@@ -634,7 +636,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  508 014f 06       		.uleb128 0x6
  509 0150 25020000 		.4byte	.LASF24
  510 0154 01       		.byte	0x1
- 511 0155 57       		.byte	0x57
+ 511 0155 59       		.byte	0x59
  512 0156 00000000 		.4byte	.LFB70
  513 015a 18000000 		.4byte	.LFE70-.LFB70
  514 015e 01       		.uleb128 0x1
@@ -656,11 +658,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  530 017e 00000000 		.4byte	turnCount
  531 0182 0B       		.uleb128 0xb
  532 0183 E9010000 		.4byte	.LASF27
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 12
+
+
  533 0187 01       		.byte	0x1
  534 0188 13       		.byte	0x13
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 12
-
-
  535 0189 81000000 		.4byte	0x81
  536 018d 05       		.uleb128 0x5
  537 018e 03       		.byte	0x3
@@ -716,11 +718,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  587 002d 00       		.byte	0
  588 002e 0B       		.uleb128 0xb
  589 002f 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 13
+
+
  590 0030 3E       		.uleb128 0x3e
  591 0031 0B       		.uleb128 0xb
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 13
-
-
  592 0032 03       		.uleb128 0x3
  593 0033 08       		.uleb128 0x8
  594 0034 00       		.byte	0
@@ -776,11 +778,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  644 0067 06       		.uleb128 0x6
  645 0068 40       		.uleb128 0x40
  646 0069 18       		.uleb128 0x18
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 14
+
+
  647 006a 9642     		.uleb128 0x2116
  648 006c 19       		.uleb128 0x19
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 14
-
-
  649 006d 01       		.uleb128 0x1
  650 006e 13       		.uleb128 0x13
  651 006f 00       		.byte	0
@@ -836,11 +838,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  701 00a1 49       		.uleb128 0x49
  702 00a2 13       		.uleb128 0x13
  703 00a3 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 15
+
+
  704 00a4 19       		.uleb128 0x19
  705 00a5 02       		.uleb128 0x2
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 15
-
-
  706 00a6 18       		.uleb128 0x18
  707 00a7 00       		.byte	0
  708 00a8 00       		.byte	0
@@ -896,11 +898,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  754      01010101 
  755              	.LASF21:
  756 0000 73746F70 		.ascii	"stopMoving\000"
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 16
+
+
  756      4D6F7669 
  756      6E6700
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 16
-
-
  757              	.LASF28:
  758 000b 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
  758      43313120 
@@ -956,11 +958,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  775              	.LASF19:
  776 010c 71756164 		.ascii	"quadPulseCount\000"
  776      50756C73 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 17
+
+
  776      65436F75 
  776      6E7400
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 17
-
-
  777              	.LASF30:
  778 011b 433A5C55 		.ascii	"C:\\Users\\ikui753\\OneDrive - The University of Au"
  778      73657273 
@@ -1016,11 +1018,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 1
  798 0201 696E7433 		.ascii	"int32_t\000"
  798      325F7400 
  799              	.LASF16:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccg14qxq.s 			page 18
+
+
  800 0209 73697A65 		.ascii	"sizetype\000"
  800      74797065 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccryPqqg.s 			page 18
-
-
  800      00
  801              	.LASF6:
  802 0212 6C6F6E67 		.ascii	"long long int\000"
