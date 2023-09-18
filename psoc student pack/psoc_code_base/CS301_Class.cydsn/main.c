@@ -77,6 +77,7 @@ CY_ISR (speedTimer) {
 }
 
 CY_ISR(S1_DETECTED) {
+    LED_TOGGLE;
     // Sensor has detected WHITE
     s1 = 1; // , Black = 0, White = 1
     //LED_Write(1u);
@@ -207,56 +208,34 @@ enum DirectionState CheckSensorDirection() {
     previousDirection = currentDirection;    
     
     // forward 111100
-    if (s1 == 1 && s2 == 1 && s3 == 1 && s4 == 1 && s5 == 1 && s6 == 1) {
+    if (s1 == 1 && s2 == 1 && s3 == 1 && s4 == 1 && !s5 && !s6) {
         directionState = Forward;
-        return directionState;   
-    }
-
-    // stop 000000
-    if ((s1 == 0 && s2 == 0 && s3 == 0 && s4 == 0 && s5 == 0 && s6 == 0)) {
-        directionState = Stop;
         return directionState;   
     }
 
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     // Only need to course correct when direction state is forward
     /*
+    */
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        // If robot is deviating to the left where top right sensor and bottom left sensor is on black
-        // we turn right until all sensors are on white again
-        if (!s1 && s2 && s5 && !s6) {
-            directionState = AdjustToTheRight;
-            return directionState;
-        }  
-        
-        // If robot is deviating to the right where top left sensor and bottom right sensor is on black
-        // we turn left until all sensors are on white again
-        if (s1 && !s2 && !s5 && s6) {
-            directionState = AdjustToTheLeft;
-            return directionState;
-        }
-        
-        // OLD COURSE CORRECTION ^^^^^^^^^^
         // NEW COURSE CORRECTION vvvvvvvvvv
-    
-        if (!s1 || !s6) {
+        
+        if(s5) {
             directionState = AdjustToTheRight;
             return directionState;
         }
-    
-        if (!s2 || !s5) {
+        if(s6) {
             directionState = AdjustToTheLeft;
             return directionState;
         }
     }
-    */
+    
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     
     // Left sensor is on black and right sensor is on white
     
     //turn left
-    /*
-    if (s1 && s2 && !s3 && s4 && s5 && s6) 
+    /*if (s1 && s2 && !s3 && s4 && s5 && s6) {
         directionState = TurnLeft;
         return directionState;
     }*/
@@ -264,28 +243,28 @@ enum DirectionState CheckSensorDirection() {
     // Right sensor is on white and right sensor is on black
     // everything else is on white
     // turn right if 111011
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!if (s1 && s2 && s3 && !s4 && s5 && s6) {
+    /*
+    if (s1 && s2 && s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
         return directionState;
-    }
+    }*/
     
     
     // ====== After Initial turn ======
     // -- This accounts for the transition period between turning at an intersection --
-    if (previousDirection == TurnRight || previousDirection == TurnLeft) {
+    /*if (previousDirection == TurnRight || previousDirection == TurnLeft) {
         if ((s1 && s2 && s3 && !s4 && !s5 && !s6) ||
         (s1 && s2 && !s3 && s4 && !s5 && !s6)) {
             directionState = HardForward;
             return directionState;
         }
-    }
+    }*/
     
     
     // if all sensors are on black -- we are currently in darkness so don't move
     // OR, all sensors are on white.
     // 111111 || 000000 stop
-    if (!(s1 && s2 && s3 && s4 && s5 && s6) ||
-        (s1 && s2 && s3 && s4 && s5 && s6)) {
+    if (s1 && s2 && s3 && s4 && s5 && s6) {
         directionState = Stop;
         return directionState;
     }
@@ -300,7 +279,7 @@ enum DirectionState CheckSensorDirection() {
     if (previousDirection == Unknown) {
         directionState = Forward;
         return directionState;
-    }*/
+    }
             
     return previousDirection;
 }
@@ -312,9 +291,7 @@ void SetRobotMovement() {
     switch (currentDirection) {
         //Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
         case Forward:
-            while(s3 == 1 && s4 == 1) {
-                moveForward();
-            }
+            moveForward();
             break;
         case TurnRight:
             rotationClockwise();
