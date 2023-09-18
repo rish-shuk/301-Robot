@@ -70,7 +70,7 @@ void rotationAntiClockwise() {
 
 // keep rotating clockwise
 // used for adjusting deviations
-void keepRotatingClockwise() {
+void adjustRight() {
     PWM_1_WriteCompare(39321); // 60% -- Left wheel spins clockwise
     PWM_2_WriteCompare(39321); // 60%
     
@@ -78,7 +78,7 @@ void keepRotatingClockwise() {
 
 // keep rotating anticlockwise
 // used for adjusting deviations
-void keepRotatingAntiClockwise() {
+void adjustLeft() {
     LED_Write(~(LED_Read()));
     PWM_1_WriteCompare(26214); // 40% -- Left Wheel spins Clockwise
     PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise

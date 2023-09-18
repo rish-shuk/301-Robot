@@ -33,10 +33,10 @@ void rotationClockwise();
 void rotationAntiClockwise();
 
 // keep rotating clockwise
-void keepRotatingClockwise();
+void adjustRight();
 
 // keep rotating anticlockwise
-void keepRotatingAntiClockwise();
+void adjustLeft();
 
 // Move forward
 void moveForward();

@@ -303,10 +303,10 @@ void SetRobotMovement() {
             keepRotatingAntiClockwise(); // try course correction methods for L/R turn
             break;
         case AdjustToTheRight:
-            keepRotatingClockwise();
+            adjustRight();
             break;
         case AdjustToTheLeft:
-            keepRotatingAntiClockwise();
+            adjustLeft();
             break;
         case Stop:
             stopMoving();
