@@ -67,7 +67,8 @@ CY_ISR (speedTimer) {
     quadDec2Count = QuadDec_M2_GetCounter();
     
     if (currentDirection == Forward && quadDec2Count != 0) {
-        uint32 newDistance = (abs(quadDec2Count) * CY_M_PI * WHEEL_DIAMETER_MM) / 57.0;
+        uint32 newDistance = ((abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM)/4;
+        
         totalDistance = totalDistance + newDistance;
     }
     
@@ -78,7 +79,6 @@ CY_ISR (speedTimer) {
 }
 
 CY_ISR(S1_DETECTED) {
-    LED_TOGGLE;
     // Sensor has detected WHITE
     s1 = 1; // , Black = 0, White = 1
     //LED_Write(1u);
@@ -129,6 +129,7 @@ int main()
 // --------------------------------    
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
+    ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     //findPath(map, "");// find shortest path- store this in map
     //isr_speed_StartEx(speedTimer); // start interrupt
@@ -208,11 +209,6 @@ enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;    
 
-    // 111111 || 000000 stop
-    /*if ((s1 && s2 && s3 && s4 && s5 && s6) || !(s1 && s2 && s3 && s4 && s5 && s6)) {
-        directionState = Stop;
-        return directionState;
-    }*/
     // stop at end of line
     if((previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)) && s5 && s6) {
         directionState = Stop;
@@ -231,7 +227,7 @@ enum DirectionState CheckSensorDirection() {
     }
     
     // forward 111100
-    if (s1 == 1 && s2 == 1 && s3 == 1 && s4 == 1 && !s5 && !s6) {
+    if (s1 && s2 && s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
     }
