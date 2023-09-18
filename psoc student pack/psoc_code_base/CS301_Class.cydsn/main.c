@@ -67,7 +67,8 @@ CY_ISR (speedTimer) {
     quadDec2Count = QuadDec_M2_GetCounter();
     
     if (currentDirection == Forward && quadDec2Count != 0) {
-        totalDistance = totalDistance + (abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM;
+        uint32 newDistance = (abs(quadDec2Count) * CY_M_PI * WHEEL_DIAMETER_MM) / 57.0;
+        totalDistance = totalDistance + newDistance;
     }
     
     QuadDec_M2_SetCounter(0); // reset count
@@ -139,7 +140,7 @@ int main()
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-    stopMoving();
+    //stopMoving();
 
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
@@ -206,6 +207,28 @@ void ResetSensorFlags() {
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;    
+
+    // 111111 || 000000 stop
+    /*if ((s1 && s2 && s3 && s4 && s5 && s6) || !(s1 && s2 && s3 && s4 && s5 && s6)) {
+        directionState = Stop;
+        return directionState;
+    }*/
+    // stop at end of line
+    if((previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)) && s5 && s6) {
+        directionState = Stop;
+        return directionState;
+    }
+    // course correction
+    if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
+        if(s5) {
+            directionState = AdjustToTheRight; // keep adjusting to the right
+            return directionState;
+        }
+        if(s6) {
+            directionState = AdjustToTheLeft; // keep adjusting to the left
+            return directionState;
+        }
+    }
     
     // forward 111100
     if (s1 == 1 && s2 == 1 && s3 == 1 && s4 == 1 && !s5 && !s6) {
@@ -213,22 +236,13 @@ enum DirectionState CheckSensorDirection() {
         return directionState;   
     }
 
+    
+
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     // Only need to course correct when direction state is forward
     /*
     */
-    if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        // NEW COURSE CORRECTION vvvvvvvvvv
-        
-        if(s5) {
-            directionState = AdjustToTheRight;
-            return directionState;
-        }
-        if(s6) {
-            directionState = AdjustToTheLeft;
-            return directionState;
-        }
-    }
+    
     
     /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     
@@ -263,12 +277,7 @@ enum DirectionState CheckSensorDirection() {
     
     // if all sensors are on black -- we are currently in darkness so don't move
     // OR, all sensors are on white.
-    // 111111 || 000000 stop
-    if (s1 && s2 && s3 && s4 && s5 && s6) {
-        directionState = Stop;
-        return directionState;
-    }
-        
+    
     
     // If the code gets up to this point then no conditions have been met
     // The sensors are in a configuration that has not been covered thus
@@ -280,7 +289,6 @@ enum DirectionState CheckSensorDirection() {
         directionState = Forward;
         return directionState;
     }
-            
     return previousDirection;
 }
 

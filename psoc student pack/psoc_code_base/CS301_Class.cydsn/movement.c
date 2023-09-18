@@ -53,7 +53,7 @@ void rotationClockwise() {
     //stopMoving(); // stop movement, ready for next instruction
 }
 
-// rotate anticlockwise 90deg
+// rotate anticlockwise 90deg- CHANGE TO NOT USE TIMER BUT SIMPLY CHECK FOR NEW CONDITIONS????
 void rotationAntiClockwise() {
     PWM_1_WriteCompare(22937); // 35%
     PWM_2_WriteCompare(22937); // 35%
@@ -71,8 +71,8 @@ void rotationAntiClockwise() {
 // keep rotating clockwise
 // used for adjusting deviations
 void keepRotatingClockwise() {
-    PWM_1_WriteCompare(36044); // 55%
-    PWM_2_WriteCompare(36044); // 55%
+    PWM_1_WriteCompare(42598); // 65%
+    PWM_2_WriteCompare(29491); // 45%
     
 }
 
@@ -80,7 +80,7 @@ void keepRotatingClockwise() {
 // used for adjusting deviations
 void keepRotatingAntiClockwise() {
     PWM_1_WriteCompare(29491); // 45%
-    PWM_2_WriteCompare(29491); // 45%
+    PWM_2_WriteCompare(42598); // 65%
 }
 
 void moveForward() {
