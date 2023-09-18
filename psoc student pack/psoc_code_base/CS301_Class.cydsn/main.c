@@ -37,7 +37,7 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
 // --- YIPPE
@@ -210,18 +210,18 @@ enum DirectionState CheckSensorDirection() {
     previousDirection = currentDirection;    
 
     // stop at end of line
-    if((previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)) && s5 && s6) {
-        directionState = Stop;
+    /*if((previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)) && s5 && s6) {
+        directionState = Stop; // need to wait to check for a black line
         return directionState;
-    }
+    }*/
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        if(s5) {
-            directionState = AdjustToTheRight; // keep adjusting to the right
-            return directionState;
-        }
         if(s6) {
             directionState = AdjustToTheLeft; // keep adjusting to the left
+            return directionState;
+        }
+        if(s5) {
+            directionState = AdjustToTheRight; // keep adjusting to the right
             return directionState;
         }
     }
@@ -231,24 +231,17 @@ enum DirectionState CheckSensorDirection() {
         directionState = Forward;
         return directionState;   
     }
-
-    
-
-    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
-    // Only need to course correct when direction state is forward
-    /*
-    */
-    
-    
-    /* COURSE CORRECTION COURSE CORRECTION COURSE CORRETION */
     
     // Left sensor is on black and right sensor is on white
-    
-    //turn left
-    /*if (s1 && s2 && !s3 && s4 && s5 && s6) {
+    //turn left 110111
+    if (s1 && s2 && !s3 && s4 && s5 && s6) {
+        if (previousDirection == TurnLeft) {
+            directionState = HardForward;
+            return directionState;
+        }
         directionState = TurnLeft;
         return directionState;
-    }*/
+    }
     
     // Right sensor is on white and right sensor is on black
     // everything else is on white
@@ -269,16 +262,7 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         }
     }*/
-    
-    
-    // if all sensors are on black -- we are currently in darkness so don't move
-    // OR, all sensors are on white.
-    
-    
-    // If the code gets up to this point then no conditions have been met
-    // The sensors are in a configuration that has not been covered thus
-    // the currentDirection to turn into is unknown.
-        
+
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
     if (previousDirection == Unknown) {
@@ -314,6 +298,9 @@ void SetRobotMovement() {
             break;
         case HardForward:
             moveForwardForSpecifiedCount();
+            break;
+        case waitForTurn:
+            moveForward(); 
             break;
         case Unknown:
             // UNKNOWN CONFIGURATION
