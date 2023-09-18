@@ -208,6 +208,8 @@ void ResetSensorFlags() {
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;
+   
+    
 
     if(previousDirection == TurnRight) {
         if(s5 && s6) {
@@ -215,20 +217,35 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         } 
         else if (!s5 || !s6) {
-            directionState = Forward;
+            directionState = HardForward;
             return directionState;
         }
     }    
 
     if(previousDirection == TurnLeft) {
         if(s5 && s6) {
+            // Possible reason
             directionState = TurnLeft;
             return directionState;
         } 
         else if (!s5 || !s6) {
-            directionState = Forward;
+            directionState = HardForward;
             return directionState;
         }
+    }
+    
+    if (previousDirection == waitForTurn) {
+        // If we are waiting for a turn, look for left sensor and right sensor, otherwise keep waiting for turn (moving forward)
+        if (!s3) {
+            directionState = TurnLeft;
+            return directionState;
+        }
+        if (!s4) {
+            directionState = TurnRight;   
+            return directionState;
+        }
+        directionState = waitForTurn;
+        return directionState;
     }
 
     // wait for turn at end of line
@@ -240,9 +257,10 @@ enum DirectionState CheckSensorDirection() {
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         
+        /*
         // If both are on white, we assume we are off the line and use the back two sensors as backup c.c
         if (s5 && s6) {
-            /*
+            
             if (s1 && s2) {
                 directionState = Forward;
                 return directionState;
@@ -255,15 +273,16 @@ enum DirectionState CheckSensorDirection() {
                 directionState = AdjustToTheLeft;
                 return directionState;
             }
-            */
+            
             directionState = Forward;
             return directionState;
         }
+            */
         
         
         if(s6) {
-            //directionState = AdjustToTheLeft; // keep adjusting to the left
-            //return directionState;
+            directionState = AdjustToTheLeft; // keep adjusting to the left
+            return directionState;
         }
         if(s5) {
             directionState = AdjustToTheRight; // keep adjusting to the right
@@ -306,6 +325,8 @@ enum DirectionState CheckSensorDirection() {
         directionState = Forward;
         return directionState;
     }
+    
+    // Possible reason
     return previousDirection;
 }
 

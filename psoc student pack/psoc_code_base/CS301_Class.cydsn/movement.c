@@ -32,7 +32,7 @@ void moveForwardForSpecifiedCount() {
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
-    while(quadPulseCount < 110) {
+    while(quadPulseCount < 55) {
         quadPulseCount = QuadDec_M1_GetCounter();
     }
     QuadDec_M1_SetCounter(0);

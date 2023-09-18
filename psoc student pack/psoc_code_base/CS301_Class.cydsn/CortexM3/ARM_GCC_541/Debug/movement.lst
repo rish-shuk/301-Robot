@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
   14:movement.c    **** #include <stdio.h>
   15:movement.c    **** #include <string.h>
   16:movement.c    **** #include <stdlib.h>
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 2
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 2
 
 
   17:movement.c    **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
   83              		.cfi_def_cfa_register 7
   30:movement.c    ****     PWM_1_WriteCompare(42598); // 65%
   84              		.loc 1 30 0
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 3
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 3
 
 
   85 0006 4AF26660 		movw	r0, #42598
@@ -136,7 +136,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
   93              		.loc 1 34 0
   94 001a 0020     		movs	r0, #0
   95 001c FFF7FEFF 		bl	QuadDec_M1_SetCounter
-  35:movement.c    ****     while(quadPulseCount < 110) {
+  35:movement.c    ****     while(quadPulseCount < 55) {
   96              		.loc 1 35 0
   97 0020 03E0     		b	.L3
   98              	.L4:
@@ -146,10 +146,10 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  101 0026 0346     		mov	r3, r0
  102 0028 7B60     		str	r3, [r7, #4]
  103              	.L3:
-  35:movement.c    ****     while(quadPulseCount < 110) {
+  35:movement.c    ****     while(quadPulseCount < 55) {
  104              		.loc 1 35 0
  105 002a 7B68     		ldr	r3, [r7, #4]
- 106 002c 6D2B     		cmp	r3, #109
+ 106 002c 362B     		cmp	r3, #54
  107 002e F8DD     		ble	.L4
   37:movement.c    ****     }
   38:movement.c    ****     QuadDec_M1_SetCounter(0);
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  129              	.LFB66:
   40:movement.c    **** 
   41:movement.c    **** // rotate clockwise 90deg
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 4
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 4
 
 
   42:movement.c    **** void rotationClockwise() {
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  170 0036 00BF     		nop
  171 0038 0837     		adds	r7, r7, #8
  172              		.cfi_def_cfa_offset 8
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 5
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 5
 
 
  173 003a BD46     		mov	sp, r7
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  217 0026 0346     		mov	r3, r0
  218 0028 7B60     		str	r3, [r7, #4]
  219              	.L9:
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 6
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 6
 
 
   63:movement.c    ****     while(quadPulseCount > -105) {
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
   76:movement.c    **** }
  262              		.loc 1 76 0
  263 0014 00BF     		nop
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 7
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 7
 
 
  264 0016 80BD     		pop	{r7, pc}
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  307              		.cfi_startproc
  308              		@ args = 0, pretend = 0, frame = 0
  309              		@ frame_needed = 1, uses_anonymous_args = 0
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 8
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 8
 
 
  310 0000 80B5     		push	{r7, lr}
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  355              		.cfi_endproc
  356              	.LFE71:
  357              		.size	turnRight, .-turnRight
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 9
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 9
 
 
  358              		.section	.text.moveForward,"ax",%progbits
@@ -532,13 +532,13 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  401 000c 0B000000 		.4byte	.LASF30
  402 0010 0C       		.byte	0xc
  403 0011 B5010000 		.4byte	.LASF31
- 404 0015 0B010000 		.4byte	.LASF32
+ 404 0015 AD000000 		.4byte	.LASF32
  405 0019 00000000 		.4byte	.Ldebug_ranges0+0
  406 001d 00000000 		.4byte	0
  407 0021 00000000 		.4byte	.Ldebug_line0
  408 0025 02       		.uleb128 0x2
  409 0026 01       		.byte	0x1
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 10
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 10
 
 
  410 0027 06       		.byte	0x6
@@ -546,7 +546,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  412 002c 02       		.uleb128 0x2
  413 002d 01       		.byte	0x1
  414 002e 08       		.byte	0x8
- 415 002f B3000000 		.4byte	.LASF1
+ 415 002f 38010000 		.4byte	.LASF1
  416 0033 02       		.uleb128 0x2
  417 0034 02       		.byte	0x2
  418 0035 05       		.byte	0x5
@@ -554,7 +554,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  420 003a 02       		.uleb128 0x2
  421 003b 02       		.byte	0x2
  422 003c 07       		.byte	0x7
- 423 003d D3000000 		.4byte	.LASF3
+ 423 003d 58010000 		.4byte	.LASF3
  424 0041 03       		.uleb128 0x3
  425 0042 99000000 		.4byte	.LASF9
  426 0046 02       		.byte	0x2
@@ -567,7 +567,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  433 0053 02       		.uleb128 0x2
  434 0054 04       		.byte	0x4
  435 0055 07       		.byte	0x7
- 436 0056 C1000000 		.4byte	.LASF5
+ 436 0056 46010000 		.4byte	.LASF5
  437 005a 02       		.uleb128 0x2
  438 005b 08       		.byte	0x8
  439 005c 05       		.byte	0x5
@@ -597,8 +597,8 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  463 008d 02       		.uleb128 0x2
  464 008e 04       		.byte	0x4
  465 008f 04       		.byte	0x4
- 466 0090 AD000000 		.4byte	.LASF12
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 11
+ 466 0090 32010000 		.4byte	.LASF12
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 11
 
 
  467 0094 02       		.uleb128 0x2
@@ -635,7 +635,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  498 00d1 9C       		.byte	0x9c
  499 00d2 E5000000 		.4byte	0xe5
  500 00d6 08       		.uleb128 0x8
- 501 00d7 FC000000 		.4byte	.LASF19
+ 501 00d7 81010000 		.4byte	.LASF19
  502 00db 01       		.byte	0x1
  503 00dc 21       		.byte	0x21
  504 00dd 68000000 		.4byte	0x68
@@ -653,19 +653,19 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  516 00f5 9C       		.byte	0x9c
  517 00f6 09010000 		.4byte	0x109
  518 00fa 08       		.uleb128 0x8
- 519 00fb FC000000 		.4byte	.LASF19
+ 519 00fb 81010000 		.4byte	.LASF19
  520 00ff 01       		.byte	0x1
  521 0100 2E       		.byte	0x2e
  522 0101 68000000 		.4byte	0x68
  523 0105 02       		.uleb128 0x2
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 12
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 12
 
 
  524 0106 91       		.byte	0x91
  525 0107 74       		.sleb128 -12
  526 0108 00       		.byte	0
  527 0109 07       		.uleb128 0x7
- 528 010a E6000000 		.4byte	.LASF20
+ 528 010a 6B010000 		.4byte	.LASF20
  529 010e 01       		.byte	0x1
  530 010f 39       		.byte	0x39
  531 0110 00000000 		.4byte	.LFB67
@@ -674,7 +674,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  534 0119 9C       		.byte	0x9c
  535 011a 2D010000 		.4byte	0x12d
  536 011e 08       		.uleb128 0x8
- 537 011f FC000000 		.4byte	.LASF19
+ 537 011f 81010000 		.4byte	.LASF19
  538 0123 01       		.byte	0x1
  539 0124 3D       		.byte	0x3d
  540 0125 68000000 		.4byte	0x68
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  578 0172 35020000 		.4byte	.LASF26
  579 0176 01       		.byte	0x1
  580 0177 62       		.byte	0x62
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 13
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 13
 
 
  581 0178 00000000 		.4byte	.LFB72
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  635 0018 3E       		.uleb128 0x3e
  636 0019 0B       		.uleb128 0xb
  637 001a 03       		.uleb128 0x3
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 14
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 14
 
 
  638 001b 0E       		.uleb128 0xe
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  692 0051 06       		.uleb128 0x6
  693 0052 40       		.uleb128 0x40
  694 0053 18       		.uleb128 0x18
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 15
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 15
 
 
  695 0054 9642     		.uleb128 0x2116
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  749 008c 19       		.uleb128 0x19
  750 008d 3C       		.uleb128 0x3c
  751 008e 19       		.uleb128 0x19
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 16
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 16
 
 
  752 008f 00       		.byte	0
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  806 005c 00000000 		.4byte	0
  807              		.section	.debug_ranges,"",%progbits
  808              	.Ldebug_ranges0:
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 17
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 17
 
 
  809 0000 00000000 		.4byte	.LFB64
@@ -1016,56 +1016,56 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  841 00a3 7475726E 		.ascii	"turnRight\000"
  841      52696768 
  841      7400
- 842              	.LASF12:
- 843 00ad 666C6F61 		.ascii	"float\000"
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 18
+ 842              	.LASF32:
+ 843 00ad 433A5C55 		.ascii	"C:\\Users\\rshu284\\OneDrive - The University of Au"
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 18
 
 
- 843      7400
- 844              	.LASF1:
- 845 00b3 756E7369 		.ascii	"unsigned char\000"
- 845      676E6564 
- 845      20636861 
- 845      7200
- 846              	.LASF5:
- 847 00c1 6C6F6E67 		.ascii	"long unsigned int\000"
- 847      20756E73 
- 847      69676E65 
- 847      6420696E 
+ 843      73657273 
+ 843      5C727368 
+ 843      75323834 
+ 843      5C4F6E65 
+ 844 00dd 636B6C61 		.ascii	"ckland\\Documents\\GitHub\\301-Robot\\psoc student "
+ 844      6E645C44 
+ 844      6F63756D 
+ 844      656E7473 
+ 844      5C476974 
+ 845 010c 7061636B 		.ascii	"pack\\psoc_code_base\\CS301_Class.cydsn\000"
+ 845      5C70736F 
+ 845      635F636F 
+ 845      64655F62 
+ 845      6173655C 
+ 846              	.LASF12:
+ 847 0132 666C6F61 		.ascii	"float\000"
  847      7400
- 848              	.LASF3:
- 849 00d3 73686F72 		.ascii	"short unsigned int\000"
- 849      7420756E 
- 849      7369676E 
- 849      65642069 
- 849      6E7400
- 850              	.LASF20:
- 851 00e6 726F7461 		.ascii	"rotationAntiClockwise\000"
- 851      74696F6E 
- 851      416E7469 
- 851      436C6F63 
- 851      6B776973 
- 852              	.LASF19:
- 853 00fc 71756164 		.ascii	"quadPulseCount\000"
- 853      50756C73 
- 853      65436F75 
+ 848              	.LASF1:
+ 849 0138 756E7369 		.ascii	"unsigned char\000"
+ 849      676E6564 
+ 849      20636861 
+ 849      7200
+ 850              	.LASF5:
+ 851 0146 6C6F6E67 		.ascii	"long unsigned int\000"
+ 851      20756E73 
+ 851      69676E65 
+ 851      6420696E 
+ 851      7400
+ 852              	.LASF3:
+ 853 0158 73686F72 		.ascii	"short unsigned int\000"
+ 853      7420756E 
+ 853      7369676E 
+ 853      65642069 
  853      6E7400
- 854              	.LASF32:
- 855 010b 433A5C55 		.ascii	"C:\\Users\\ikui753\\OneDrive - The University of Au"
- 855      73657273 
- 855      5C696B75 
- 855      69373533 
- 855      5C4F6E65 
- 856 013b 636B6C61 		.ascii	"ckland\\Documents\\GitHub\\301-Robot\\psoc student "
- 856      6E645C44 
- 856      6F63756D 
- 856      656E7473 
- 856      5C476974 
- 857 016a 7061636B 		.ascii	"pack\\psoc_code_base\\CS301_Class.cydsn\000"
- 857      5C70736F 
- 857      635F636F 
- 857      64655F62 
- 857      6173655C 
+ 854              	.LASF20:
+ 855 016b 726F7461 		.ascii	"rotationAntiClockwise\000"
+ 855      74696F6E 
+ 855      416E7469 
+ 855      436C6F63 
+ 855      6B776973 
+ 856              	.LASF19:
+ 857 0181 71756164 		.ascii	"quadPulseCount\000"
+ 857      50756C73 
+ 857      65436F75 
+ 857      6E7400
  858              	.LASF22:
  859 0190 61646A75 		.ascii	"adjustRight\000"
  859      73745269 
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  863      73744C65 
  863      667400
  864              	.LASF11:
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 19
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 19
 
 
  865 01ae 75696E74 		.ascii	"uint16\000"
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 1
  890              	.LASF18:
  891 0241 726F7461 		.ascii	"rotationClockwise\000"
  891      74696F6E 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccu8xL0W.s 			page 20
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cct4Nw6o.s 			page 20
 
 
  891      436C6F63 
