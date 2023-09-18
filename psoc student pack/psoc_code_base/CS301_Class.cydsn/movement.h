@@ -41,7 +41,8 @@ void adjustLeft();
 // Move forward
 void moveForward();
 
-// Traverse Line
-void traverseLine();
+void turnRight();
+
+void turnLeft();
 
 #endif /* MOVEMENT_FUNCTIONS_H */
