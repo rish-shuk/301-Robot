@@ -71,8 +71,8 @@ void rotationAntiClockwise() {
 // keep rotating clockwise
 // used for adjusting deviations
 void keepRotatingClockwise() {
-    PWM_1_WriteCompare(42598); // 65% -- Left wheel spins clockwise
-    PWM_2_WriteCompare(29491); // 45%
+    PWM_1_WriteCompare(39321); // 60% -- Left wheel spins clockwise
+    PWM_2_WriteCompare(39321); // 60%
     
 }
 
