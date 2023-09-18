@@ -209,6 +209,17 @@ enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;
 
+    if(previousDirection == TurnRight) {
+        if(s5 && s6) {
+            directionState = TurnRight;
+            return directionState;
+        } 
+        else if (!s5 || !s6) {
+            directionState = Forward;
+            return directionState;
+        }
+    }    
+
     if(previousDirection == TurnLeft) {
         if(s5 && s6) {
             directionState = TurnLeft;
@@ -220,19 +231,8 @@ enum DirectionState CheckSensorDirection() {
         }
     }
 
-    if(previousDirection == TurnRight) {
-        if(s5 && s6) {
-            directionState = TurnRight;
-            return directionState;
-        } 
-        else if (!s5 || !s6) {
-            directionState = Forward;
-            return directionState;
-        }
-    }        
-
     // wait for turn at end of line
-    if((previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)) && s5 && s6) {
+    if(s5 && s6 && (previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight))) {
         directionState = waitForTurn; // need to wait to check for a black line
         return directionState;
     }

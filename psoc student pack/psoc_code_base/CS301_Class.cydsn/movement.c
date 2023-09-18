@@ -71,35 +71,28 @@ void rotationAntiClockwise() {
 // keep rotating clockwise
 // used for adjusting deviations
 void adjustRight() {
-    //PWM_1_WriteCompare(39321); // 60% -- Left wheel spins clockwise
-    //PWM_2_WriteCompare(39321); // 60% -- Left wheel anti clockwise
-
-    PWM_1_WriteCompare(42598); // 60% - Left Wheel Clockwise
+    PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
     PWM_2_WriteCompare(26214); // 40% - Right Wheel Clockwise
 }
 
 // keep rotating anticlockwise
 // used for adjusting deviations
 void adjustLeft() {
-    LED_Write(~(LED_Read()));
-    //PWM_1_WriteCompare(26214); // 40% -- Left Wheel spins Clockwise
-    //PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
-    //PWM_1_WriteCompare(36044); // 55% -- Left Wheel spins Clockwise
-    //PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
-
 
     PWM_1_WriteCompare(39321); // 60% - Left Wheel Clockwise
     PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
 }
 
+// Anti-clockwise
 void turnLeft() {
     PWM_1_WriteCompare(26214); // 40% -- Left Wheel spins Clockwise
     PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
 }
 
+// Clockwise
 void turnRight() {
     PWM_1_WriteCompare(39321); // 60% -- Left wheel spins clockwise
-    PWM_2_WriteCompare(39321); // 60%
+    PWM_2_WriteCompare(39321); // 60% - Right wheel spins Anti Clockwise
 }
 
 void moveForward() {
