@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #define maxForwardPWM 9830
 #define maxTurningPWM 6553
-#define movementMultiplier 1.1
+#define movementMultiplier 0.8
 
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
@@ -32,27 +32,35 @@ void stopMoving() {
 // keep rotating clockwise
 // used for adjusting deviations
 void adjustRight() {
-    PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
-    PWM_2_WriteCompare(26214); // 40% - Right Wheel Clockwise
+    uint16 count1 = (32767 + (maxForwardPWM * movementMultiplier));
+    uint16 count2 = (32767 - (maxTurningPWM * movementMultiplier));
+    PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
+    PWM_2_WriteCompare(count2); // 40% - Right Wheel Clockwise
 }
 
 // keep rotating anticlockwise
 // used for adjusting deviations
 void adjustLeft() {
-    PWM_1_WriteCompare(39321); // 60% - Left Wheel Clockwise
-    PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
+    uint16 count1 = (32767 + (maxTurningPWM * movementMultiplier));
+    uint16 count2 = (32767 - (maxForwardPWM * movementMultiplier));
+    PWM_1_WriteCompare(count1); // 60% - Left Wheel Clockwise
+    PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
 }
 
 // Anti-clockwise
 void turnLeft() {
-    PWM_1_WriteCompare(26214); // 40% -- Left Wheel spins Clockwise
-    PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
+    uint16 count1 = (32767 - (maxTurningPWM * movementMultiplier));
+    uint16 count2 = (32767 - (maxTurningPWM * movementMultiplier));
+    PWM_1_WriteCompare(count1); // 40% -- Left Wheel spins Clockwise
+    PWM_2_WriteCompare(count2); // 40% -- Right wheel spins clockwise
 }
 
 // Clockwise
 void turnRight() {
-    PWM_1_WriteCompare(39321); // 60% -- Left wheel spins clockwise
-    PWM_2_WriteCompare(39321); // 60% - Right wheel spins Anti Clockwise
+    uint16 count1 = (32767 + (maxTurningPWM * movementMultiplier));
+    uint16 count2 = (32767 + (maxTurningPWM * movementMultiplier));
+    PWM_1_WriteCompare(count1); // 60% -- Left wheel spins clockwise
+    PWM_2_WriteCompare(count2); // 60% - Right wheel spins Anti Clockwise
 }
 
 void moveForward() {

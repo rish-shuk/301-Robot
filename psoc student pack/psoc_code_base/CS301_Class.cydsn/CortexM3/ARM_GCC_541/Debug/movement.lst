@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 1
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 1
 
 
    1              		.syntax unified
@@ -58,12 +58,12 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 1
   14:movement.c    **** #include <stdio.h>
   15:movement.c    **** #include <string.h>
   16:movement.c    **** #include <stdlib.h>
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 2
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 2
 
 
   17:movement.c    **** #define maxForwardPWM 9830
   18:movement.c    **** #define maxTurningPWM 6553
-  19:movement.c    **** #define movementMultiplier 1.1
+  19:movement.c    **** #define movementMultiplier 0.8
   20:movement.c    **** 
   21:movement.c    **** uint16 turnCount = 0;
   22:movement.c    **** uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
@@ -111,834 +111,983 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 1
   34:movement.c    **** void adjustRight() {
   72              		.loc 1 34 0
   73              		.cfi_startproc
-  74              		@ args = 0, pretend = 0, frame = 0
+  74              		@ args = 0, pretend = 0, frame = 8
   75              		@ frame_needed = 1, uses_anonymous_args = 0
   76 0000 80B5     		push	{r7, lr}
   77              		.cfi_def_cfa_offset 8
   78              		.cfi_offset 7, -8
   79              		.cfi_offset 14, -4
-  80 0002 00AF     		add	r7, sp, #0
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 3
+  80 0002 82B0     		sub	sp, sp, #8
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 3
 
 
-  81              		.cfi_def_cfa_register 7
-  35:movement.c    ****     PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
-  82              		.loc 1 35 0
-  83 0004 4AF26660 		movw	r0, #42598
-  84 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  36:movement.c    ****     PWM_2_WriteCompare(26214); // 40% - Right Wheel Clockwise
-  85              		.loc 1 36 0
-  86 000c 46F26660 		movw	r0, #26214
-  87 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
-  37:movement.c    **** }
-  88              		.loc 1 37 0
-  89 0014 00BF     		nop
-  90 0016 80BD     		pop	{r7, pc}
-  91              		.cfi_endproc
-  92              	.LFE65:
-  93              		.size	adjustRight, .-adjustRight
-  94              		.section	.text.adjustLeft,"ax",%progbits
-  95              		.align	2
-  96              		.global	adjustLeft
-  97              		.thumb
-  98              		.thumb_func
-  99              		.type	adjustLeft, %function
- 100              	adjustLeft:
- 101              	.LFB66:
-  38:movement.c    **** 
-  39:movement.c    **** // keep rotating anticlockwise
-  40:movement.c    **** // used for adjusting deviations
-  41:movement.c    **** void adjustLeft() {
- 102              		.loc 1 41 0
- 103              		.cfi_startproc
- 104              		@ args = 0, pretend = 0, frame = 0
- 105              		@ frame_needed = 1, uses_anonymous_args = 0
- 106 0000 80B5     		push	{r7, lr}
- 107              		.cfi_def_cfa_offset 8
- 108              		.cfi_offset 7, -8
- 109              		.cfi_offset 14, -4
- 110 0002 00AF     		add	r7, sp, #0
- 111              		.cfi_def_cfa_register 7
-  42:movement.c    ****     PWM_1_WriteCompare(39321); // 60% - Left Wheel Clockwise
- 112              		.loc 1 42 0
- 113 0004 49F69910 		movw	r0, #39321
- 114 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  43:movement.c    ****     PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
- 115              		.loc 1 43 0
- 116 000c 45F69910 		movw	r0, #22937
- 117 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
-  44:movement.c    **** }
- 118              		.loc 1 44 0
- 119 0014 00BF     		nop
- 120 0016 80BD     		pop	{r7, pc}
- 121              		.cfi_endproc
- 122              	.LFE66:
- 123              		.size	adjustLeft, .-adjustLeft
- 124              		.section	.text.turnLeft,"ax",%progbits
- 125              		.align	2
- 126              		.global	turnLeft
- 127              		.thumb
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 4
+  81              		.cfi_def_cfa_offset 16
+  82 0004 00AF     		add	r7, sp, #0
+  83              		.cfi_def_cfa_register 7
+  35:movement.c    ****     uint16 count1 = (32767 + (maxForwardPWM * movementMultiplier));
+  84              		.loc 1 35 0
+  85 0006 49F6B763 		movw	r3, #40631
+  86 000a FB80     		strh	r3, [r7, #6]	@ movhi
+  36:movement.c    ****     uint16 count2 = (32767 - (maxTurningPWM * movementMultiplier));
+  87              		.loc 1 36 0
+  88 000c 46F68433 		movw	r3, #27524
+  89 0010 BB80     		strh	r3, [r7, #4]	@ movhi
+  37:movement.c    ****     PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
+  90              		.loc 1 37 0
+  91 0012 FB88     		ldrh	r3, [r7, #6]
+  92 0014 1846     		mov	r0, r3
+  93 0016 FFF7FEFF 		bl	PWM_1_WriteCompare
+  38:movement.c    ****     PWM_2_WriteCompare(count2); // 40% - Right Wheel Clockwise
+  94              		.loc 1 38 0
+  95 001a BB88     		ldrh	r3, [r7, #4]
+  96 001c 1846     		mov	r0, r3
+  97 001e FFF7FEFF 		bl	PWM_2_WriteCompare
+  39:movement.c    **** }
+  98              		.loc 1 39 0
+  99 0022 00BF     		nop
+ 100 0024 0837     		adds	r7, r7, #8
+ 101              		.cfi_def_cfa_offset 8
+ 102 0026 BD46     		mov	sp, r7
+ 103              		.cfi_def_cfa_register 13
+ 104              		@ sp needed
+ 105 0028 80BD     		pop	{r7, pc}
+ 106              		.cfi_endproc
+ 107              	.LFE65:
+ 108              		.size	adjustRight, .-adjustRight
+ 109 002a 00BF     		.section	.text.adjustLeft,"ax",%progbits
+ 110              		.align	2
+ 111              		.global	adjustLeft
+ 112              		.thumb
+ 113              		.thumb_func
+ 114              		.type	adjustLeft, %function
+ 115              	adjustLeft:
+ 116              	.LFB66:
+  40:movement.c    **** 
+  41:movement.c    **** // keep rotating anticlockwise
+  42:movement.c    **** // used for adjusting deviations
+  43:movement.c    **** void adjustLeft() {
+ 117              		.loc 1 43 0
+ 118              		.cfi_startproc
+ 119              		@ args = 0, pretend = 0, frame = 8
+ 120              		@ frame_needed = 1, uses_anonymous_args = 0
+ 121 0000 80B5     		push	{r7, lr}
+ 122              		.cfi_def_cfa_offset 8
+ 123              		.cfi_offset 7, -8
+ 124              		.cfi_offset 14, -4
+ 125 0002 82B0     		sub	sp, sp, #8
+ 126              		.cfi_def_cfa_offset 16
+ 127 0004 00AF     		add	r7, sp, #0
+ 128              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 4
 
 
- 128              		.thumb_func
- 129              		.type	turnLeft, %function
- 130              	turnLeft:
- 131              	.LFB67:
-  45:movement.c    **** 
-  46:movement.c    **** // Anti-clockwise
-  47:movement.c    **** void turnLeft() {
- 132              		.loc 1 47 0
- 133              		.cfi_startproc
- 134              		@ args = 0, pretend = 0, frame = 0
- 135              		@ frame_needed = 1, uses_anonymous_args = 0
- 136 0000 80B5     		push	{r7, lr}
- 137              		.cfi_def_cfa_offset 8
- 138              		.cfi_offset 7, -8
- 139              		.cfi_offset 14, -4
- 140 0002 00AF     		add	r7, sp, #0
- 141              		.cfi_def_cfa_register 7
-  48:movement.c    ****     PWM_1_WriteCompare(26214); // 40% -- Left Wheel spins Clockwise
- 142              		.loc 1 48 0
- 143 0004 46F26660 		movw	r0, #26214
- 144 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  49:movement.c    ****     PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
- 145              		.loc 1 49 0
- 146 000c 46F26660 		movw	r0, #26214
- 147 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
-  50:movement.c    **** }
- 148              		.loc 1 50 0
- 149 0014 00BF     		nop
- 150 0016 80BD     		pop	{r7, pc}
+  44:movement.c    ****     uint16 count1 = (32767 + (maxTurningPWM * movementMultiplier));
+ 129              		.loc 1 44 0
+ 130 0006 49F27943 		movw	r3, #38009
+ 131 000a FB80     		strh	r3, [r7, #6]	@ movhi
+  45:movement.c    ****     uint16 count2 = (32767 - (maxForwardPWM * movementMultiplier));
+ 132              		.loc 1 45 0
+ 133 000c 46F24713 		movw	r3, #24903
+ 134 0010 BB80     		strh	r3, [r7, #4]	@ movhi
+  46:movement.c    ****     PWM_1_WriteCompare(count1); // 60% - Left Wheel Clockwise
+ 135              		.loc 1 46 0
+ 136 0012 FB88     		ldrh	r3, [r7, #6]
+ 137 0014 1846     		mov	r0, r3
+ 138 0016 FFF7FEFF 		bl	PWM_1_WriteCompare
+  47:movement.c    ****     PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
+ 139              		.loc 1 47 0
+ 140 001a BB88     		ldrh	r3, [r7, #4]
+ 141 001c 1846     		mov	r0, r3
+ 142 001e FFF7FEFF 		bl	PWM_2_WriteCompare
+  48:movement.c    **** }
+ 143              		.loc 1 48 0
+ 144 0022 00BF     		nop
+ 145 0024 0837     		adds	r7, r7, #8
+ 146              		.cfi_def_cfa_offset 8
+ 147 0026 BD46     		mov	sp, r7
+ 148              		.cfi_def_cfa_register 13
+ 149              		@ sp needed
+ 150 0028 80BD     		pop	{r7, pc}
  151              		.cfi_endproc
- 152              	.LFE67:
- 153              		.size	turnLeft, .-turnLeft
- 154              		.section	.text.turnRight,"ax",%progbits
+ 152              	.LFE66:
+ 153              		.size	adjustLeft, .-adjustLeft
+ 154 002a 00BF     		.section	.text.turnLeft,"ax",%progbits
  155              		.align	2
- 156              		.global	turnRight
+ 156              		.global	turnLeft
  157              		.thumb
  158              		.thumb_func
- 159              		.type	turnRight, %function
- 160              	turnRight:
- 161              	.LFB68:
-  51:movement.c    **** 
-  52:movement.c    **** // Clockwise
-  53:movement.c    **** void turnRight() {
- 162              		.loc 1 53 0
+ 159              		.type	turnLeft, %function
+ 160              	turnLeft:
+ 161              	.LFB67:
+  49:movement.c    **** 
+  50:movement.c    **** // Anti-clockwise
+  51:movement.c    **** void turnLeft() {
+ 162              		.loc 1 51 0
  163              		.cfi_startproc
- 164              		@ args = 0, pretend = 0, frame = 0
+ 164              		@ args = 0, pretend = 0, frame = 8
  165              		@ frame_needed = 1, uses_anonymous_args = 0
  166 0000 80B5     		push	{r7, lr}
  167              		.cfi_def_cfa_offset 8
  168              		.cfi_offset 7, -8
  169              		.cfi_offset 14, -4
- 170 0002 00AF     		add	r7, sp, #0
- 171              		.cfi_def_cfa_register 7
-  54:movement.c    ****     PWM_1_WriteCompare(39321); // 60% -- Left wheel spins clockwise
- 172              		.loc 1 54 0
- 173 0004 49F69910 		movw	r0, #39321
- 174 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 5
+ 170 0002 82B0     		sub	sp, sp, #8
+ 171              		.cfi_def_cfa_offset 16
+ 172 0004 00AF     		add	r7, sp, #0
+ 173              		.cfi_def_cfa_register 7
+  52:movement.c    ****     uint16 count1 = (32767 - (maxTurningPWM * movementMultiplier));
+ 174              		.loc 1 52 0
+ 175 0006 46F68433 		movw	r3, #27524
+ 176 000a FB80     		strh	r3, [r7, #6]	@ movhi
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 5
 
 
-  55:movement.c    ****     PWM_2_WriteCompare(39321); // 60% - Right wheel spins Anti Clockwise
- 175              		.loc 1 55 0
- 176 000c 49F69910 		movw	r0, #39321
- 177 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
+  53:movement.c    ****     uint16 count2 = (32767 - (maxTurningPWM * movementMultiplier));
+ 177              		.loc 1 53 0
+ 178 000c 46F68433 		movw	r3, #27524
+ 179 0010 BB80     		strh	r3, [r7, #4]	@ movhi
+  54:movement.c    ****     PWM_1_WriteCompare(count1); // 40% -- Left Wheel spins Clockwise
+ 180              		.loc 1 54 0
+ 181 0012 FB88     		ldrh	r3, [r7, #6]
+ 182 0014 1846     		mov	r0, r3
+ 183 0016 FFF7FEFF 		bl	PWM_1_WriteCompare
+  55:movement.c    ****     PWM_2_WriteCompare(count2); // 40% -- Right wheel spins clockwise
+ 184              		.loc 1 55 0
+ 185 001a BB88     		ldrh	r3, [r7, #4]
+ 186 001c 1846     		mov	r0, r3
+ 187 001e FFF7FEFF 		bl	PWM_2_WriteCompare
   56:movement.c    **** }
- 178              		.loc 1 56 0
- 179 0014 00BF     		nop
- 180 0016 80BD     		pop	{r7, pc}
- 181              		.cfi_endproc
- 182              	.LFE68:
- 183              		.size	turnRight, .-turnRight
- 184              		.section	.text.moveForward,"ax",%progbits
- 185              		.align	2
- 186              		.global	moveForward
- 187              		.thumb
- 188              		.thumb_func
- 189              		.type	moveForward, %function
- 190              	moveForward:
- 191              	.LFB69:
+ 188              		.loc 1 56 0
+ 189 0022 00BF     		nop
+ 190 0024 0837     		adds	r7, r7, #8
+ 191              		.cfi_def_cfa_offset 8
+ 192 0026 BD46     		mov	sp, r7
+ 193              		.cfi_def_cfa_register 13
+ 194              		@ sp needed
+ 195 0028 80BD     		pop	{r7, pc}
+ 196              		.cfi_endproc
+ 197              	.LFE67:
+ 198              		.size	turnLeft, .-turnLeft
+ 199 002a 00BF     		.section	.text.turnRight,"ax",%progbits
+ 200              		.align	2
+ 201              		.global	turnRight
+ 202              		.thumb
+ 203              		.thumb_func
+ 204              		.type	turnRight, %function
+ 205              	turnRight:
+ 206              	.LFB68:
   57:movement.c    **** 
-  58:movement.c    **** void moveForward() {
- 192              		.loc 1 58 0
- 193              		.cfi_startproc
- 194              		@ args = 0, pretend = 0, frame = 8
- 195              		@ frame_needed = 1, uses_anonymous_args = 0
- 196 0000 80B5     		push	{r7, lr}
- 197              		.cfi_def_cfa_offset 8
- 198              		.cfi_offset 7, -8
- 199              		.cfi_offset 14, -4
- 200 0002 82B0     		sub	sp, sp, #8
- 201              		.cfi_def_cfa_offset 16
- 202 0004 00AF     		add	r7, sp, #0
- 203              		.cfi_def_cfa_register 7
-  59:movement.c    ****     uint16 count1 = (32767 + (maxForwardPWM * movementMultiplier));
- 204              		.loc 1 59 0
- 205 0006 4AF63C23 		movw	r3, #43580
- 206 000a FB80     		strh	r3, [r7, #6]	@ movhi
-  60:movement.c    ****     uint16 count2 = (32767 - (maxForwardPWM * movementMultiplier));
- 207              		.loc 1 60 0
- 208 000c 45F2C253 		movw	r3, #21954
- 209 0010 BB80     		strh	r3, [r7, #4]	@ movhi
-  61:movement.c    ****     PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
- 210              		.loc 1 61 0
- 211 0012 FB88     		ldrh	r3, [r7, #6]
- 212 0014 1846     		mov	r0, r3
- 213 0016 FFF7FEFF 		bl	PWM_1_WriteCompare
-  62:movement.c    ****     PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
- 214              		.loc 1 62 0
- 215 001a BB88     		ldrh	r3, [r7, #4]
- 216 001c 1846     		mov	r0, r3
- 217 001e FFF7FEFF 		bl	PWM_2_WriteCompare
-  63:movement.c    **** }
- 218              		.loc 1 63 0
- 219 0022 00BF     		nop
- 220 0024 0837     		adds	r7, r7, #8
- 221              		.cfi_def_cfa_offset 8
- 222 0026 BD46     		mov	sp, r7
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 6
+  58:movement.c    **** // Clockwise
+  59:movement.c    **** void turnRight() {
+ 207              		.loc 1 59 0
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 8
+ 210              		@ frame_needed = 1, uses_anonymous_args = 0
+ 211 0000 80B5     		push	{r7, lr}
+ 212              		.cfi_def_cfa_offset 8
+ 213              		.cfi_offset 7, -8
+ 214              		.cfi_offset 14, -4
+ 215 0002 82B0     		sub	sp, sp, #8
+ 216              		.cfi_def_cfa_offset 16
+ 217 0004 00AF     		add	r7, sp, #0
+ 218              		.cfi_def_cfa_register 7
+  60:movement.c    ****     uint16 count1 = (32767 + (maxTurningPWM * movementMultiplier));
+ 219              		.loc 1 60 0
+ 220 0006 49F27943 		movw	r3, #38009
+ 221 000a FB80     		strh	r3, [r7, #6]	@ movhi
+  61:movement.c    ****     uint16 count2 = (32767 + (maxTurningPWM * movementMultiplier));
+ 222              		.loc 1 61 0
+ 223 000c 49F27943 		movw	r3, #38009
+ 224 0010 BB80     		strh	r3, [r7, #4]	@ movhi
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 6
 
 
- 223              		.cfi_def_cfa_register 13
- 224              		@ sp needed
- 225 0028 80BD     		pop	{r7, pc}
- 226              		.cfi_endproc
- 227              	.LFE69:
- 228              		.size	moveForward, .-moveForward
- 229 002a 00BF     		.section	.text.moveBackward,"ax",%progbits
- 230              		.align	2
- 231              		.global	moveBackward
- 232              		.thumb
- 233              		.thumb_func
- 234              		.type	moveBackward, %function
- 235              	moveBackward:
- 236              	.LFB70:
-  64:movement.c    **** 
-  65:movement.c    **** void moveBackward() {
- 237              		.loc 1 65 0
- 238              		.cfi_startproc
- 239              		@ args = 0, pretend = 0, frame = 0
- 240              		@ frame_needed = 1, uses_anonymous_args = 0
- 241 0000 80B5     		push	{r7, lr}
- 242              		.cfi_def_cfa_offset 8
- 243              		.cfi_offset 7, -8
- 244              		.cfi_offset 14, -4
- 245 0002 00AF     		add	r7, sp, #0
- 246              		.cfi_def_cfa_register 7
-  66:movement.c    ****     PWM_1_WriteCompare(22937); // 35% - Left Wheel Anti Clockwise
- 247              		.loc 1 66 0
- 248 0004 45F69910 		movw	r0, #22937
- 249 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
-  67:movement.c    ****     PWM_2_WriteCompare(42598); // 65% - Right Wheel Anti Clockwise
- 250              		.loc 1 67 0
- 251 000c 4AF26660 		movw	r0, #42598
- 252 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
-  68:movement.c    **** }
- 253              		.loc 1 68 0
- 254 0014 00BF     		nop
- 255 0016 80BD     		pop	{r7, pc}
- 256              		.cfi_endproc
- 257              	.LFE70:
- 258              		.size	moveBackward, .-moveBackward
- 259              		.text
- 260              	.Letext0:
- 261              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
- 262              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
- 263              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
- 264              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
- 265              		.section	.debug_info,"",%progbits
- 266              	.Ldebug_info0:
- 267 0000 78010000 		.4byte	0x178
- 268 0004 0400     		.2byte	0x4
- 269 0006 00000000 		.4byte	.Ldebug_abbrev0
- 270 000a 04       		.byte	0x4
- 271 000b 01       		.uleb128 0x1
- 272 000c 0B000000 		.4byte	.LASF28
- 273 0010 0C       		.byte	0xc
- 274 0011 B8010000 		.4byte	.LASF29
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 7
+  62:movement.c    ****     PWM_1_WriteCompare(count1); // 60% -- Left wheel spins clockwise
+ 225              		.loc 1 62 0
+ 226 0012 FB88     		ldrh	r3, [r7, #6]
+ 227 0014 1846     		mov	r0, r3
+ 228 0016 FFF7FEFF 		bl	PWM_1_WriteCompare
+  63:movement.c    ****     PWM_2_WriteCompare(count2); // 60% - Right wheel spins Anti Clockwise
+ 229              		.loc 1 63 0
+ 230 001a BB88     		ldrh	r3, [r7, #4]
+ 231 001c 1846     		mov	r0, r3
+ 232 001e FFF7FEFF 		bl	PWM_2_WriteCompare
+  64:movement.c    **** }
+ 233              		.loc 1 64 0
+ 234 0022 00BF     		nop
+ 235 0024 0837     		adds	r7, r7, #8
+ 236              		.cfi_def_cfa_offset 8
+ 237 0026 BD46     		mov	sp, r7
+ 238              		.cfi_def_cfa_register 13
+ 239              		@ sp needed
+ 240 0028 80BD     		pop	{r7, pc}
+ 241              		.cfi_endproc
+ 242              	.LFE68:
+ 243              		.size	turnRight, .-turnRight
+ 244 002a 00BF     		.section	.text.moveForward,"ax",%progbits
+ 245              		.align	2
+ 246              		.global	moveForward
+ 247              		.thumb
+ 248              		.thumb_func
+ 249              		.type	moveForward, %function
+ 250              	moveForward:
+ 251              	.LFB69:
+  65:movement.c    **** 
+  66:movement.c    **** void moveForward() {
+ 252              		.loc 1 66 0
+ 253              		.cfi_startproc
+ 254              		@ args = 0, pretend = 0, frame = 8
+ 255              		@ frame_needed = 1, uses_anonymous_args = 0
+ 256 0000 80B5     		push	{r7, lr}
+ 257              		.cfi_def_cfa_offset 8
+ 258              		.cfi_offset 7, -8
+ 259              		.cfi_offset 14, -4
+ 260 0002 82B0     		sub	sp, sp, #8
+ 261              		.cfi_def_cfa_offset 16
+ 262 0004 00AF     		add	r7, sp, #0
+ 263              		.cfi_def_cfa_register 7
+  67:movement.c    ****     uint16 count1 = (32767 + (maxForwardPWM * movementMultiplier));
+ 264              		.loc 1 67 0
+ 265 0006 49F6B763 		movw	r3, #40631
+ 266 000a FB80     		strh	r3, [r7, #6]	@ movhi
+  68:movement.c    ****     uint16 count2 = (32767 - (maxForwardPWM * movementMultiplier));
+ 267              		.loc 1 68 0
+ 268 000c 46F24713 		movw	r3, #24903
+ 269 0010 BB80     		strh	r3, [r7, #4]	@ movhi
+  69:movement.c    ****     PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
+ 270              		.loc 1 69 0
+ 271 0012 FB88     		ldrh	r3, [r7, #6]
+ 272 0014 1846     		mov	r0, r3
+ 273 0016 FFF7FEFF 		bl	PWM_1_WriteCompare
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 7
 
 
- 275 0015 BB000000 		.4byte	.LASF30
- 276 0019 00000000 		.4byte	.Ldebug_ranges0+0
- 277 001d 00000000 		.4byte	0
- 278 0021 00000000 		.4byte	.Ldebug_line0
- 279 0025 02       		.uleb128 0x2
- 280 0026 01       		.byte	0x1
- 281 0027 06       		.byte	0x6
- 282 0028 56020000 		.4byte	.LASF0
- 283 002c 02       		.uleb128 0x2
- 284 002d 01       		.byte	0x1
- 285 002e 08       		.byte	0x8
- 286 002f 46010000 		.4byte	.LASF1
- 287 0033 02       		.uleb128 0x2
- 288 0034 02       		.byte	0x2
- 289 0035 05       		.byte	0x5
- 290 0036 37020000 		.4byte	.LASF2
- 291 003a 02       		.uleb128 0x2
- 292 003b 02       		.byte	0x2
- 293 003c 07       		.byte	0x7
- 294 003d 73010000 		.4byte	.LASF3
- 295 0041 03       		.uleb128 0x3
- 296 0042 A7000000 		.4byte	.LASF9
- 297 0046 02       		.byte	0x2
- 298 0047 3F       		.byte	0x3f
- 299 0048 4C000000 		.4byte	0x4c
- 300 004c 02       		.uleb128 0x2
- 301 004d 04       		.byte	0x4
- 302 004e 05       		.byte	0x5
- 303 004f 41020000 		.4byte	.LASF4
- 304 0053 02       		.uleb128 0x2
- 305 0054 04       		.byte	0x4
- 306 0055 07       		.byte	0x7
- 307 0056 54010000 		.4byte	.LASF5
- 308 005a 02       		.uleb128 0x2
- 309 005b 08       		.byte	0x8
- 310 005c 05       		.byte	0x5
- 311 005d 0E020000 		.4byte	.LASF6
- 312 0061 02       		.uleb128 0x2
- 313 0062 08       		.byte	0x8
- 314 0063 07       		.byte	0x7
- 315 0064 D0010000 		.4byte	.LASF7
- 316 0068 04       		.uleb128 0x4
- 317 0069 04       		.byte	0x4
- 318 006a 05       		.byte	0x5
- 319 006b 696E7400 		.ascii	"int\000"
- 320 006f 02       		.uleb128 0x2
- 321 0070 04       		.byte	0x4
- 322 0071 07       		.byte	0x7
- 323 0072 C3010000 		.4byte	.LASF8
- 324 0076 03       		.uleb128 0x3
- 325 0077 FD010000 		.4byte	.LASF10
- 326 007b 03       		.byte	0x3
- 327 007c 2C       		.byte	0x2c
- 328 007d 41000000 		.4byte	0x41
- 329 0081 05       		.uleb128 0x5
- 330 0082 B1010000 		.4byte	.LASF11
- 331 0086 04       		.byte	0x4
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 8
+  70:movement.c    ****     PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
+ 274              		.loc 1 70 0
+ 275 001a BB88     		ldrh	r3, [r7, #4]
+ 276 001c 1846     		mov	r0, r3
+ 277 001e FFF7FEFF 		bl	PWM_2_WriteCompare
+  71:movement.c    **** }
+ 278              		.loc 1 71 0
+ 279 0022 00BF     		nop
+ 280 0024 0837     		adds	r7, r7, #8
+ 281              		.cfi_def_cfa_offset 8
+ 282 0026 BD46     		mov	sp, r7
+ 283              		.cfi_def_cfa_register 13
+ 284              		@ sp needed
+ 285 0028 80BD     		pop	{r7, pc}
+ 286              		.cfi_endproc
+ 287              	.LFE69:
+ 288              		.size	moveForward, .-moveForward
+ 289 002a 00BF     		.section	.text.moveBackward,"ax",%progbits
+ 290              		.align	2
+ 291              		.global	moveBackward
+ 292              		.thumb
+ 293              		.thumb_func
+ 294              		.type	moveBackward, %function
+ 295              	moveBackward:
+ 296              	.LFB70:
+  72:movement.c    **** 
+  73:movement.c    **** void moveBackward() {
+ 297              		.loc 1 73 0
+ 298              		.cfi_startproc
+ 299              		@ args = 0, pretend = 0, frame = 0
+ 300              		@ frame_needed = 1, uses_anonymous_args = 0
+ 301 0000 80B5     		push	{r7, lr}
+ 302              		.cfi_def_cfa_offset 8
+ 303              		.cfi_offset 7, -8
+ 304              		.cfi_offset 14, -4
+ 305 0002 00AF     		add	r7, sp, #0
+ 306              		.cfi_def_cfa_register 7
+  74:movement.c    ****     PWM_1_WriteCompare(22937); // 35% - Left Wheel Anti Clockwise
+ 307              		.loc 1 74 0
+ 308 0004 45F69910 		movw	r0, #22937
+ 309 0008 FFF7FEFF 		bl	PWM_1_WriteCompare
+  75:movement.c    ****     PWM_2_WriteCompare(42598); // 65% - Right Wheel Anti Clockwise
+ 310              		.loc 1 75 0
+ 311 000c 4AF26660 		movw	r0, #42598
+ 312 0010 FFF7FEFF 		bl	PWM_2_WriteCompare
+  76:movement.c    **** }
+ 313              		.loc 1 76 0
+ 314 0014 00BF     		nop
+ 315 0016 80BD     		pop	{r7, pc}
+ 316              		.cfi_endproc
+ 317              	.LFE70:
+ 318              		.size	moveBackward, .-moveBackward
+ 319              		.text
+ 320              	.Letext0:
+ 321              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 322              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 323              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 8
 
 
- 332 0087 E801     		.2byte	0x1e8
- 333 0089 3A000000 		.4byte	0x3a
- 334 008d 02       		.uleb128 0x2
- 335 008e 04       		.byte	0x4
- 336 008f 04       		.byte	0x4
- 337 0090 40010000 		.4byte	.LASF12
- 338 0094 02       		.uleb128 0x2
- 339 0095 08       		.byte	0x8
- 340 0096 04       		.byte	0x4
- 341 0097 9F010000 		.4byte	.LASF13
- 342 009b 02       		.uleb128 0x2
- 343 009c 01       		.byte	0x1
- 344 009d 08       		.byte	0x8
- 345 009e 1C020000 		.4byte	.LASF14
- 346 00a2 02       		.uleb128 0x2
- 347 00a3 08       		.byte	0x8
- 348 00a4 04       		.byte	0x4
- 349 00a5 4A020000 		.4byte	.LASF15
- 350 00a9 02       		.uleb128 0x2
- 351 00aa 04       		.byte	0x4
- 352 00ab 07       		.byte	0x7
- 353 00ac 05020000 		.4byte	.LASF16
- 354 00b0 06       		.uleb128 0x6
- 355 00b1 00000000 		.4byte	.LASF17
- 356 00b5 01       		.byte	0x1
- 357 00b6 1B       		.byte	0x1b
- 358 00b7 00000000 		.4byte	.LFB64
- 359 00bb 18000000 		.4byte	.LFE64-.LFB64
- 360 00bf 01       		.uleb128 0x1
- 361 00c0 9C       		.byte	0x9c
- 362 00c1 06       		.uleb128 0x6
- 363 00c2 93010000 		.4byte	.LASF18
- 364 00c6 01       		.byte	0x1
- 365 00c7 22       		.byte	0x22
- 366 00c8 00000000 		.4byte	.LFB65
- 367 00cc 18000000 		.4byte	.LFE65-.LFB65
- 368 00d0 01       		.uleb128 0x1
- 369 00d1 9C       		.byte	0x9c
- 370 00d2 06       		.uleb128 0x6
- 371 00d3 A6010000 		.4byte	.LASF19
- 372 00d7 01       		.byte	0x1
- 373 00d8 29       		.byte	0x29
- 374 00d9 00000000 		.4byte	.LFB66
- 375 00dd 18000000 		.4byte	.LFE66-.LFB66
- 376 00e1 01       		.uleb128 0x1
- 377 00e2 9C       		.byte	0x9c
- 378 00e3 06       		.uleb128 0x6
- 379 00e4 F4010000 		.4byte	.LASF20
- 380 00e8 01       		.byte	0x1
- 381 00e9 2F       		.byte	0x2f
- 382 00ea 00000000 		.4byte	.LFB67
- 383 00ee 18000000 		.4byte	.LFE67-.LFB67
- 384 00f2 01       		.uleb128 0x1
- 385 00f3 9C       		.byte	0x9c
- 386 00f4 06       		.uleb128 0x6
- 387 00f5 B1000000 		.4byte	.LASF21
- 388 00f9 01       		.byte	0x1
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 9
+ 324              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
+ 325              		.section	.debug_info,"",%progbits
+ 326              	.Ldebug_info0:
+ 327 0000 FC010000 		.4byte	0x1fc
+ 328 0004 0400     		.2byte	0x4
+ 329 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 330 000a 04       		.byte	0x4
+ 331 000b 01       		.uleb128 0x1
+ 332 000c 0B000000 		.4byte	.LASF29
+ 333 0010 0C       		.byte	0xc
+ 334 0011 B8010000 		.4byte	.LASF30
+ 335 0015 BB000000 		.4byte	.LASF31
+ 336 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 337 001d 00000000 		.4byte	0
+ 338 0021 00000000 		.4byte	.Ldebug_line0
+ 339 0025 02       		.uleb128 0x2
+ 340 0026 01       		.byte	0x1
+ 341 0027 06       		.byte	0x6
+ 342 0028 56020000 		.4byte	.LASF0
+ 343 002c 02       		.uleb128 0x2
+ 344 002d 01       		.byte	0x1
+ 345 002e 08       		.byte	0x8
+ 346 002f 46010000 		.4byte	.LASF1
+ 347 0033 02       		.uleb128 0x2
+ 348 0034 02       		.byte	0x2
+ 349 0035 05       		.byte	0x5
+ 350 0036 37020000 		.4byte	.LASF2
+ 351 003a 02       		.uleb128 0x2
+ 352 003b 02       		.byte	0x2
+ 353 003c 07       		.byte	0x7
+ 354 003d 73010000 		.4byte	.LASF3
+ 355 0041 03       		.uleb128 0x3
+ 356 0042 A7000000 		.4byte	.LASF9
+ 357 0046 02       		.byte	0x2
+ 358 0047 3F       		.byte	0x3f
+ 359 0048 4C000000 		.4byte	0x4c
+ 360 004c 02       		.uleb128 0x2
+ 361 004d 04       		.byte	0x4
+ 362 004e 05       		.byte	0x5
+ 363 004f 41020000 		.4byte	.LASF4
+ 364 0053 02       		.uleb128 0x2
+ 365 0054 04       		.byte	0x4
+ 366 0055 07       		.byte	0x7
+ 367 0056 54010000 		.4byte	.LASF5
+ 368 005a 02       		.uleb128 0x2
+ 369 005b 08       		.byte	0x8
+ 370 005c 05       		.byte	0x5
+ 371 005d 0E020000 		.4byte	.LASF6
+ 372 0061 02       		.uleb128 0x2
+ 373 0062 08       		.byte	0x8
+ 374 0063 07       		.byte	0x7
+ 375 0064 D0010000 		.4byte	.LASF7
+ 376 0068 04       		.uleb128 0x4
+ 377 0069 04       		.byte	0x4
+ 378 006a 05       		.byte	0x5
+ 379 006b 696E7400 		.ascii	"int\000"
+ 380 006f 02       		.uleb128 0x2
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 9
 
 
- 389 00fa 35       		.byte	0x35
- 390 00fb 00000000 		.4byte	.LFB68
- 391 00ff 18000000 		.4byte	.LFE68-.LFB68
- 392 0103 01       		.uleb128 0x1
- 393 0104 9C       		.byte	0x9c
- 394 0105 07       		.uleb128 0x7
- 395 0106 21020000 		.4byte	.LASF31
- 396 010a 01       		.byte	0x1
- 397 010b 3A       		.byte	0x3a
- 398 010c 00000000 		.4byte	.LFB69
- 399 0110 2A000000 		.4byte	.LFE69-.LFB69
- 400 0114 01       		.uleb128 0x1
- 401 0115 9C       		.byte	0x9c
- 402 0116 37010000 		.4byte	0x137
- 403 011a 08       		.uleb128 0x8
- 404 011b 99000000 		.4byte	.LASF22
- 405 011f 01       		.byte	0x1
- 406 0120 3B       		.byte	0x3b
- 407 0121 81000000 		.4byte	0x81
- 408 0125 02       		.uleb128 0x2
- 409 0126 91       		.byte	0x91
- 410 0127 76       		.sleb128 -10
- 411 0128 08       		.uleb128 0x8
- 412 0129 A0000000 		.4byte	.LASF23
- 413 012d 01       		.byte	0x1
- 414 012e 3C       		.byte	0x3c
- 415 012f 81000000 		.4byte	0x81
- 416 0133 02       		.uleb128 0x2
- 417 0134 91       		.byte	0x91
- 418 0135 74       		.sleb128 -12
- 419 0136 00       		.byte	0
- 420 0137 06       		.uleb128 0x6
- 421 0138 66010000 		.4byte	.LASF24
- 422 013c 01       		.byte	0x1
- 423 013d 41       		.byte	0x41
- 424 013e 00000000 		.4byte	.LFB70
- 425 0142 18000000 		.4byte	.LFE70-.LFB70
- 426 0146 01       		.uleb128 0x1
- 427 0147 9C       		.byte	0x9c
- 428 0148 09       		.uleb128 0x9
- 429 0149 86010000 		.4byte	.LASF25
- 430 014d 05       		.byte	0x5
- 431 014e 1207     		.2byte	0x712
- 432 0150 54010000 		.4byte	0x154
- 433 0154 0A       		.uleb128 0xa
- 434 0155 76000000 		.4byte	0x76
- 435 0159 0B       		.uleb128 0xb
- 436 015a 2D020000 		.4byte	.LASF26
- 437 015e 01       		.byte	0x1
- 438 015f 15       		.byte	0x15
- 439 0160 81000000 		.4byte	0x81
- 440 0164 05       		.uleb128 0x5
- 441 0165 03       		.byte	0x3
- 442 0166 00000000 		.4byte	turnCount
- 443 016a 0B       		.uleb128 0xb
- 444 016b E7010000 		.4byte	.LASF27
- 445 016f 01       		.byte	0x1
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 10
+ 381 0070 04       		.byte	0x4
+ 382 0071 07       		.byte	0x7
+ 383 0072 C3010000 		.4byte	.LASF8
+ 384 0076 03       		.uleb128 0x3
+ 385 0077 FD010000 		.4byte	.LASF10
+ 386 007b 03       		.byte	0x3
+ 387 007c 2C       		.byte	0x2c
+ 388 007d 41000000 		.4byte	0x41
+ 389 0081 05       		.uleb128 0x5
+ 390 0082 B1010000 		.4byte	.LASF11
+ 391 0086 04       		.byte	0x4
+ 392 0087 E801     		.2byte	0x1e8
+ 393 0089 3A000000 		.4byte	0x3a
+ 394 008d 02       		.uleb128 0x2
+ 395 008e 04       		.byte	0x4
+ 396 008f 04       		.byte	0x4
+ 397 0090 40010000 		.4byte	.LASF12
+ 398 0094 02       		.uleb128 0x2
+ 399 0095 08       		.byte	0x8
+ 400 0096 04       		.byte	0x4
+ 401 0097 9F010000 		.4byte	.LASF13
+ 402 009b 02       		.uleb128 0x2
+ 403 009c 01       		.byte	0x1
+ 404 009d 08       		.byte	0x8
+ 405 009e 1C020000 		.4byte	.LASF14
+ 406 00a2 02       		.uleb128 0x2
+ 407 00a3 08       		.byte	0x8
+ 408 00a4 04       		.byte	0x4
+ 409 00a5 4A020000 		.4byte	.LASF15
+ 410 00a9 02       		.uleb128 0x2
+ 411 00aa 04       		.byte	0x4
+ 412 00ab 07       		.byte	0x7
+ 413 00ac 05020000 		.4byte	.LASF16
+ 414 00b0 06       		.uleb128 0x6
+ 415 00b1 00000000 		.4byte	.LASF24
+ 416 00b5 01       		.byte	0x1
+ 417 00b6 1B       		.byte	0x1b
+ 418 00b7 00000000 		.4byte	.LFB64
+ 419 00bb 18000000 		.4byte	.LFE64-.LFB64
+ 420 00bf 01       		.uleb128 0x1
+ 421 00c0 9C       		.byte	0x9c
+ 422 00c1 07       		.uleb128 0x7
+ 423 00c2 93010000 		.4byte	.LASF19
+ 424 00c6 01       		.byte	0x1
+ 425 00c7 22       		.byte	0x22
+ 426 00c8 00000000 		.4byte	.LFB65
+ 427 00cc 2A000000 		.4byte	.LFE65-.LFB65
+ 428 00d0 01       		.uleb128 0x1
+ 429 00d1 9C       		.byte	0x9c
+ 430 00d2 F3000000 		.4byte	0xf3
+ 431 00d6 08       		.uleb128 0x8
+ 432 00d7 99000000 		.4byte	.LASF17
+ 433 00db 01       		.byte	0x1
+ 434 00dc 23       		.byte	0x23
+ 435 00dd 81000000 		.4byte	0x81
+ 436 00e1 02       		.uleb128 0x2
+ 437 00e2 91       		.byte	0x91
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 10
 
 
- 446 0170 16       		.byte	0x16
- 447 0171 81000000 		.4byte	0x81
- 448 0175 05       		.uleb128 0x5
- 449 0176 03       		.byte	0x3
- 450 0177 00000000 		.4byte	maxTurnCount
- 451 017b 00       		.byte	0
- 452              		.section	.debug_abbrev,"",%progbits
- 453              	.Ldebug_abbrev0:
- 454 0000 01       		.uleb128 0x1
- 455 0001 11       		.uleb128 0x11
- 456 0002 01       		.byte	0x1
- 457 0003 25       		.uleb128 0x25
- 458 0004 0E       		.uleb128 0xe
- 459 0005 13       		.uleb128 0x13
- 460 0006 0B       		.uleb128 0xb
- 461 0007 03       		.uleb128 0x3
- 462 0008 0E       		.uleb128 0xe
- 463 0009 1B       		.uleb128 0x1b
- 464 000a 0E       		.uleb128 0xe
- 465 000b 55       		.uleb128 0x55
- 466 000c 17       		.uleb128 0x17
- 467 000d 11       		.uleb128 0x11
- 468 000e 01       		.uleb128 0x1
- 469 000f 10       		.uleb128 0x10
- 470 0010 17       		.uleb128 0x17
- 471 0011 00       		.byte	0
- 472 0012 00       		.byte	0
- 473 0013 02       		.uleb128 0x2
- 474 0014 24       		.uleb128 0x24
- 475 0015 00       		.byte	0
- 476 0016 0B       		.uleb128 0xb
- 477 0017 0B       		.uleb128 0xb
- 478 0018 3E       		.uleb128 0x3e
- 479 0019 0B       		.uleb128 0xb
- 480 001a 03       		.uleb128 0x3
- 481 001b 0E       		.uleb128 0xe
- 482 001c 00       		.byte	0
- 483 001d 00       		.byte	0
- 484 001e 03       		.uleb128 0x3
- 485 001f 16       		.uleb128 0x16
- 486 0020 00       		.byte	0
- 487 0021 03       		.uleb128 0x3
- 488 0022 0E       		.uleb128 0xe
- 489 0023 3A       		.uleb128 0x3a
- 490 0024 0B       		.uleb128 0xb
- 491 0025 3B       		.uleb128 0x3b
- 492 0026 0B       		.uleb128 0xb
- 493 0027 49       		.uleb128 0x49
- 494 0028 13       		.uleb128 0x13
- 495 0029 00       		.byte	0
- 496 002a 00       		.byte	0
- 497 002b 04       		.uleb128 0x4
- 498 002c 24       		.uleb128 0x24
- 499 002d 00       		.byte	0
- 500 002e 0B       		.uleb128 0xb
- 501 002f 0B       		.uleb128 0xb
- 502 0030 3E       		.uleb128 0x3e
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 11
+ 438 00e3 76       		.sleb128 -10
+ 439 00e4 08       		.uleb128 0x8
+ 440 00e5 A0000000 		.4byte	.LASF18
+ 441 00e9 01       		.byte	0x1
+ 442 00ea 24       		.byte	0x24
+ 443 00eb 81000000 		.4byte	0x81
+ 444 00ef 02       		.uleb128 0x2
+ 445 00f0 91       		.byte	0x91
+ 446 00f1 74       		.sleb128 -12
+ 447 00f2 00       		.byte	0
+ 448 00f3 07       		.uleb128 0x7
+ 449 00f4 A6010000 		.4byte	.LASF20
+ 450 00f8 01       		.byte	0x1
+ 451 00f9 2B       		.byte	0x2b
+ 452 00fa 00000000 		.4byte	.LFB66
+ 453 00fe 2A000000 		.4byte	.LFE66-.LFB66
+ 454 0102 01       		.uleb128 0x1
+ 455 0103 9C       		.byte	0x9c
+ 456 0104 25010000 		.4byte	0x125
+ 457 0108 08       		.uleb128 0x8
+ 458 0109 99000000 		.4byte	.LASF17
+ 459 010d 01       		.byte	0x1
+ 460 010e 2C       		.byte	0x2c
+ 461 010f 81000000 		.4byte	0x81
+ 462 0113 02       		.uleb128 0x2
+ 463 0114 91       		.byte	0x91
+ 464 0115 76       		.sleb128 -10
+ 465 0116 08       		.uleb128 0x8
+ 466 0117 A0000000 		.4byte	.LASF18
+ 467 011b 01       		.byte	0x1
+ 468 011c 2D       		.byte	0x2d
+ 469 011d 81000000 		.4byte	0x81
+ 470 0121 02       		.uleb128 0x2
+ 471 0122 91       		.byte	0x91
+ 472 0123 74       		.sleb128 -12
+ 473 0124 00       		.byte	0
+ 474 0125 07       		.uleb128 0x7
+ 475 0126 F4010000 		.4byte	.LASF21
+ 476 012a 01       		.byte	0x1
+ 477 012b 33       		.byte	0x33
+ 478 012c 00000000 		.4byte	.LFB67
+ 479 0130 2A000000 		.4byte	.LFE67-.LFB67
+ 480 0134 01       		.uleb128 0x1
+ 481 0135 9C       		.byte	0x9c
+ 482 0136 57010000 		.4byte	0x157
+ 483 013a 08       		.uleb128 0x8
+ 484 013b 99000000 		.4byte	.LASF17
+ 485 013f 01       		.byte	0x1
+ 486 0140 34       		.byte	0x34
+ 487 0141 81000000 		.4byte	0x81
+ 488 0145 02       		.uleb128 0x2
+ 489 0146 91       		.byte	0x91
+ 490 0147 76       		.sleb128 -10
+ 491 0148 08       		.uleb128 0x8
+ 492 0149 A0000000 		.4byte	.LASF18
+ 493 014d 01       		.byte	0x1
+ 494 014e 35       		.byte	0x35
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 11
 
 
- 503 0031 0B       		.uleb128 0xb
- 504 0032 03       		.uleb128 0x3
- 505 0033 08       		.uleb128 0x8
- 506 0034 00       		.byte	0
- 507 0035 00       		.byte	0
- 508 0036 05       		.uleb128 0x5
- 509 0037 16       		.uleb128 0x16
- 510 0038 00       		.byte	0
- 511 0039 03       		.uleb128 0x3
- 512 003a 0E       		.uleb128 0xe
- 513 003b 3A       		.uleb128 0x3a
- 514 003c 0B       		.uleb128 0xb
- 515 003d 3B       		.uleb128 0x3b
- 516 003e 05       		.uleb128 0x5
- 517 003f 49       		.uleb128 0x49
- 518 0040 13       		.uleb128 0x13
- 519 0041 00       		.byte	0
- 520 0042 00       		.byte	0
- 521 0043 06       		.uleb128 0x6
- 522 0044 2E       		.uleb128 0x2e
- 523 0045 00       		.byte	0
- 524 0046 3F       		.uleb128 0x3f
- 525 0047 19       		.uleb128 0x19
- 526 0048 03       		.uleb128 0x3
- 527 0049 0E       		.uleb128 0xe
- 528 004a 3A       		.uleb128 0x3a
- 529 004b 0B       		.uleb128 0xb
- 530 004c 3B       		.uleb128 0x3b
- 531 004d 0B       		.uleb128 0xb
- 532 004e 11       		.uleb128 0x11
- 533 004f 01       		.uleb128 0x1
- 534 0050 12       		.uleb128 0x12
- 535 0051 06       		.uleb128 0x6
- 536 0052 40       		.uleb128 0x40
- 537 0053 18       		.uleb128 0x18
- 538 0054 9642     		.uleb128 0x2116
- 539 0056 19       		.uleb128 0x19
- 540 0057 00       		.byte	0
- 541 0058 00       		.byte	0
- 542 0059 07       		.uleb128 0x7
- 543 005a 2E       		.uleb128 0x2e
- 544 005b 01       		.byte	0x1
- 545 005c 3F       		.uleb128 0x3f
- 546 005d 19       		.uleb128 0x19
- 547 005e 03       		.uleb128 0x3
- 548 005f 0E       		.uleb128 0xe
- 549 0060 3A       		.uleb128 0x3a
- 550 0061 0B       		.uleb128 0xb
- 551 0062 3B       		.uleb128 0x3b
- 552 0063 0B       		.uleb128 0xb
- 553 0064 11       		.uleb128 0x11
- 554 0065 01       		.uleb128 0x1
- 555 0066 12       		.uleb128 0x12
- 556 0067 06       		.uleb128 0x6
- 557 0068 40       		.uleb128 0x40
- 558 0069 18       		.uleb128 0x18
- 559 006a 9642     		.uleb128 0x2116
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 12
+ 495 014f 81000000 		.4byte	0x81
+ 496 0153 02       		.uleb128 0x2
+ 497 0154 91       		.byte	0x91
+ 498 0155 74       		.sleb128 -12
+ 499 0156 00       		.byte	0
+ 500 0157 07       		.uleb128 0x7
+ 501 0158 B1000000 		.4byte	.LASF22
+ 502 015c 01       		.byte	0x1
+ 503 015d 3B       		.byte	0x3b
+ 504 015e 00000000 		.4byte	.LFB68
+ 505 0162 2A000000 		.4byte	.LFE68-.LFB68
+ 506 0166 01       		.uleb128 0x1
+ 507 0167 9C       		.byte	0x9c
+ 508 0168 89010000 		.4byte	0x189
+ 509 016c 08       		.uleb128 0x8
+ 510 016d 99000000 		.4byte	.LASF17
+ 511 0171 01       		.byte	0x1
+ 512 0172 3C       		.byte	0x3c
+ 513 0173 81000000 		.4byte	0x81
+ 514 0177 02       		.uleb128 0x2
+ 515 0178 91       		.byte	0x91
+ 516 0179 76       		.sleb128 -10
+ 517 017a 08       		.uleb128 0x8
+ 518 017b A0000000 		.4byte	.LASF18
+ 519 017f 01       		.byte	0x1
+ 520 0180 3D       		.byte	0x3d
+ 521 0181 81000000 		.4byte	0x81
+ 522 0185 02       		.uleb128 0x2
+ 523 0186 91       		.byte	0x91
+ 524 0187 74       		.sleb128 -12
+ 525 0188 00       		.byte	0
+ 526 0189 07       		.uleb128 0x7
+ 527 018a 21020000 		.4byte	.LASF23
+ 528 018e 01       		.byte	0x1
+ 529 018f 42       		.byte	0x42
+ 530 0190 00000000 		.4byte	.LFB69
+ 531 0194 2A000000 		.4byte	.LFE69-.LFB69
+ 532 0198 01       		.uleb128 0x1
+ 533 0199 9C       		.byte	0x9c
+ 534 019a BB010000 		.4byte	0x1bb
+ 535 019e 08       		.uleb128 0x8
+ 536 019f 99000000 		.4byte	.LASF17
+ 537 01a3 01       		.byte	0x1
+ 538 01a4 43       		.byte	0x43
+ 539 01a5 81000000 		.4byte	0x81
+ 540 01a9 02       		.uleb128 0x2
+ 541 01aa 91       		.byte	0x91
+ 542 01ab 76       		.sleb128 -10
+ 543 01ac 08       		.uleb128 0x8
+ 544 01ad A0000000 		.4byte	.LASF18
+ 545 01b1 01       		.byte	0x1
+ 546 01b2 44       		.byte	0x44
+ 547 01b3 81000000 		.4byte	0x81
+ 548 01b7 02       		.uleb128 0x2
+ 549 01b8 91       		.byte	0x91
+ 550 01b9 74       		.sleb128 -12
+ 551 01ba 00       		.byte	0
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 12
 
 
- 560 006c 19       		.uleb128 0x19
- 561 006d 01       		.uleb128 0x1
- 562 006e 13       		.uleb128 0x13
- 563 006f 00       		.byte	0
- 564 0070 00       		.byte	0
- 565 0071 08       		.uleb128 0x8
- 566 0072 34       		.uleb128 0x34
- 567 0073 00       		.byte	0
- 568 0074 03       		.uleb128 0x3
- 569 0075 0E       		.uleb128 0xe
- 570 0076 3A       		.uleb128 0x3a
- 571 0077 0B       		.uleb128 0xb
- 572 0078 3B       		.uleb128 0x3b
- 573 0079 0B       		.uleb128 0xb
- 574 007a 49       		.uleb128 0x49
- 575 007b 13       		.uleb128 0x13
- 576 007c 02       		.uleb128 0x2
- 577 007d 18       		.uleb128 0x18
- 578 007e 00       		.byte	0
- 579 007f 00       		.byte	0
- 580 0080 09       		.uleb128 0x9
- 581 0081 34       		.uleb128 0x34
- 582 0082 00       		.byte	0
- 583 0083 03       		.uleb128 0x3
- 584 0084 0E       		.uleb128 0xe
- 585 0085 3A       		.uleb128 0x3a
- 586 0086 0B       		.uleb128 0xb
- 587 0087 3B       		.uleb128 0x3b
- 588 0088 05       		.uleb128 0x5
- 589 0089 49       		.uleb128 0x49
- 590 008a 13       		.uleb128 0x13
- 591 008b 3F       		.uleb128 0x3f
- 592 008c 19       		.uleb128 0x19
- 593 008d 3C       		.uleb128 0x3c
- 594 008e 19       		.uleb128 0x19
- 595 008f 00       		.byte	0
- 596 0090 00       		.byte	0
- 597 0091 0A       		.uleb128 0xa
- 598 0092 35       		.uleb128 0x35
- 599 0093 00       		.byte	0
- 600 0094 49       		.uleb128 0x49
- 601 0095 13       		.uleb128 0x13
- 602 0096 00       		.byte	0
- 603 0097 00       		.byte	0
- 604 0098 0B       		.uleb128 0xb
- 605 0099 34       		.uleb128 0x34
- 606 009a 00       		.byte	0
- 607 009b 03       		.uleb128 0x3
- 608 009c 0E       		.uleb128 0xe
- 609 009d 3A       		.uleb128 0x3a
- 610 009e 0B       		.uleb128 0xb
- 611 009f 3B       		.uleb128 0x3b
- 612 00a0 0B       		.uleb128 0xb
- 613 00a1 49       		.uleb128 0x49
- 614 00a2 13       		.uleb128 0x13
- 615 00a3 3F       		.uleb128 0x3f
- 616 00a4 19       		.uleb128 0x19
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 13
+ 552 01bb 06       		.uleb128 0x6
+ 553 01bc 66010000 		.4byte	.LASF25
+ 554 01c0 01       		.byte	0x1
+ 555 01c1 49       		.byte	0x49
+ 556 01c2 00000000 		.4byte	.LFB70
+ 557 01c6 18000000 		.4byte	.LFE70-.LFB70
+ 558 01ca 01       		.uleb128 0x1
+ 559 01cb 9C       		.byte	0x9c
+ 560 01cc 09       		.uleb128 0x9
+ 561 01cd 86010000 		.4byte	.LASF26
+ 562 01d1 05       		.byte	0x5
+ 563 01d2 1207     		.2byte	0x712
+ 564 01d4 D8010000 		.4byte	0x1d8
+ 565 01d8 0A       		.uleb128 0xa
+ 566 01d9 76000000 		.4byte	0x76
+ 567 01dd 0B       		.uleb128 0xb
+ 568 01de 2D020000 		.4byte	.LASF27
+ 569 01e2 01       		.byte	0x1
+ 570 01e3 15       		.byte	0x15
+ 571 01e4 81000000 		.4byte	0x81
+ 572 01e8 05       		.uleb128 0x5
+ 573 01e9 03       		.byte	0x3
+ 574 01ea 00000000 		.4byte	turnCount
+ 575 01ee 0B       		.uleb128 0xb
+ 576 01ef E7010000 		.4byte	.LASF28
+ 577 01f3 01       		.byte	0x1
+ 578 01f4 16       		.byte	0x16
+ 579 01f5 81000000 		.4byte	0x81
+ 580 01f9 05       		.uleb128 0x5
+ 581 01fa 03       		.byte	0x3
+ 582 01fb 00000000 		.4byte	maxTurnCount
+ 583 01ff 00       		.byte	0
+ 584              		.section	.debug_abbrev,"",%progbits
+ 585              	.Ldebug_abbrev0:
+ 586 0000 01       		.uleb128 0x1
+ 587 0001 11       		.uleb128 0x11
+ 588 0002 01       		.byte	0x1
+ 589 0003 25       		.uleb128 0x25
+ 590 0004 0E       		.uleb128 0xe
+ 591 0005 13       		.uleb128 0x13
+ 592 0006 0B       		.uleb128 0xb
+ 593 0007 03       		.uleb128 0x3
+ 594 0008 0E       		.uleb128 0xe
+ 595 0009 1B       		.uleb128 0x1b
+ 596 000a 0E       		.uleb128 0xe
+ 597 000b 55       		.uleb128 0x55
+ 598 000c 17       		.uleb128 0x17
+ 599 000d 11       		.uleb128 0x11
+ 600 000e 01       		.uleb128 0x1
+ 601 000f 10       		.uleb128 0x10
+ 602 0010 17       		.uleb128 0x17
+ 603 0011 00       		.byte	0
+ 604 0012 00       		.byte	0
+ 605 0013 02       		.uleb128 0x2
+ 606 0014 24       		.uleb128 0x24
+ 607 0015 00       		.byte	0
+ 608 0016 0B       		.uleb128 0xb
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 13
 
 
- 617 00a5 02       		.uleb128 0x2
- 618 00a6 18       		.uleb128 0x18
- 619 00a7 00       		.byte	0
- 620 00a8 00       		.byte	0
- 621 00a9 00       		.byte	0
- 622              		.section	.debug_aranges,"",%progbits
- 623 0000 4C000000 		.4byte	0x4c
- 624 0004 0200     		.2byte	0x2
- 625 0006 00000000 		.4byte	.Ldebug_info0
- 626 000a 04       		.byte	0x4
- 627 000b 00       		.byte	0
- 628 000c 0000     		.2byte	0
- 629 000e 0000     		.2byte	0
- 630 0010 00000000 		.4byte	.LFB64
- 631 0014 18000000 		.4byte	.LFE64-.LFB64
- 632 0018 00000000 		.4byte	.LFB65
- 633 001c 18000000 		.4byte	.LFE65-.LFB65
- 634 0020 00000000 		.4byte	.LFB66
- 635 0024 18000000 		.4byte	.LFE66-.LFB66
- 636 0028 00000000 		.4byte	.LFB67
- 637 002c 18000000 		.4byte	.LFE67-.LFB67
- 638 0030 00000000 		.4byte	.LFB68
- 639 0034 18000000 		.4byte	.LFE68-.LFB68
- 640 0038 00000000 		.4byte	.LFB69
- 641 003c 2A000000 		.4byte	.LFE69-.LFB69
- 642 0040 00000000 		.4byte	.LFB70
- 643 0044 18000000 		.4byte	.LFE70-.LFB70
- 644 0048 00000000 		.4byte	0
- 645 004c 00000000 		.4byte	0
- 646              		.section	.debug_ranges,"",%progbits
- 647              	.Ldebug_ranges0:
- 648 0000 00000000 		.4byte	.LFB64
- 649 0004 18000000 		.4byte	.LFE64
- 650 0008 00000000 		.4byte	.LFB65
- 651 000c 18000000 		.4byte	.LFE65
- 652 0010 00000000 		.4byte	.LFB66
- 653 0014 18000000 		.4byte	.LFE66
- 654 0018 00000000 		.4byte	.LFB67
- 655 001c 18000000 		.4byte	.LFE67
- 656 0020 00000000 		.4byte	.LFB68
- 657 0024 18000000 		.4byte	.LFE68
- 658 0028 00000000 		.4byte	.LFB69
- 659 002c 2A000000 		.4byte	.LFE69
- 660 0030 00000000 		.4byte	.LFB70
- 661 0034 18000000 		.4byte	.LFE70
- 662 0038 00000000 		.4byte	0
- 663 003c 00000000 		.4byte	0
- 664              		.section	.debug_line,"",%progbits
- 665              	.Ldebug_line0:
- 666 0000 D7010000 		.section	.debug_str,"MS",%progbits,1
- 666      02005001 
- 666      00000201 
- 666      FB0E0D00 
- 666      01010101 
- 667              	.LASF17:
- 668 0000 73746F70 		.ascii	"stopMoving\000"
- 668      4D6F7669 
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 14
+ 609 0017 0B       		.uleb128 0xb
+ 610 0018 3E       		.uleb128 0x3e
+ 611 0019 0B       		.uleb128 0xb
+ 612 001a 03       		.uleb128 0x3
+ 613 001b 0E       		.uleb128 0xe
+ 614 001c 00       		.byte	0
+ 615 001d 00       		.byte	0
+ 616 001e 03       		.uleb128 0x3
+ 617 001f 16       		.uleb128 0x16
+ 618 0020 00       		.byte	0
+ 619 0021 03       		.uleb128 0x3
+ 620 0022 0E       		.uleb128 0xe
+ 621 0023 3A       		.uleb128 0x3a
+ 622 0024 0B       		.uleb128 0xb
+ 623 0025 3B       		.uleb128 0x3b
+ 624 0026 0B       		.uleb128 0xb
+ 625 0027 49       		.uleb128 0x49
+ 626 0028 13       		.uleb128 0x13
+ 627 0029 00       		.byte	0
+ 628 002a 00       		.byte	0
+ 629 002b 04       		.uleb128 0x4
+ 630 002c 24       		.uleb128 0x24
+ 631 002d 00       		.byte	0
+ 632 002e 0B       		.uleb128 0xb
+ 633 002f 0B       		.uleb128 0xb
+ 634 0030 3E       		.uleb128 0x3e
+ 635 0031 0B       		.uleb128 0xb
+ 636 0032 03       		.uleb128 0x3
+ 637 0033 08       		.uleb128 0x8
+ 638 0034 00       		.byte	0
+ 639 0035 00       		.byte	0
+ 640 0036 05       		.uleb128 0x5
+ 641 0037 16       		.uleb128 0x16
+ 642 0038 00       		.byte	0
+ 643 0039 03       		.uleb128 0x3
+ 644 003a 0E       		.uleb128 0xe
+ 645 003b 3A       		.uleb128 0x3a
+ 646 003c 0B       		.uleb128 0xb
+ 647 003d 3B       		.uleb128 0x3b
+ 648 003e 05       		.uleb128 0x5
+ 649 003f 49       		.uleb128 0x49
+ 650 0040 13       		.uleb128 0x13
+ 651 0041 00       		.byte	0
+ 652 0042 00       		.byte	0
+ 653 0043 06       		.uleb128 0x6
+ 654 0044 2E       		.uleb128 0x2e
+ 655 0045 00       		.byte	0
+ 656 0046 3F       		.uleb128 0x3f
+ 657 0047 19       		.uleb128 0x19
+ 658 0048 03       		.uleb128 0x3
+ 659 0049 0E       		.uleb128 0xe
+ 660 004a 3A       		.uleb128 0x3a
+ 661 004b 0B       		.uleb128 0xb
+ 662 004c 3B       		.uleb128 0x3b
+ 663 004d 0B       		.uleb128 0xb
+ 664 004e 11       		.uleb128 0x11
+ 665 004f 01       		.uleb128 0x1
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 14
 
 
- 668      6E6700
- 669              	.LASF28:
- 670 000b 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 670      43313120 
- 670      352E342E 
- 670      31203230 
- 670      31363036 
- 671 003e 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 671      20726576 
- 671      6973696F 
- 671      6E203233 
- 671      37373135 
- 672 0071 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
- 672      66756E63 
- 672      74696F6E 
- 672      2D736563 
- 672      74696F6E 
- 673              	.LASF22:
- 674 0099 636F756E 		.ascii	"count1\000"
- 674      743100
- 675              	.LASF23:
- 676 00a0 636F756E 		.ascii	"count2\000"
- 676      743200
- 677              	.LASF9:
- 678 00a7 5F5F696E 		.ascii	"__int32_t\000"
- 678      7433325F 
- 678      7400
- 679              	.LASF21:
- 680 00b1 7475726E 		.ascii	"turnRight\000"
- 680      52696768 
- 680      7400
- 681              	.LASF30:
- 682 00bb 433A5C55 		.ascii	"C:\\Users\\rshu284\\OneDrive - The University of Au"
- 682      73657273 
- 682      5C727368 
- 682      75323834 
- 682      5C4F6E65 
- 683 00eb 636B6C61 		.ascii	"ckland\\Documents\\GitHub\\301-Robot\\psoc student "
- 683      6E645C44 
- 683      6F63756D 
- 683      656E7473 
- 683      5C476974 
- 684 011a 7061636B 		.ascii	"pack\\psoc_code_base\\CS301_Class.cydsn\000"
- 684      5C70736F 
- 684      635F636F 
- 684      64655F62 
- 684      6173655C 
- 685              	.LASF12:
- 686 0140 666C6F61 		.ascii	"float\000"
- 686      7400
- 687              	.LASF1:
- 688 0146 756E7369 		.ascii	"unsigned char\000"
- 688      676E6564 
- 688      20636861 
- 688      7200
- 689              	.LASF5:
- 690 0154 6C6F6E67 		.ascii	"long unsigned int\000"
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 15
+ 666 0050 12       		.uleb128 0x12
+ 667 0051 06       		.uleb128 0x6
+ 668 0052 40       		.uleb128 0x40
+ 669 0053 18       		.uleb128 0x18
+ 670 0054 9642     		.uleb128 0x2116
+ 671 0056 19       		.uleb128 0x19
+ 672 0057 00       		.byte	0
+ 673 0058 00       		.byte	0
+ 674 0059 07       		.uleb128 0x7
+ 675 005a 2E       		.uleb128 0x2e
+ 676 005b 01       		.byte	0x1
+ 677 005c 3F       		.uleb128 0x3f
+ 678 005d 19       		.uleb128 0x19
+ 679 005e 03       		.uleb128 0x3
+ 680 005f 0E       		.uleb128 0xe
+ 681 0060 3A       		.uleb128 0x3a
+ 682 0061 0B       		.uleb128 0xb
+ 683 0062 3B       		.uleb128 0x3b
+ 684 0063 0B       		.uleb128 0xb
+ 685 0064 11       		.uleb128 0x11
+ 686 0065 01       		.uleb128 0x1
+ 687 0066 12       		.uleb128 0x12
+ 688 0067 06       		.uleb128 0x6
+ 689 0068 40       		.uleb128 0x40
+ 690 0069 18       		.uleb128 0x18
+ 691 006a 9642     		.uleb128 0x2116
+ 692 006c 19       		.uleb128 0x19
+ 693 006d 01       		.uleb128 0x1
+ 694 006e 13       		.uleb128 0x13
+ 695 006f 00       		.byte	0
+ 696 0070 00       		.byte	0
+ 697 0071 08       		.uleb128 0x8
+ 698 0072 34       		.uleb128 0x34
+ 699 0073 00       		.byte	0
+ 700 0074 03       		.uleb128 0x3
+ 701 0075 0E       		.uleb128 0xe
+ 702 0076 3A       		.uleb128 0x3a
+ 703 0077 0B       		.uleb128 0xb
+ 704 0078 3B       		.uleb128 0x3b
+ 705 0079 0B       		.uleb128 0xb
+ 706 007a 49       		.uleb128 0x49
+ 707 007b 13       		.uleb128 0x13
+ 708 007c 02       		.uleb128 0x2
+ 709 007d 18       		.uleb128 0x18
+ 710 007e 00       		.byte	0
+ 711 007f 00       		.byte	0
+ 712 0080 09       		.uleb128 0x9
+ 713 0081 34       		.uleb128 0x34
+ 714 0082 00       		.byte	0
+ 715 0083 03       		.uleb128 0x3
+ 716 0084 0E       		.uleb128 0xe
+ 717 0085 3A       		.uleb128 0x3a
+ 718 0086 0B       		.uleb128 0xb
+ 719 0087 3B       		.uleb128 0x3b
+ 720 0088 05       		.uleb128 0x5
+ 721 0089 49       		.uleb128 0x49
+ 722 008a 13       		.uleb128 0x13
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 15
 
 
- 690      20756E73 
- 690      69676E65 
- 690      6420696E 
- 690      7400
- 691              	.LASF24:
- 692 0166 6D6F7665 		.ascii	"moveBackward\000"
- 692      4261636B 
- 692      77617264 
- 692      00
- 693              	.LASF3:
- 694 0173 73686F72 		.ascii	"short unsigned int\000"
- 694      7420756E 
- 694      7369676E 
- 694      65642069 
- 694      6E7400
- 695              	.LASF25:
- 696 0186 49544D5F 		.ascii	"ITM_RxBuffer\000"
- 696      52784275 
- 696      66666572 
- 696      00
- 697              	.LASF18:
- 698 0193 61646A75 		.ascii	"adjustRight\000"
- 698      73745269 
- 698      67687400 
- 699              	.LASF13:
- 700 019f 646F7562 		.ascii	"double\000"
- 700      6C6500
- 701              	.LASF19:
- 702 01a6 61646A75 		.ascii	"adjustLeft\000"
- 702      73744C65 
- 702      667400
- 703              	.LASF11:
- 704 01b1 75696E74 		.ascii	"uint16\000"
- 704      313600
- 705              	.LASF29:
- 706 01b8 6D6F7665 		.ascii	"movement.c\000"
- 706      6D656E74 
- 706      2E6300
- 707              	.LASF8:
- 708 01c3 756E7369 		.ascii	"unsigned int\000"
- 708      676E6564 
- 708      20696E74 
- 708      00
- 709              	.LASF7:
- 710 01d0 6C6F6E67 		.ascii	"long long unsigned int\000"
- 710      206C6F6E 
- 710      6720756E 
- 710      7369676E 
- 710      65642069 
- 711              	.LASF27:
- 712 01e7 6D617854 		.ascii	"maxTurnCount\000"
- 712      75726E43 
- 712      6F756E74 
- 712      00
- 713              	.LASF20:
- 714 01f4 7475726E 		.ascii	"turnLeft\000"
- 714      4C656674 
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccY57EDn.s 			page 16
+ 723 008b 3F       		.uleb128 0x3f
+ 724 008c 19       		.uleb128 0x19
+ 725 008d 3C       		.uleb128 0x3c
+ 726 008e 19       		.uleb128 0x19
+ 727 008f 00       		.byte	0
+ 728 0090 00       		.byte	0
+ 729 0091 0A       		.uleb128 0xa
+ 730 0092 35       		.uleb128 0x35
+ 731 0093 00       		.byte	0
+ 732 0094 49       		.uleb128 0x49
+ 733 0095 13       		.uleb128 0x13
+ 734 0096 00       		.byte	0
+ 735 0097 00       		.byte	0
+ 736 0098 0B       		.uleb128 0xb
+ 737 0099 34       		.uleb128 0x34
+ 738 009a 00       		.byte	0
+ 739 009b 03       		.uleb128 0x3
+ 740 009c 0E       		.uleb128 0xe
+ 741 009d 3A       		.uleb128 0x3a
+ 742 009e 0B       		.uleb128 0xb
+ 743 009f 3B       		.uleb128 0x3b
+ 744 00a0 0B       		.uleb128 0xb
+ 745 00a1 49       		.uleb128 0x49
+ 746 00a2 13       		.uleb128 0x13
+ 747 00a3 3F       		.uleb128 0x3f
+ 748 00a4 19       		.uleb128 0x19
+ 749 00a5 02       		.uleb128 0x2
+ 750 00a6 18       		.uleb128 0x18
+ 751 00a7 00       		.byte	0
+ 752 00a8 00       		.byte	0
+ 753 00a9 00       		.byte	0
+ 754              		.section	.debug_aranges,"",%progbits
+ 755 0000 4C000000 		.4byte	0x4c
+ 756 0004 0200     		.2byte	0x2
+ 757 0006 00000000 		.4byte	.Ldebug_info0
+ 758 000a 04       		.byte	0x4
+ 759 000b 00       		.byte	0
+ 760 000c 0000     		.2byte	0
+ 761 000e 0000     		.2byte	0
+ 762 0010 00000000 		.4byte	.LFB64
+ 763 0014 18000000 		.4byte	.LFE64-.LFB64
+ 764 0018 00000000 		.4byte	.LFB65
+ 765 001c 2A000000 		.4byte	.LFE65-.LFB65
+ 766 0020 00000000 		.4byte	.LFB66
+ 767 0024 2A000000 		.4byte	.LFE66-.LFB66
+ 768 0028 00000000 		.4byte	.LFB67
+ 769 002c 2A000000 		.4byte	.LFE67-.LFB67
+ 770 0030 00000000 		.4byte	.LFB68
+ 771 0034 2A000000 		.4byte	.LFE68-.LFB68
+ 772 0038 00000000 		.4byte	.LFB69
+ 773 003c 2A000000 		.4byte	.LFE69-.LFB69
+ 774 0040 00000000 		.4byte	.LFB70
+ 775 0044 18000000 		.4byte	.LFE70-.LFB70
+ 776 0048 00000000 		.4byte	0
+ 777 004c 00000000 		.4byte	0
+ 778              		.section	.debug_ranges,"",%progbits
+ 779              	.Ldebug_ranges0:
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 16
 
 
- 714      00
- 715              	.LASF10:
- 716 01fd 696E7433 		.ascii	"int32_t\000"
- 716      325F7400 
- 717              	.LASF16:
- 718 0205 73697A65 		.ascii	"sizetype\000"
- 718      74797065 
- 718      00
- 719              	.LASF6:
- 720 020e 6C6F6E67 		.ascii	"long long int\000"
- 720      206C6F6E 
- 720      6720696E 
- 720      7400
- 721              	.LASF14:
- 722 021c 63686172 		.ascii	"char\000"
- 722      00
- 723              	.LASF31:
- 724 0221 6D6F7665 		.ascii	"moveForward\000"
- 724      466F7277 
- 724      61726400 
- 725              	.LASF26:
- 726 022d 7475726E 		.ascii	"turnCount\000"
- 726      436F756E 
- 726      7400
- 727              	.LASF2:
- 728 0237 73686F72 		.ascii	"short int\000"
- 728      7420696E 
- 728      7400
- 729              	.LASF4:
- 730 0241 6C6F6E67 		.ascii	"long int\000"
- 730      20696E74 
- 730      00
- 731              	.LASF15:
- 732 024a 6C6F6E67 		.ascii	"long double\000"
- 732      20646F75 
- 732      626C6500 
- 733              	.LASF0:
- 734 0256 7369676E 		.ascii	"signed char\000"
- 734      65642063 
- 734      68617200 
- 735              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
+ 780 0000 00000000 		.4byte	.LFB64
+ 781 0004 18000000 		.4byte	.LFE64
+ 782 0008 00000000 		.4byte	.LFB65
+ 783 000c 2A000000 		.4byte	.LFE65
+ 784 0010 00000000 		.4byte	.LFB66
+ 785 0014 2A000000 		.4byte	.LFE66
+ 786 0018 00000000 		.4byte	.LFB67
+ 787 001c 2A000000 		.4byte	.LFE67
+ 788 0020 00000000 		.4byte	.LFB68
+ 789 0024 2A000000 		.4byte	.LFE68
+ 790 0028 00000000 		.4byte	.LFB69
+ 791 002c 2A000000 		.4byte	.LFE69
+ 792 0030 00000000 		.4byte	.LFB70
+ 793 0034 18000000 		.4byte	.LFE70
+ 794 0038 00000000 		.4byte	0
+ 795 003c 00000000 		.4byte	0
+ 796              		.section	.debug_line,"",%progbits
+ 797              	.Ldebug_line0:
+ 798 0000 E0010000 		.section	.debug_str,"MS",%progbits,1
+ 798      02005001 
+ 798      00000201 
+ 798      FB0E0D00 
+ 798      01010101 
+ 799              	.LASF24:
+ 800 0000 73746F70 		.ascii	"stopMoving\000"
+ 800      4D6F7669 
+ 800      6E6700
+ 801              	.LASF29:
+ 802 000b 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 802      43313120 
+ 802      352E342E 
+ 802      31203230 
+ 802      31363036 
+ 803 003e 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 803      20726576 
+ 803      6973696F 
+ 803      6E203233 
+ 803      37373135 
+ 804 0071 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 804      66756E63 
+ 804      74696F6E 
+ 804      2D736563 
+ 804      74696F6E 
+ 805              	.LASF17:
+ 806 0099 636F756E 		.ascii	"count1\000"
+ 806      743100
+ 807              	.LASF18:
+ 808 00a0 636F756E 		.ascii	"count2\000"
+ 808      743200
+ 809              	.LASF9:
+ 810 00a7 5F5F696E 		.ascii	"__int32_t\000"
+ 810      7433325F 
+ 810      7400
+ 811              	.LASF22:
+ 812 00b1 7475726E 		.ascii	"turnRight\000"
+ 812      52696768 
+ 812      7400
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 17
+
+
+ 813              	.LASF31:
+ 814 00bb 433A5C55 		.ascii	"C:\\Users\\rshu284\\OneDrive - The University of Au"
+ 814      73657273 
+ 814      5C727368 
+ 814      75323834 
+ 814      5C4F6E65 
+ 815 00eb 636B6C61 		.ascii	"ckland\\Documents\\GitHub\\301-Robot\\psoc student "
+ 815      6E645C44 
+ 815      6F63756D 
+ 815      656E7473 
+ 815      5C476974 
+ 816 011a 7061636B 		.ascii	"pack\\psoc_code_base\\CS301_Class.cydsn\000"
+ 816      5C70736F 
+ 816      635F636F 
+ 816      64655F62 
+ 816      6173655C 
+ 817              	.LASF12:
+ 818 0140 666C6F61 		.ascii	"float\000"
+ 818      7400
+ 819              	.LASF1:
+ 820 0146 756E7369 		.ascii	"unsigned char\000"
+ 820      676E6564 
+ 820      20636861 
+ 820      7200
+ 821              	.LASF5:
+ 822 0154 6C6F6E67 		.ascii	"long unsigned int\000"
+ 822      20756E73 
+ 822      69676E65 
+ 822      6420696E 
+ 822      7400
+ 823              	.LASF25:
+ 824 0166 6D6F7665 		.ascii	"moveBackward\000"
+ 824      4261636B 
+ 824      77617264 
+ 824      00
+ 825              	.LASF3:
+ 826 0173 73686F72 		.ascii	"short unsigned int\000"
+ 826      7420756E 
+ 826      7369676E 
+ 826      65642069 
+ 826      6E7400
+ 827              	.LASF26:
+ 828 0186 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 828      52784275 
+ 828      66666572 
+ 828      00
+ 829              	.LASF19:
+ 830 0193 61646A75 		.ascii	"adjustRight\000"
+ 830      73745269 
+ 830      67687400 
+ 831              	.LASF13:
+ 832 019f 646F7562 		.ascii	"double\000"
+ 832      6C6500
+ 833              	.LASF20:
+ 834 01a6 61646A75 		.ascii	"adjustLeft\000"
+ 834      73744C65 
+ 834      667400
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 18
+
+
+ 835              	.LASF11:
+ 836 01b1 75696E74 		.ascii	"uint16\000"
+ 836      313600
+ 837              	.LASF30:
+ 838 01b8 6D6F7665 		.ascii	"movement.c\000"
+ 838      6D656E74 
+ 838      2E6300
+ 839              	.LASF8:
+ 840 01c3 756E7369 		.ascii	"unsigned int\000"
+ 840      676E6564 
+ 840      20696E74 
+ 840      00
+ 841              	.LASF7:
+ 842 01d0 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 842      206C6F6E 
+ 842      6720756E 
+ 842      7369676E 
+ 842      65642069 
+ 843              	.LASF28:
+ 844 01e7 6D617854 		.ascii	"maxTurnCount\000"
+ 844      75726E43 
+ 844      6F756E74 
+ 844      00
+ 845              	.LASF21:
+ 846 01f4 7475726E 		.ascii	"turnLeft\000"
+ 846      4C656674 
+ 846      00
+ 847              	.LASF10:
+ 848 01fd 696E7433 		.ascii	"int32_t\000"
+ 848      325F7400 
+ 849              	.LASF16:
+ 850 0205 73697A65 		.ascii	"sizetype\000"
+ 850      74797065 
+ 850      00
+ 851              	.LASF6:
+ 852 020e 6C6F6E67 		.ascii	"long long int\000"
+ 852      206C6F6E 
+ 852      6720696E 
+ 852      7400
+ 853              	.LASF14:
+ 854 021c 63686172 		.ascii	"char\000"
+ 854      00
+ 855              	.LASF23:
+ 856 0221 6D6F7665 		.ascii	"moveForward\000"
+ 856      466F7277 
+ 856      61726400 
+ 857              	.LASF27:
+ 858 022d 7475726E 		.ascii	"turnCount\000"
+ 858      436F756E 
+ 858      7400
+ 859              	.LASF2:
+ 860 0237 73686F72 		.ascii	"short int\000"
+ 860      7420696E 
+ 860      7400
+ 861              	.LASF4:
+ 862 0241 6C6F6E67 		.ascii	"long int\000"
+ 862      20696E74 
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccUlZzjg.s 			page 19
+
+
+ 862      00
+ 863              	.LASF15:
+ 864 024a 6C6F6E67 		.ascii	"long double\000"
+ 864      20646F75 
+ 864      626C6500 
+ 865              	.LASF0:
+ 866 0256 7369676E 		.ascii	"signed char\000"
+ 866      65642063 
+ 866      68617200 
+ 867              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
