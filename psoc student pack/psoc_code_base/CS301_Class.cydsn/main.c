@@ -37,7 +37,7 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn, ForwardAfterTurn, Backward};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
 // --- YIPPE
@@ -50,14 +50,16 @@ uint8 s5 = 0;
 uint8 s6 = 0;
 //* ========================================
 // Calculating Distance
-#define WHEEL_DIAMETER_MM 65
+#define WHEEL_DIAMETER_MM 64.5
+#define STOPPING_DISTANCE 1000 // in MM
 uint32 totalMilliseconds = 0;
-uint32 totalDistance = 0; // in mm
+float totalDistance = 0; // in mm
 //* ========================================
 char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
 int keepLedOn = 0;
+uint32 stopBuffer = 0;
 
 //char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
@@ -66,8 +68,15 @@ CY_ISR (speedTimer) {
     //quadDec_M1 used for turning macros
     quadDec2Count = QuadDec_M2_GetCounter();
     
-    if (currentDirection == Forward && quadDec2Count != 0) {
-        uint32 newDistance = ((abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM)/4;
+    if ((currentDirection == Forward || 
+        currentDirection == HardForward ||
+        currentDirection == waitForTurn || 
+        currentDirection == ForwardAfterTurn ||
+        currentDirection == AdjustToTheLeft ||
+        currentDirection == AdjustToTheRight) &&
+        quadDec2Count != 0) {
+        //uint32 newDistance = ((abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM)/4;
+        float newDistance = (abs(quadDec2Count) * CY_M_PI * WHEEL_DIAMETER_MM)/228;
         
         totalDistance = totalDistance + newDistance;
     }
@@ -118,6 +127,11 @@ CY_ISR(S6_DETECTED) {
 
 CY_ISR(TIMER_FINISH) {
     //LED_Write(0u);
+    if (currentDirection == Stop) {
+        stopBuffer = stopBuffer + 1;
+    } else {
+        stopBuffer = 0;
+    }
     SetRobotMovement(); 
     ResetSensorFlags(); // Reset Sensor Flags for Next rising Eddge
     Timer_LED_ReadStatusRegister();
@@ -132,7 +146,7 @@ int main()
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     //findPath(map, "");// find shortest path- store this in map
-    //isr_speed_StartEx(speedTimer); // start interrupt
+    isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
     S1_detected_StartEx(S1_DETECTED);
     S2_detected_StartEx(S2_DETECTED);
@@ -208,7 +222,27 @@ void ResetSensorFlags() {
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;
+    
+    if (totalDistance >= STOPPING_DISTANCE) {
+        directionState = Stop;
+        return directionState;
+    }
    
+    if (previousDirection == Stop) {
+        if (stopBuffer <= 5) {
+            directionState = Stop;
+        } else {
+            directionState = ForwardAfterTurn;
+        }
+        return directionState;
+    }
+    
+    if (previousDirection == ForwardAfterTurn) {
+        if (s3 || s4) {
+            directionState = Forward;
+            return directionState;
+        }
+    }
     
 
     if(previousDirection == TurnRight) {
@@ -217,19 +251,18 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         } 
         else if (!s5 || !s6) {
-            directionState = HardForward;
+            directionState = Stop;
             return directionState;
         }
     }    
 
     if(previousDirection == TurnLeft) {
         if(s5 && s6) {
-            // Possible reason
             directionState = TurnLeft;
             return directionState;
         } 
         else if (!s5 || !s6) {
-            directionState = HardForward;
+            directionState = Stop;
             return directionState;
         }
     }
@@ -247,13 +280,15 @@ enum DirectionState CheckSensorDirection() {
         directionState = waitForTurn;
         return directionState;
     }
+    
+
 
     // wait for turn at end of line
     if(s5 && s6 && (previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight))) {
         directionState = waitForTurn; // need to wait to check for a black line
         return directionState;
     }
-
+    
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         
@@ -318,6 +353,8 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         }
     }*/
+    
+    
 
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
@@ -359,6 +396,12 @@ void SetRobotMovement() {
             break;
         case waitForTurn:
             moveForward(); 
+            break;
+        case ForwardAfterTurn:
+            moveForward();
+            break;
+        case Backward:
+            moveBackward();
             break;
         case Unknown:
             // UNKNOWN CONFIGURATION

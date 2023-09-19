@@ -32,7 +32,7 @@ void moveForwardForSpecifiedCount() {
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
-    while(quadPulseCount < 55) {
+    while(quadPulseCount < 15) {
         quadPulseCount = QuadDec_M1_GetCounter();
     }
     QuadDec_M1_SetCounter(0);
@@ -98,6 +98,11 @@ void turnRight() {
 void moveForward() {
     PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
     PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
+}
+
+void moveBackward() {
+    PWM_1_WriteCompare(22937); // 35% - Left Wheel Anti Clockwise
+    PWM_2_WriteCompare(42598); // 65% - Right Wheel Anti Clockwise
 }
 
 

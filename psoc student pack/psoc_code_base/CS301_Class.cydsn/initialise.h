@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <project.h>
 
+#define MAX_PWM_COUNT 65535
+
 //* ========================================
 void init();
 

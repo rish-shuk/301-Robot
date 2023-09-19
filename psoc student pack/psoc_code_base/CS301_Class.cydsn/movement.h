@@ -45,4 +45,6 @@ void turnRight();
 
 void turnLeft();
 
+void moveBackward();
+
 #endif /* MOVEMENT_FUNCTIONS_H */
