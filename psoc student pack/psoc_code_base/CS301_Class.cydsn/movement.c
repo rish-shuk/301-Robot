@@ -18,9 +18,6 @@
 #include <math.h>
 
 #define MAX_MOVEMENT_PERCENTAGE 1.00 // 100% of PWM COUNT
-
-
-
 float PWM_Forward_Percentage = 0.15;
 
 uint16 turnCount = 0;
@@ -29,13 +26,13 @@ uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 // Calculate Speed
 uint16 setPWMAbove50(float percentage)
 {
-    uint16 compareCount = round((0.5 + percentage) * MAX_PWM_COUNT * MAX_MOVEMENT_PERCENTAGE);
+    uint16 compareCount = (0.5 + percentage) * MAX_PWM_COUNT * MAX_MOVEMENT_PERCENTAGE;
     return compareCount;
 }
 
 uint16 setPWMBelow50(float percentage) 
 {
-    uint16 compareCount = round((0.5 - percentage) * MAX_PWM_COUNT * MAX_MOVEMENT_PERCENTAGE);
+    uint16 compareCount = ((0.5 - percentage) * MAX_PWM_COUNT * MAX_MOVEMENT_PERCENTAGE);
     return compareCount;
 }
 

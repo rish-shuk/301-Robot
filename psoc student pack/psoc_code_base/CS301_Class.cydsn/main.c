@@ -45,7 +45,6 @@ typedef enum DirectionState
     AdjustToTheRight,
     Stop,
     Unknown,
-    HardForward,
     waitForTurn,
     ForwardAfterTurn,
     Backward
@@ -71,7 +70,7 @@ float totalDistance = 0; // in mm
 char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
-int keepLedOn = 0;
+int keepLedOn = 0;      
 uint32 stopBuffer = 0;
 
 // char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
@@ -83,7 +82,6 @@ CY_ISR(speedTimer)
     quadDec2Count = QuadDec_M2_GetCounter();
 
     if ((currentDirection == Forward ||
-         currentDirection == HardForward ||
          currentDirection == waitForTurn ||
          currentDirection == ForwardAfterTurn ||
          currentDirection == AdjustToTheLeft ||
@@ -194,9 +192,7 @@ int main()
     // usbPutString("Initialised UART");
     for (;;)
     {
-        // traverseMap(map);
-        // rotationAntiClockwise();
-        // rotationClockwise();
+        //moveForward();
 
         if (timerInt == 1)
         {
@@ -263,8 +259,7 @@ DirectionState CheckSensorDirection()
         if (stopBuffer <= 5)
         {
             directionState = Stop;
-        }
-        else
+        } else
         {
             directionState = ForwardAfterTurn;
         }
@@ -438,9 +433,6 @@ void SetRobotMovement()
         break;
     case Stop:
         stopMoving();
-        break;
-    case HardForward:
-        moveForwardForSpecifiedCount();
         break;
     case waitForTurn:
         moveForward();
