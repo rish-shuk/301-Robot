@@ -36,8 +36,8 @@ int16 quadCountToRPM(uint16 count);
 // Sensors, Course correction and Movement Direction.
 void ResetSensorFlags();
 void SetRobotMovement();
-enum DirectionState CheckSensorDirection();
-enum DirectionState
+DirectionState CheckSensorDirection();
+typedef enum DirectionState
 {
     Forward,
     TurnRight,
@@ -50,9 +50,9 @@ enum DirectionState
     waitForTurn,
     ForwardAfterTurn,
     Backward
-};
-enum DirectionState currentDirection = Stop;
-enum DirectionState previousDirection = Unknown;
+} DirectionState;
+DirectionState currentDirection = Stop;
+DirectionState previousDirection = Unknown;
 // --- YIPPE
 // ----------------------------------------
 uint8 s1 = 0; // black = 0, white = 1
@@ -234,12 +234,12 @@ int16 quadCountToRPM(uint16 count)
 // Resets all sensor flags to 0 - i.e. currently out of map
 void ResetSensorFlags()
 {
-    s1 = 0;
-    s2 = 0;
-    s3 = 0;
-    s4 = 0;
-    s5 = 0;
-    s6 = 0;
+    s1 = BLACK;
+    s2 = BLACK;
+    s3 = BLACK;
+    s4 = BLACK;
+    s5 = BLACK;
+    s6 = BLACK;
 }
 
 // This function checks the sensor flags s1-s6 through a boolean truth table and
@@ -247,9 +247,9 @@ void ResetSensorFlags()
 // if no conditons are met, it returns Unknown -- need to fix this edge case
 // s1 = 0 -- Black
 // s1 = 1 -- White
-enum DirectionState CheckSensorDirection()
+DirectionState CheckSensorDirection()
 {
-    enum DirectionState directionState = Stop;
+    DirectionState directionState = Stop;
     previousDirection = currentDirection;
 
     if (totalDistance >= STOPPING_DISTANCE)
