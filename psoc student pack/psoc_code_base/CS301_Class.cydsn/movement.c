@@ -16,7 +16,14 @@
 #include <stdlib.h>
 #define maxForwardPWM 9830
 #define maxTurningPWM 6553
-#define movementMultiplier 1.3
+
+// CHANGE SPEED
+#define MOVEMENT_SPEED_MULTIPLIER 1.0 
+
+
+
+float rangeMovementMultiplier = 0.7;
+float minMovementMultiplier = 0.5;
 
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
@@ -32,8 +39,11 @@ void stopMoving() {
 // keep rotating clockwise
 // used for adjusting deviations
 void adjustRight() {
-    uint16 count1 = (32767 + (maxForwardPWM * movementMultiplier));
-    uint16 count2 = (32767 - (maxTurningPWM * movementMultiplier));
+    // totalMultiplier = 0.5 + (0.7 * movement_speed_multiplier)
+    float totalMultiplier = minMovementMultiplier + (rangeMovementMultiplier * MOVEMENT_SPEED_MULTIPLIER);
+    
+    uint16 count1 = (32767 + (maxForwardPWM * totalMultiplier));
+    uint16 count2 = (32767 - (maxTurningPWM * totalMultiplier));
     PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
     PWM_2_WriteCompare(count2); // 40% - Right Wheel Clockwise
 }
@@ -41,8 +51,11 @@ void adjustRight() {
 // keep rotating anticlockwise
 // used for adjusting deviations
 void adjustLeft() {
-    uint16 count1 = (32767 + (maxTurningPWM * movementMultiplier));
-    uint16 count2 = (32767 - (maxForwardPWM * movementMultiplier));
+    // totalMultiplier = 0.5 + (0.7 * movement_speed_multiplier)
+    float totalMultiplier = minMovementMultiplier + (rangeMovementMultiplier * MOVEMENT_SPEED_MULTIPLIER);
+    
+    uint16 count1 = (32767 + (maxTurningPWM * totalMultiplier));
+    uint16 count2 = (32767 - (maxForwardPWM * totalMultiplier));
     PWM_1_WriteCompare(count1); // 60% - Left Wheel Clockwise
     PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
 }
@@ -64,8 +77,11 @@ void turnRight() {
 }
 
 void moveForward() {
-    uint16 count1 = (32767 + (maxForwardPWM * movementMultiplier));
-    uint16 count2 = (32767 - (maxForwardPWM * movementMultiplier));
+    // totalMultiplier = 0.5 + (0.7 * movement_speed_multiplier)
+    float totalMultiplier = minMovementMultiplier + (rangeMovementMultiplier * MOVEMENT_SPEED_MULTIPLIER);
+    
+    uint16 count1 = (32767 + (maxForwardPWM * totalMultiplier));
+    uint16 count2 = (32767 - (maxForwardPWM * totalMultiplier));
     PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
     PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
 }
