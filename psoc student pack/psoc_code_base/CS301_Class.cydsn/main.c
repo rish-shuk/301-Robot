@@ -1,7 +1,7 @@
 /* ========================================
- * Fully working code: 
- * PWM      : 
- * Encoder  : 
+ * Fully working code:
+ * PWM      :
+ * Encoder  :
  * ADC      :
  * USB      : port displays speed and position.
  * CMD: "PW xx"
@@ -13,7 +13,7 @@
  * WHICH IS THE PROPERTY OF Univ of Auckland.
  *
  * ========================================
-*/
+ */
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -21,7 +21,7 @@
 //* ========================================
 #include "defines.h"
 #include "vars.h"
-//#include "pathfinding.h"
+// #include "pathfinding.h"
 #include "initialise.h"
 #include "movement.h"
 #include "usbUART.h"
@@ -37,7 +37,20 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn, ForwardAfterTurn, Backward};
+enum DirectionState
+{
+    Forward,
+    TurnRight,
+    TurnLeft,
+    AdjustToTheLeft,
+    AdjustToTheRight,
+    Stop,
+    Unknown,
+    HardForward,
+    waitForTurn,
+    ForwardAfterTurn,
+    Backward
+};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
 // --- YIPPE
@@ -61,91 +74,102 @@ int timerInt = 0;
 int keepLedOn = 0;
 uint32 stopBuffer = 0;
 
-//char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
+// char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
-CY_ISR (speedTimer) {
+CY_ISR(speedTimer)
+{
     timerInt = 1;
-    //quadDec_M1 used for turning macros
+    // quadDec_M1 used for turning macros
     quadDec2Count = QuadDec_M2_GetCounter();
-    
-    if ((currentDirection == Forward || 
-        currentDirection == HardForward ||
-        currentDirection == waitForTurn || 
-        currentDirection == ForwardAfterTurn ||
-        currentDirection == AdjustToTheLeft ||
-        currentDirection == AdjustToTheRight) &&
-        quadDec2Count != 0) {
-        //uint32 newDistance = ((abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM)/4;
-        float newDistance = (abs(quadDec2Count) * CY_M_PI * WHEEL_DIAMETER_MM)/228;
-        
+
+    if ((currentDirection == Forward ||
+         currentDirection == HardForward ||
+         currentDirection == waitForTurn ||
+         currentDirection == ForwardAfterTurn ||
+         currentDirection == AdjustToTheLeft ||
+         currentDirection == AdjustToTheRight) &&
+        quadDec2Count != 0)
+    {
+        // uint32 newDistance = ((abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM)/4;
+        float newDistance = (abs(quadDec2Count) * CY_M_PI * WHEEL_DIAMETER_MM) / 228;
+
         totalDistance = totalDistance + newDistance;
     }
-    
+
     QuadDec_M2_SetCounter(0); // reset count
-    QuadDec_M2_Start(); // restart counter
-    
+    QuadDec_M2_Start();       // restart counter
+
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
-CY_ISR(S1_DETECTED) {
+CY_ISR(S1_DETECTED)
+{
     // Sensor has detected WHITE
     s1 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
+    // LED_Write(1u);
+    // moveForward();
 }
 
-CY_ISR(S2_DETECTED) {
+CY_ISR(S2_DETECTED)
+{
     // Sensor has detected WHITE
     s2 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
+    // LED_Write(1u);
+    // moveForward();
 }
 
-CY_ISR(S3_DETECTED) {
+CY_ISR(S3_DETECTED)
+{
     // Sensor has detected WHITE
     s3 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
+    // LED_Write(1u);
 }
 
-CY_ISR(S4_DETECTED) {
+CY_ISR(S4_DETECTED)
+{
     // Sensor has detected WHITE
     s4 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
+    // LED_Write(1u);
 }
 
-CY_ISR(S5_DETECTED) {
+CY_ISR(S5_DETECTED)
+{
     // Sensor has detected WHITE
     s5 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
+    // LED_Write(1u);
 }
 
-CY_ISR(S6_DETECTED) {
+CY_ISR(S6_DETECTED)
+{
     // Sensor has detected WHITE
     s6 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
+    // LED_Write(1u);
 }
 
-CY_ISR(TIMER_FINISH) {
-    //LED_Write(0u);
-    if (currentDirection == Stop) {
+CY_ISR(TIMER_FINISH)
+{
+    // LED_Write(0u);
+    if (currentDirection == Stop)
+    {
         stopBuffer = stopBuffer + 1;
-    } else {
+    }
+    else
+    {
         stopBuffer = 0;
     }
-    SetRobotMovement(); 
+    SetRobotMovement();
     ResetSensorFlags(); // Reset Sensor Flags for Next rising Eddge
     Timer_LED_ReadStatusRegister();
 }
 
-
 int main()
 {
-// --------------------------------    
-// ----- INITIALIZATIONS ----------
+    // --------------------------------
+    // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
-    //findPath(map, "");// find shortest path- store this in map
+    // findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
     S1_detected_StartEx(S1_DETECTED);
@@ -155,39 +179,38 @@ int main()
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-    //stopMoving();
+    // stopMoving();
 
-// ------USB SETUP ----------------    
-#ifdef USE_USB    
-    USBUART_Start(0,USBUART_5V_OPERATION);
-#endif        
+// ------USB SETUP ----------------
+#ifdef USE_USB
+    USBUART_Start(0, USBUART_5V_OPERATION);
+#endif
     RF_BT_SELECT_Write(0);
-    
-    //usbPutString("Initialised UART");
-    for(;;)
+
+    // usbPutString("Initialised UART");
+    for (;;)
     {
-        //traverseMap(map);
-        //rotationAntiClockwise();
-        //rotationClockwise();
-        
-        
-        
-        if(timerInt == 1) {
+        // traverseMap(map);
+        // rotationAntiClockwise();
+        // rotationClockwise();
+
+        if (timerInt == 1)
+        {
             timerInt = 0;
             // calculate RPM of M2
             quadCountToRPM(quadDec2Count);
-            //sprintf(buffer, "%lu", totalDistance);
-            //usbPutString(buffer);
-            //usbPutString(" ");
+            // sprintf(buffer, "%lu", totalDistance);
+            // usbPutString(buffer);
+            // usbPutString(" ");
         }
-        //handle_usb();
+        // handle_usb();
         if (flag_KB_string == 1)
         {
-            //usbPutString("Total Distance: ");
-            //sprintf(buffer, "%lu", totalDistance);
-            //usbPutString(buffer);
+            // usbPutString("Total Distance: ");
+            // sprintf(buffer, "%lu", totalDistance);
+            // usbPutString(buffer);
             flag_KB_string = 0;
-        }           
+        }
     }
     return 0;
 }
@@ -196,16 +219,17 @@ int main()
 //* ========================================
 int16 quadCountToRPM(uint16 count)
 {
-    float cps = count/57.00;
-    int16 rpm = (int16)(cps*15); // rpm value
-    //sprintf(buffer, "%d", rpm); // store in buffer
+    float cps = count / 57.00;
+    int16 rpm = (int16)(cps * 15); // rpm value
+    // sprintf(buffer, "%d", rpm); // store in buffer
     return rpm;
-    //usbPutString(buffer);
-    //usbPutString("rpm ");
+    // usbPutString(buffer);
+    // usbPutString("rpm ");
 }
 
 // Resets all sensor flags to 0 - i.e. currently out of map
-void ResetSensorFlags() {
+void ResetSensorFlags()
+{
     s1 = 0;
     s2 = 0;
     s3 = 0;
@@ -219,83 +243,99 @@ void ResetSensorFlags() {
 // if no conditons are met, it returns Unknown -- need to fix this edge case
 // s1 = 0 -- Black
 // s1 = 1 -- White
-enum DirectionState CheckSensorDirection() {
+enum DirectionState CheckSensorDirection()
+{
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;
-    
-    if (totalDistance >= STOPPING_DISTANCE) {
+
+    if (totalDistance >= STOPPING_DISTANCE)
+    {
         directionState = Stop;
         return directionState;
     }
-   
-    if (previousDirection == Stop) {
-        if (stopBuffer <= 5) {
+
+    if (previousDirection == Stop)
+    {
+        if (stopBuffer <= 5)
+        {
             directionState = Stop;
-        } else {
+        }
+        else
+        {
             directionState = ForwardAfterTurn;
         }
         return directionState;
     }
-    
-    if (previousDirection == ForwardAfterTurn) {
-        if (s3 || s4) {
+
+    if (previousDirection == ForwardAfterTurn)
+    {
+        if (s3 || s4)
+        {
             directionState = Forward;
             return directionState;
         }
     }
-    
 
-    if(previousDirection == TurnRight) {
-        if(s5 && s6) {
+    if (previousDirection == TurnRight)
+    {
+        if (s5 && s6)
+        {
             directionState = TurnRight;
             return directionState;
-        } 
-        else if (!s5 || !s6) {
-            directionState = Stop;
-            return directionState;
         }
-    }    
-
-    if(previousDirection == TurnLeft) {
-        if(s5 && s6) {
-            directionState = TurnLeft;
-            return directionState;
-        } 
-        else if (!s5 || !s6) {
+        else if (!s5 || !s6)
+        {
             directionState = Stop;
             return directionState;
         }
     }
-    
-    if (previousDirection == waitForTurn) {
-        // If we are waiting for a turn, look for left sensor and right sensor, otherwise keep waiting for turn (moving forward)
-        if (!s3) {
+
+    if (previousDirection == TurnLeft)
+    {
+        if (s5 && s6)
+        {
             directionState = TurnLeft;
             return directionState;
         }
-        if (!s4) {
-            directionState = TurnRight;   
+        else if (!s5 || !s6)
+        {
+            directionState = Stop;
+            return directionState;
+        }
+    }
+
+    if (previousDirection == waitForTurn)
+    {
+        // If we are waiting for a turn, look for left sensor and right sensor, otherwise keep waiting for turn (moving forward)
+        if (!s3)
+        {
+            directionState = TurnLeft;
+            return directionState;
+        }
+        if (!s4)
+        {
+            directionState = TurnRight;
             return directionState;
         }
         directionState = waitForTurn;
         return directionState;
     }
-    
-
 
     // wait for turn at end of line
-    if(s5 && s6 && (previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight))) {
+    if (s5 && s6 && (previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)))
+    {
         directionState = waitForTurn; // need to wait to check for a black line
         return directionState;
     }
-    
+
     // course correction
-    if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        
+    if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight)
+    {
+
         /*
         // If both are on white, we assume we are off the line and use the back two sensors as backup c.c
         if (s5 && s6) {
-            
+
             if (s1 && s2) {
                 directionState = Forward;
                 return directionState;
@@ -308,42 +348,45 @@ enum DirectionState CheckSensorDirection() {
                 directionState = AdjustToTheLeft;
                 return directionState;
             }
-            
+
             directionState = Forward;
             return directionState;
         }
             */
-        
-        
-        if(s6) {
+
+        if (s6)
+        {
             directionState = AdjustToTheLeft; // keep adjusting to the left
             return directionState;
         }
-        if(s5) {
+        if (s5)
+        {
             directionState = AdjustToTheRight; // keep adjusting to the right
             return directionState;
         }
     }
-    
+
     // forward 111100
-    if (s1 && s2 && s3 && s4 && !s5 && !s6) {
+    if (s1 && s2 && s3 && s4 && !s5 && !s6)
+    {
         directionState = Forward;
-        return directionState;   
+        return directionState;
     }
-    
-    //turn left 110111
-    if (s1 && s2 && !s3 && s4 && s5 && s6) {
+
+    // turn left 110111
+    if (s1 && s2 && !s3 && s4 && s5 && s6)
+    {
         directionState = TurnLeft;
         return directionState;
     }
-    
+
     // turn right if 111011
-    if (s1 && s2 && s3 && !s4 && s5 && s6) {
+    if (s1 && s2 && s3 && !s4 && s5 && s6)
+    {
         directionState = TurnRight;
         return directionState;
     }
-    
-    
+
     // ====== After Initial turn ======
     // -- This accounts for the transition period between turning at an intersection --
     /*if (previousDirection == TurnRight || previousDirection == TurnLeft) {
@@ -353,58 +396,59 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         }
     }*/
-    
-    
 
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
-    if (previousDirection == Unknown) {
+    if (previousDirection == Unknown)
+    {
         directionState = Forward;
         return directionState;
     }
-    
+
     // Possible reason
     return previousDirection;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
-void SetRobotMovement() {
-    currentDirection = CheckSensorDirection();   
-    
-    switch (currentDirection) {
-        //Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
-        case Forward:
-            moveForward();
-            break;
-        case TurnRight:
-            turnRight();
-            break;
-        case TurnLeft:
-            turnLeft(); // try course correction methods for L/R turn
-            break;
-        case AdjustToTheRight:
-            adjustRight();
-            break;
-        case AdjustToTheLeft:
-            adjustLeft();
-            break;
-        case Stop:
-            stopMoving();
-            break;
-        case HardForward:
-            moveForwardForSpecifiedCount();
-            break;
-        case waitForTurn:
-            moveForward(); 
-            break;
-        case ForwardAfterTurn:
-            moveForward();
-            break;
-        case Backward:
-            moveBackward();
-            break;
-        case Unknown:
-            // UNKNOWN CONFIGURATION
-            break;  
+void SetRobotMovement()
+{
+    currentDirection = CheckSensorDirection();
+
+    switch (currentDirection)
+    {
+    // Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
+    case Forward:
+        moveForward();
+        break;
+    case TurnRight:
+        turnRight();
+        break;
+    case TurnLeft:
+        turnLeft(); // try course correction methods for L/R turn
+        break;
+    case AdjustToTheRight:
+        adjustRight();
+        break;
+    case AdjustToTheLeft:
+        adjustLeft();
+        break;
+    case Stop:
+        stopMoving();
+        break;
+    case HardForward:
+        moveForwardForSpecifiedCount();
+        break;
+    case waitForTurn:
+        moveForward();
+        break;
+    case ForwardAfterTurn:
+        moveForward();
+        break;
+    case Backward:
+        moveBackward();
+        break;
+    case Unknown:
+        // UNKNOWN CONFIGURATION
+        break;
     }
 }

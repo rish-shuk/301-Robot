@@ -18,6 +18,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+// Speed Macros
+uint16 calculateSpeed(uint16 count);   
+    
+    
 // Direction/ Movement macros
 //* ========================================
 // Stop moving
