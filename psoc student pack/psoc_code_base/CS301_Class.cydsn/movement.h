@@ -19,15 +19,12 @@
 #include <stdlib.h>
 
 // Speed Macros
-uint16 calculateSpeedCompareCount(uint16 count);
-
+uint16 setPWM1speed(float percentage);
+uint16 setPWM2speed(float percentage);
 // Direction/ Movement macros
 //* ========================================
 // Stop moving
 void stopMoving();
-
-// Move forward by hard coded amount in function
-void moveForwardForSpecifiedCount();
 
 // Rotate clockwise 90 degrees
 void rotationClockwise();
