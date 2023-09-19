@@ -51,7 +51,7 @@ uint8 s6 = 0;
 //* ========================================
 // Calculating Distance
 #define WHEEL_DIAMETER_MM 64.5
-#define STOPPING_DISTANCE 1000 // in MM
+#define STOPPING_DISTANCE 10000 // in MM
 uint32 totalMilliseconds = 0;
 float totalDistance = 0; // in mm
 //* ========================================
