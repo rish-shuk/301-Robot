@@ -8,7 +8,7 @@
  * WHICH IS THE PROPERTY OF your company.
  *
  * ========================================
-*/
+ */
 
 #ifndef MOVEMENT_FUNCTIONS_H
 #define MOVEMENT_FUNCTIONS_H
@@ -19,9 +19,8 @@
 #include <stdlib.h>
 
 // Speed Macros
-uint16 calculateSpeed(uint16 count);   
-    
-    
+uint16 calculateSpeed(uint16 count);
+
 // Direction/ Movement macros
 //* ========================================
 // Stop moving

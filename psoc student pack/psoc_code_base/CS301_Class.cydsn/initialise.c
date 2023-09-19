@@ -8,11 +8,12 @@
  * WHICH IS THE PROPERTY OF your company.
  *
  * ========================================
-*/
+ */
 #include <project.h>
 #include "initialise.h"
 
-void init() {
+void init()
+{
     Clock_PWM_Start();
     PWM_1_Start();
     PWM_1_WritePeriod(MAX_PWM_COUNT);

@@ -8,7 +8,7 @@
  * WHICH IS THE PROPERTY OF your company.
  *
  * ========================================
-*/
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -17,7 +17,6 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-
 
 // MAP INITIALISATION CODE
 /*
@@ -78,7 +77,7 @@ struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]) {
     return randomLocation;
 }
 
-// pathfinding 
+// pathfinding
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
 bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]) {
@@ -126,7 +125,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
         int idx = 0;
         for (int i = 1; i < pqSize; i++) {
             if (pq[i].distance < pq[idx].distance) {
-                idx = i; // find the shortest distance location 
+                idx = i; // find the shortest distance location
             }
         }
         struct PriorityQueue current = pq[idx]; // record current location
@@ -153,11 +152,11 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
                     if (newDistance < distances[newRow][newCol]) {
                         distances[newRow][newCol] = newDistance; // take new distance if less than existing, otherwise do nothing
                         //paths[stepNum] = (struct Location){newRow, newCol}; // add location to path array
-                        
+
                         pq[pqSize].location.row = newRow; // update location
                         pq[pqSize].location.col = newCol; // update location
                         pq[pqSize].distance = newDistance; // update distance
-                        
+
                         stepNum++;
                         pqSize++;
                     }
@@ -173,13 +172,13 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     //struct Location *retSteps = malloc(sizeof(struct Location) * shortestDist); // store every step of path- pointer to array
     int currentRow = targetlocation.row;
     int currentCol = targetlocation.col;
-    //retSteps[shortestDist-1].row = currentRow; 
+    //retSteps[shortestDist-1].row = currentRow;
     //retSteps[shortestDist-1].col = currentCol; // add targetLocation to retSteps
     //printf("retSteps[%d]: %d,%d\n", shortestDist-1, currentRow, currentCol);
     map[currentRow][currentCol] = 'X'; // mark finish location
     //printf("%d,%d\n", currentRow, currentCol); // print optimal step
     // reconstruct path by reversing paths array and taking shortest distance
-    while(shortestDist > 0) {    
+    while(shortestDist > 0) {
         // make a move, check if valid and is the next step in path
         for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
             int newRow = currentRow + moves[i].row;
@@ -188,15 +187,15 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
                 map[newRow][newCol] = '*'; // mark optimal step
                 shortestDist--; // decrement distance
-                currentRow = newRow; 
+                currentRow = newRow;
                 currentCol = newCol; // change current location
                 //printf("retSteps[%d]: %d,%d\n", shortestDist,currentRow,currentCol); // print visited step
-                //retSteps[shortestDist].row = currentRow; 
+                //retSteps[shortestDist].row = currentRow;
                 //retSteps[shortestDist].col = currentCol; // add currentRow and currentCol to retstep- stores optimal path
                 if(currentRow == startlocation.row && currentCol == startlocation.col) {
                     map[currentRow][currentCol] = 'S'; // mark start location
                     break;
-                }   
+                }
             }
         }
     }
@@ -257,7 +256,7 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS]) {
                         // rotation clockwise
                     }
                     leftOrient = true;
-                    // MOVE FORWARD 
+                    // MOVE FORWARD
                     // STOP
                     break;
                 case 2:

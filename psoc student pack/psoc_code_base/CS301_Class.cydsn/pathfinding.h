@@ -8,7 +8,7 @@
  * WHICH IS THE PROPERTY OF your company.
  *
  * ========================================
-*/
+ */
 
 #ifndef MAP_FUNCTIONS_H
 #define MAP_FUNCTIONS_H
@@ -18,12 +18,12 @@
 #include <time.h>
 #include <stdbool.h>
 
-
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
-struct Location {
+struct Location
+{
     int row;
     int col;
 };

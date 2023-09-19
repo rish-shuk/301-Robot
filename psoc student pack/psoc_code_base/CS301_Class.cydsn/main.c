@@ -102,10 +102,14 @@ CY_ISR(speedTimer)
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
+// make sensors less aids
+#define WHITE 1
+#define BLACK 0
+
 CY_ISR(S1_DETECTED)
 {
     // Sensor has detected WHITE
-    s1 = 1; // , Black = 0, White = 1
+    s1 = WHITE; // , Black = 0, White = 1
     // LED_Write(1u);
     // moveForward();
 }
@@ -113,7 +117,7 @@ CY_ISR(S1_DETECTED)
 CY_ISR(S2_DETECTED)
 {
     // Sensor has detected WHITE
-    s2 = 1; // , Black = 0, White = 1
+    s2 = WHITE; // , Black = 0, White = 1
     // LED_Write(1u);
     // moveForward();
 }
@@ -121,28 +125,28 @@ CY_ISR(S2_DETECTED)
 CY_ISR(S3_DETECTED)
 {
     // Sensor has detected WHITE
-    s3 = 1; // , Black = 0, White = 1
+    s3 = WHITE; // , Black = 0, White = 1
     // LED_Write(1u);
 }
 
 CY_ISR(S4_DETECTED)
 {
     // Sensor has detected WHITE
-    s4 = 1; // , Black = 0, White = 1
+    s4 = WHITE; // , Black = 0, White = 1
     // LED_Write(1u);
 }
 
 CY_ISR(S5_DETECTED)
 {
     // Sensor has detected WHITE
-    s5 = 1; // , Black = 0, White = 1
+    s5 = WHITE; // , Black = 0, White = 1
     // LED_Write(1u);
 }
 
 CY_ISR(S6_DETECTED)
 {
     // Sensor has detected WHITE
-    s6 = 1; // , Black = 0, White = 1
+    s6 = WHITE; // , Black = 0, White = 1
     // LED_Write(1u);
 }
 
