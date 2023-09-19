@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 1
 
 
    1              		.syntax unified
@@ -38,12 +38,13 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
    8:initialise.c  ****  * WHICH IS THE PROPERTY OF your company.
    9:initialise.c  ****  *
   10:initialise.c  ****  * ========================================
-  11:initialise.c  **** */
+  11:initialise.c  ****  */
   12:initialise.c  **** #include <project.h>
   13:initialise.c  **** #include "initialise.h"
   14:initialise.c  **** 
-  15:initialise.c  **** void init() {
-  28              		.loc 1 15 0
+  15:initialise.c  **** void init()
+  16:initialise.c  **** {
+  28              		.loc 1 16 0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -53,42 +54,42 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
   35              		.cfi_offset 14, -4
   36 0002 00AF     		add	r7, sp, #0
   37              		.cfi_def_cfa_register 7
-  16:initialise.c  ****     Clock_PWM_Start();
-  38              		.loc 1 16 0
+  17:initialise.c  ****     Clock_PWM_Start();
+  38              		.loc 1 17 0
   39 0004 FFF7FEFF 		bl	Clock_PWM_Start
-  17:initialise.c  ****     PWM_1_Start();
-  40              		.loc 1 17 0
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 2
+  18:initialise.c  ****     PWM_1_Start();
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 2
 
 
+  40              		.loc 1 18 0
   41 0008 FFF7FEFF 		bl	PWM_1_Start
-  18:initialise.c  ****     PWM_1_WritePeriod(MAX_PWM_COUNT);
-  42              		.loc 1 18 0
+  19:initialise.c  ****     PWM_1_WritePeriod(MAX_PWM_COUNT);
+  42              		.loc 1 19 0
   43 000c 4FF6FF70 		movw	r0, #65535
   44 0010 FFF7FEFF 		bl	PWM_1_WritePeriod
-  19:initialise.c  ****     PWM_2_Start();
-  45              		.loc 1 19 0
+  20:initialise.c  ****     PWM_2_Start();
+  45              		.loc 1 20 0
   46 0014 FFF7FEFF 		bl	PWM_2_Start
-  20:initialise.c  ****     PWM_2_WritePeriod(MAX_PWM_COUNT);
-  47              		.loc 1 20 0
+  21:initialise.c  ****     PWM_2_WritePeriod(MAX_PWM_COUNT);
+  47              		.loc 1 21 0
   48 0018 4FF6FF70 		movw	r0, #65535
   49 001c FFF7FEFF 		bl	PWM_2_WritePeriod
-  21:initialise.c  **** 
-  22:initialise.c  ****     // start quadrature decoders
-  23:initialise.c  ****     QuadDec_M1_Start();
-  50              		.loc 1 23 0
+  22:initialise.c  **** 
+  23:initialise.c  ****     // start quadrature decoders
+  24:initialise.c  ****     QuadDec_M1_Start();
+  50              		.loc 1 24 0
   51 0020 FFF7FEFF 		bl	QuadDec_M1_Start
-  24:initialise.c  ****     QuadDec_M2_Start();
-  52              		.loc 1 24 0
+  25:initialise.c  ****     QuadDec_M2_Start();
+  52              		.loc 1 25 0
   53 0024 FFF7FEFF 		bl	QuadDec_M2_Start
-  25:initialise.c  ****     SpeedTimer_Start();
-  54              		.loc 1 25 0
+  26:initialise.c  ****     SpeedTimer_Start();
+  54              		.loc 1 26 0
   55 0028 FFF7FEFF 		bl	SpeedTimer_Start
-  26:initialise.c  ****     SpeedClock_Start();
-  56              		.loc 1 26 0
+  27:initialise.c  ****     SpeedClock_Start();
+  56              		.loc 1 27 0
   57 002c FFF7FEFF 		bl	SpeedClock_Start
-  27:initialise.c  **** }
-  58              		.loc 1 27 0
+  28:initialise.c  **** }
+  58              		.loc 1 28 0
   59 0030 00BF     		nop
   60 0032 80BD     		pop	{r7, pc}
   61              		.cfi_endproc
@@ -117,10 +118,10 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
   84 0026 01       		.byte	0x1
   85 0027 06       		.byte	0x6
   86 0028 AC010000 		.4byte	.LASF0
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 3
+
+
   87 002c 02       		.uleb128 0x2
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 3
-
-
   88 002d 01       		.byte	0x1
   89 002e 08       		.byte	0x8
   90 002f 61010000 		.4byte	.LASF1
@@ -177,10 +178,10 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
  141 008f 02       		.uleb128 0x2
  142 0090 01       		.byte	0x1
  143 0091 08       		.byte	0x8
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 4
+
+
  144 0092 6F010000 		.4byte	.LASF13
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 4
-
-
  145 0096 02       		.uleb128 0x2
  146 0097 08       		.byte	0x8
  147 0098 04       		.byte	0x4
@@ -237,10 +238,10 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
  198 001b 0E       		.uleb128 0xe
  199 001c 00       		.byte	0
  200 001d 00       		.byte	0
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 5
+
+
  201 001e 03       		.uleb128 0x3
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 5
-
-
  202 001f 16       		.uleb128 0x16
  203 0020 00       		.byte	0
  204 0021 03       		.uleb128 0x3
@@ -297,10 +298,10 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
  255 0055 49       		.uleb128 0x49
  256 0056 13       		.uleb128 0x13
  257 0057 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 6
+
+
  258 0058 19       		.uleb128 0x19
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 6
-
-
  259 0059 3C       		.uleb128 0x3c
  260 005a 19       		.uleb128 0x19
  261 005b 00       		.byte	0
@@ -357,10 +358,10 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
  296              	.LASF3:
  297 0085 73686F72 		.ascii	"short unsigned int\000"
  297      7420756E 
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 7
+
+
  297      7369676E 
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 7
-
-
  297      65642069 
  297      6E7400
  298              	.LASF8:
@@ -417,10 +418,10 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 1
  317      20696E74 
  317      00
  318              	.LASF12:
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccMQaMs5.s 			page 8
+
+
  319 018a 646F7562 		.ascii	"double\000"
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc8O2HYD.s 			page 8
-
-
  319      6C6500
  320              	.LASF6:
  321 0191 6C6F6E67 		.ascii	"long long int\000"

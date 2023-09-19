@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 1
 
 
    1              		.syntax unified
@@ -38,7 +38,7 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
    8:tacho.c       ****  * WHICH IS THE PROPERTY OF your company.
    9:tacho.c       ****  *
   10:tacho.c       ****  * ========================================
-  11:tacho.c       **** */
+  11:tacho.c       ****  */
   12:tacho.c       **** 
   13:tacho.c       **** #include <project.h>
   14:tacho.c       **** #include "defines.h"
@@ -46,55 +46,54 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
   16:tacho.c       **** extern int16 speedL, speedR;
   17:tacho.c       **** extern int16 posL, posR;
   18:tacho.c       **** 
-  19:tacho.c       **** 
-  20:tacho.c       **** void get_position(void);
-  21:tacho.c       **** void get_speed(void);
-  22:tacho.c       **** 
-  23:tacho.c       **** //------------------------------------------------------
-  24:tacho.c       **** void get_position()
-  25:tacho.c       **** {
-  28              		.loc 1 25 0
+  19:tacho.c       **** void get_position(void);
+  20:tacho.c       **** void get_speed(void);
+  21:tacho.c       **** 
+  22:tacho.c       **** //------------------------------------------------------
+  23:tacho.c       **** void get_position()
+  24:tacho.c       **** {
+  28              		.loc 1 24 0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 8
   31              		@ frame_needed = 1, uses_anonymous_args = 0
   32 0000 80B5     		push	{r7, lr}
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 2
-
-
   33              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 2
+
+
   34              		.cfi_offset 7, -8
   35              		.cfi_offset 14, -4
   36 0002 82B0     		sub	sp, sp, #8
   37              		.cfi_def_cfa_offset 16
   38 0004 00AF     		add	r7, sp, #0
   39              		.cfi_def_cfa_register 7
-  26:tacho.c       ****     int pl, pr;
-  27:tacho.c       **** 
-  28:tacho.c       ****     pl = QuadDec_M1_GetCounter();
-  40              		.loc 1 28 0
+  25:tacho.c       ****     int pl, pr;
+  26:tacho.c       **** 
+  27:tacho.c       ****     pl = QuadDec_M1_GetCounter();
+  40              		.loc 1 27 0
   41 0006 FFF7FEFF 		bl	QuadDec_M1_GetCounter
   42 000a 0346     		mov	r3, r0
   43 000c 7B60     		str	r3, [r7, #4]
-  29:tacho.c       ****     pr = QuadDec_M2_GetCounter();
-  44              		.loc 1 29 0
+  28:tacho.c       ****     pr = QuadDec_M2_GetCounter();
+  44              		.loc 1 28 0
   45 000e FFF7FEFF 		bl	QuadDec_M2_GetCounter
   46 0012 0346     		mov	r3, r0
   47 0014 3B60     		str	r3, [r7]
-  30:tacho.c       **** 
-  31:tacho.c       ****     posL = pl;
-  48              		.loc 1 31 0
+  29:tacho.c       **** 
+  30:tacho.c       ****     posL = pl;
+  48              		.loc 1 30 0
   49 0016 7B68     		ldr	r3, [r7, #4]
   50 0018 1AB2     		sxth	r2, r3
   51 001a 054B     		ldr	r3, .L2
   52 001c 1A80     		strh	r2, [r3]	@ movhi
-  32:tacho.c       ****     posR = pr;
-  53              		.loc 1 32 0
+  31:tacho.c       ****     posR = pr;
+  53              		.loc 1 31 0
   54 001e 3B68     		ldr	r3, [r7]
   55 0020 1AB2     		sxth	r2, r3
   56 0022 044B     		ldr	r3, .L2+4
   57 0024 1A80     		strh	r2, [r3]	@ movhi
-  33:tacho.c       **** }
-  58              		.loc 1 33 0
+  32:tacho.c       **** }
+  58              		.loc 1 32 0
   59 0026 00BF     		nop
   60 0028 0837     		adds	r7, r7, #8
   61              		.cfi_def_cfa_offset 8
@@ -118,13 +117,13 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
   79              		.type	get_speed, %function
   80              	get_speed:
   81              	.LFB64:
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 3
+  33:tacho.c       **** //------------------------------------------------------
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 3
 
 
-  34:tacho.c       **** //------------------------------------------------------
-  35:tacho.c       **** void get_speed()
-  36:tacho.c       **** {
-  82              		.loc 1 36 0
+  34:tacho.c       **** void get_speed()
+  35:tacho.c       **** {
+  82              		.loc 1 35 0
   83              		.cfi_startproc
   84              		@ args = 0, pretend = 0, frame = 8
   85              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -136,22 +135,22 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
   91              		.cfi_def_cfa_offset 16
   92 0004 00AF     		add	r7, sp, #0
   93              		.cfi_def_cfa_register 7
-  37:tacho.c       ****     int16 pl, pr;
-  38:tacho.c       ****     
-  39:tacho.c       ****     // get current position.
-  40:tacho.c       ****     pl = QuadDec_M1_GetCounter();
-  94              		.loc 1 40 0
+  36:tacho.c       ****     int16 pl, pr;
+  37:tacho.c       **** 
+  38:tacho.c       ****     // get current position.
+  39:tacho.c       ****     pl = QuadDec_M1_GetCounter();
+  94              		.loc 1 39 0
   95 0006 FFF7FEFF 		bl	QuadDec_M1_GetCounter
   96 000a 0346     		mov	r3, r0
   97 000c FB80     		strh	r3, [r7, #6]	@ movhi
-  41:tacho.c       ****     pr = QuadDec_M2_GetCounter();
-  98              		.loc 1 41 0
+  40:tacho.c       ****     pr = QuadDec_M2_GetCounter();
+  98              		.loc 1 40 0
   99 000e FFF7FEFF 		bl	QuadDec_M2_GetCounter
  100 0012 0346     		mov	r3, r0
  101 0014 BB80     		strh	r3, [r7, #4]	@ movhi
-  42:tacho.c       ****     
-  43:tacho.c       ****     speedL = pl - posL;
- 102              		.loc 1 43 0
+  41:tacho.c       **** 
+  42:tacho.c       ****     speedL = pl - posL;
+ 102              		.loc 1 42 0
  103 0016 FA88     		ldrh	r2, [r7, #6]
  104 0018 0E4B     		ldr	r3, .L5
  105 001a B3F90030 		ldrsh	r3, [r3]
@@ -161,8 +160,8 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  109 0024 1AB2     		sxth	r2, r3
  110 0026 0C4B     		ldr	r3, .L5+4
  111 0028 1A80     		strh	r2, [r3]	@ movhi
-  44:tacho.c       ****     speedR = pr - posR;
- 112              		.loc 1 44 0
+  43:tacho.c       ****     speedR = pr - posR;
+ 112              		.loc 1 43 0
  113 002a BA88     		ldrh	r2, [r7, #4]
  114 002c 0B4B     		ldr	r3, .L5+8
  115 002e B3F90030 		ldrsh	r3, [r3]
@@ -172,44 +171,43 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  119 0038 1AB2     		sxth	r2, r3
  120 003a 094B     		ldr	r3, .L5+12
  121 003c 1A80     		strh	r2, [r3]	@ movhi
-  45:tacho.c       ****     posL = pl;
- 122              		.loc 1 45 0
+  44:tacho.c       ****     posL = pl;
+ 122              		.loc 1 44 0
  123 003e 054A     		ldr	r2, .L5
  124 0040 FB88     		ldrh	r3, [r7, #6]	@ movhi
  125 0042 1380     		strh	r3, [r2]	@ movhi
-  46:tacho.c       ****     posR = pr;
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 4
+  45:tacho.c       ****     posR = pr;
+ 126              		.loc 1 45 0
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 4
 
 
- 126              		.loc 1 46 0
  127 0044 054A     		ldr	r2, .L5+8
  128 0046 BB88     		ldrh	r3, [r7, #4]	@ movhi
  129 0048 1380     		strh	r3, [r2]	@ movhi
-  47:tacho.c       ****     
-  48:tacho.c       ****     
-  49:tacho.c       **** //    // Speed of Motor 1
-  50:tacho.c       **** //    state = QuadDec_M1_GetEvents();
-  51:tacho.c       **** //    speed = pl - posL;
-  52:tacho.c       **** //    if ((state & QuadDec_M1_COUNTER_OVERFLOW) != 0x00)
-  53:tacho.c       **** //        speed += 32767;
-  54:tacho.c       **** //    
-  55:tacho.c       **** //    if ((state & QuadDec_M1_COUNTER_UNDERFLOW) != 0x00)
-  56:tacho.c       **** //        speed += -32768;
-  57:tacho.c       **** //    speedL = speed;
-  58:tacho.c       **** //    posL = pl;
-  59:tacho.c       **** //    
-  60:tacho.c       **** //    // Speed of Motor 2
-  61:tacho.c       **** //    state = QuadDec_M2_GetEvents();
-  62:tacho.c       **** //    speed = pr - posR;
-  63:tacho.c       **** //    if ((state & QuadDec_M2_COUNTER_OVERFLOW) != 0x00)
-  64:tacho.c       **** //        speed += 32767;
-  65:tacho.c       **** //    
-  66:tacho.c       **** //    if ((state & QuadDec_M2_COUNTER_UNDERFLOW) != 0x00)
-  67:tacho.c       **** //        speed += -32768;
-  68:tacho.c       **** //    speedR = speed;    
-  69:tacho.c       **** //    posR = pr;
-  70:tacho.c       **** }
- 130              		.loc 1 70 0
+  46:tacho.c       **** 
+  47:tacho.c       ****     //    // Speed of Motor 1
+  48:tacho.c       ****     //    state = QuadDec_M1_GetEvents();
+  49:tacho.c       ****     //    speed = pl - posL;
+  50:tacho.c       ****     //    if ((state & QuadDec_M1_COUNTER_OVERFLOW) != 0x00)
+  51:tacho.c       ****     //        speed += 32767;
+  52:tacho.c       ****     //
+  53:tacho.c       ****     //    if ((state & QuadDec_M1_COUNTER_UNDERFLOW) != 0x00)
+  54:tacho.c       ****     //        speed += -32768;
+  55:tacho.c       ****     //    speedL = speed;
+  56:tacho.c       ****     //    posL = pl;
+  57:tacho.c       ****     //
+  58:tacho.c       ****     //    // Speed of Motor 2
+  59:tacho.c       ****     //    state = QuadDec_M2_GetEvents();
+  60:tacho.c       ****     //    speed = pr - posR;
+  61:tacho.c       ****     //    if ((state & QuadDec_M2_COUNTER_OVERFLOW) != 0x00)
+  62:tacho.c       ****     //        speed += 32767;
+  63:tacho.c       ****     //
+  64:tacho.c       ****     //    if ((state & QuadDec_M2_COUNTER_UNDERFLOW) != 0x00)
+  65:tacho.c       ****     //        speed += -32768;
+  66:tacho.c       ****     //    speedR = speed;
+  67:tacho.c       ****     //    posR = pr;
+  68:tacho.c       **** }
+ 130              		.loc 1 68 0
  131 004a 00BF     		nop
  132 004c 0837     		adds	r7, r7, #8
  133              		.cfi_def_cfa_offset 8
@@ -238,11 +236,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  156 0000 4A010000 		.4byte	0x14a
  157 0004 0400     		.2byte	0x4
  158 0006 00000000 		.4byte	.Ldebug_abbrev0
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 5
-
-
  159 000a 04       		.byte	0x4
  160 000b 01       		.uleb128 0x1
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 5
+
+
  161 000c F3000000 		.4byte	.LASF24
  162 0010 0C       		.byte	0xc
  163 0011 81010000 		.4byte	.LASF25
@@ -298,11 +296,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  213 0076 03       		.uleb128 0x3
  214 0077 09020000 		.4byte	.LASF10
  215 007b 03       		.byte	0x3
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 6
-
-
  216 007c 2C       		.byte	0x2c
  217 007d 41000000 		.4byte	0x41
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 6
+
+
  218 0081 05       		.uleb128 0x5
  219 0082 03020000 		.4byte	.LASF11
  220 0086 04       		.byte	0x4
@@ -331,7 +329,7 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  243 00b0 06       		.uleb128 0x6
  244 00b1 A5000000 		.4byte	.LASF17
  245 00b5 01       		.byte	0x1
- 246 00b6 18       		.byte	0x18
+ 246 00b6 17       		.byte	0x17
  247 00b7 00000000 		.4byte	.LFB63
  248 00bb 38000000 		.4byte	.LFE63-.LFB63
  249 00bf 01       		.uleb128 0x1
@@ -340,7 +338,7 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  252 00c5 07       		.uleb128 0x7
  253 00c6 706C00   		.ascii	"pl\000"
  254 00c9 01       		.byte	0x1
- 255 00ca 1A       		.byte	0x1a
+ 255 00ca 19       		.byte	0x19
  256 00cb 68000000 		.4byte	0x68
  257 00cf 02       		.uleb128 0x2
  258 00d0 91       		.byte	0x91
@@ -348,7 +346,7 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  260 00d2 07       		.uleb128 0x7
  261 00d3 707200   		.ascii	"pr\000"
  262 00d6 01       		.byte	0x1
- 263 00d7 1A       		.byte	0x1a
+ 263 00d7 19       		.byte	0x19
  264 00d8 68000000 		.4byte	0x68
  265 00dc 02       		.uleb128 0x2
  266 00dd 91       		.byte	0x91
@@ -357,19 +355,19 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  269 00e0 06       		.uleb128 0x6
  270 00e1 E2000000 		.4byte	.LASF18
  271 00e5 01       		.byte	0x1
- 272 00e6 23       		.byte	0x23
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 7
-
-
+ 272 00e6 22       		.byte	0x22
  273 00e7 00000000 		.4byte	.LFB64
  274 00eb 64000000 		.4byte	.LFE64-.LFB64
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 7
+
+
  275 00ef 01       		.uleb128 0x1
  276 00f0 9C       		.byte	0x9c
  277 00f1 10010000 		.4byte	0x110
  278 00f5 07       		.uleb128 0x7
  279 00f6 706C00   		.ascii	"pl\000"
  280 00f9 01       		.byte	0x1
- 281 00fa 25       		.byte	0x25
+ 281 00fa 24       		.byte	0x24
  282 00fb 81000000 		.4byte	0x81
  283 00ff 02       		.uleb128 0x2
  284 0100 91       		.byte	0x91
@@ -377,7 +375,7 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  286 0102 07       		.uleb128 0x7
  287 0103 707200   		.ascii	"pr\000"
  288 0106 01       		.byte	0x1
- 289 0107 25       		.byte	0x25
+ 289 0107 24       		.byte	0x24
  290 0108 81000000 		.4byte	0x81
  291 010c 02       		.uleb128 0x2
  292 010d 91       		.byte	0x91
@@ -418,11 +416,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  327 0002 01       		.byte	0x1
  328 0003 25       		.uleb128 0x25
  329 0004 0E       		.uleb128 0xe
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 8
-
-
  330 0005 13       		.uleb128 0x13
  331 0006 0B       		.uleb128 0xb
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 8
+
+
  332 0007 03       		.uleb128 0x3
  333 0008 0E       		.uleb128 0xe
  334 0009 1B       		.uleb128 0x1b
@@ -478,11 +476,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  384 003b 3A       		.uleb128 0x3a
  385 003c 0B       		.uleb128 0xb
  386 003d 3B       		.uleb128 0x3b
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 9
-
-
  387 003e 05       		.uleb128 0x5
  388 003f 49       		.uleb128 0x49
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 9
+
+
  389 0040 13       		.uleb128 0x13
  390 0041 00       		.byte	0
  391 0042 00       		.byte	0
@@ -538,11 +536,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  441 0075 49       		.uleb128 0x49
  442 0076 13       		.uleb128 0x13
  443 0077 3F       		.uleb128 0x3f
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 10
-
-
  444 0078 19       		.uleb128 0x19
  445 0079 3C       		.uleb128 0x3c
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 10
+
+
  446 007a 19       		.uleb128 0x19
  447 007b 00       		.byte	0
  448 007c 00       		.byte	0
@@ -598,11 +596,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  498 0000 7F010000 		.section	.debug_str,"MS",%progbits,1
  498      02004D01 
  498      00000201 
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 11
-
-
  498      FB0E0D00 
  498      01010101 
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 11
+
+
  499              	.LASF26:
  500 0000 433A5C55 		.ascii	"C:\\Users\\rshu284\\OneDrive - The University of Au"
  500      73657273 
@@ -658,11 +656,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  518 00ec 73706565 		.ascii	"speedR\000"
  518      645200
  519              	.LASF24:
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 12
-
-
  520 00f3 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
  520      43313120 
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 12
+
+
  520      352E342E 
  520      31203230 
  520      31363036 
@@ -718,11 +716,11 @@ ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 1
  543              	.LASF9:
  544 01e4 5F5F696E 		.ascii	"__int32_t\000"
  544      7433325F 
-ARM GAS  C:\Users\rshu284\AppData\Local\Temp\ccl3wbqO.s 			page 13
-
-
  544      7400
  545              	.LASF22:
+ARM GAS  C:\Users\rshu284\AppData\Local\Temp\cc6e45d0.s 			page 13
+
+
  546 01ee 706F734C 		.ascii	"posL\000"
  546      00
  547              	.LASF12:

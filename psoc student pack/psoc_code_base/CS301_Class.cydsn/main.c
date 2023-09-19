@@ -36,7 +36,6 @@ int16 quadCountToRPM(uint16 count);
 // Sensors, Course correction and Movement Direction.
 void ResetSensorFlags();
 void SetRobotMovement();
-DirectionState CheckSensorDirection();
 typedef enum DirectionState
 {
     Forward,
@@ -51,6 +50,7 @@ typedef enum DirectionState
     ForwardAfterTurn,
     Backward
 } DirectionState;
+DirectionState CheckSensorDirection();
 DirectionState currentDirection = Stop;
 DirectionState previousDirection = Unknown;
 // --- YIPPE
