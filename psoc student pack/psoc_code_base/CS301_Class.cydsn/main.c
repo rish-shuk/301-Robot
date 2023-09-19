@@ -229,7 +229,7 @@ enum DirectionState CheckSensorDirection() {
     }
    
     if (previousDirection == Stop) {
-        if (stopBuffer <= 5) {
+        if (stopBuffer <= 10) {
             directionState = Stop;
         } else {
             directionState = ForwardAfterTurn;

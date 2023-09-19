@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #define maxForwardPWM 9830
 #define maxTurningPWM 6553
-#define movementMultiplier 1.0
+#define movementMultiplier 1.1
 
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
