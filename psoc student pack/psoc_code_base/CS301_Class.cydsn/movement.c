@@ -14,10 +14,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#define maxForwardPWM 9830
+#define maxTurningPWM 6553
+#define movementMultiplier 1.0
 
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
-
 
 // Direction/ Movement macros
 //* ========================================
@@ -54,8 +56,10 @@ void turnRight() {
 }
 
 void moveForward() {
-    PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
-    PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
+    uint16 count1 = (32767 + (maxForwardPWM * movementMultiplier));
+    uint16 count2 = (32767 - (maxForwardPWM * movementMultiplier));
+    PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
+    PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
 }
 
 void moveBackward() {

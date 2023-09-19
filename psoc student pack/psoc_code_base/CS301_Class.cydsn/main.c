@@ -392,7 +392,6 @@ void SetRobotMovement() {
             stopMoving();
             break;
         case HardForward:
-            moveForwardForSpecifiedCount();
             break;
         case waitForTurn:
             moveForward(); 
