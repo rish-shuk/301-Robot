@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 // Speed Macros
-uint16 calculateSpeed(uint16 count);
+uint16 calculateSpeedCompareCount(uint16 count);
 
 // Direction/ Movement macros
 //* ========================================

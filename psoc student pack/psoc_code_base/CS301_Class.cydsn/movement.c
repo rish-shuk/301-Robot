@@ -22,7 +22,7 @@ uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
 
 // Calculate Speed
-uint16 calculateSpeed(uint8 percentage)
+uint16 calculateSpeedCompareCount(uint8 percentage)
 {
     float decimalSpeed = percentage / 100; // 50% / 100 = 0.5
     float maxDecimalSpeed = MAX_MOVEMENT_PERCENTAGE / 100;
@@ -41,8 +41,8 @@ void stopMoving()
     PWM_1_WriteCompare(32768); // 50%
     PWM_2_WriteCompare(32768); // 50%
 
-    // PWM_1_WriteCompare(calculateSpeed(50)); // 50%
-    // PWM_2_WriteCompare(calculateSpeed(50)); // 50%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(50)); // 50%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(50)); // 50%
 }
 
 void moveForwardForSpecifiedCount()
@@ -50,8 +50,8 @@ void moveForwardForSpecifiedCount()
     PWM_1_WriteCompare(42598); // 65%
     PWM_2_WriteCompare(22937); // 35%
 
-    // PWM_1_WriteCompare(calculateSpeed(65)); // 65%
-    // PWM_2_WriteCompare(calculateSpeed(35)); // 35%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(65)); // 65%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(35)); // 35%
 
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -68,8 +68,8 @@ void rotationClockwise()
     PWM_1_WriteCompare(42598); // 65%
     PWM_2_WriteCompare(42598); // 65%
 
-    // PWM_1_WriteCompare(calculateSpeed(65)); // 65%
-    // PWM_2_WriteCompare(calculateSpeed(65)); // 65%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(65)); // 65%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(65)); // 65%
 
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -88,8 +88,8 @@ void rotationAntiClockwise()
     PWM_1_WriteCompare(22937); // 35%
     PWM_2_WriteCompare(22937); // 35%
 
-    // PWM_1_WriteCompare(calculateSpeed(35)); // 35%
-    // PWM_2_WriteCompare(calculateSpeed(35)); // 35%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(35)); // 35%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(35)); // 35%
 
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
@@ -108,8 +108,8 @@ void adjustRight()
 {
     PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
     PWM_2_WriteCompare(26214); // 40% - Right Wheel Clockwise
-    // PWM_1_WriteCompare(calculateSpeed(65)); // 65%
-    // PWM_2_WriteCompare(calculateSpeed(40)); // 40%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(65)); // 65%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(40)); // 40%
 }
 
 // keep rotating anticlockwise
@@ -118,8 +118,8 @@ void adjustLeft()
 {
     PWM_1_WriteCompare(39321); // 60% - Left Wheel Clockwise
     PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
-    // PWM_1_WriteCompare(calculateSpeed(60)); // 60%
-    // PWM_2_WriteCompare(calculateSpeed(35)); // 35%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(60)); // 60%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(35)); // 35%
     //  love cock and balls
 }
 
@@ -128,8 +128,8 @@ void turnLeft()
 {
     PWM_1_WriteCompare(26214); // 40% -- Left Wheel spins Clockwise
     PWM_2_WriteCompare(26214); // 40% -- Right wheel spins clockwise
-    // PWM_1_WriteCompare(calculateSpeed(40)); // 40%
-    // PWM_2_WriteCompare(calculateSpeed(40)); // 40%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(40)); // 40%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(40)); // 40%
 }
 
 // Clockwise
@@ -137,24 +137,24 @@ void turnRight()
 {
     PWM_1_WriteCompare(39321); // 60% -- Left wheel spins clockwise
     PWM_2_WriteCompare(39321); // 60% - Right wheel spins Anti Clockwise
-    // PWM_1_WriteCompare(calculateSpeed(60)); // 60%
-    // PWM_2_WriteCompare(calculateSpeed(60)); // 60%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(60)); // 60%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(60)); // 60%
 }
 
 void moveForward()
 {
     PWM_1_WriteCompare(42598); // 65% - Left Wheel Clockwise
     PWM_2_WriteCompare(22937); // 35% - Right Wheel Clockwise
-    // PWM_1_WriteCompare(calculateSpeed(65)); // 65%
-    // PWM_2_WriteCompare(calculateSpeed(35)); // 35%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(65)); // 65%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(35)); // 35%
 }
 
 void moveBackward()
 {
     PWM_1_WriteCompare(22937); // 35% - Left Wheel Anti Clockwise
     PWM_2_WriteCompare(42598); // 65% - Right Wheel Anti Clockwise
-    // PWM_1_WriteCompare(calculateSpeed(35)); // 35%
-    // PWM_2_WriteCompare(calculateSpeed(63)); // 65%
+    // PWM_1_WriteCompare(calculateSpeedCompareCount(35)); // 35%
+    // PWM_2_WriteCompare(calculateSpeedCompareCount(63)); // 65%
 }
 
 /* [] END OF FILE */
