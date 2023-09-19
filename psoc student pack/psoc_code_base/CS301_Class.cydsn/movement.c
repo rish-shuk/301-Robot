@@ -18,12 +18,12 @@
 #define maxTurningPWM 6553
 
 // CHANGE SPEED
-#define MOVEMENT_SPEED_MULTIPLIER 1.0 
+// max speed is 20.83cm/s
+// min speed is 11.69cm/s
+#define MOVEMENT_SPEED_MULTIPLIER 0.0
 
-
-
-float rangeMovementMultiplier = 0.7;
-float minMovementMultiplier = 0.5;
+float rangeMovementMultiplier = 0.4;
+float minMovementMultiplier = 0.7;
 
 uint16 turnCount = 0;
 uint16 maxTurnCount = 25; // clock counts for one complete 90 deg turn
