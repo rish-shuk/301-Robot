@@ -13,13 +13,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include "map1.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 // MAP INITIALISATION CODE
-void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]) {
+/*void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]) {
     FILE *file = fopen(filePath, "r");
 
     if (file == NULL) {
@@ -43,13 +44,13 @@ void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]) {
     }
 
     fclose(file); // Close text file
-}
+}*/
 
-void printMap(char map[MAX_ROWS][MAX_COLS]) {
+void printMap(int map[MAX_ROWS][MAX_COLS]) {
     // Print the map in a grid format
     for (int i = 0; i < MAX_ROWS; i++) {
         for (int j = 0; j < MAX_COLS; j++) {
-            printf("%c", map[i][j]);
+            printf("%d", map[i][j]);
         }
         printf("\n");
     }
@@ -60,7 +61,7 @@ struct Location {
     int col;
 };
 
-struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]) {
+struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
     struct Location randomLocation;
     int isNotValid = 1; // true
     while (isNotValid) {
@@ -84,7 +85,7 @@ bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS])
 }
 
 // dijkstra's algorithm- changes global map variable
-void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
+void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
 
     int visitedMap[MAX_ROWS][MAX_COLS];
     for (int i = 0; i < MAX_ROWS; i++) {
@@ -202,7 +203,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     //return retSteps;
 }
 
-void traverseMap(char map[MAX_ROWS][MAX_COLS]) {
+void traverseMap(int map[MAX_ROWS][MAX_COLS]) {
     int currentRow, currentCol = 0;
     struct Location targetLocation;
     for(int i = 0; i < MAX_ROWS; i++) {
@@ -289,9 +290,10 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS]) {
     }
 }
 
-void findPath(char map[MAX_ROWS][MAX_COLS], char *filePath) {
+void findPath(int map[MAX_ROWS][MAX_COLS], char *filePath) {
     readMap(filePath, map); // read map
-    dijkstra(map,getRandomLocation(map),getRandomLocation(map)); // find shortest path
+    printMap(map);
+    //dijkstra(map,getRandomLocation(map),getRandomLocation(map)); // find shortest path
 }
 
 /* [] END OF FILE */

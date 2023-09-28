@@ -21,7 +21,7 @@
 //* ========================================
 #include "defines.h"
 #include "vars.h"
-//#include "pathfinding.h"
+#include "pathfinding.h"
 #include "initialise.h"
 #include "movement.h"
 #include "usbUART.h"
@@ -62,7 +62,7 @@ int timerInt = 0;
 int keepLedOn = 0;
 uint32 stopBuffer = 0;
 
-//char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
+char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
 CY_ISR (speedTimer) {
     timerInt = 1;
@@ -155,6 +155,7 @@ int main()
     S4_detected_StartEx(S4_DETECTED);
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
+    //findPath(map, FILEPATH);
     Timer_LED_Start();
     //stopMoving();
 
@@ -237,7 +238,7 @@ enum DirectionState CheckSensorDirection() {
     } else {
         blockSize = xBlockSize;
     }
-    // increment row/ column
+    // BLOCK TRACKING
     if (totalDistance >= blockSize) {
         switch(orientation) {
             case Up:
@@ -256,7 +257,7 @@ enum DirectionState CheckSensorDirection() {
                 break;
         }
     }
-   
+   // MOVEMENT
     if (previousDirection == Stop) {
         if (stopBuffer <= 10) {
             directionState = Stop;
@@ -272,7 +273,6 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         }
     }
-    
 
     if(previousDirection == TurnRight) {
         if(s5 && s6) {
