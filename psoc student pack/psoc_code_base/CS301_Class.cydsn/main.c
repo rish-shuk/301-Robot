@@ -38,6 +38,7 @@ void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn, ForwardAfterTurn, Backward};
+enum Orientation {Up, Down, Left, Right}; // taken from origin at bottom left corner
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
 // --- YIPPE
@@ -219,13 +220,41 @@ void ResetSensorFlags() {
 // if no conditons are met, it returns Unknown -- need to fix this edge case
 // s1 = 0 -- Black
 // s1 = 1 -- White
+float yBlockSize = 12.84;
+float xBlockSize = 9.13;
+float blockSize;
+uint8 currentRow;
+uint8 currentCol;
+
+
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
+    enum Orientation orientation;
     previousDirection = currentDirection;
-    
-    if (totalDistance >= STOPPING_DISTANCE) {
-        directionState = Stop;
-        return directionState;
+    // determine orientation
+    if(orientation == Up || orientation == Down) {
+        blockSize = yBlockSize;
+    } else {
+        blockSize = xBlockSize;
+    }
+    // increment row/ column
+    if (totalDistance >= blockSize) {
+        switch(orientation) {
+            case Up:
+                currentCol++;
+                break;
+            case Down:
+                currentCol--;
+                break;
+            case Left:
+                currentRow--;
+                break;
+            case Right:
+                currentRow++;
+                break;
+            default:
+                break;
+        }
     }
    
     if (previousDirection == Stop) {
