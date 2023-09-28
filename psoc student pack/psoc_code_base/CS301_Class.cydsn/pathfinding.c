@@ -14,6 +14,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include "map1.h"
+#include "movement.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
@@ -206,16 +207,6 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 void traverseMap(int map[MAX_ROWS][MAX_COLS]) {
     int currentRow, currentCol = 0;
     struct Location targetLocation;
-    for(int i = 0; i < MAX_ROWS; i++) {
-        for(int j = 0; j < MAX_COLS; j++) {
-            if(map[i][j] == 'S') {
-                currentRow = i;
-                currentCol = j; // get starting location
-            } else if(map[i][j] == 'X') {
-                targetLocation.row = i;
-                targetLocation.col = j; // get target location
-            }
-    }
 
     bool leftOrient, rightOrient, upOrient, downOrient = false; // initialise orientation booleans- check which direction they're facing
     struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
@@ -286,7 +277,6 @@ void traverseMap(int map[MAX_ROWS][MAX_COLS]) {
                 }
             }
         }
-    }
     }
 }
 

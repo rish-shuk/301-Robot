@@ -256,6 +256,7 @@ enum DirectionState CheckSensorDirection() {
             default:
                 break;
         }
+        totalDistance = 0; // reset total distance
     }
    // MOVEMENT
     if (previousDirection == Stop) {
@@ -269,6 +270,7 @@ enum DirectionState CheckSensorDirection() {
     
     if (previousDirection == ForwardAfterTurn) {
         if (s3 || s4) {
+            totalDistance = 0; // reset total distance after turn
             directionState = Forward;
             return directionState;
         }
@@ -309,8 +311,12 @@ enum DirectionState CheckSensorDirection() {
         directionState = waitForTurn;
         return directionState;
     }
-    
 
+    // reached fork/ alternate paths
+    if(currentDirection == Forward && (s3 || s4)) {
+        // check for next step in calculated path
+        
+    }
 
     // wait for turn at end of line
     if(s5 && s6 && (previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight))) {
@@ -320,30 +326,6 @@ enum DirectionState CheckSensorDirection() {
     
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        
-        /*
-        // If both are on white, we assume we are off the line and use the back two sensors as backup c.c
-        if (s5 && s6) {
-            
-            if (s1 && s2) {
-                directionState = Forward;
-                return directionState;
-            }
-            if (!s1) {
-                directionState = AdjustToTheRight;
-                return directionState;
-            }
-            if (!s2) {
-                directionState = AdjustToTheLeft;
-                return directionState;
-            }
-            
-            directionState = Forward;
-            return directionState;
-        }
-            */
-        
-        
         if(s6) {
             directionState = AdjustToTheLeft; // keep adjusting to the left
             return directionState;
@@ -354,37 +336,24 @@ enum DirectionState CheckSensorDirection() {
         }
     }
     
-    // forward 111100
+    // forward 1100
     if (s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
     }
     
-    //turn left 110111
+    //turn left 0111
     if (!s3 && s4 && s5 && s6) {
         directionState = TurnLeft;
         return directionState;
     }
     
-    // turn right if 111011
+    // turn right if 1011
     if (s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
         return directionState;
     }
     
-    
-    // ====== After Initial turn ======
-    // -- This accounts for the transition period between turning at an intersection --
-    /*if (previousDirection == TurnRight || previousDirection == TurnLeft) {
-        if ((s1 && s2 && s3 && !s4 && !s5 && !s6) ||
-        (s1 && s2 && !s3 && s4 && !s5 && !s6)) {
-            directionState = HardForward;
-            return directionState;
-        }
-    }*/
-    
-    
-
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
     if (previousDirection == Unknown) {
