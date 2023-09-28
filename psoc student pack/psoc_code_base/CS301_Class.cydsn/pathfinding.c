@@ -19,7 +19,6 @@
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 // MAP INITIALISATION CODE
-/*
 void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]) {
     FILE *file = fopen(filePath, "r");
 
@@ -210,10 +209,10 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS]) {
         for(int j = 0; j < MAX_COLS; j++) {
             if(map[i][j] == 'S') {
                 currentRow = i;
-                currentCol = j;
+                currentCol = j; // get starting location
             } else if(map[i][j] == 'X') {
                 targetLocation.row = i;
-                targetLocation.col = j;
+                targetLocation.col = j; // get target location
             }
     }
 
@@ -295,5 +294,4 @@ void findPath(char map[MAX_ROWS][MAX_COLS], char *filePath) {
     dijkstra(map,getRandomLocation(map),getRandomLocation(map)); // find shortest path
 }
 
-*/
 /* [] END OF FILE */

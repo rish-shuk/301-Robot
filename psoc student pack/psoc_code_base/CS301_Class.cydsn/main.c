@@ -326,19 +326,19 @@ enum DirectionState CheckSensorDirection() {
     }
     
     // forward 111100
-    if (s1 && s2 && s3 && s4 && !s5 && !s6) {
+    if (s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
     }
     
     //turn left 110111
-    if (s1 && s2 && !s3 && s4 && s5 && s6) {
+    if (!s3 && s4 && s5 && s6) {
         directionState = TurnLeft;
         return directionState;
     }
     
     // turn right if 111011
-    if (s1 && s2 && s3 && !s4 && s5 && s6) {
+    if (s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
         return directionState;
     }
