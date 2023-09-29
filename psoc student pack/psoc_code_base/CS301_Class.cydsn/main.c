@@ -219,58 +219,144 @@ float blockSize;
 uint8 currentRow;
 uint8 currentCol; // need to initialise
 
-enum DirectionState traversePath() {
-    switch (previousOrientation) {
-        case Up:
-            if(map[currentRow][currentCol + 1] == 8) {
-                currentDirection = Up;
-                directionState = Forward;
-            } else if (map[currentRow - 1][currentCol] == 8) {
-                currentDirection = Left;
-                directionState = TurnLeft;
-            } else if (map[currentRow + 1][currentCol] == 8) {
-                currentDirection = Right;
-                directionState = TurnRight;
+enum DirectionState getDirection() {
+    // determine block size
+    if(previousOrientation == Up || previousOrientation == Down) {
+        blockSize = yBlockSize;
+    } else {
+        blockSize = xBlockSize;
+    }
+    // find next direction after we reach a new coordinate
+    if(totalDistance <= blockSize) {
+        // MOVEMENT
+        if (previousDirection == Stop) {
+            if (stopBuffer <= 10) {
+                directionState = Stop;
+            } else {
+                directionState = ForwardAfterTurn;
             }
-            break;
-        case Down:
-            if(map[currentRow][currentCol - 1] == 8) {
-                currentDirection = Down;
+            //currentDirection = previousDirection;
+            return directionState;
+        }
+        
+        if (previousDirection == ForwardAfterTurn) {
+            if (s3 || s4) {
+                //totalDistance = 0; // reset total distance after turn
                 directionState = Forward;
-            } else if (map[currentRow - 1][currentCol] == 8) {
-                currentDirection = Right;
-                directionState = TurnRight;
-            } else if (map[currentRow + 1][currentCol] == 8) {
-                currentDirection = Left;
-                directionState = TurnLeft;
+                //currentDirection = previousDirection;
+                return directionState;
             }
-            break;
-        case Left:
-            if(map[currentRow - 1][currentCol] == 8) {
-                currentDirection = Left;
-                directionState = Forward;
-            } else if (map[currentRow][currentCol + 1] == 8) {
-                currentDirection = Up;
+        }
+
+        if(previousDirection == TurnRight) {
+            if(s5 && s6) {
                 directionState = TurnRight;
-            } else if (map[currentRow][currentCol - 1] == 8) {
-                currentDirection = Down;
-                directionState = TurnLeft;
+                currentDirection = previousDirection;
+                return directionState;
+            } 
+            else if (!s5 || !s6) {
+                directionState = Stop;
+                currentDirection = previousDirection;
+                return directionState;
             }
-            break;
-        case Right:
-            if(map[currentRow + 1][currentCol] == 8) {
-                currentDirection = Right;
-                directionState = Forward;
-            } else if (map[currentRow][currentCol + 1] == 8) {
-                currentDirection = Up;
+        }    
+
+        if(previousDirection == TurnLeft) {
+            if(s5 && s6) {
                 directionState = TurnLeft;
-            } else if (map[currentRow][currentCol - 1] == 8) {
-                currentDirection = Down;
-                directionState = TurnRight;
+                currentDirection = previousDirection;
+                return directionState;
+            } 
+            else if (!s5 || !s6) {
+                directionState = Stop;
+                currentDirection = previousDirection;
+                return directionState;
             }
-            break;
-        default:
-            break;
+        }
+
+        // course correction
+        if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
+            if(s6) {
+                directionState = AdjustToTheLeft; // keep adjusting to the left
+            }
+            if(s5) {
+                directionState = AdjustToTheRight; // keep adjusting to the right
+            }
+            previousOrientation = currentOrientation; // unchanged orientation
+            return directionState;
+        }
+        
+        // forward 1100
+        if (s3 && s4 && !s5 && !s6) {
+            directionState = Forward;
+            previousOrientation = currentOrientation; // unchanged orientation
+            return directionState;   
+        }
+
+
+        if (previousDirection == Unknown) {
+            directionState = Forward;
+            previousDirection = currentDirection;
+            return directionState;
+        }
+    
+        // Possible reason
+        previousDirection = currentDirection;
+        return previousDirection;
+
+    } else {
+        switch (previousOrientation) {
+            case Up:
+                if(map[currentRow][currentCol + 1] == 8) {
+                    currentOrientation = Up;
+                    directionState = Forward;
+                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentOrientation = Left;
+                    directionState = TurnLeft;
+                } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentOrientation = Right;
+                    directionState = TurnRight;
+                }
+                break;
+            case Down:
+                if(map[currentRow][currentCol - 1] == 8) {
+                    currentOrientation = Down;
+                    directionState = Forward;
+                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentOrientation = Right;
+                    directionState = TurnRight;
+                } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentOrientation = Left;
+                    directionState = TurnLeft;
+                }
+                break;
+            case Left:
+                if(map[currentRow - 1][currentCol] == 8) {
+                    currentOrientation = Left;
+                    directionState = Forward;
+                } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentOrientation = Up;
+                    directionState = TurnRight;
+                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentOrientation = Down;
+                    directionState = TurnLeft;
+                }
+                break;
+            case Right:
+                if(map[currentRow + 1][currentCol] == 8) {
+                    currentOrientation = Right;
+                    directionState = Forward;
+                } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentOrientation = Up;
+                    directionState = TurnLeft;
+                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentOrientation = Down;
+                    directionState = TurnRight;
+                }
+                break;
+            default:
+                break;
+            }
         }
 }
 
@@ -317,6 +403,7 @@ enum DirectionState CheckSensorDirection() {
         return directionState;
     }
     
+    // If one of the sensors are still on the line after we turn, move forward
     if (previousDirection == ForwardAfterTurn) {
         if (s3 || s4) {
             totalDistance = 0; // reset total distance after turn
@@ -426,10 +513,10 @@ enum DirectionState CheckSensorDirection() {
     }
 
     // wait for turn at end of line
-    if(s5 && s6 && (previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight))) {
+    /*if(s5 && s6 && (previousDirection == Forward || (previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight))) {
         directionState = waitForTurn; // need to wait to check for a black line
         return directionState;
-    }
+    }*/
     
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
