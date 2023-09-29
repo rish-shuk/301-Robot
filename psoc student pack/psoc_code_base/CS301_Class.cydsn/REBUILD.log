@@ -1,4 +1,4 @@
---------------- Rebuild Started: 09/19/2023 19:21:42 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Rebuild Started: 09/29/2023 16:21:20 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\main.o"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\tacho.o"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\initialise.o"
@@ -90,8 +90,6 @@ Deleting file ".\CortexM3\ARM_GCC_541\Debug\S3_detected.o"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\S4_detected.o"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\S5_detected.o"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\S6_detected.o"
-Deleting file ".\CortexM3\ARM_GCC_541\Debug\CS301_Class.hex"
-Deleting file ".\CortexM3\ARM_GCC_541\Debug\CS301_Class.elf"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\CS301_Class.map"
 Deleting file ".\CS301_Class.cycdx"
 Deleting file ".\CS301_Class.svd"
@@ -99,7 +97,7 @@ Deleting file ".\CS301_Class.rpt"
 Deleting file ".\CS301_Class_timing.html"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\.deps\SOURCE_C__ARM_GCC_GENERIC.P"
 Deleting file ".\CortexM3\ARM_GCC_541\Debug\.deps\SOURCE_ASM__ARM_GCC_GENERIC.P"
-cydsfit.exe -.appdatapath "C:\Users\rshu284\AppData\Local\Cypress Semiconductor\PSoC Creator\4.2" -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p "C:\Users\rshu284\OneDrive - The University of Auckland\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CS301_Class.cyprj" -d CY8C5888LTI-LP097 -s "C:\Users\rshu284\OneDrive - The University of Auckland\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\Generated_Source\PSoC5" -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE
+cydsfit.exe -.appdatapath "C:\Users\ikui753\AppData\Local\Cypress Semiconductor\PSoC Creator\4.2" -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p "H:\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CS301_Class.cyprj" -d CY8C5888LTI-LP097 -s "H:\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\Generated_Source\PSoC5" -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE
 Elaborating Design...
 HDL Generation...
 Synthesis...
@@ -112,15 +110,11 @@ Digital Routing...
 Bitstream Generation...
 Bitstream Verification...
 Static timing analysis...
-Warning: sta.M0021: CS301_Class_timing.html: Warning-1350: Asynchronous path(s) exist from "CyBUS_CLK" to "CyILO". See the timing report for details. (File=C:\Users\rshu284\OneDrive - The University of Auckland\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CS301_Class_timing.html)
+Warning: sta.M0021: CS301_Class_timing.html: Warning-1350: Asynchronous path(s) exist from "CyBUS_CLK" to "CyILO". See the timing report for details. (File=H:\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CS301_Class_timing.html)
 API Generation...
 Dependency Generation...
 Cleanup...
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c main.c -o .\CortexM3\ARM_GCC_541\Debug\main.o
-main.c: In function 'SetRobotMovement':
-main.c:395:13: warning: implicit declaration of function 'moveForwardForSpecifiedCount' [-Wimplicit-function-declaration]
-             moveForwardForSpecifiedCount();
-             ^
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/tacho.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c tacho.c -o .\CortexM3\ARM_GCC_541\Debug\tacho.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/initialise.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c initialise.c -o .\CortexM3\ARM_GCC_541\Debug\initialise.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/pathfinding.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c pathfinding.c -o .\CortexM3\ARM_GCC_541\Debug\pathfinding.o
@@ -214,9 +208,11 @@ arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-
 arm-none-eabi-as.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -alh=.\CortexM3\ARM_GCC_541\Debug/CyBootAsmGnu.lst -g -W -o .\CortexM3\ARM_GCC_541\Debug\CyBootAsmGnu.o Generated_Source\PSoC5\CyBootAsmGnu.s
 arm-none-eabi-ar.exe -rs .\CortexM3\ARM_GCC_541\Debug\CS301_Class.a .\CortexM3\ARM_GCC_541\Debug\USBUART.o .\CortexM3\ARM_GCC_541\Debug\USBUART_audio.o .\CortexM3\ARM_GCC_541\Debug\USBUART_boot.o .\CortexM3\ARM_GCC_541\Debug\USBUART_cdc.o .\CortexM3\ARM_GCC_541\Debug\USBUART_cls.o .\CortexM3\ARM_GCC_541\Debug\USBUART_descr.o .\CortexM3\ARM_GCC_541\Debug\USBUART_drv.o .\CortexM3\ARM_GCC_541\Debug\USBUART_episr.o .\CortexM3\ARM_GCC_541\Debug\USBUART_hid.o .\CortexM3\ARM_GCC_541\Debug\USBUART_pm.o .\CortexM3\ARM_GCC_541\Debug\USBUART_std.o .\CortexM3\ARM_GCC_541\Debug\USBUART_vnd.o .\CortexM3\ARM_GCC_541\Debug\USBUART_midi.o .\CortexM3\ARM_GCC_541\Debug\USBUART_msc.o .\CortexM3\ARM_GCC_541\Debug\CONTROL.o .\CortexM3\ARM_GCC_541\Debug\CONTROL_PM.o .\CortexM3\ARM_GCC_541\Debug\USBUART_Dm.o .\CortexM3\ARM_GCC_541\Debug\USBUART_Dp.o .\CortexM3\ARM_GCC_541\Debug\CyDmac.o .\CortexM3\ARM_GCC_541\Debug\CyFlash.o .\CortexM3\ARM_GCC_541\Debug\CyLib.o .\CortexM3\ARM_GCC_541\Debug\cyPm.o .\CortexM3\ARM_GCC_541\Debug\CySpc.o .\CortexM3\ARM_GCC_541\Debug\cyutils.o .\CortexM3\ARM_GCC_541\Debug\PWM_1.o .\CortexM3\ARM_GCC_541\Debug\PWM_1_PM.o .\CortexM3\ARM_GCC_541\Debug\Clock_PWM.o .\CortexM3\ARM_GCC_541\Debug\Clock_QENC.o .\CortexM3\ARM_GCC_541\Debug\M1_IN1.o .\CortexM3\ARM_GCC_541\Debug\M1_IN2.o .\CortexM3\ARM_GCC_541\Debug\M2_IN1.o .\CortexM3\ARM_GCC_541\Debug\M2_IN2.o .\CortexM3\ARM_GCC_541\Debug\M2_D1.o .\CortexM3\ARM_GCC_541\Debug\M1_QA.o .\CortexM3\ARM_GCC_541\Debug\M1_QB.o .\CortexM3\ARM_GCC_541\Debug\M2_QA.o .\CortexM3\ARM_GCC_541\Debug\M2_QB.o .\CortexM3\ARM_GCC_541\Debug\M1_D1.o .\CortexM3\ARM_GCC_541\Debug\PWM_2.o .\CortexM3\ARM_GCC_541\Debug\PWM_2_PM.o .\CortexM3\ARM_GCC_541\Debug\LED.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M1.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M1_PM.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M2.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M2_PM.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M1_Cnt16.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M1_Cnt16_PM.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M2_Cnt16.o .\CortexM3\ARM_GCC_541\Debug\QuadDec_M2_Cnt16_PM.o .\CortexM3\ARM_GCC_541\Debug\DB0.o .\CortexM3\ARM_GCC_541\Debug\DB1.o .\CortexM3\ARM_GCC_541\Debug\DB2.o .\CortexM3\ARM_GCC_541\Debug\UART.o .\CortexM3\ARM_GCC_541\Debug\UART_PM.o .\CortexM3\ARM_GCC_541\Debug\UART_INT.o .\CortexM3\ARM_GCC_541\Debug\UART_BOOT.o .\CortexM3\ARM_GCC_541\Debug\UART_IntClock.o .\CortexM3\ARM_GCC_541\Debug\RF_BT_SELECT.o .\CortexM3\ARM_GCC_541\Debug\RF_BT_SELECT_PM.o .\CortexM3\ARM_GCC_541\Debug\cy_em_eeprom.o .\CortexM3\ARM_GCC_541\Debug\isr_TX.o .\CortexM3\ARM_GCC_541\Debug\isr_RX.o .\CortexM3\ARM_GCC_541\Debug\SpeedTimer.o .\CortexM3\ARM_GCC_541\Debug\SpeedTimer_PM.o .\CortexM3\ARM_GCC_541\Debug\isr_speed.o .\CortexM3\ARM_GCC_541\Debug\SpeedClock.o .\CortexM3\ARM_GCC_541\Debug\Timer_LED.o .\CortexM3\ARM_GCC_541\Debug\Timer_LED_PM.o .\CortexM3\ARM_GCC_541\Debug\isr_Timer_LED.o .\CortexM3\ARM_GCC_541\Debug\timer_clock.o .\CortexM3\ARM_GCC_541\Debug\S6.o .\CortexM3\ARM_GCC_541\Debug\S5.o .\CortexM3\ARM_GCC_541\Debug\S4.o .\CortexM3\ARM_GCC_541\Debug\S3.o .\CortexM3\ARM_GCC_541\Debug\S2.o .\CortexM3\ARM_GCC_541\Debug\S1_detected.o .\CortexM3\ARM_GCC_541\Debug\S1.o .\CortexM3\ARM_GCC_541\Debug\S2_detected.o .\CortexM3\ARM_GCC_541\Debug\S3_detected.o .\CortexM3\ARM_GCC_541\Debug\S4_detected.o .\CortexM3\ARM_GCC_541\Debug\S5_detected.o .\CortexM3\ARM_GCC_541\Debug\S6_detected.o .\CortexM3\ARM_GCC_541\Debug\CyBootAsmGnu.o
 arm-none-eabi-ar.exe: creating .\CortexM3\ARM_GCC_541\Debug\CS301_Class.a
-arm-none-eabi-gcc.exe -Wl,--start-group -o "C:\Users\rshu284\OneDrive - The University of Auckland\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CortexM3\ARM_GCC_541\Debug\CS301_Class.elf" .\CortexM3\ARM_GCC_541\Debug\main.o .\CortexM3\ARM_GCC_541\Debug\tacho.o .\CortexM3\ARM_GCC_541\Debug\initialise.o .\CortexM3\ARM_GCC_541\Debug\pathfinding.o .\CortexM3\ARM_GCC_541\Debug\movement.o .\CortexM3\ARM_GCC_541\Debug\usbUART.o .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM3\ARM_GCC_541\Debug\cymetadata.o .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o .\CortexM3\ARM_GCC_541\Debug\CS301_Class.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM3\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m3 -mthumb -L Generated_Source\PSoC5 -Wl,-Map,.\CortexM3\ARM_GCC_541\Debug/CS301_Class.map -T Generated_Source\PSoC5\cm3gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -O0 -ffat-lto-objects -Wl,--end-group
-.\CortexM3\ARM_GCC_541\Debug\main.o: In function `SetRobotMovement':
-C:\Users\rshu284\OneDrive - The University of Auckland\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn/main.c:395: undefined reference to `moveForwardForSpecifiedCount'
+arm-none-eabi-gcc.exe -Wl,--start-group -o "H:\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CortexM3\ARM_GCC_541\Debug\CS301_Class.elf" .\CortexM3\ARM_GCC_541\Debug\main.o .\CortexM3\ARM_GCC_541\Debug\tacho.o .\CortexM3\ARM_GCC_541\Debug\initialise.o .\CortexM3\ARM_GCC_541\Debug\pathfinding.o .\CortexM3\ARM_GCC_541\Debug\movement.o .\CortexM3\ARM_GCC_541\Debug\usbUART.o .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o .\CortexM3\ARM_GCC_541\Debug\cymetadata.o .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o .\CortexM3\ARM_GCC_541\Debug\CS301_Class.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM3\ARM_GCC_541\Debug\CyComponentLibrary.a" -mcpu=cortex-m3 -mthumb -L Generated_Source\PSoC5 -Wl,-Map,.\CortexM3\ARM_GCC_541\Debug/CS301_Class.map -T Generated_Source\PSoC5\cm3gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -O0 -ffat-lto-objects -Wl,--end-group
+.\CortexM3\ARM_GCC_541\Debug\pathfinding.o:(.data+0x0): multiple definition of `map'
+.\CortexM3\ARM_GCC_541\Debug\main.o:(.data+0x44): first defined here
+.\CortexM3\ARM_GCC_541\Debug\pathfinding.o:(.data+0x474): multiple definition of `food_list'
+.\CortexM3\ARM_GCC_541\Debug\main.o:(.data+0x4b8): first defined here
 collect2.exe: error: ld returned 1 exit status
 The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
---------------- Rebuild Failed: 09/19/2023 19:21:56 ---------------
+--------------- Rebuild Failed: 09/29/2023 16:23:19 ---------------

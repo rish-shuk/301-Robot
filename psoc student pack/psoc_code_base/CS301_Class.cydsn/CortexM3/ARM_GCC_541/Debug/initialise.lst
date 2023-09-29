@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 1
 
 
    1              		.syntax unified
@@ -26,7 +26,7 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
   23              		.thumb_func
   24              		.type	init, %function
   25              	init:
-  26              	.LFB63:
+  26              	.LFB64:
   27              		.file 1 "initialise.c"
    1:initialise.c  **** /* ========================================
    2:initialise.c  ****  *
@@ -38,11 +38,13 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
    8:initialise.c  ****  * WHICH IS THE PROPERTY OF your company.
    9:initialise.c  ****  *
   10:initialise.c  ****  * ========================================
-  11:initialise.c  **** */
+  11:initialise.c  ****  */
   12:initialise.c  **** #include <project.h>
-  13:initialise.c  **** 
-  14:initialise.c  **** void init() {
-  28              		.loc 1 14 0
+  13:initialise.c  **** #include "initialise.h"
+  14:initialise.c  **** 
+  15:initialise.c  **** void init()
+  16:initialise.c  **** {
+  28              		.loc 1 16 0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -52,46 +54,46 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
   35              		.cfi_offset 14, -4
   36 0002 00AF     		add	r7, sp, #0
   37              		.cfi_def_cfa_register 7
-  15:initialise.c  ****     Clock_PWM_Start();
-  38              		.loc 1 15 0
+  17:initialise.c  ****     Clock_PWM_Start();
+  38              		.loc 1 17 0
   39 0004 FFF7FEFF 		bl	Clock_PWM_Start
-  16:initialise.c  ****     PWM_1_Start();
-  40              		.loc 1 16 0
+  18:initialise.c  ****     PWM_1_Start();
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 2
+
+
+  40              		.loc 1 18 0
   41 0008 FFF7FEFF 		bl	PWM_1_Start
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 2
-
-
-  17:initialise.c  ****     PWM_1_WritePeriod(65535);
-  42              		.loc 1 17 0
+  19:initialise.c  ****     PWM_1_WritePeriod(MAX_PWM_COUNT);
+  42              		.loc 1 19 0
   43 000c 4FF6FF70 		movw	r0, #65535
   44 0010 FFF7FEFF 		bl	PWM_1_WritePeriod
-  18:initialise.c  ****     PWM_2_Start();
-  45              		.loc 1 18 0
+  20:initialise.c  ****     PWM_2_Start();
+  45              		.loc 1 20 0
   46 0014 FFF7FEFF 		bl	PWM_2_Start
-  19:initialise.c  ****     PWM_2_WritePeriod(65535);
-  47              		.loc 1 19 0
+  21:initialise.c  ****     PWM_2_WritePeriod(MAX_PWM_COUNT);
+  47              		.loc 1 21 0
   48 0018 4FF6FF70 		movw	r0, #65535
   49 001c FFF7FEFF 		bl	PWM_2_WritePeriod
-  20:initialise.c  **** 
-  21:initialise.c  ****     // start quadrature decoders
-  22:initialise.c  ****     QuadDec_M1_Start();
-  50              		.loc 1 22 0
+  22:initialise.c  **** 
+  23:initialise.c  ****     // start quadrature decoders
+  24:initialise.c  ****     QuadDec_M1_Start();
+  50              		.loc 1 24 0
   51 0020 FFF7FEFF 		bl	QuadDec_M1_Start
-  23:initialise.c  ****     QuadDec_M2_Start();
-  52              		.loc 1 23 0
+  25:initialise.c  ****     QuadDec_M2_Start();
+  52              		.loc 1 25 0
   53 0024 FFF7FEFF 		bl	QuadDec_M2_Start
-  24:initialise.c  ****     SpeedTimer_Start();
-  54              		.loc 1 24 0
+  26:initialise.c  ****     SpeedTimer_Start();
+  54              		.loc 1 26 0
   55 0028 FFF7FEFF 		bl	SpeedTimer_Start
-  25:initialise.c  ****     SpeedClock_Start();
-  56              		.loc 1 25 0
+  27:initialise.c  ****     SpeedClock_Start();
+  56              		.loc 1 27 0
   57 002c FFF7FEFF 		bl	SpeedClock_Start
-  26:initialise.c  **** }
-  58              		.loc 1 26 0
+  28:initialise.c  **** }
+  58              		.loc 1 28 0
   59 0030 00BF     		nop
   60 0032 80BD     		pop	{r7, pc}
   61              		.cfi_endproc
-  62              	.LFE63:
+  62              	.LFE64:
   63              		.size	init, .-init
   64              		.text
   65              	.Letext0:
@@ -105,41 +107,41 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
   73 0006 00000000 		.4byte	.Ldebug_abbrev0
   74 000a 04       		.byte	0x4
   75 000b 01       		.uleb128 0x1
-  76 000c BB000000 		.4byte	.LASF16
+  76 000c 5C000000 		.4byte	.LASF16
   77 0010 0C       		.byte	0xc
-  78 0011 5C010000 		.4byte	.LASF17
-  79 0015 5C000000 		.4byte	.LASF18
+  78 0011 FD000000 		.4byte	.LASF17
+  79 0015 0A010000 		.4byte	.LASF18
   80 0019 00000000 		.4byte	.Ldebug_ranges0+0
   81 001d 00000000 		.4byte	0
   82 0021 00000000 		.4byte	.Ldebug_line0
   83 0025 02       		.uleb128 0x2
   84 0026 01       		.byte	0x1
   85 0027 06       		.byte	0x6
-  86 0028 86010000 		.4byte	.LASF0
+  86 0028 78010000 		.4byte	.LASF0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 3
+
+
   87 002c 02       		.uleb128 0x2
   88 002d 01       		.byte	0x1
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 3
-
-
   89 002e 08       		.byte	0x8
-  90 002f 49010000 		.4byte	.LASF1
+  90 002f EA000000 		.4byte	.LASF1
   91 0033 02       		.uleb128 0x2
   92 0034 02       		.byte	0x2
   93 0035 05       		.byte	0x5
-  94 0036 AE010000 		.4byte	.LASF2
+  94 0036 A0010000 		.4byte	.LASF2
   95 003a 02       		.uleb128 0x2
   96 003b 02       		.byte	0x2
   97 003c 07       		.byte	0x7
   98 003d 0E000000 		.4byte	.LASF3
   99 0041 03       		.uleb128 0x3
- 100 0042 9E010000 		.4byte	.LASF9
+ 100 0042 90010000 		.4byte	.LASF9
  101 0046 02       		.byte	0x2
  102 0047 3F       		.byte	0x3f
  103 0048 4C000000 		.4byte	0x4c
  104 004c 02       		.uleb128 0x2
  105 004d 04       		.byte	0x4
  106 004e 05       		.byte	0x5
- 107 004f 69010000 		.4byte	.LASF4
+ 107 004f 5B010000 		.4byte	.LASF4
  108 0053 02       		.uleb128 0x2
  109 0054 04       		.byte	0x4
  110 0055 07       		.byte	0x7
@@ -161,43 +163,43 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
  126 0071 07       		.byte	0x7
  127 0072 21000000 		.4byte	.LASF8
  128 0076 03       		.uleb128 0x3
- 129 0077 B8010000 		.4byte	.LASF10
+ 129 0077 AA010000 		.4byte	.LASF10
  130 007b 03       		.byte	0x3
  131 007c 2C       		.byte	0x2c
  132 007d 41000000 		.4byte	0x41
  133 0081 02       		.uleb128 0x2
  134 0082 04       		.byte	0x4
  135 0083 04       		.byte	0x4
- 136 0084 A8010000 		.4byte	.LASF11
+ 136 0084 9A010000 		.4byte	.LASF11
  137 0088 02       		.uleb128 0x2
  138 0089 08       		.byte	0x8
  139 008a 04       		.byte	0x4
- 140 008b 72010000 		.4byte	.LASF12
+ 140 008b 64010000 		.4byte	.LASF12
  141 008f 02       		.uleb128 0x2
  142 0090 01       		.byte	0x1
  143 0091 08       		.byte	0x8
- 144 0092 57010000 		.4byte	.LASF13
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 4
+
+
+ 144 0092 F8000000 		.4byte	.LASF13
  145 0096 02       		.uleb128 0x2
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 4
-
-
  146 0097 08       		.byte	0x8
  147 0098 04       		.byte	0x4
- 148 0099 92010000 		.4byte	.LASF14
+ 148 0099 84010000 		.4byte	.LASF14
  149 009d 02       		.uleb128 0x2
  150 009e 04       		.byte	0x4
  151 009f 07       		.byte	0x7
- 152 00a0 C0010000 		.4byte	.LASF15
+ 152 00a0 B2010000 		.4byte	.LASF15
  153 00a4 05       		.uleb128 0x5
  154 00a5 2E000000 		.4byte	.LASF19
  155 00a9 01       		.byte	0x1
- 156 00aa 0E       		.byte	0xe
- 157 00ab 00000000 		.4byte	.LFB63
- 158 00af 34000000 		.4byte	.LFE63-.LFB63
+ 156 00aa 0F       		.byte	0xf
+ 157 00ab 00000000 		.4byte	.LFB64
+ 158 00af 34000000 		.4byte	.LFE64-.LFB64
  159 00b3 01       		.uleb128 0x1
  160 00b4 9C       		.byte	0x9c
  161 00b5 06       		.uleb128 0x6
- 162 00b6 79010000 		.4byte	.LASF20
+ 162 00b6 6B010000 		.4byte	.LASF20
  163 00ba 04       		.byte	0x4
  164 00bb 1207     		.2byte	0x712
  165 00bd C1000000 		.4byte	0xc1
@@ -236,11 +238,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
  198 001b 0E       		.uleb128 0xe
  199 001c 00       		.byte	0
  200 001d 00       		.byte	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 5
+
+
  201 001e 03       		.uleb128 0x3
  202 001f 16       		.uleb128 0x16
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 5
-
-
  203 0020 00       		.byte	0
  204 0021 03       		.uleb128 0x3
  205 0022 0E       		.uleb128 0xe
@@ -296,11 +298,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
  255 0055 49       		.uleb128 0x49
  256 0056 13       		.uleb128 0x13
  257 0057 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 6
+
+
  258 0058 19       		.uleb128 0x19
  259 0059 3C       		.uleb128 0x3c
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 6
-
-
  260 005a 19       		.uleb128 0x19
  261 005b 00       		.byte	0
  262 005c 00       		.byte	0
@@ -320,14 +322,14 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
  276 000b 00       		.byte	0
  277 000c 0000     		.2byte	0
  278 000e 0000     		.2byte	0
- 279 0010 00000000 		.4byte	.LFB63
- 280 0014 34000000 		.4byte	.LFE63-.LFB63
+ 279 0010 00000000 		.4byte	.LFB64
+ 280 0014 34000000 		.4byte	.LFE64-.LFB64
  281 0018 00000000 		.4byte	0
  282 001c 00000000 		.4byte	0
  283              		.section	.debug_ranges,"",%progbits
  284              	.Ldebug_ranges0:
- 285 0000 00000000 		.4byte	.LFB63
- 286 0004 34000000 		.4byte	.LFE63
+ 285 0000 00000000 		.4byte	.LFB64
+ 286 0004 34000000 		.4byte	.LFE64
  287 0008 00000000 		.4byte	0
  288 000c 00000000 		.4byte	0
  289              		.section	.debug_line,"",%progbits
@@ -356,11 +358,11 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
  298              	.LASF19:
  299 002e 696E6974 		.ascii	"init\000"
  299      00
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 7
+
+
  300              	.LASF5:
  301 0033 6C6F6E67 		.ascii	"long unsigned int\000"
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 7
-
-
  301      20756E73 
  301      69676E65 
  301      6420696E 
@@ -371,86 +373,85 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 1
  303      6720756E 
  303      7369676E 
  303      65642069 
- 304              	.LASF18:
- 305 005c 433A5C55 		.ascii	"C:\\Users\\ikui753\\Documents\\GitHub\\301-Robot\\p"
- 305      73657273 
- 305      5C696B75 
- 305      69373533 
- 305      5C446F63 
- 306 0089 736F6320 		.ascii	"soc student pack\\psoc_code_base\\CS301_Class.cydsn"
- 306      73747564 
- 306      656E7420 
- 306      7061636B 
- 306      5C70736F 
- 307 00ba 00       		.ascii	"\000"
- 308              	.LASF16:
- 309 00bb 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 309      43313120 
- 309      352E342E 
- 309      31203230 
- 309      31363036 
- 310 00ee 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 310      20726576 
- 310      6973696F 
- 310      6E203233 
- 310      37373135 
- 311 0121 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
- 311      66756E63 
- 311      74696F6E 
- 311      2D736563 
- 311      74696F6E 
- 312              	.LASF1:
- 313 0149 756E7369 		.ascii	"unsigned char\000"
- 313      676E6564 
- 313      20636861 
- 313      7200
- 314              	.LASF13:
- 315 0157 63686172 		.ascii	"char\000"
- 315      00
- 316              	.LASF17:
- 317 015c 696E6974 		.ascii	"initialise.c\000"
- 317      69616C69 
- 317      73652E63 
- 317      00
- 318              	.LASF4:
- 319 0169 6C6F6E67 		.ascii	"long int\000"
- 319      20696E74 
- 319      00
- 320              	.LASF12:
- 321 0172 646F7562 		.ascii	"double\000"
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccWAIlSu.s 			page 8
+ 304              	.LASF16:
+ 305 005c 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 305      43313120 
+ 305      352E342E 
+ 305      31203230 
+ 305      31363036 
+ 306 008f 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 306      20726576 
+ 306      6973696F 
+ 306      6E203233 
+ 306      37373135 
+ 307 00c2 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 307      66756E63 
+ 307      74696F6E 
+ 307      2D736563 
+ 307      74696F6E 
+ 308              	.LASF1:
+ 309 00ea 756E7369 		.ascii	"unsigned char\000"
+ 309      676E6564 
+ 309      20636861 
+ 309      7200
+ 310              	.LASF13:
+ 311 00f8 63686172 		.ascii	"char\000"
+ 311      00
+ 312              	.LASF17:
+ 313 00fd 696E6974 		.ascii	"initialise.c\000"
+ 313      69616C69 
+ 313      73652E63 
+ 313      00
+ 314              	.LASF18:
+ 315 010a 483A5C44 		.ascii	"H:\\Documents\\GitHub\\301-Robot\\psoc student pack"
+ 315      6F63756D 
+ 315      656E7473 
+ 315      5C476974 
+ 315      4875625C 
+ 316 0139 5C70736F 		.ascii	"\\psoc_code_base\\CS301_Class.cydsn\000"
+ 316      635F636F 
+ 316      64655F62 
+ 316      6173655C 
+ 316      43533330 
+ 317              	.LASF4:
+ 318 015b 6C6F6E67 		.ascii	"long int\000"
+ 318      20696E74 
+ 318      00
+ 319              	.LASF12:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cc7HNBEY.s 			page 8
 
 
- 321      6C6500
- 322              	.LASF20:
- 323 0179 49544D5F 		.ascii	"ITM_RxBuffer\000"
- 323      52784275 
- 323      66666572 
- 323      00
- 324              	.LASF0:
- 325 0186 7369676E 		.ascii	"signed char\000"
- 325      65642063 
- 325      68617200 
- 326              	.LASF14:
- 327 0192 6C6F6E67 		.ascii	"long double\000"
- 327      20646F75 
- 327      626C6500 
- 328              	.LASF9:
- 329 019e 5F5F696E 		.ascii	"__int32_t\000"
- 329      7433325F 
- 329      7400
- 330              	.LASF11:
- 331 01a8 666C6F61 		.ascii	"float\000"
- 331      7400
- 332              	.LASF2:
- 333 01ae 73686F72 		.ascii	"short int\000"
- 333      7420696E 
- 333      7400
- 334              	.LASF10:
- 335 01b8 696E7433 		.ascii	"int32_t\000"
- 335      325F7400 
- 336              	.LASF15:
- 337 01c0 73697A65 		.ascii	"sizetype\000"
- 337      74797065 
- 337      00
- 338              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
+ 320 0164 646F7562 		.ascii	"double\000"
+ 320      6C6500
+ 321              	.LASF20:
+ 322 016b 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 322      52784275 
+ 322      66666572 
+ 322      00
+ 323              	.LASF0:
+ 324 0178 7369676E 		.ascii	"signed char\000"
+ 324      65642063 
+ 324      68617200 
+ 325              	.LASF14:
+ 326 0184 6C6F6E67 		.ascii	"long double\000"
+ 326      20646F75 
+ 326      626C6500 
+ 327              	.LASF9:
+ 328 0190 5F5F696E 		.ascii	"__int32_t\000"
+ 328      7433325F 
+ 328      7400
+ 329              	.LASF11:
+ 330 019a 666C6F61 		.ascii	"float\000"
+ 330      7400
+ 331              	.LASF2:
+ 332 01a0 73686F72 		.ascii	"short int\000"
+ 332      7420696E 
+ 332      7400
+ 333              	.LASF10:
+ 334 01aa 696E7433 		.ascii	"int32_t\000"
+ 334      325F7400 
+ 335              	.LASF15:
+ 336 01b2 73697A65 		.ascii	"sizetype\000"
+ 336      74797065 
+ 336      00
+ 337              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

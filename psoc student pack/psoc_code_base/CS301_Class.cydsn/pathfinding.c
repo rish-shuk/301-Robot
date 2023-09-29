@@ -55,7 +55,7 @@ struct Location {
 // pathfinding 
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
-bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]) {
+bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == 0);
 }
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
@@ -172,13 +172,10 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
             }
         }
     }
-    printMap(map);
-    //printMap(map);
-    //return retSteps;
 }
 
 
-void traverseMap(char map[MAX_ROWS][MAX_COLS]) {
+void traverseMap(int map[MAX_ROWS][MAX_COLS]) {
     int currentRow, currentCol = 0;
     struct Location targetLocation;
     for(int i = 0; i < MAX_ROWS; i++) {

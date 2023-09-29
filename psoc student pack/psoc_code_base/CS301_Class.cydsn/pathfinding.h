@@ -29,14 +29,14 @@ struct Location
 };
 
 // MAP INITIALISATION CODE
-void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]);
-void printMap(char map[MAX_ROWS][MAX_COLS]);
-struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]);
+//void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]);
+//void printMap(char map[MAX_ROWS][MAX_COLS]);
+//struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]);
 
 // Pathfinding functions
-bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]);
-void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
-void traverseMap(char map[MAX_ROWS][MAX_COLS]);
-void findPath(char map[MAX_ROWS][MAX_COLS], char *filePath);
+bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]);
+void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
+void traverseMap(int map[MAX_ROWS][MAX_COLS]);
+void findPath(int map[MAX_ROWS][MAX_COLS]);
 
 #endif /* MAP_FUNCTIONS_H */
