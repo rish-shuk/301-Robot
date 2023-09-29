@@ -251,12 +251,12 @@ enum DirectionState getDirection() {
         if(previousDirection == TurnRight) {
             if(s5 && s6) {
                 directionState = TurnRight;
-                currentDirection = previousDirection;
+                //currentDirection = previousDirection;
                 return directionState;
             } 
             else if (!s5 || !s6) {
                 directionState = Stop;
-                currentDirection = previousDirection;
+                //currentDirection = previousDirection;
                 return directionState;
             }
         }    
@@ -264,12 +264,12 @@ enum DirectionState getDirection() {
         if(previousDirection == TurnLeft) {
             if(s5 && s6) {
                 directionState = TurnLeft;
-                currentDirection = previousDirection;
+                //currentDirection = previousDirection;
                 return directionState;
             } 
             else if (!s5 || !s6) {
                 directionState = Stop;
-                currentDirection = previousDirection;
+                //currentDirection = previousDirection;
                 return directionState;
             }
         }
@@ -282,26 +282,25 @@ enum DirectionState getDirection() {
             if(s5) {
                 directionState = AdjustToTheRight; // keep adjusting to the right
             }
-            previousOrientation = currentOrientation; // unchanged orientation
+            //previousOrientation = currentOrientation; // unchanged orientation
             return directionState;
         }
         
         // forward 1100
         if (s3 && s4 && !s5 && !s6) {
             directionState = Forward;
-            previousOrientation = currentOrientation; // unchanged orientation
+            //previousOrientation = currentOrientation; // unchanged orientation
             return directionState;   
         }
 
-
         if (previousDirection == Unknown) {
             directionState = Forward;
-            previousDirection = currentDirection;
+            //previousDirection = currentDirection;
             return directionState;
         }
     
         // Possible reason
-        previousDirection = currentDirection;
+        //previousDirection = currentDirection;
         return previousDirection;
 
     } else {
