@@ -355,8 +355,9 @@ enum DirectionState getDirection() {
                 break;
             default:
                 break;
-            }
         }
+        totalDistance = 0; // reset total distance
+    }
 }
 
 enum DirectionState CheckSensorDirection() {
