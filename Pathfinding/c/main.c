@@ -1,44 +1,18 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-
+#include "map.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
-void readMap(char *filePath, char map[MAX_ROWS][MAX_COLS]) {
-    FILE *file = fopen(filePath, "r");
-
-    if (file == NULL) {
-        perror("Error opening file");
-        exit(1); // Exit the program if file opening fails
-    }
-
-    // Read the file and populate the array
-    for (int i = 0; i < MAX_ROWS; i++) {
-        for (int j = 0; j < MAX_COLS; j++) {
-            char c = fgetc(file);
-            while (c != '0' && c != '1' && c != EOF) {
-                c = fgetc(file);
-            }
-            if (c == EOF) {
-                fclose(file);
-                return; // Exit the function if end of file is reached
-            }
-            map[i][j] = c;
-        }
-    }
-
-    fclose(file); // Close text file
-}
-
-void printMap(char map[MAX_ROWS][MAX_COLS]) {
+void printMap(int map[MAX_ROWS][MAX_COLS]) {
     // Print the map in a grid format
     for (int i = 0; i < MAX_ROWS; i++) {
         for (int j = 0; j < MAX_COLS; j++) {
-            printf("%c", map[i][j]);
+            printf("%d", map[i][j]);
         }
         printf("\n");
     }
@@ -49,14 +23,14 @@ struct Location {
     int col;
 };
 
-struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]) {
+struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
     struct Location randomLocation;
     int isNotValid = 1; // true
     while (isNotValid) {
         int random_row = rand() % MAX_ROWS;
         int random_col = rand() % MAX_COLS; // get random row and column
         // check point on map to see if it's a path
-        if (map[random_row][random_col] == '0') {
+        if (map[random_row][random_col] == 0) {
             randomLocation.row = random_row;
             randomLocation.col = random_col;
             isNotValid = 0; // found valid location
@@ -65,15 +39,13 @@ struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]) {
     return randomLocation;
 }
 
-
-
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
-bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]) {
-    return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == '0');
+bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
+    return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == 0);
 }
 
-void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
+void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
 
     int visitedMap[MAX_ROWS][MAX_COLS];
     for (int i = 0; i < MAX_ROWS; i++) {
@@ -163,7 +135,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
     retSteps[shortestDist-1].row = currentRow; 
     retSteps[shortestDist-1].col = currentCol; // add targetLocation to retSteps
     //printf("retSteps[%d]: %d,%d\n", shortestDist-1, currentRow, currentCol);
-    map[currentRow][currentCol] = 'X'; // mark finish location
+    map[currentRow][currentCol] = 9; // mark finish location
     //printf("%d,%d\n", currentRow, currentCol); // print optimal step
     // reconstruct path by reversing paths array and taking shortest distance
     while(shortestDist > 0) {    
@@ -173,7 +145,7 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
             int newCol = currentCol + moves[i].col;
 
             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
-                map[newRow][newCol] = '*'; // mark optimal step
+                map[newRow][newCol] = 8; // mark optimal step
                 shortestDist--; // decrement distance
                 currentRow = newRow; 
                 currentCol = newCol; // change current location
@@ -181,17 +153,18 @@ void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struc
                 retSteps[shortestDist].row = currentRow; 
                 retSteps[shortestDist].col = currentCol; // add currentRow and currentCol to retstep- stores optimal path
                 if(currentRow == startlocation.row && currentCol == startlocation.col) {
-                    map[currentRow][currentCol] = 'S'; // mark start location
+                    map[currentRow][currentCol] = 2; // mark start location
                     break;
                 }   
             }
         }
     }
     printMap(map);
+    //printMap(map);
     //return retSteps;
 }
 
-void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
+void traverseMap(int map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
     int currentRow = startLocation.row;
     int currentCol = startLocation.col; // get starting location
     bool leftOrient, rightOrient, upOrient, downOrient = false; // initialise orientation booleans- check which direction they're facing
@@ -268,22 +241,25 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS], struct Location startLocation, st
 
 int main() {
     srand(time(NULL)); // Seed the random number generator with the current time
-    char map[MAX_ROWS][MAX_COLS];
-    readMap("map_demo.txt", map);
     //printMap(map);
     //struct Location startLocation = getRandomLocation(map); 
     //struct Location targetLocation = getRandomLocation(map); // generate random start and target location
     struct Location startLocation; 
     startLocation.row = 13;
     startLocation.col = 0;
+    startLocation.row = 1;
+    startLocation.col = 1;
     struct Location targetLocation; // generate random start and target location
     targetLocation.row = 0;
     targetLocation.col = 17;
+    targetLocation.row = 1;
+    targetLocation.col = 4;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
     dijkstra(map, startLocation, targetLocation); // find shortest path
+    printMap(map);
     // traverseMap(map, startLocation, targetLocation);
     return 0;
 }
