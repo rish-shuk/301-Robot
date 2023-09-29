@@ -159,7 +159,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
             }
         }
     }
-    printMap(map);
+    //printMap(map);
     //return retSteps;
 }
 
@@ -244,16 +244,17 @@ int main() {
     //struct Location startLocation = getRandomLocation(map); 
     //struct Location targetLocation = getRandomLocation(map); // generate random start and target location
     struct Location startLocation; 
-    startLocation.row = 13;
-    startLocation.col = 0;
+    startLocation.row = 1;
+    startLocation.col = 1;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 0;
-    targetLocation.col = 17;
+    targetLocation.row = 1;
+    targetLocation.col = 4;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
     dijkstra(map, startLocation, targetLocation); // find shortest path
+    printMap(map);
     // traverseMap(map, startLocation, targetLocation);
     return 0;
 }
