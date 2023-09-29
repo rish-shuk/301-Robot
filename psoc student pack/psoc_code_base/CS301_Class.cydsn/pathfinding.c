@@ -267,10 +267,10 @@ void traverseMap(char map[MAX_ROWS][MAX_COLS]) {
     }
 }
 
-void findPath(char map[MAX_ROWS][MAX_COLS], char *filePath) {
-    
-    dijkstra(map,getRandomLocation(map),getRandomLocation(map)); // find shortest path
+void findPath(int map[MAX_ROWS][MAX_COLS]) {
+    struct Location startLocation = {1,1};
+    struct Location targetLocation = {1,5};
+    dijkstra(map, startLocation, targetLocation); // find shortest path
 }
 
-*/
 /* [] END OF FILE */
