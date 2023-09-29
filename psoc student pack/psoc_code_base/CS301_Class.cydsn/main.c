@@ -219,7 +219,63 @@ float blockSize;
 uint8 currentRow;
 uint8 currentCol; // need to initialise
 
+enum DirectionState traversePath() {
+    switch (previousOrientation) {
+        case Up:
+            if(map[currentRow][currentCol + 1] == 8) {
+                currentDirection = Up;
+                directionState = Forward;
+            } else if (map[currentRow - 1][currentCol] == 8) {
+                currentDirection = Left;
+                directionState = TurnLeft;
+            } else if (map[currentRow + 1][currentCol] == 8) {
+                currentDirection = Right;
+                directionState = TurnRight;
+            }
+            break;
+        case Down:
+            if(map[currentRow][currentCol - 1] == 8) {
+                currentDirection = Down;
+                directionState = Forward;
+            } else if (map[currentRow - 1][currentCol] == 8) {
+                currentDirection = Right;
+                directionState = TurnRight;
+            } else if (map[currentRow + 1][currentCol] == 8) {
+                currentDirection = Left;
+                directionState = TurnLeft;
+            }
+            break;
+        case Left:
+            if(map[currentRow - 1][currentCol] == 8) {
+                currentDirection = Left;
+                directionState = Forward;
+            } else if (map[currentRow][currentCol + 1] == 8) {
+                currentDirection = Up;
+                directionState = TurnRight;
+            } else if (map[currentRow][currentCol - 1] == 8) {
+                currentDirection = Down;
+                directionState = TurnLeft;
+            }
+            break;
+        case Right:
+            if(map[currentRow + 1][currentCol] == 8) {
+                currentDirection = Right;
+                directionState = Forward;
+            } else if (map[currentRow][currentCol + 1] == 8) {
+                currentDirection = Up;
+                directionState = TurnLeft;
+            } else if (map[currentRow][currentCol - 1] == 8) {
+                currentDirection = Down;
+                directionState = TurnRight;
+            }
+            break;
+        default:
+            break;
+        }
+}
+
 enum DirectionState CheckSensorDirection() {
+
     directionState = Stop;
     currentOrientation = Up; // initialise at start
     previousDirection = currentDirection;
