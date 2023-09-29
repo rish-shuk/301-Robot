@@ -39,6 +39,7 @@ void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn, ForwardAfterTurn, Backward};
+enum DirectionState directionState;
 enum Orientation {Up, Down, Left, Right}; // taken from origin at bottom left corner
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
@@ -219,8 +220,8 @@ uint8 currentRow;
 uint8 currentCol; // need to initialise
 
 enum DirectionState CheckSensorDirection() {
-    enum DirectionState directionState = Stop;
-    enum Orientation currentOrientation;
+    directionState = Stop;
+    currentOrientation = Up; // initialise at start
     previousDirection = currentDirection;
     // determine orientation and relevant blocksize
     if(currentOrientation == Up || Down) {
@@ -256,6 +257,7 @@ enum DirectionState CheckSensorDirection() {
         } else {
             directionState = ForwardAfterTurn;
         }
+        currentDirection = previousDirection;
         return directionState;
     }
     
@@ -263,6 +265,7 @@ enum DirectionState CheckSensorDirection() {
         if (s3 || s4) {
             totalDistance = 0; // reset total distance after turn
             directionState = Forward;
+            currentDirection = previousDirection;
             return directionState;
         }
     }
@@ -270,10 +273,12 @@ enum DirectionState CheckSensorDirection() {
     if(previousDirection == TurnRight) {
         if(s5 && s6) {
             directionState = TurnRight;
+            currentDirection = previousDirection;
             return directionState;
         } 
         else if (!s5 || !s6) {
             directionState = Stop;
+            currentDirection = previousDirection;
             return directionState;
         }
     }    
@@ -281,15 +286,17 @@ enum DirectionState CheckSensorDirection() {
     if(previousDirection == TurnLeft) {
         if(s5 && s6) {
             directionState = TurnLeft;
+            currentDirection = previousDirection;
             return directionState;
         } 
         else if (!s5 || !s6) {
             directionState = Stop;
+            currentDirection = previousDirection;
             return directionState;
         }
     }
     
-    if (previousDirection == waitForTurn) {
+    /*if (previousDirection == waitForTurn) {
         // If we are waiting for a turn, look for left sensor and right sensor, otherwise keep waiting for turn (moving forward)
         if (!s3) {
             directionState = TurnLeft;
@@ -301,13 +308,13 @@ enum DirectionState CheckSensorDirection() {
         }
         directionState = waitForTurn;
         return directionState;
-    }
+    }*/
 
-    // reached fork/ alternate paths
+    // reached fork/ alternate paths or needs to turn
     if((previousDirection == Forward && (s3 || s4)) || (previousDirection == waitForTurn && s3 && s4)) {
         // check for next step in calculated path, robot will know it's location and next step
         // optimal steps are marked with an 8
-        switch (currentDirection) {
+        switch (previousOrientation) {
             case Up:
                 if(map[currentRow][currentCol + 1] == 8) {
                     currentDirection = Up;
@@ -388,7 +395,7 @@ enum DirectionState CheckSensorDirection() {
     }
     
     //turn left 0111
-    if (!s3 && s4 && s5 && s6) {
+    /*if (!s3 && s4 && s5 && s6) {
         directionState = TurnLeft;
         switch(previousOrientation) {
             case Up:
@@ -408,10 +415,10 @@ enum DirectionState CheckSensorDirection() {
         }
         previousDirection = currentDirection;
         return directionState;
-    }
+    }*/
     
     // turn right if 1011
-    if (s3 && !s4 && s5 && s6) {
+    /*if (s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
         switch(previousOrientation) {
             case Up:
@@ -431,16 +438,18 @@ enum DirectionState CheckSensorDirection() {
         }
         previousDirection = currentDirection;
         return directionState;
-    }
+    }*/
     
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
     if (previousDirection == Unknown) {
         directionState = Forward;
+        previousDirection = currentDirection;
         return directionState;
     }
     
     // Possible reason
+    previousDirection = currentDirection;
     return previousDirection;
 }
 
