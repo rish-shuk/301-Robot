@@ -60,4 +60,9 @@
 #define SOP 0xaa
 #define PACKETSIZE 32
 #define RXSTRINGSIZE 64 // 4+3+[4+4+4]+[4+4+4+4]+[4+4+4+4]+[4+4+4+4]+delimiters, i.e. no more than 64
+
+//* ========================================
+// Distance
+#define WHEEL_DIAMETER_MM 64.5
+#define STOPPING_DISTANCE 10000 // in MM
 /* [] END OF FILE */

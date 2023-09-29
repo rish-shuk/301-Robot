@@ -25,6 +25,7 @@
 #include "initialise.h"
 #include "movement.h"
 #include "usbUART.h"
+#include "map.h"
 //* ========================================
 // USBUART
 void usbPutString(char *s);
@@ -41,18 +42,9 @@ enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheR
 enum Orientation {Up, Down, Left, Right}; // taken from origin at bottom left corner
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
-// --- YIPPE
 // ----------------------------------------
-uint8 s1 = 0; // black = 0, white = 1
-uint8 s2 = 0;
-uint8 s3 = 0;
-uint8 s4 = 0;
-uint8 s5 = 0;
-uint8 s6 = 0;
+uint8 s1, s2, s3, s4, s5, s6 = 0; // black = 0, white = 1- initialise sensor signals
 //* ========================================
-// Calculating Distance
-#define WHEEL_DIAMETER_MM 64.5
-#define STOPPING_DISTANCE 10000 // in MM
 uint32 totalMilliseconds = 0;
 float totalDistance = 0; // in mm
 //* ========================================
@@ -61,8 +53,6 @@ int quadDec2Count = 0;
 int timerInt = 0;
 int keepLedOn = 0;
 uint32 stopBuffer = 0;
-
-char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
 CY_ISR (speedTimer) {
     timerInt = 1;
@@ -78,7 +68,6 @@ CY_ISR (speedTimer) {
         quadDec2Count != 0) {
         //uint32 newDistance = ((abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM)/4;
         float newDistance = (abs(quadDec2Count) * CY_M_PI * WHEEL_DIAMETER_MM)/228;
-        
         totalDistance = totalDistance + newDistance;
     }
     
@@ -227,7 +216,6 @@ float blockSize;
 uint8 currentRow;
 uint8 currentCol;
 
-
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
     enum Orientation orientation;
@@ -258,6 +246,7 @@ enum DirectionState CheckSensorDirection() {
         }
         totalDistance = 0; // reset total distance
     }
+
    // MOVEMENT
     if (previousDirection == Stop) {
         if (stopBuffer <= 10) {
@@ -313,9 +302,68 @@ enum DirectionState CheckSensorDirection() {
     }
 
     // reached fork/ alternate paths
-    if(currentDirection == Forward && (s3 || s4)) {
-        // check for next step in calculated path
+    if((previousDirection == Forward && (s3 || s4)) || (previousDirection == waitForTurn && s3 && s4)) {
+        // check for next step in calculated path, robot will know it's location and next step
+        // optimal steps are marked with an 8
+        switch (currentDirection) {
+            case Up:
+                if(map[currentRow][currentCol + 1] == 8) {
+                    currentDirection = Up;
+                    directionState = Forward;
+                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentDirection = Left;
+                    directionState = TurnLeft;
+                } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentDirection = Right;
+                    directionState = TurnRight;
+                }
+                break;
+            case Down:
+                if(map[currentRow][currentCol - 1] == 8) {
+                    currentDirection = Down;
+                    directionState = Forward;
+                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentDirection = Right;
+                    directionState = TurnRight;
+                } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentDirection = Left;
+                    directionState = TurnLeft;
+                }
+                break;
+            case Left:
+                if(map[currentRow - 1][currentCol] == 8) {
+                    currentDirection = Left;
+                    directionState = Forward;
+                } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentDirection = Up;
+                    directionState = TurnRight;
+                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentDirection = Down;
+                    directionState = TurnLeft;
+                }
+                break;
+            case Right:
+                if(map[currentRow + 1][currentCol] == 8) {
+                    currentDirection = Right;
+                    directionState = Forward;
+                } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentDirection = Up;
+                    directionState = TurnLeft;
+                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentDirection = Down;
+                    directionState = TurnRight;
+                }
+                break;
+            default:
+                break;
+        }
+
+            
+
+
         
+        }
+        return directionState;
     }
 
     // wait for turn at end of line
