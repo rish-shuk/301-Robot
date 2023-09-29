@@ -42,6 +42,8 @@ enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheR
 enum Orientation {Up, Down, Left, Right}; // taken from origin at bottom left corner
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
+enum Orientation currentOrientation = Up;
+enum Orientation previousOrientation = Up;
 // ----------------------------------------
 uint8 s1, s2, s3, s4, s5, s6 = 0; // black = 0, white = 1- initialise sensor signals
 //* ========================================
@@ -214,21 +216,21 @@ float yBlockSize = 12.84;
 float xBlockSize = 9.13;
 float blockSize;
 uint8 currentRow;
-uint8 currentCol;
+uint8 currentCol; // need to initialise
 
 enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop;
-    enum Orientation orientation;
+    enum Orientation currentOrientation;
     previousDirection = currentDirection;
-    // determine orientation
-    if(orientation == Up || orientation == Down) {
+    // determine orientation and relevant blocksize
+    if(currentOrientation == Up || Down) {
         blockSize = yBlockSize;
     } else {
         blockSize = xBlockSize;
     }
     // BLOCK TRACKING
     if (totalDistance >= blockSize) {
-        switch(orientation) {
+        switch(currentOrientation) {
             case Up:
                 currentCol++;
                 break;
@@ -357,12 +359,6 @@ enum DirectionState CheckSensorDirection() {
             default:
                 break;
         }
-
-            
-
-
-        
-        }
         return directionState;
     }
 
@@ -376,29 +372,64 @@ enum DirectionState CheckSensorDirection() {
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         if(s6) {
             directionState = AdjustToTheLeft; // keep adjusting to the left
-            return directionState;
         }
         if(s5) {
             directionState = AdjustToTheRight; // keep adjusting to the right
-            return directionState;
         }
+        previousOrientation = currentOrientation; // unchanged orientation
+        return directionState;
     }
     
     // forward 1100
     if (s3 && s4 && !s5 && !s6) {
         directionState = Forward;
+        previousOrientation = currentOrientation; // unchanged orientation
         return directionState;   
     }
     
     //turn left 0111
     if (!s3 && s4 && s5 && s6) {
         directionState = TurnLeft;
+        switch(previousOrientation) {
+            case Up:
+                currentDirection = Left;
+                break;
+            case Down:
+                currentDirection = Right;
+                break;
+            case Left:
+                currentDirection = Up;
+                break;
+            case Right:
+                currentDirection = Down;
+                break;
+            default:
+                break;
+        }
+        previousDirection = currentDirection;
         return directionState;
     }
     
     // turn right if 1011
     if (s3 && !s4 && s5 && s6) {
         directionState = TurnRight;
+        switch(previousOrientation) {
+            case Up:
+                currentDirection = Right;
+                break;
+            case Down:
+                currentDirection = Left;
+                break;
+            case Left:
+                currentDirection = Down;
+                break;
+            case Right:
+                currentDirection = Up;
+                break;
+            default:
+                break;
+        }
+        previousDirection = currentDirection;
         return directionState;
     }
     
