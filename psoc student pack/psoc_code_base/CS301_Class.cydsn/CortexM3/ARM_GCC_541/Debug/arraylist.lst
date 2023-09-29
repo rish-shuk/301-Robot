@@ -1,0 +1,2670 @@
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"arraylist.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.rodata
+  20              		.align	2
+  21              	.LC0:
+  22 0000 6E65775F 		.ascii	"new_list->body\000"
+  22      6C697374 
+  22      2D3E626F 
+  22      647900
+  23 000f 00       		.align	2
+  24              	.LC1:
+  25 0010 61727261 		.ascii	"arraylist.c\000"
+  25      796C6973 
+  25      742E6300 
+  26              		.section	.text.arraylist_create,"ax",%progbits
+  27              		.align	2
+  28              		.global	arraylist_create
+  29              		.thumb
+  30              		.thumb_func
+  31              		.type	arraylist_create, %function
+  32              	arraylist_create:
+  33              	.LFB0:
+  34              		.file 1 "arraylist.c"
+   1:arraylist.c   **** /**
+   2:arraylist.c   ****  * Arraylist implementation
+   3:arraylist.c   ****  * (c) 2011 @marekweb
+   4:arraylist.c   ****  *
+   5:arraylist.c   ****  * Uses dynamic extensible arrays.
+   6:arraylist.c   ****  */
+   7:arraylist.c   **** // ARRAYLIST IMPLEMENTATION FROM https://github.com/marekweb/datastructs-c // @marekweb
+   8:arraylist.c   **** #include <stdlib.h>
+   9:arraylist.c   **** #include <string.h>
+  10:arraylist.c   **** #include <assert.h>
+  11:arraylist.c   **** #include "arraylist.h"
+  12:arraylist.c   **** 
+  13:arraylist.c   **** /*
+  14:arraylist.c   ****  * Interface section used for `makeheaders`.
+  15:arraylist.c   ****  */
+  16:arraylist.c   **** #if INTERFACE
+  17:arraylist.c   **** 
+  18:arraylist.c   **** struct arraylist {
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 2
+
+
+  19:arraylist.c   **** 	unsigned int size; // Count of items currently in list
+  20:arraylist.c   **** 	unsigned int capacity; // Allocated memory size, in items
+  21:arraylist.c   **** 	void** body; // Pointer to allocated memory for items (of size capacity * sizeof(void*))
+  22:arraylist.c   **** };
+  23:arraylist.c   **** 
+  24:arraylist.c   **** /**
+  25:arraylist.c   ****  * Iterates over a list, using the provided `unsigned int index` and `void* item`
+  26:arraylist.c   ****  * variables as containers.
+  27:arraylist.c   ****  */
+  28:arraylist.c   **** #define arraylist_iterate(l, index, item) \
+  29:arraylist.c   **** 	for (index = 0, item = l->body[0]; index < l->size; item = l->body[++index])
+  30:arraylist.c   **** 
+  31:arraylist.c   **** #endif
+  32:arraylist.c   **** 
+  33:arraylist.c   **** // Initial capacity of the arraylist
+  34:arraylist.c   **** #define ARRAYLIST_INITIAL_CAPACITY 4
+  35:arraylist.c   **** 
+  36:arraylist.c   **** /**
+  37:arraylist.c   ****  * Macro to shift a section of memory by an offset, used when inserting or removing items.
+  38:arraylist.c   ****  */
+  39:arraylist.c   **** #define arraylist_memshift(s, offset, length) memmove((s) + (offset), (s), (length)* sizeof(s));
+  40:arraylist.c   **** 
+  41:arraylist.c   **** /**
+  42:arraylist.c   ****  * Create a new, empty arraylist.
+  43:arraylist.c   ****  */
+  44:arraylist.c   **** arraylist* arraylist_create()
+  45:arraylist.c   **** {
+  35              		.loc 1 45 0
+  36              		.cfi_startproc
+  37              		@ args = 0, pretend = 0, frame = 8
+  38              		@ frame_needed = 1, uses_anonymous_args = 0
+  39 0000 80B5     		push	{r7, lr}
+  40              		.cfi_def_cfa_offset 8
+  41              		.cfi_offset 7, -8
+  42              		.cfi_offset 14, -4
+  43 0002 82B0     		sub	sp, sp, #8
+  44              		.cfi_def_cfa_offset 16
+  45 0004 00AF     		add	r7, sp, #0
+  46              		.cfi_def_cfa_register 7
+  46:arraylist.c   **** 	arraylist* new_list = malloc(sizeof(arraylist));
+  47              		.loc 1 46 0
+  48 0006 0C20     		movs	r0, #12
+  49 0008 FFF7FEFF 		bl	malloc
+  50 000c 0346     		mov	r3, r0
+  51 000e 7B60     		str	r3, [r7, #4]
+  47:arraylist.c   **** 	new_list->size = 0;
+  52              		.loc 1 47 0
+  53 0010 7B68     		ldr	r3, [r7, #4]
+  54 0012 0022     		movs	r2, #0
+  55 0014 1A60     		str	r2, [r3]
+  48:arraylist.c   **** 	// Allocate the array
+  49:arraylist.c   **** 	new_list->body = malloc(sizeof(void*) * ARRAYLIST_INITIAL_CAPACITY);
+  56              		.loc 1 49 0
+  57 0016 1020     		movs	r0, #16
+  58 0018 FFF7FEFF 		bl	malloc
+  59 001c 0346     		mov	r3, r0
+  60 001e 1A46     		mov	r2, r3
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 3
+
+
+  61 0020 7B68     		ldr	r3, [r7, #4]
+  62 0022 9A60     		str	r2, [r3, #8]
+  50:arraylist.c   **** 	assert(new_list->body);
+  63              		.loc 1 50 0
+  64 0024 7B68     		ldr	r3, [r7, #4]
+  65 0026 9B68     		ldr	r3, [r3, #8]
+  66 0028 002B     		cmp	r3, #0
+  67 002a 05D1     		bne	.L2
+  68              		.loc 1 50 0 is_stmt 0 discriminator 1
+  69 002c 064B     		ldr	r3, .L4
+  70 002e 074A     		ldr	r2, .L4+4
+  71 0030 3221     		movs	r1, #50
+  72 0032 0748     		ldr	r0, .L4+8
+  73 0034 FFF7FEFF 		bl	__assert_func
+  74              	.L2:
+  51:arraylist.c   **** 	new_list->capacity = ARRAYLIST_INITIAL_CAPACITY;
+  75              		.loc 1 51 0 is_stmt 1
+  76 0038 7B68     		ldr	r3, [r7, #4]
+  77 003a 0422     		movs	r2, #4
+  78 003c 5A60     		str	r2, [r3, #4]
+  52:arraylist.c   **** 	return new_list;
+  79              		.loc 1 52 0
+  80 003e 7B68     		ldr	r3, [r7, #4]
+  53:arraylist.c   **** }
+  81              		.loc 1 53 0
+  82 0040 1846     		mov	r0, r3
+  83 0042 0837     		adds	r7, r7, #8
+  84              		.cfi_def_cfa_offset 8
+  85 0044 BD46     		mov	sp, r7
+  86              		.cfi_def_cfa_register 13
+  87              		@ sp needed
+  88 0046 80BD     		pop	{r7, pc}
+  89              	.L5:
+  90              		.align	2
+  91              	.L4:
+  92 0048 00000000 		.word	.LC0
+  93 004c 68000000 		.word	__func__.4652
+  94 0050 10000000 		.word	.LC1
+  95              		.cfi_endproc
+  96              	.LFE0:
+  97              		.size	arraylist_create, .-arraylist_create
+  98              		.section	.rodata
+  99              		.align	2
+ 100              	.LC2:
+ 101 001c 73697A65 		.ascii	"size > 0\000"
+ 101      203E2030 
+ 101      00
+ 102 0025 000000   		.align	2
+ 103              	.LC3:
+ 104 0028 6C2D3E62 		.ascii	"l->body\000"
+ 104      6F647900 
+ 105              		.section	.text.arraylist_allocate,"ax",%progbits
+ 106              		.align	2
+ 107              		.global	arraylist_allocate
+ 108              		.thumb
+ 109              		.thumb_func
+ 110              		.type	arraylist_allocate, %function
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 4
+
+
+ 111              	arraylist_allocate:
+ 112              	.LFB1:
+  54:arraylist.c   **** 
+  55:arraylist.c   **** /**
+  56:arraylist.c   ****  * Allocate sufficient array capacity for at least `size` elements.
+  57:arraylist.c   ****  */
+  58:arraylist.c   **** void arraylist_allocate(arraylist* l, unsigned int size)
+  59:arraylist.c   **** {
+ 113              		.loc 1 59 0
+ 114              		.cfi_startproc
+ 115              		@ args = 0, pretend = 0, frame = 16
+ 116              		@ frame_needed = 1, uses_anonymous_args = 0
+ 117 0000 80B5     		push	{r7, lr}
+ 118              		.cfi_def_cfa_offset 8
+ 119              		.cfi_offset 7, -8
+ 120              		.cfi_offset 14, -4
+ 121 0002 84B0     		sub	sp, sp, #16
+ 122              		.cfi_def_cfa_offset 24
+ 123 0004 00AF     		add	r7, sp, #0
+ 124              		.cfi_def_cfa_register 7
+ 125 0006 7860     		str	r0, [r7, #4]
+ 126 0008 3960     		str	r1, [r7]
+  60:arraylist.c   **** 	assert(size > 0);
+ 127              		.loc 1 60 0
+ 128 000a 3B68     		ldr	r3, [r7]
+ 129 000c 002B     		cmp	r3, #0
+ 130 000e 05D1     		bne	.L7
+ 131              		.loc 1 60 0 is_stmt 0 discriminator 1
+ 132 0010 184B     		ldr	r3, .L13
+ 133 0012 194A     		ldr	r2, .L13+4
+ 134 0014 3C21     		movs	r1, #60
+ 135 0016 1948     		ldr	r0, .L13+8
+ 136 0018 FFF7FEFF 		bl	__assert_func
+ 137              	.L7:
+  61:arraylist.c   **** 	if (size > l->capacity) {
+ 138              		.loc 1 61 0 is_stmt 1
+ 139 001c 7B68     		ldr	r3, [r7, #4]
+ 140 001e 5A68     		ldr	r2, [r3, #4]
+ 141 0020 3B68     		ldr	r3, [r7]
+ 142 0022 9A42     		cmp	r2, r3
+ 143 0024 22D2     		bcs	.L12
+ 144              	.LBB2:
+  62:arraylist.c   **** 		unsigned int new_capacity = l->capacity;
+ 145              		.loc 1 62 0
+ 146 0026 7B68     		ldr	r3, [r7, #4]
+ 147 0028 5B68     		ldr	r3, [r3, #4]
+ 148 002a FB60     		str	r3, [r7, #12]
+  63:arraylist.c   **** 		while (new_capacity < size) {
+ 149              		.loc 1 63 0
+ 150 002c 02E0     		b	.L9
+ 151              	.L10:
+  64:arraylist.c   **** 			new_capacity *= 2;
+ 152              		.loc 1 64 0
+ 153 002e FB68     		ldr	r3, [r7, #12]
+ 154 0030 5B00     		lsls	r3, r3, #1
+ 155 0032 FB60     		str	r3, [r7, #12]
+ 156              	.L9:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 5
+
+
+  63:arraylist.c   **** 		while (new_capacity < size) {
+ 157              		.loc 1 63 0
+ 158 0034 FA68     		ldr	r2, [r7, #12]
+ 159 0036 3B68     		ldr	r3, [r7]
+ 160 0038 9A42     		cmp	r2, r3
+ 161 003a F8D3     		bcc	.L10
+  65:arraylist.c   **** 		}
+  66:arraylist.c   **** 		l->body = realloc(l->body, sizeof(void*) * new_capacity);
+ 162              		.loc 1 66 0
+ 163 003c 7B68     		ldr	r3, [r7, #4]
+ 164 003e 9A68     		ldr	r2, [r3, #8]
+ 165 0040 FB68     		ldr	r3, [r7, #12]
+ 166 0042 9B00     		lsls	r3, r3, #2
+ 167 0044 1946     		mov	r1, r3
+ 168 0046 1046     		mov	r0, r2
+ 169 0048 FFF7FEFF 		bl	realloc
+ 170 004c 0246     		mov	r2, r0
+ 171 004e 7B68     		ldr	r3, [r7, #4]
+ 172 0050 9A60     		str	r2, [r3, #8]
+  67:arraylist.c   **** 		assert(l->body);
+ 173              		.loc 1 67 0
+ 174 0052 7B68     		ldr	r3, [r7, #4]
+ 175 0054 9B68     		ldr	r3, [r3, #8]
+ 176 0056 002B     		cmp	r3, #0
+ 177 0058 05D1     		bne	.L11
+ 178              		.loc 1 67 0 is_stmt 0 discriminator 1
+ 179 005a 094B     		ldr	r3, .L13+12
+ 180 005c 064A     		ldr	r2, .L13+4
+ 181 005e 4321     		movs	r1, #67
+ 182 0060 0648     		ldr	r0, .L13+8
+ 183 0062 FFF7FEFF 		bl	__assert_func
+ 184              	.L11:
+  68:arraylist.c   **** 		l->capacity = new_capacity;
+ 185              		.loc 1 68 0 is_stmt 1
+ 186 0066 7B68     		ldr	r3, [r7, #4]
+ 187 0068 FA68     		ldr	r2, [r7, #12]
+ 188 006a 5A60     		str	r2, [r3, #4]
+ 189              	.L12:
+ 190              	.LBE2:
+  69:arraylist.c   **** 	}
+  70:arraylist.c   **** }
+ 191              		.loc 1 70 0
+ 192 006c 00BF     		nop
+ 193 006e 1037     		adds	r7, r7, #16
+ 194              		.cfi_def_cfa_offset 8
+ 195 0070 BD46     		mov	sp, r7
+ 196              		.cfi_def_cfa_register 13
+ 197              		@ sp needed
+ 198 0072 80BD     		pop	{r7, pc}
+ 199              	.L14:
+ 200              		.align	2
+ 201              	.L13:
+ 202 0074 1C000000 		.word	.LC2
+ 203 0078 7C000000 		.word	__func__.4657
+ 204 007c 10000000 		.word	.LC1
+ 205 0080 28000000 		.word	.LC3
+ 206              		.cfi_endproc
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 6
+
+
+ 207              	.LFE1:
+ 208              		.size	arraylist_allocate, .-arraylist_allocate
+ 209              		.section	.text.arraylist_size,"ax",%progbits
+ 210              		.align	2
+ 211              		.global	arraylist_size
+ 212              		.thumb
+ 213              		.thumb_func
+ 214              		.type	arraylist_size, %function
+ 215              	arraylist_size:
+ 216              	.LFB2:
+  71:arraylist.c   **** 
+  72:arraylist.c   **** /** 
+  73:arraylist.c   ****  * Return the number of items contained in the list.
+  74:arraylist.c   ****  */
+  75:arraylist.c   **** extern inline unsigned int arraylist_size(arraylist*l) {
+ 217              		.loc 1 75 0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 8
+ 220              		@ frame_needed = 1, uses_anonymous_args = 0
+ 221              		@ link register save eliminated.
+ 222 0000 80B4     		push	{r7}
+ 223              		.cfi_def_cfa_offset 4
+ 224              		.cfi_offset 7, -4
+ 225 0002 83B0     		sub	sp, sp, #12
+ 226              		.cfi_def_cfa_offset 16
+ 227 0004 00AF     		add	r7, sp, #0
+ 228              		.cfi_def_cfa_register 7
+ 229 0006 7860     		str	r0, [r7, #4]
+  76:arraylist.c   **** 	return l->size;
+ 230              		.loc 1 76 0
+ 231 0008 7B68     		ldr	r3, [r7, #4]
+ 232 000a 1B68     		ldr	r3, [r3]
+  77:arraylist.c   **** }
+ 233              		.loc 1 77 0
+ 234 000c 1846     		mov	r0, r3
+ 235 000e 0C37     		adds	r7, r7, #12
+ 236              		.cfi_def_cfa_offset 4
+ 237 0010 BD46     		mov	sp, r7
+ 238              		.cfi_def_cfa_register 13
+ 239              		@ sp needed
+ 240 0012 80BC     		pop	{r7}
+ 241              		.cfi_restore 7
+ 242              		.cfi_def_cfa_offset 0
+ 243 0014 7047     		bx	lr
+ 244              		.cfi_endproc
+ 245              	.LFE2:
+ 246              		.size	arraylist_size, .-arraylist_size
+ 247 0016 00BF     		.section	.text.arraylist_add,"ax",%progbits
+ 248              		.align	2
+ 249              		.global	arraylist_add
+ 250              		.thumb
+ 251              		.thumb_func
+ 252              		.type	arraylist_add, %function
+ 253              	arraylist_add:
+ 254              	.LFB3:
+  78:arraylist.c   **** 
+  79:arraylist.c   **** /**
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 7
+
+
+  80:arraylist.c   ****  * Add item at the end of the list.
+  81:arraylist.c   ****  */
+  82:arraylist.c   **** void arraylist_add(arraylist* l, void* item)
+  83:arraylist.c   **** {
+ 255              		.loc 1 83 0
+ 256              		.cfi_startproc
+ 257              		@ args = 0, pretend = 0, frame = 8
+ 258              		@ frame_needed = 1, uses_anonymous_args = 0
+ 259 0000 80B5     		push	{r7, lr}
+ 260              		.cfi_def_cfa_offset 8
+ 261              		.cfi_offset 7, -8
+ 262              		.cfi_offset 14, -4
+ 263 0002 82B0     		sub	sp, sp, #8
+ 264              		.cfi_def_cfa_offset 16
+ 265 0004 00AF     		add	r7, sp, #0
+ 266              		.cfi_def_cfa_register 7
+ 267 0006 7860     		str	r0, [r7, #4]
+ 268 0008 3960     		str	r1, [r7]
+  84:arraylist.c   **** 	arraylist_allocate(l, l->size + 1);
+ 269              		.loc 1 84 0
+ 270 000a 7B68     		ldr	r3, [r7, #4]
+ 271 000c 1B68     		ldr	r3, [r3]
+ 272 000e 0133     		adds	r3, r3, #1
+ 273 0010 1946     		mov	r1, r3
+ 274 0012 7868     		ldr	r0, [r7, #4]
+ 275 0014 FFF7FEFF 		bl	arraylist_allocate
+  85:arraylist.c   **** 	l->body[l->size++] = item;
+ 276              		.loc 1 85 0
+ 277 0018 7B68     		ldr	r3, [r7, #4]
+ 278 001a 9A68     		ldr	r2, [r3, #8]
+ 279 001c 7B68     		ldr	r3, [r7, #4]
+ 280 001e 1B68     		ldr	r3, [r3]
+ 281 0020 581C     		adds	r0, r3, #1
+ 282 0022 7968     		ldr	r1, [r7, #4]
+ 283 0024 0860     		str	r0, [r1]
+ 284 0026 9B00     		lsls	r3, r3, #2
+ 285 0028 1344     		add	r3, r3, r2
+ 286 002a 3A68     		ldr	r2, [r7]
+ 287 002c 1A60     		str	r2, [r3]
+  86:arraylist.c   **** }
+ 288              		.loc 1 86 0
+ 289 002e 00BF     		nop
+ 290 0030 0837     		adds	r7, r7, #8
+ 291              		.cfi_def_cfa_offset 8
+ 292 0032 BD46     		mov	sp, r7
+ 293              		.cfi_def_cfa_register 13
+ 294              		@ sp needed
+ 295 0034 80BD     		pop	{r7, pc}
+ 296              		.cfi_endproc
+ 297              	.LFE3:
+ 298              		.size	arraylist_add, .-arraylist_add
+ 299 0036 00BF     		.section	.rodata
+ 300              		.align	2
+ 301              	.LC4:
+ 302 0030 6C2D3E73 		.ascii	"l->size > 0\000"
+ 302      697A6520 
+ 302      3E203000 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 8
+
+
+ 303              		.section	.text.arraylist_pop,"ax",%progbits
+ 304              		.align	2
+ 305              		.global	arraylist_pop
+ 306              		.thumb
+ 307              		.thumb_func
+ 308              		.type	arraylist_pop, %function
+ 309              	arraylist_pop:
+ 310              	.LFB4:
+  87:arraylist.c   **** 
+  88:arraylist.c   **** /**
+  89:arraylist.c   ****  * Pop (remove and return) an item off the end of the list.
+  90:arraylist.c   ****  */
+  91:arraylist.c   **** void* arraylist_pop(arraylist* l)
+  92:arraylist.c   **** {
+ 311              		.loc 1 92 0
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 8
+ 314              		@ frame_needed = 1, uses_anonymous_args = 0
+ 315 0000 80B5     		push	{r7, lr}
+ 316              		.cfi_def_cfa_offset 8
+ 317              		.cfi_offset 7, -8
+ 318              		.cfi_offset 14, -4
+ 319 0002 82B0     		sub	sp, sp, #8
+ 320              		.cfi_def_cfa_offset 16
+ 321 0004 00AF     		add	r7, sp, #0
+ 322              		.cfi_def_cfa_register 7
+ 323 0006 7860     		str	r0, [r7, #4]
+  93:arraylist.c   **** 	assert(l->size > 0);
+ 324              		.loc 1 93 0
+ 325 0008 7B68     		ldr	r3, [r7, #4]
+ 326 000a 1B68     		ldr	r3, [r3]
+ 327 000c 002B     		cmp	r3, #0
+ 328 000e 05D1     		bne	.L19
+ 329              		.loc 1 93 0 is_stmt 0 discriminator 1
+ 330 0010 0A4B     		ldr	r3, .L21
+ 331 0012 0B4A     		ldr	r2, .L21+4
+ 332 0014 5D21     		movs	r1, #93
+ 333 0016 0B48     		ldr	r0, .L21+8
+ 334 0018 FFF7FEFF 		bl	__assert_func
+ 335              	.L19:
+  94:arraylist.c   **** 	return l->body[--l->size];
+ 336              		.loc 1 94 0 is_stmt 1
+ 337 001c 7B68     		ldr	r3, [r7, #4]
+ 338 001e 9A68     		ldr	r2, [r3, #8]
+ 339 0020 7B68     		ldr	r3, [r7, #4]
+ 340 0022 1B68     		ldr	r3, [r3]
+ 341 0024 591E     		subs	r1, r3, #1
+ 342 0026 7B68     		ldr	r3, [r7, #4]
+ 343 0028 1960     		str	r1, [r3]
+ 344 002a 7B68     		ldr	r3, [r7, #4]
+ 345 002c 1B68     		ldr	r3, [r3]
+ 346 002e 9B00     		lsls	r3, r3, #2
+ 347 0030 1344     		add	r3, r3, r2
+ 348 0032 1B68     		ldr	r3, [r3]
+  95:arraylist.c   **** }
+ 349              		.loc 1 95 0
+ 350 0034 1846     		mov	r0, r3
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 9
+
+
+ 351 0036 0837     		adds	r7, r7, #8
+ 352              		.cfi_def_cfa_offset 8
+ 353 0038 BD46     		mov	sp, r7
+ 354              		.cfi_def_cfa_register 13
+ 355              		@ sp needed
+ 356 003a 80BD     		pop	{r7, pc}
+ 357              	.L22:
+ 358              		.align	2
+ 359              	.L21:
+ 360 003c 30000000 		.word	.LC4
+ 361 0040 90000000 		.word	__func__.4672
+ 362 0044 10000000 		.word	.LC1
+ 363              		.cfi_endproc
+ 364              	.LFE4:
+ 365              		.size	arraylist_pop, .-arraylist_pop
+ 366              		.section	.rodata
+ 367              		.align	2
+ 368              	.LC5:
+ 369 003c 696E6465 		.ascii	"index < l->size\000"
+ 369      78203C20 
+ 369      6C2D3E73 
+ 369      697A6500 
+ 370              		.section	.text.arraylist_get,"ax",%progbits
+ 371              		.align	2
+ 372              		.global	arraylist_get
+ 373              		.thumb
+ 374              		.thumb_func
+ 375              		.type	arraylist_get, %function
+ 376              	arraylist_get:
+ 377              	.LFB5:
+  96:arraylist.c   **** 
+  97:arraylist.c   **** /**
+  98:arraylist.c   ****  * Return item located at index.
+  99:arraylist.c   ****  */
+ 100:arraylist.c   **** void* arraylist_get(arraylist* l, unsigned int index)
+ 101:arraylist.c   **** {
+ 378              		.loc 1 101 0
+ 379              		.cfi_startproc
+ 380              		@ args = 0, pretend = 0, frame = 8
+ 381              		@ frame_needed = 1, uses_anonymous_args = 0
+ 382 0000 80B5     		push	{r7, lr}
+ 383              		.cfi_def_cfa_offset 8
+ 384              		.cfi_offset 7, -8
+ 385              		.cfi_offset 14, -4
+ 386 0002 82B0     		sub	sp, sp, #8
+ 387              		.cfi_def_cfa_offset 16
+ 388 0004 00AF     		add	r7, sp, #0
+ 389              		.cfi_def_cfa_register 7
+ 390 0006 7860     		str	r0, [r7, #4]
+ 391 0008 3960     		str	r1, [r7]
+ 102:arraylist.c   **** 	assert(index < l->size);
+ 392              		.loc 1 102 0
+ 393 000a 7B68     		ldr	r3, [r7, #4]
+ 394 000c 1A68     		ldr	r2, [r3]
+ 395 000e 3B68     		ldr	r3, [r7]
+ 396 0010 9A42     		cmp	r2, r3
+ 397 0012 05D8     		bhi	.L24
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 10
+
+
+ 398              		.loc 1 102 0 is_stmt 0 discriminator 1
+ 399 0014 074B     		ldr	r3, .L26
+ 400 0016 084A     		ldr	r2, .L26+4
+ 401 0018 6621     		movs	r1, #102
+ 402 001a 0848     		ldr	r0, .L26+8
+ 403 001c FFF7FEFF 		bl	__assert_func
+ 404              	.L24:
+ 103:arraylist.c   **** 	return l->body[index];
+ 405              		.loc 1 103 0 is_stmt 1
+ 406 0020 7B68     		ldr	r3, [r7, #4]
+ 407 0022 9A68     		ldr	r2, [r3, #8]
+ 408 0024 3B68     		ldr	r3, [r7]
+ 409 0026 9B00     		lsls	r3, r3, #2
+ 410 0028 1344     		add	r3, r3, r2
+ 411 002a 1B68     		ldr	r3, [r3]
+ 104:arraylist.c   **** }
+ 412              		.loc 1 104 0
+ 413 002c 1846     		mov	r0, r3
+ 414 002e 0837     		adds	r7, r7, #8
+ 415              		.cfi_def_cfa_offset 8
+ 416 0030 BD46     		mov	sp, r7
+ 417              		.cfi_def_cfa_register 13
+ 418              		@ sp needed
+ 419 0032 80BD     		pop	{r7, pc}
+ 420              	.L27:
+ 421              		.align	2
+ 422              	.L26:
+ 423 0034 3C000000 		.word	.LC5
+ 424 0038 A0000000 		.word	__func__.4677
+ 425 003c 10000000 		.word	.LC1
+ 426              		.cfi_endproc
+ 427              	.LFE5:
+ 428              		.size	arraylist_get, .-arraylist_get
+ 429              		.section	.text.arraylist_set,"ax",%progbits
+ 430              		.align	2
+ 431              		.global	arraylist_set
+ 432              		.thumb
+ 433              		.thumb_func
+ 434              		.type	arraylist_set, %function
+ 435              	arraylist_set:
+ 436              	.LFB6:
+ 105:arraylist.c   **** 
+ 106:arraylist.c   **** /**
+ 107:arraylist.c   ****  * Replace item at index with given value.
+ 108:arraylist.c   ****  */
+ 109:arraylist.c   **** void arraylist_set(arraylist* l, unsigned int index, void* value)
+ 110:arraylist.c   **** {
+ 437              		.loc 1 110 0
+ 438              		.cfi_startproc
+ 439              		@ args = 0, pretend = 0, frame = 16
+ 440              		@ frame_needed = 1, uses_anonymous_args = 0
+ 441 0000 80B5     		push	{r7, lr}
+ 442              		.cfi_def_cfa_offset 8
+ 443              		.cfi_offset 7, -8
+ 444              		.cfi_offset 14, -4
+ 445 0002 84B0     		sub	sp, sp, #16
+ 446              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 11
+
+
+ 447 0004 00AF     		add	r7, sp, #0
+ 448              		.cfi_def_cfa_register 7
+ 449 0006 F860     		str	r0, [r7, #12]
+ 450 0008 B960     		str	r1, [r7, #8]
+ 451 000a 7A60     		str	r2, [r7, #4]
+ 111:arraylist.c   **** 	assert(index < l->size);
+ 452              		.loc 1 111 0
+ 453 000c FB68     		ldr	r3, [r7, #12]
+ 454 000e 1A68     		ldr	r2, [r3]
+ 455 0010 BB68     		ldr	r3, [r7, #8]
+ 456 0012 9A42     		cmp	r2, r3
+ 457 0014 05D8     		bhi	.L29
+ 458              		.loc 1 111 0 is_stmt 0 discriminator 1
+ 459 0016 084B     		ldr	r3, .L30
+ 460 0018 084A     		ldr	r2, .L30+4
+ 461 001a 6F21     		movs	r1, #111
+ 462 001c 0848     		ldr	r0, .L30+8
+ 463 001e FFF7FEFF 		bl	__assert_func
+ 464              	.L29:
+ 112:arraylist.c   **** 	l->body[index] = value;
+ 465              		.loc 1 112 0 is_stmt 1
+ 466 0022 FB68     		ldr	r3, [r7, #12]
+ 467 0024 9A68     		ldr	r2, [r3, #8]
+ 468 0026 BB68     		ldr	r3, [r7, #8]
+ 469 0028 9B00     		lsls	r3, r3, #2
+ 470 002a 1344     		add	r3, r3, r2
+ 471 002c 7A68     		ldr	r2, [r7, #4]
+ 472 002e 1A60     		str	r2, [r3]
+ 113:arraylist.c   **** }
+ 473              		.loc 1 113 0
+ 474 0030 00BF     		nop
+ 475 0032 1037     		adds	r7, r7, #16
+ 476              		.cfi_def_cfa_offset 8
+ 477 0034 BD46     		mov	sp, r7
+ 478              		.cfi_def_cfa_register 13
+ 479              		@ sp needed
+ 480 0036 80BD     		pop	{r7, pc}
+ 481              	.L31:
+ 482              		.align	2
+ 483              	.L30:
+ 484 0038 3C000000 		.word	.LC5
+ 485 003c B0000000 		.word	__func__.4683
+ 486 0040 10000000 		.word	.LC1
+ 487              		.cfi_endproc
+ 488              	.LFE6:
+ 489              		.size	arraylist_set, .-arraylist_set
+ 490              		.section	.text.arraylist_insert,"ax",%progbits
+ 491              		.align	2
+ 492              		.global	arraylist_insert
+ 493              		.thumb
+ 494              		.thumb_func
+ 495              		.type	arraylist_insert, %function
+ 496              	arraylist_insert:
+ 497              	.LFB7:
+ 114:arraylist.c   **** 
+ 115:arraylist.c   **** /**
+ 116:arraylist.c   ****  * Insert item at index, shifting the following items by one spot.
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 12
+
+
+ 117:arraylist.c   ****  */
+ 118:arraylist.c   **** void arraylist_insert(arraylist* l, unsigned int index, void* value)
+ 119:arraylist.c   **** {
+ 498              		.loc 1 119 0
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 16
+ 501              		@ frame_needed = 1, uses_anonymous_args = 0
+ 502 0000 80B5     		push	{r7, lr}
+ 503              		.cfi_def_cfa_offset 8
+ 504              		.cfi_offset 7, -8
+ 505              		.cfi_offset 14, -4
+ 506 0002 84B0     		sub	sp, sp, #16
+ 507              		.cfi_def_cfa_offset 24
+ 508 0004 00AF     		add	r7, sp, #0
+ 509              		.cfi_def_cfa_register 7
+ 510 0006 F860     		str	r0, [r7, #12]
+ 511 0008 B960     		str	r1, [r7, #8]
+ 512 000a 7A60     		str	r2, [r7, #4]
+ 120:arraylist.c   **** 	// Reallocate, if needed
+ 121:arraylist.c   **** 	arraylist_allocate(l, l->size + 1);
+ 513              		.loc 1 121 0
+ 514 000c FB68     		ldr	r3, [r7, #12]
+ 515 000e 1B68     		ldr	r3, [r3]
+ 516 0010 0133     		adds	r3, r3, #1
+ 517 0012 1946     		mov	r1, r3
+ 518 0014 F868     		ldr	r0, [r7, #12]
+ 519 0016 FFF7FEFF 		bl	arraylist_allocate
+ 122:arraylist.c   **** 
+ 123:arraylist.c   **** 	// Move data to create a spot for the new value
+ 124:arraylist.c   **** 	arraylist_memshift(l->body + index, 1, l->size - index);
+ 520              		.loc 1 124 0
+ 521 001a FB68     		ldr	r3, [r7, #12]
+ 522 001c 9A68     		ldr	r2, [r3, #8]
+ 523 001e BB68     		ldr	r3, [r7, #8]
+ 524 0020 0133     		adds	r3, r3, #1
+ 525 0022 9B00     		lsls	r3, r3, #2
+ 526 0024 D018     		adds	r0, r2, r3
+ 527 0026 FB68     		ldr	r3, [r7, #12]
+ 528 0028 9A68     		ldr	r2, [r3, #8]
+ 529 002a BB68     		ldr	r3, [r7, #8]
+ 530 002c 9B00     		lsls	r3, r3, #2
+ 531 002e D118     		adds	r1, r2, r3
+ 532 0030 FB68     		ldr	r3, [r7, #12]
+ 533 0032 1A68     		ldr	r2, [r3]
+ 534 0034 BB68     		ldr	r3, [r7, #8]
+ 535 0036 D31A     		subs	r3, r2, r3
+ 536 0038 9B00     		lsls	r3, r3, #2
+ 537 003a 1A46     		mov	r2, r3
+ 538 003c FFF7FEFF 		bl	memmove
+ 125:arraylist.c   **** 	l->body[index] = value;
+ 539              		.loc 1 125 0
+ 540 0040 FB68     		ldr	r3, [r7, #12]
+ 541 0042 9A68     		ldr	r2, [r3, #8]
+ 542 0044 BB68     		ldr	r3, [r7, #8]
+ 543 0046 9B00     		lsls	r3, r3, #2
+ 544 0048 1344     		add	r3, r3, r2
+ 545 004a 7A68     		ldr	r2, [r7, #4]
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 13
+
+
+ 546 004c 1A60     		str	r2, [r3]
+ 126:arraylist.c   **** 	l->size++;
+ 547              		.loc 1 126 0
+ 548 004e FB68     		ldr	r3, [r7, #12]
+ 549 0050 1B68     		ldr	r3, [r3]
+ 550 0052 5A1C     		adds	r2, r3, #1
+ 551 0054 FB68     		ldr	r3, [r7, #12]
+ 552 0056 1A60     		str	r2, [r3]
+ 127:arraylist.c   **** }
+ 553              		.loc 1 127 0
+ 554 0058 00BF     		nop
+ 555 005a 1037     		adds	r7, r7, #16
+ 556              		.cfi_def_cfa_offset 8
+ 557 005c BD46     		mov	sp, r7
+ 558              		.cfi_def_cfa_register 13
+ 559              		@ sp needed
+ 560 005e 80BD     		pop	{r7, pc}
+ 561              		.cfi_endproc
+ 562              	.LFE7:
+ 563              		.size	arraylist_insert, .-arraylist_insert
+ 564              		.section	.text.arraylist_remove,"ax",%progbits
+ 565              		.align	2
+ 566              		.global	arraylist_remove
+ 567              		.thumb
+ 568              		.thumb_func
+ 569              		.type	arraylist_remove, %function
+ 570              	arraylist_remove:
+ 571              	.LFB8:
+ 128:arraylist.c   **** 
+ 129:arraylist.c   **** /**
+ 130:arraylist.c   ****  * Remove the item at index, shifting the following items back by one spot.
+ 131:arraylist.c   ****  */
+ 132:arraylist.c   **** void* arraylist_remove(arraylist* l, unsigned int index)
+ 133:arraylist.c   **** {
+ 572              		.loc 1 133 0
+ 573              		.cfi_startproc
+ 574              		@ args = 0, pretend = 0, frame = 16
+ 575              		@ frame_needed = 1, uses_anonymous_args = 0
+ 576 0000 80B5     		push	{r7, lr}
+ 577              		.cfi_def_cfa_offset 8
+ 578              		.cfi_offset 7, -8
+ 579              		.cfi_offset 14, -4
+ 580 0002 84B0     		sub	sp, sp, #16
+ 581              		.cfi_def_cfa_offset 24
+ 582 0004 00AF     		add	r7, sp, #0
+ 583              		.cfi_def_cfa_register 7
+ 584 0006 7860     		str	r0, [r7, #4]
+ 585 0008 3960     		str	r1, [r7]
+ 134:arraylist.c   **** 	void* value = l->body[index];
+ 586              		.loc 1 134 0
+ 587 000a 7B68     		ldr	r3, [r7, #4]
+ 588 000c 9A68     		ldr	r2, [r3, #8]
+ 589 000e 3B68     		ldr	r3, [r7]
+ 590 0010 9B00     		lsls	r3, r3, #2
+ 591 0012 1344     		add	r3, r3, r2
+ 592 0014 1B68     		ldr	r3, [r3]
+ 593 0016 FB60     		str	r3, [r7, #12]
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 14
+
+
+ 135:arraylist.c   **** 	arraylist_memshift(l->body + index + 1, -1, l->size - index);
+ 594              		.loc 1 135 0
+ 595 0018 7B68     		ldr	r3, [r7, #4]
+ 596 001a 9A68     		ldr	r2, [r3, #8]
+ 597 001c 3B68     		ldr	r3, [r7]
+ 598 001e 9B00     		lsls	r3, r3, #2
+ 599 0020 D018     		adds	r0, r2, r3
+ 600 0022 7B68     		ldr	r3, [r7, #4]
+ 601 0024 9A68     		ldr	r2, [r3, #8]
+ 602 0026 3B68     		ldr	r3, [r7]
+ 603 0028 0133     		adds	r3, r3, #1
+ 604 002a 9B00     		lsls	r3, r3, #2
+ 605 002c D118     		adds	r1, r2, r3
+ 606 002e 7B68     		ldr	r3, [r7, #4]
+ 607 0030 1A68     		ldr	r2, [r3]
+ 608 0032 3B68     		ldr	r3, [r7]
+ 609 0034 D31A     		subs	r3, r2, r3
+ 610 0036 9B00     		lsls	r3, r3, #2
+ 611 0038 1A46     		mov	r2, r3
+ 612 003a FFF7FEFF 		bl	memmove
+ 136:arraylist.c   **** 	l->size--;
+ 613              		.loc 1 136 0
+ 614 003e 7B68     		ldr	r3, [r7, #4]
+ 615 0040 1B68     		ldr	r3, [r3]
+ 616 0042 5A1E     		subs	r2, r3, #1
+ 617 0044 7B68     		ldr	r3, [r7, #4]
+ 618 0046 1A60     		str	r2, [r3]
+ 137:arraylist.c   **** 	return value;
+ 619              		.loc 1 137 0
+ 620 0048 FB68     		ldr	r3, [r7, #12]
+ 138:arraylist.c   **** }
+ 621              		.loc 1 138 0
+ 622 004a 1846     		mov	r0, r3
+ 623 004c 1037     		adds	r7, r7, #16
+ 624              		.cfi_def_cfa_offset 8
+ 625 004e BD46     		mov	sp, r7
+ 626              		.cfi_def_cfa_register 13
+ 627              		@ sp needed
+ 628 0050 80BD     		pop	{r7, pc}
+ 629              		.cfi_endproc
+ 630              	.LFE8:
+ 631              		.size	arraylist_remove, .-arraylist_remove
+ 632 0052 00BF     		.section	.text.arraylist_clear,"ax",%progbits
+ 633              		.align	2
+ 634              		.global	arraylist_clear
+ 635              		.thumb
+ 636              		.thumb_func
+ 637              		.type	arraylist_clear, %function
+ 638              	arraylist_clear:
+ 639              	.LFB9:
+ 139:arraylist.c   **** 
+ 140:arraylist.c   **** /**
+ 141:arraylist.c   ****  * Clear list of all items.
+ 142:arraylist.c   ****  */
+ 143:arraylist.c   **** void arraylist_clear(arraylist* l)
+ 144:arraylist.c   **** {
+ 640              		.loc 1 144 0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 15
+
+
+ 641              		.cfi_startproc
+ 642              		@ args = 0, pretend = 0, frame = 8
+ 643              		@ frame_needed = 1, uses_anonymous_args = 0
+ 644              		@ link register save eliminated.
+ 645 0000 80B4     		push	{r7}
+ 646              		.cfi_def_cfa_offset 4
+ 647              		.cfi_offset 7, -4
+ 648 0002 83B0     		sub	sp, sp, #12
+ 649              		.cfi_def_cfa_offset 16
+ 650 0004 00AF     		add	r7, sp, #0
+ 651              		.cfi_def_cfa_register 7
+ 652 0006 7860     		str	r0, [r7, #4]
+ 145:arraylist.c   **** 	l->size = 0;
+ 653              		.loc 1 145 0
+ 654 0008 7B68     		ldr	r3, [r7, #4]
+ 655 000a 0022     		movs	r2, #0
+ 656 000c 1A60     		str	r2, [r3]
+ 146:arraylist.c   **** }
+ 657              		.loc 1 146 0
+ 658 000e 00BF     		nop
+ 659 0010 0C37     		adds	r7, r7, #12
+ 660              		.cfi_def_cfa_offset 4
+ 661 0012 BD46     		mov	sp, r7
+ 662              		.cfi_def_cfa_register 13
+ 663              		@ sp needed
+ 664 0014 80BC     		pop	{r7}
+ 665              		.cfi_restore 7
+ 666              		.cfi_def_cfa_offset 0
+ 667 0016 7047     		bx	lr
+ 668              		.cfi_endproc
+ 669              	.LFE9:
+ 670              		.size	arraylist_clear, .-arraylist_clear
+ 671              		.section	.rodata
+ 672              		.align	2
+ 673              	.LC6:
+ 674 004c 696E6465 		.ascii	"index + length <= l->size\000"
+ 674      78202B20 
+ 674      6C656E67 
+ 674      7468203C 
+ 674      3D206C2D 
+ 675              		.section	.text.arraylist_slice,"ax",%progbits
+ 676              		.align	2
+ 677              		.global	arraylist_slice
+ 678              		.thumb
+ 679              		.thumb_func
+ 680              		.type	arraylist_slice, %function
+ 681              	arraylist_slice:
+ 682              	.LFB10:
+ 147:arraylist.c   **** 
+ 148:arraylist.c   **** /**
+ 149:arraylist.c   ****  * Return a slice of the list (of given length starting at index) as a new arraylist.
+ 150:arraylist.c   ****  */
+ 151:arraylist.c   **** arraylist* arraylist_slice(arraylist* l, unsigned int index, unsigned int length)
+ 152:arraylist.c   **** {
+ 683              		.loc 1 152 0
+ 684              		.cfi_startproc
+ 685              		@ args = 0, pretend = 0, frame = 24
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 16
+
+
+ 686              		@ frame_needed = 1, uses_anonymous_args = 0
+ 687 0000 80B5     		push	{r7, lr}
+ 688              		.cfi_def_cfa_offset 8
+ 689              		.cfi_offset 7, -8
+ 690              		.cfi_offset 14, -4
+ 691 0002 86B0     		sub	sp, sp, #24
+ 692              		.cfi_def_cfa_offset 32
+ 693 0004 00AF     		add	r7, sp, #0
+ 694              		.cfi_def_cfa_register 7
+ 695 0006 F860     		str	r0, [r7, #12]
+ 696 0008 B960     		str	r1, [r7, #8]
+ 697 000a 7A60     		str	r2, [r7, #4]
+ 153:arraylist.c   **** 	assert(index + length <= l->size);
+ 698              		.loc 1 153 0
+ 699 000c BA68     		ldr	r2, [r7, #8]
+ 700 000e 7B68     		ldr	r3, [r7, #4]
+ 701 0010 1A44     		add	r2, r2, r3
+ 702 0012 FB68     		ldr	r3, [r7, #12]
+ 703 0014 1B68     		ldr	r3, [r3]
+ 704 0016 9A42     		cmp	r2, r3
+ 705 0018 05D9     		bls	.L37
+ 706              		.loc 1 153 0 is_stmt 0 discriminator 1
+ 707 001a 104B     		ldr	r3, .L39
+ 708 001c 104A     		ldr	r2, .L39+4
+ 709 001e 9921     		movs	r1, #153
+ 710 0020 1048     		ldr	r0, .L39+8
+ 711 0022 FFF7FEFF 		bl	__assert_func
+ 712              	.L37:
+ 154:arraylist.c   **** 	arraylist* new_list = arraylist_create();
+ 713              		.loc 1 154 0 is_stmt 1
+ 714 0026 FFF7FEFF 		bl	arraylist_create
+ 715 002a 7861     		str	r0, [r7, #20]
+ 155:arraylist.c   **** 	arraylist_allocate(new_list, length);
+ 716              		.loc 1 155 0
+ 717 002c 7968     		ldr	r1, [r7, #4]
+ 718 002e 7869     		ldr	r0, [r7, #20]
+ 719 0030 FFF7FEFF 		bl	arraylist_allocate
+ 156:arraylist.c   **** 	memmove(new_list->body, l->body + index, length * sizeof(void*));
+ 720              		.loc 1 156 0
+ 721 0034 7B69     		ldr	r3, [r7, #20]
+ 722 0036 9868     		ldr	r0, [r3, #8]
+ 723 0038 FB68     		ldr	r3, [r7, #12]
+ 724 003a 9A68     		ldr	r2, [r3, #8]
+ 725 003c BB68     		ldr	r3, [r7, #8]
+ 726 003e 9B00     		lsls	r3, r3, #2
+ 727 0040 D118     		adds	r1, r2, r3
+ 728 0042 7B68     		ldr	r3, [r7, #4]
+ 729 0044 9B00     		lsls	r3, r3, #2
+ 730 0046 1A46     		mov	r2, r3
+ 731 0048 FFF7FEFF 		bl	memmove
+ 157:arraylist.c   **** 	new_list->size = length;
+ 732              		.loc 1 157 0
+ 733 004c 7B69     		ldr	r3, [r7, #20]
+ 734 004e 7A68     		ldr	r2, [r7, #4]
+ 735 0050 1A60     		str	r2, [r3]
+ 158:arraylist.c   **** 	return new_list;
+ 736              		.loc 1 158 0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 17
+
+
+ 737 0052 7B69     		ldr	r3, [r7, #20]
+ 159:arraylist.c   **** }
+ 738              		.loc 1 159 0
+ 739 0054 1846     		mov	r0, r3
+ 740 0056 1837     		adds	r7, r7, #24
+ 741              		.cfi_def_cfa_offset 8
+ 742 0058 BD46     		mov	sp, r7
+ 743              		.cfi_def_cfa_register 13
+ 744              		@ sp needed
+ 745 005a 80BD     		pop	{r7, pc}
+ 746              	.L40:
+ 747              		.align	2
+ 748              	.L39:
+ 749 005c 4C000000 		.word	.LC6
+ 750 0060 C0000000 		.word	__func__.4702
+ 751 0064 10000000 		.word	.LC1
+ 752              		.cfi_endproc
+ 753              	.LFE10:
+ 754              		.size	arraylist_slice, .-arraylist_slice
+ 755              		.section	.text.arraylist_slice_end,"ax",%progbits
+ 756              		.align	2
+ 757              		.global	arraylist_slice_end
+ 758              		.thumb
+ 759              		.thumb_func
+ 760              		.type	arraylist_slice_end, %function
+ 761              	arraylist_slice_end:
+ 762              	.LFB11:
+ 160:arraylist.c   **** 
+ 161:arraylist.c   **** /**
+ 162:arraylist.c   ****  * Return a slice of the list (from index to the end) as a new arraylist.
+ 163:arraylist.c   ****  */
+ 164:arraylist.c   **** arraylist* arraylist_slice_end(arraylist* l, unsigned int index)
+ 165:arraylist.c   **** {
+ 763              		.loc 1 165 0
+ 764              		.cfi_startproc
+ 765              		@ args = 0, pretend = 0, frame = 8
+ 766              		@ frame_needed = 1, uses_anonymous_args = 0
+ 767 0000 80B5     		push	{r7, lr}
+ 768              		.cfi_def_cfa_offset 8
+ 769              		.cfi_offset 7, -8
+ 770              		.cfi_offset 14, -4
+ 771 0002 82B0     		sub	sp, sp, #8
+ 772              		.cfi_def_cfa_offset 16
+ 773 0004 00AF     		add	r7, sp, #0
+ 774              		.cfi_def_cfa_register 7
+ 775 0006 7860     		str	r0, [r7, #4]
+ 776 0008 3960     		str	r1, [r7]
+ 166:arraylist.c   **** 	return arraylist_slice(l, index, l->size - index);
+ 777              		.loc 1 166 0
+ 778 000a 7B68     		ldr	r3, [r7, #4]
+ 779 000c 1A68     		ldr	r2, [r3]
+ 780 000e 3B68     		ldr	r3, [r7]
+ 781 0010 D31A     		subs	r3, r2, r3
+ 782 0012 1A46     		mov	r2, r3
+ 783 0014 3968     		ldr	r1, [r7]
+ 784 0016 7868     		ldr	r0, [r7, #4]
+ 785 0018 FFF7FEFF 		bl	arraylist_slice
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 18
+
+
+ 786 001c 0346     		mov	r3, r0
+ 167:arraylist.c   **** }
+ 787              		.loc 1 167 0
+ 788 001e 1846     		mov	r0, r3
+ 789 0020 0837     		adds	r7, r7, #8
+ 790              		.cfi_def_cfa_offset 8
+ 791 0022 BD46     		mov	sp, r7
+ 792              		.cfi_def_cfa_register 13
+ 793              		@ sp needed
+ 794 0024 80BD     		pop	{r7, pc}
+ 795              		.cfi_endproc
+ 796              	.LFE11:
+ 797              		.size	arraylist_slice_end, .-arraylist_slice_end
+ 798 0026 00BF     		.section	.text.arraylist_copy,"ax",%progbits
+ 799              		.align	2
+ 800              		.global	arraylist_copy
+ 801              		.thumb
+ 802              		.thumb_func
+ 803              		.type	arraylist_copy, %function
+ 804              	arraylist_copy:
+ 805              	.LFB12:
+ 168:arraylist.c   **** 
+ 169:arraylist.c   **** /**
+ 170:arraylist.c   ****  * Return a copy of the arraylist.
+ 171:arraylist.c   ****  */
+ 172:arraylist.c   **** arraylist* arraylist_copy(arraylist* l)
+ 173:arraylist.c   **** {
+ 806              		.loc 1 173 0
+ 807              		.cfi_startproc
+ 808              		@ args = 0, pretend = 0, frame = 8
+ 809              		@ frame_needed = 1, uses_anonymous_args = 0
+ 810 0000 80B5     		push	{r7, lr}
+ 811              		.cfi_def_cfa_offset 8
+ 812              		.cfi_offset 7, -8
+ 813              		.cfi_offset 14, -4
+ 814 0002 82B0     		sub	sp, sp, #8
+ 815              		.cfi_def_cfa_offset 16
+ 816 0004 00AF     		add	r7, sp, #0
+ 817              		.cfi_def_cfa_register 7
+ 818 0006 7860     		str	r0, [r7, #4]
+ 174:arraylist.c   **** 	return arraylist_slice_end(l, 0);
+ 819              		.loc 1 174 0
+ 820 0008 0021     		movs	r1, #0
+ 821 000a 7868     		ldr	r0, [r7, #4]
+ 822 000c FFF7FEFF 		bl	arraylist_slice_end
+ 823 0010 0346     		mov	r3, r0
+ 175:arraylist.c   **** }
+ 824              		.loc 1 175 0
+ 825 0012 1846     		mov	r0, r3
+ 826 0014 0837     		adds	r7, r7, #8
+ 827              		.cfi_def_cfa_offset 8
+ 828 0016 BD46     		mov	sp, r7
+ 829              		.cfi_def_cfa_register 13
+ 830              		@ sp needed
+ 831 0018 80BD     		pop	{r7, pc}
+ 832              		.cfi_endproc
+ 833              	.LFE12:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 19
+
+
+ 834              		.size	arraylist_copy, .-arraylist_copy
+ 835 001a 00BF     		.section	.text.arraylist_join,"ax",%progbits
+ 836              		.align	2
+ 837              		.global	arraylist_join
+ 838              		.thumb
+ 839              		.thumb_func
+ 840              		.type	arraylist_join, %function
+ 841              	arraylist_join:
+ 842              	.LFB13:
+ 176:arraylist.c   **** 
+ 177:arraylist.c   **** /**
+ 178:arraylist.c   ****  * Append a list onto another, in-place.
+ 179:arraylist.c   ****  */
+ 180:arraylist.c   **** void arraylist_join(arraylist* l, arraylist* source)
+ 181:arraylist.c   **** {
+ 843              		.loc 1 181 0
+ 844              		.cfi_startproc
+ 845              		@ args = 0, pretend = 0, frame = 8
+ 846              		@ frame_needed = 1, uses_anonymous_args = 0
+ 847 0000 80B5     		push	{r7, lr}
+ 848              		.cfi_def_cfa_offset 8
+ 849              		.cfi_offset 7, -8
+ 850              		.cfi_offset 14, -4
+ 851 0002 82B0     		sub	sp, sp, #8
+ 852              		.cfi_def_cfa_offset 16
+ 853 0004 00AF     		add	r7, sp, #0
+ 854              		.cfi_def_cfa_register 7
+ 855 0006 7860     		str	r0, [r7, #4]
+ 856 0008 3960     		str	r1, [r7]
+ 182:arraylist.c   **** 	arraylist_splice(l, source, l->size);
+ 857              		.loc 1 182 0
+ 858 000a 7B68     		ldr	r3, [r7, #4]
+ 859 000c 1B68     		ldr	r3, [r3]
+ 860 000e 1A46     		mov	r2, r3
+ 861 0010 3968     		ldr	r1, [r7]
+ 862 0012 7868     		ldr	r0, [r7, #4]
+ 863 0014 FFF7FEFF 		bl	arraylist_splice
+ 183:arraylist.c   **** }
+ 864              		.loc 1 183 0
+ 865 0018 00BF     		nop
+ 866 001a 0837     		adds	r7, r7, #8
+ 867              		.cfi_def_cfa_offset 8
+ 868 001c BD46     		mov	sp, r7
+ 869              		.cfi_def_cfa_register 13
+ 870              		@ sp needed
+ 871 001e 80BD     		pop	{r7, pc}
+ 872              		.cfi_endproc
+ 873              	.LFE13:
+ 874              		.size	arraylist_join, .-arraylist_join
+ 875              		.section	.text.arraylist_splice,"ax",%progbits
+ 876              		.align	2
+ 877              		.global	arraylist_splice
+ 878              		.thumb
+ 879              		.thumb_func
+ 880              		.type	arraylist_splice, %function
+ 881              	arraylist_splice:
+ 882              	.LFB14:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 20
+
+
+ 184:arraylist.c   **** 
+ 185:arraylist.c   **** /**
+ 186:arraylist.c   ****  * Insert a list into another at the given index, in-place.
+ 187:arraylist.c   ****  */
+ 188:arraylist.c   **** void arraylist_splice(arraylist* l, arraylist* source, unsigned int index)
+ 189:arraylist.c   **** {
+ 883              		.loc 1 189 0
+ 884              		.cfi_startproc
+ 885              		@ args = 0, pretend = 0, frame = 16
+ 886              		@ frame_needed = 1, uses_anonymous_args = 0
+ 887 0000 80B5     		push	{r7, lr}
+ 888              		.cfi_def_cfa_offset 8
+ 889              		.cfi_offset 7, -8
+ 890              		.cfi_offset 14, -4
+ 891 0002 84B0     		sub	sp, sp, #16
+ 892              		.cfi_def_cfa_offset 24
+ 893 0004 00AF     		add	r7, sp, #0
+ 894              		.cfi_def_cfa_register 7
+ 895 0006 F860     		str	r0, [r7, #12]
+ 896 0008 B960     		str	r1, [r7, #8]
+ 897 000a 7A60     		str	r2, [r7, #4]
+ 190:arraylist.c   **** 	// Reallocate, if needed
+ 191:arraylist.c   **** 	arraylist_allocate(l, l->size + source->size);
+ 898              		.loc 1 191 0
+ 899 000c FB68     		ldr	r3, [r7, #12]
+ 900 000e 1A68     		ldr	r2, [r3]
+ 901 0010 BB68     		ldr	r3, [r7, #8]
+ 902 0012 1B68     		ldr	r3, [r3]
+ 903 0014 1344     		add	r3, r3, r2
+ 904 0016 1946     		mov	r1, r3
+ 905 0018 F868     		ldr	r0, [r7, #12]
+ 906 001a FFF7FEFF 		bl	arraylist_allocate
+ 192:arraylist.c   **** 
+ 193:arraylist.c   **** 	// Move data to the right
+ 194:arraylist.c   **** 	arraylist_memshift(l->body + index, source->size, l->size - index);
+ 907              		.loc 1 194 0
+ 908 001e FB68     		ldr	r3, [r7, #12]
+ 909 0020 9A68     		ldr	r2, [r3, #8]
+ 910 0022 BB68     		ldr	r3, [r7, #8]
+ 911 0024 1968     		ldr	r1, [r3]
+ 912 0026 7B68     		ldr	r3, [r7, #4]
+ 913 0028 0B44     		add	r3, r3, r1
+ 914 002a 9B00     		lsls	r3, r3, #2
+ 915 002c D018     		adds	r0, r2, r3
+ 916 002e FB68     		ldr	r3, [r7, #12]
+ 917 0030 9A68     		ldr	r2, [r3, #8]
+ 918 0032 7B68     		ldr	r3, [r7, #4]
+ 919 0034 9B00     		lsls	r3, r3, #2
+ 920 0036 D118     		adds	r1, r2, r3
+ 921 0038 FB68     		ldr	r3, [r7, #12]
+ 922 003a 1A68     		ldr	r2, [r3]
+ 923 003c 7B68     		ldr	r3, [r7, #4]
+ 924 003e D31A     		subs	r3, r2, r3
+ 925 0040 9B00     		lsls	r3, r3, #2
+ 926 0042 1A46     		mov	r2, r3
+ 927 0044 FFF7FEFF 		bl	memmove
+ 195:arraylist.c   **** 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 21
+
+
+ 196:arraylist.c   **** 	// Copy the data over
+ 197:arraylist.c   **** 	memmove(l->body + index, source->body, source->size * sizeof(void*));
+ 928              		.loc 1 197 0
+ 929 0048 FB68     		ldr	r3, [r7, #12]
+ 930 004a 9A68     		ldr	r2, [r3, #8]
+ 931 004c 7B68     		ldr	r3, [r7, #4]
+ 932 004e 9B00     		lsls	r3, r3, #2
+ 933 0050 D018     		adds	r0, r2, r3
+ 934 0052 BB68     		ldr	r3, [r7, #8]
+ 935 0054 9968     		ldr	r1, [r3, #8]
+ 936 0056 BB68     		ldr	r3, [r7, #8]
+ 937 0058 1B68     		ldr	r3, [r3]
+ 938 005a 9B00     		lsls	r3, r3, #2
+ 939 005c 1A46     		mov	r2, r3
+ 940 005e FFF7FEFF 		bl	memmove
+ 198:arraylist.c   **** 	l->size += source->size;
+ 941              		.loc 1 198 0
+ 942 0062 FB68     		ldr	r3, [r7, #12]
+ 943 0064 1A68     		ldr	r2, [r3]
+ 944 0066 BB68     		ldr	r3, [r7, #8]
+ 945 0068 1B68     		ldr	r3, [r3]
+ 946 006a 1A44     		add	r2, r2, r3
+ 947 006c FB68     		ldr	r3, [r7, #12]
+ 948 006e 1A60     		str	r2, [r3]
+ 199:arraylist.c   **** }
+ 949              		.loc 1 199 0
+ 950 0070 00BF     		nop
+ 951 0072 1037     		adds	r7, r7, #16
+ 952              		.cfi_def_cfa_offset 8
+ 953 0074 BD46     		mov	sp, r7
+ 954              		.cfi_def_cfa_register 13
+ 955              		@ sp needed
+ 956 0076 80BD     		pop	{r7, pc}
+ 957              		.cfi_endproc
+ 958              	.LFE14:
+ 959              		.size	arraylist_splice, .-arraylist_splice
+ 960              		.section	.text.arraylist_destroy,"ax",%progbits
+ 961              		.align	2
+ 962              		.global	arraylist_destroy
+ 963              		.thumb
+ 964              		.thumb_func
+ 965              		.type	arraylist_destroy, %function
+ 966              	arraylist_destroy:
+ 967              	.LFB15:
+ 200:arraylist.c   **** 
+ 201:arraylist.c   **** void arraylist_destroy(arraylist* l)
+ 202:arraylist.c   **** {
+ 968              		.loc 1 202 0
+ 969              		.cfi_startproc
+ 970              		@ args = 0, pretend = 0, frame = 8
+ 971              		@ frame_needed = 1, uses_anonymous_args = 0
+ 972 0000 80B5     		push	{r7, lr}
+ 973              		.cfi_def_cfa_offset 8
+ 974              		.cfi_offset 7, -8
+ 975              		.cfi_offset 14, -4
+ 976 0002 82B0     		sub	sp, sp, #8
+ 977              		.cfi_def_cfa_offset 16
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 22
+
+
+ 978 0004 00AF     		add	r7, sp, #0
+ 979              		.cfi_def_cfa_register 7
+ 980 0006 7860     		str	r0, [r7, #4]
+ 203:arraylist.c   **** 	free(l->body);
+ 981              		.loc 1 203 0
+ 982 0008 7B68     		ldr	r3, [r7, #4]
+ 983 000a 9B68     		ldr	r3, [r3, #8]
+ 984 000c 1846     		mov	r0, r3
+ 985 000e FFF7FEFF 		bl	free
+ 204:arraylist.c   **** 	free(l);
+ 986              		.loc 1 204 0
+ 987 0012 7868     		ldr	r0, [r7, #4]
+ 988 0014 FFF7FEFF 		bl	free
+ 205:arraylist.c   **** }
+ 989              		.loc 1 205 0
+ 990 0018 00BF     		nop
+ 991 001a 0837     		adds	r7, r7, #8
+ 992              		.cfi_def_cfa_offset 8
+ 993 001c BD46     		mov	sp, r7
+ 994              		.cfi_def_cfa_register 13
+ 995              		@ sp needed
+ 996 001e 80BD     		pop	{r7, pc}
+ 997              		.cfi_endproc
+ 998              	.LFE15:
+ 999              		.size	arraylist_destroy, .-arraylist_destroy
+ 1000              		.section	.rodata
+ 1001 0066 0000     		.align	2
+ 1002              		.type	__func__.4652, %object
+ 1003              		.size	__func__.4652, 17
+ 1004              	__func__.4652:
+ 1005 0068 61727261 		.ascii	"arraylist_create\000"
+ 1005      796C6973 
+ 1005      745F6372 
+ 1005      65617465 
+ 1005      00
+ 1006 0079 000000   		.align	2
+ 1007              		.type	__func__.4657, %object
+ 1008              		.size	__func__.4657, 19
+ 1009              	__func__.4657:
+ 1010 007c 61727261 		.ascii	"arraylist_allocate\000"
+ 1010      796C6973 
+ 1010      745F616C 
+ 1010      6C6F6361 
+ 1010      746500
+ 1011 008f 00       		.align	2
+ 1012              		.type	__func__.4672, %object
+ 1013              		.size	__func__.4672, 14
+ 1014              	__func__.4672:
+ 1015 0090 61727261 		.ascii	"arraylist_pop\000"
+ 1015      796C6973 
+ 1015      745F706F 
+ 1015      7000
+ 1016 009e 0000     		.align	2
+ 1017              		.type	__func__.4677, %object
+ 1018              		.size	__func__.4677, 14
+ 1019              	__func__.4677:
+ 1020 00a0 61727261 		.ascii	"arraylist_get\000"
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 23
+
+
+ 1020      796C6973 
+ 1020      745F6765 
+ 1020      7400
+ 1021 00ae 0000     		.align	2
+ 1022              		.type	__func__.4683, %object
+ 1023              		.size	__func__.4683, 14
+ 1024              	__func__.4683:
+ 1025 00b0 61727261 		.ascii	"arraylist_set\000"
+ 1025      796C6973 
+ 1025      745F7365 
+ 1025      7400
+ 1026 00be 0000     		.align	2
+ 1027              		.type	__func__.4702, %object
+ 1028              		.size	__func__.4702, 16
+ 1029              	__func__.4702:
+ 1030 00c0 61727261 		.ascii	"arraylist_slice\000"
+ 1030      796C6973 
+ 1030      745F736C 
+ 1030      69636500 
+ 1031              		.text
+ 1032              	.Letext0:
+ 1033              		.file 2 "arraylist.h"
+ 1034              		.section	.debug_info,"",%progbits
+ 1035              	.Ldebug_info0:
+ 1036 0000 B3040000 		.4byte	0x4b3
+ 1037 0004 0400     		.2byte	0x4
+ 1038 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1039 000a 04       		.byte	0x4
+ 1040 000b 01       		.uleb128 0x1
+ 1041 000c 3C000000 		.4byte	.LASF37
+ 1042 0010 0C       		.byte	0xc
+ 1043 0011 D6010000 		.4byte	.LASF38
+ 1044 0015 69010000 		.4byte	.LASF39
+ 1045 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1046 001d 00000000 		.4byte	0
+ 1047 0021 00000000 		.4byte	.Ldebug_line0
+ 1048 0025 02       		.uleb128 0x2
+ 1049 0026 04       		.byte	0x4
+ 1050 0027 07       		.byte	0x7
+ 1051 0028 E2010000 		.4byte	.LASF0
+ 1052 002c 03       		.uleb128 0x3
+ 1053 002d 04       		.byte	0x4
+ 1054 002e 05       		.byte	0x5
+ 1055 002f 696E7400 		.ascii	"int\000"
+ 1056 0033 02       		.uleb128 0x2
+ 1057 0034 01       		.byte	0x1
+ 1058 0035 06       		.byte	0x6
+ 1059 0036 B1020000 		.4byte	.LASF1
+ 1060 003a 02       		.uleb128 0x2
+ 1061 003b 01       		.byte	0x1
+ 1062 003c 08       		.byte	0x8
+ 1063 003d 46010000 		.4byte	.LASF2
+ 1064 0041 02       		.uleb128 0x2
+ 1065 0042 02       		.byte	0x2
+ 1066 0043 05       		.byte	0x5
+ 1067 0044 8B020000 		.4byte	.LASF3
+ 1068 0048 02       		.uleb128 0x2
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 24
+
+
+ 1069 0049 02       		.byte	0x2
+ 1070 004a 07       		.byte	0x7
+ 1071 004b 22010000 		.4byte	.LASF4
+ 1072 004f 02       		.uleb128 0x2
+ 1073 0050 04       		.byte	0x4
+ 1074 0051 05       		.byte	0x5
+ 1075 0052 95020000 		.4byte	.LASF5
+ 1076 0056 02       		.uleb128 0x2
+ 1077 0057 04       		.byte	0x4
+ 1078 0058 07       		.byte	0x7
+ 1079 0059 07010000 		.4byte	.LASF6
+ 1080 005d 02       		.uleb128 0x2
+ 1081 005e 08       		.byte	0x8
+ 1082 005f 05       		.byte	0x5
+ 1083 0060 64020000 		.4byte	.LASF7
+ 1084 0064 02       		.uleb128 0x2
+ 1085 0065 08       		.byte	0x8
+ 1086 0066 07       		.byte	0x7
+ 1087 0067 EF010000 		.4byte	.LASF8
+ 1088 006b 02       		.uleb128 0x2
+ 1089 006c 04       		.byte	0x4
+ 1090 006d 07       		.byte	0x7
+ 1091 006e 5B020000 		.4byte	.LASF9
+ 1092 0072 04       		.uleb128 0x4
+ 1093 0073 04       		.byte	0x4
+ 1094 0074 02       		.uleb128 0x2
+ 1095 0075 01       		.byte	0x1
+ 1096 0076 08       		.byte	0x8
+ 1097 0077 72020000 		.4byte	.LASF10
+ 1098 007b 05       		.uleb128 0x5
+ 1099 007c 74000000 		.4byte	0x74
+ 1100 0080 06       		.uleb128 0x6
+ 1101 0081 C4020000 		.4byte	.LASF40
+ 1102 0085 02       		.byte	0x2
+ 1103 0086 02       		.byte	0x2
+ 1104 0087 8B000000 		.4byte	0x8b
+ 1105 008b 07       		.uleb128 0x7
+ 1106 008c C4020000 		.4byte	.LASF40
+ 1107 0090 0C       		.byte	0xc
+ 1108 0091 02       		.byte	0x2
+ 1109 0092 15       		.byte	0x15
+ 1110 0093 BC000000 		.4byte	0xbc
+ 1111 0097 08       		.uleb128 0x8
+ 1112 0098 02010000 		.4byte	.LASF11
+ 1113 009c 02       		.byte	0x2
+ 1114 009d 16       		.byte	0x16
+ 1115 009e 25000000 		.4byte	0x25
+ 1116 00a2 00       		.byte	0
+ 1117 00a3 08       		.uleb128 0x8
+ 1118 00a4 0F000000 		.4byte	.LASF12
+ 1119 00a8 02       		.byte	0x2
+ 1120 00a9 17       		.byte	0x17
+ 1121 00aa 25000000 		.4byte	0x25
+ 1122 00ae 04       		.byte	0x4
+ 1123 00af 08       		.uleb128 0x8
+ 1124 00b0 64010000 		.4byte	.LASF13
+ 1125 00b4 02       		.byte	0x2
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 25
+
+
+ 1126 00b5 18       		.byte	0x18
+ 1127 00b6 BC000000 		.4byte	0xbc
+ 1128 00ba 08       		.byte	0x8
+ 1129 00bb 00       		.byte	0
+ 1130 00bc 09       		.uleb128 0x9
+ 1131 00bd 04       		.byte	0x4
+ 1132 00be 72000000 		.4byte	0x72
+ 1133 00c2 0A       		.uleb128 0xa
+ 1134 00c3 18000000 		.4byte	.LASF14
+ 1135 00c7 01       		.byte	0x1
+ 1136 00c8 2C       		.byte	0x2c
+ 1137 00c9 F9000000 		.4byte	0xf9
+ 1138 00cd 00000000 		.4byte	.LFB0
+ 1139 00d1 54000000 		.4byte	.LFE0-.LFB0
+ 1140 00d5 01       		.uleb128 0x1
+ 1141 00d6 9C       		.byte	0x9c
+ 1142 00d7 F9000000 		.4byte	0xf9
+ 1143 00db 0B       		.uleb128 0xb
+ 1144 00dc 19010000 		.4byte	.LASF17
+ 1145 00e0 01       		.byte	0x1
+ 1146 00e1 2E       		.byte	0x2e
+ 1147 00e2 F9000000 		.4byte	0xf9
+ 1148 00e6 02       		.uleb128 0x2
+ 1149 00e7 91       		.byte	0x91
+ 1150 00e8 74       		.sleb128 -12
+ 1151 00e9 0C       		.uleb128 0xc
+ 1152 00ea F9000000 		.4byte	.LASF16
+ 1153 00ee 0F010000 		.4byte	0x10f
+ 1154 00f2 05       		.uleb128 0x5
+ 1155 00f3 03       		.byte	0x3
+ 1156 00f4 68000000 		.4byte	__func__.4652
+ 1157 00f8 00       		.byte	0
+ 1158 00f9 09       		.uleb128 0x9
+ 1159 00fa 04       		.byte	0x4
+ 1160 00fb 80000000 		.4byte	0x80
+ 1161 00ff 0D       		.uleb128 0xd
+ 1162 0100 7B000000 		.4byte	0x7b
+ 1163 0104 0F010000 		.4byte	0x10f
+ 1164 0108 0E       		.uleb128 0xe
+ 1165 0109 6B000000 		.4byte	0x6b
+ 1166 010d 10       		.byte	0x10
+ 1167 010e 00       		.byte	0
+ 1168 010f 05       		.uleb128 0x5
+ 1169 0110 FF000000 		.4byte	0xff
+ 1170 0114 0F       		.uleb128 0xf
+ 1171 0115 29000000 		.4byte	.LASF15
+ 1172 0119 01       		.byte	0x1
+ 1173 011a 3A       		.byte	0x3a
+ 1174 011b 00000000 		.4byte	.LFB1
+ 1175 011f 84000000 		.4byte	.LFE1-.LFB1
+ 1176 0123 01       		.uleb128 0x1
+ 1177 0124 9C       		.byte	0x9c
+ 1178 0125 6B010000 		.4byte	0x16b
+ 1179 0129 10       		.uleb128 0x10
+ 1180 012a 6C00     		.ascii	"l\000"
+ 1181 012c 01       		.byte	0x1
+ 1182 012d 3A       		.byte	0x3a
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 26
+
+
+ 1183 012e F9000000 		.4byte	0xf9
+ 1184 0132 02       		.uleb128 0x2
+ 1185 0133 91       		.byte	0x91
+ 1186 0134 6C       		.sleb128 -20
+ 1187 0135 11       		.uleb128 0x11
+ 1188 0136 02010000 		.4byte	.LASF11
+ 1189 013a 01       		.byte	0x1
+ 1190 013b 3A       		.byte	0x3a
+ 1191 013c 25000000 		.4byte	0x25
+ 1192 0140 02       		.uleb128 0x2
+ 1193 0141 91       		.byte	0x91
+ 1194 0142 68       		.sleb128 -24
+ 1195 0143 0C       		.uleb128 0xc
+ 1196 0144 F9000000 		.4byte	.LASF16
+ 1197 0148 7B010000 		.4byte	0x17b
+ 1198 014c 05       		.uleb128 0x5
+ 1199 014d 03       		.byte	0x3
+ 1200 014e 7C000000 		.4byte	__func__.4657
+ 1201 0152 12       		.uleb128 0x12
+ 1202 0153 26000000 		.4byte	.LBB2
+ 1203 0157 46000000 		.4byte	.LBE2-.LBB2
+ 1204 015b 0B       		.uleb128 0xb
+ 1205 015c C9010000 		.4byte	.LASF18
+ 1206 0160 01       		.byte	0x1
+ 1207 0161 3E       		.byte	0x3e
+ 1208 0162 25000000 		.4byte	0x25
+ 1209 0166 02       		.uleb128 0x2
+ 1210 0167 91       		.byte	0x91
+ 1211 0168 74       		.sleb128 -12
+ 1212 0169 00       		.byte	0
+ 1213 016a 00       		.byte	0
+ 1214 016b 0D       		.uleb128 0xd
+ 1215 016c 7B000000 		.4byte	0x7b
+ 1216 0170 7B010000 		.4byte	0x17b
+ 1217 0174 0E       		.uleb128 0xe
+ 1218 0175 6B000000 		.4byte	0x6b
+ 1219 0179 12       		.byte	0x12
+ 1220 017a 00       		.byte	0
+ 1221 017b 05       		.uleb128 0x5
+ 1222 017c 6B010000 		.4byte	0x16b
+ 1223 0180 13       		.uleb128 0x13
+ 1224 0181 00000000 		.4byte	.LASF21
+ 1225 0185 01       		.byte	0x1
+ 1226 0186 4B       		.byte	0x4b
+ 1227 0187 25000000 		.4byte	0x25
+ 1228 018b 00000000 		.4byte	.LFB2
+ 1229 018f 16000000 		.4byte	.LFE2-.LFB2
+ 1230 0193 01       		.uleb128 0x1
+ 1231 0194 9C       		.byte	0x9c
+ 1232 0195 A6010000 		.4byte	0x1a6
+ 1233 0199 10       		.uleb128 0x10
+ 1234 019a 6C00     		.ascii	"l\000"
+ 1235 019c 01       		.byte	0x1
+ 1236 019d 4B       		.byte	0x4b
+ 1237 019e F9000000 		.4byte	0xf9
+ 1238 01a2 02       		.uleb128 0x2
+ 1239 01a3 91       		.byte	0x91
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 27
+
+
+ 1240 01a4 74       		.sleb128 -12
+ 1241 01a5 00       		.byte	0
+ 1242 01a6 0F       		.uleb128 0xf
+ 1243 01a7 9E020000 		.4byte	.LASF19
+ 1244 01ab 01       		.byte	0x1
+ 1245 01ac 52       		.byte	0x52
+ 1246 01ad 00000000 		.4byte	.LFB3
+ 1247 01b1 36000000 		.4byte	.LFE3-.LFB3
+ 1248 01b5 01       		.uleb128 0x1
+ 1249 01b6 9C       		.byte	0x9c
+ 1250 01b7 D6010000 		.4byte	0x1d6
+ 1251 01bb 10       		.uleb128 0x10
+ 1252 01bc 6C00     		.ascii	"l\000"
+ 1253 01be 01       		.byte	0x1
+ 1254 01bf 52       		.byte	0x52
+ 1255 01c0 F9000000 		.4byte	0xf9
+ 1256 01c4 02       		.uleb128 0x2
+ 1257 01c5 91       		.byte	0x91
+ 1258 01c6 74       		.sleb128 -12
+ 1259 01c7 11       		.uleb128 0x11
+ 1260 01c8 AC020000 		.4byte	.LASF20
+ 1261 01cc 01       		.byte	0x1
+ 1262 01cd 52       		.byte	0x52
+ 1263 01ce 72000000 		.4byte	0x72
+ 1264 01d2 02       		.uleb128 0x2
+ 1265 01d3 91       		.byte	0x91
+ 1266 01d4 70       		.sleb128 -16
+ 1267 01d5 00       		.byte	0
+ 1268 01d6 14       		.uleb128 0x14
+ 1269 01d7 D5020000 		.4byte	.LASF22
+ 1270 01db 01       		.byte	0x1
+ 1271 01dc 5B       		.byte	0x5b
+ 1272 01dd 72000000 		.4byte	0x72
+ 1273 01e1 00000000 		.4byte	.LFB4
+ 1274 01e5 48000000 		.4byte	.LFE4-.LFB4
+ 1275 01e9 01       		.uleb128 0x1
+ 1276 01ea 9C       		.byte	0x9c
+ 1277 01eb 0B020000 		.4byte	0x20b
+ 1278 01ef 10       		.uleb128 0x10
+ 1279 01f0 6C00     		.ascii	"l\000"
+ 1280 01f2 01       		.byte	0x1
+ 1281 01f3 5B       		.byte	0x5b
+ 1282 01f4 F9000000 		.4byte	0xf9
+ 1283 01f8 02       		.uleb128 0x2
+ 1284 01f9 91       		.byte	0x91
+ 1285 01fa 74       		.sleb128 -12
+ 1286 01fb 0C       		.uleb128 0xc
+ 1287 01fc F9000000 		.4byte	.LASF16
+ 1288 0200 1B020000 		.4byte	0x21b
+ 1289 0204 05       		.uleb128 0x5
+ 1290 0205 03       		.byte	0x3
+ 1291 0206 90000000 		.4byte	__func__.4672
+ 1292 020a 00       		.byte	0
+ 1293 020b 0D       		.uleb128 0xd
+ 1294 020c 7B000000 		.4byte	0x7b
+ 1295 0210 1B020000 		.4byte	0x21b
+ 1296 0214 0E       		.uleb128 0xe
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 28
+
+
+ 1297 0215 6B000000 		.4byte	0x6b
+ 1298 0219 0D       		.byte	0xd
+ 1299 021a 00       		.byte	0
+ 1300 021b 05       		.uleb128 0x5
+ 1301 021c 0B020000 		.4byte	0x20b
+ 1302 0220 14       		.uleb128 0x14
+ 1303 0221 17020000 		.4byte	.LASF23
+ 1304 0225 01       		.byte	0x1
+ 1305 0226 64       		.byte	0x64
+ 1306 0227 72000000 		.4byte	0x72
+ 1307 022b 00000000 		.4byte	.LFB5
+ 1308 022f 40000000 		.4byte	.LFE5-.LFB5
+ 1309 0233 01       		.uleb128 0x1
+ 1310 0234 9C       		.byte	0x9c
+ 1311 0235 63020000 		.4byte	0x263
+ 1312 0239 10       		.uleb128 0x10
+ 1313 023a 6C00     		.ascii	"l\000"
+ 1314 023c 01       		.byte	0x1
+ 1315 023d 64       		.byte	0x64
+ 1316 023e F9000000 		.4byte	0xf9
+ 1317 0242 02       		.uleb128 0x2
+ 1318 0243 91       		.byte	0x91
+ 1319 0244 74       		.sleb128 -12
+ 1320 0245 11       		.uleb128 0x11
+ 1321 0246 77020000 		.4byte	.LASF24
+ 1322 024a 01       		.byte	0x1
+ 1323 024b 64       		.byte	0x64
+ 1324 024c 25000000 		.4byte	0x25
+ 1325 0250 02       		.uleb128 0x2
+ 1326 0251 91       		.byte	0x91
+ 1327 0252 70       		.sleb128 -16
+ 1328 0253 0C       		.uleb128 0xc
+ 1329 0254 F9000000 		.4byte	.LASF16
+ 1330 0258 63020000 		.4byte	0x263
+ 1331 025c 05       		.uleb128 0x5
+ 1332 025d 03       		.byte	0x3
+ 1333 025e A0000000 		.4byte	__func__.4677
+ 1334 0262 00       		.byte	0
+ 1335 0263 05       		.uleb128 0x5
+ 1336 0264 0B020000 		.4byte	0x20b
+ 1337 0268 0F       		.uleb128 0xf
+ 1338 0269 7D020000 		.4byte	.LASF25
+ 1339 026d 01       		.byte	0x1
+ 1340 026e 6D       		.byte	0x6d
+ 1341 026f 00000000 		.4byte	.LFB6
+ 1342 0273 44000000 		.4byte	.LFE6-.LFB6
+ 1343 0277 01       		.uleb128 0x1
+ 1344 0278 9C       		.byte	0x9c
+ 1345 0279 B5020000 		.4byte	0x2b5
+ 1346 027d 10       		.uleb128 0x10
+ 1347 027e 6C00     		.ascii	"l\000"
+ 1348 0280 01       		.byte	0x1
+ 1349 0281 6D       		.byte	0x6d
+ 1350 0282 F9000000 		.4byte	0xf9
+ 1351 0286 02       		.uleb128 0x2
+ 1352 0287 91       		.byte	0x91
+ 1353 0288 74       		.sleb128 -12
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 29
+
+
+ 1354 0289 11       		.uleb128 0x11
+ 1355 028a 77020000 		.4byte	.LASF24
+ 1356 028e 01       		.byte	0x1
+ 1357 028f 6D       		.byte	0x6d
+ 1358 0290 25000000 		.4byte	0x25
+ 1359 0294 02       		.uleb128 0x2
+ 1360 0295 91       		.byte	0x91
+ 1361 0296 70       		.sleb128 -16
+ 1362 0297 11       		.uleb128 0x11
+ 1363 0298 D3000000 		.4byte	.LASF26
+ 1364 029c 01       		.byte	0x1
+ 1365 029d 6D       		.byte	0x6d
+ 1366 029e 72000000 		.4byte	0x72
+ 1367 02a2 02       		.uleb128 0x2
+ 1368 02a3 91       		.byte	0x91
+ 1369 02a4 6C       		.sleb128 -20
+ 1370 02a5 0C       		.uleb128 0xc
+ 1371 02a6 F9000000 		.4byte	.LASF16
+ 1372 02aa B5020000 		.4byte	0x2b5
+ 1373 02ae 05       		.uleb128 0x5
+ 1374 02af 03       		.byte	0x3
+ 1375 02b0 B0000000 		.4byte	__func__.4683
+ 1376 02b4 00       		.byte	0
+ 1377 02b5 05       		.uleb128 0x5
+ 1378 02b6 0B020000 		.4byte	0x20b
+ 1379 02ba 0F       		.uleb128 0xf
+ 1380 02bb 35010000 		.4byte	.LASF27
+ 1381 02bf 01       		.byte	0x1
+ 1382 02c0 76       		.byte	0x76
+ 1383 02c1 00000000 		.4byte	.LFB7
+ 1384 02c5 60000000 		.4byte	.LFE7-.LFB7
+ 1385 02c9 01       		.uleb128 0x1
+ 1386 02ca 9C       		.byte	0x9c
+ 1387 02cb F8020000 		.4byte	0x2f8
+ 1388 02cf 10       		.uleb128 0x10
+ 1389 02d0 6C00     		.ascii	"l\000"
+ 1390 02d2 01       		.byte	0x1
+ 1391 02d3 76       		.byte	0x76
+ 1392 02d4 F9000000 		.4byte	0xf9
+ 1393 02d8 02       		.uleb128 0x2
+ 1394 02d9 91       		.byte	0x91
+ 1395 02da 74       		.sleb128 -12
+ 1396 02db 11       		.uleb128 0x11
+ 1397 02dc 77020000 		.4byte	.LASF24
+ 1398 02e0 01       		.byte	0x1
+ 1399 02e1 76       		.byte	0x76
+ 1400 02e2 25000000 		.4byte	0x25
+ 1401 02e6 02       		.uleb128 0x2
+ 1402 02e7 91       		.byte	0x91
+ 1403 02e8 70       		.sleb128 -16
+ 1404 02e9 11       		.uleb128 0x11
+ 1405 02ea D3000000 		.4byte	.LASF26
+ 1406 02ee 01       		.byte	0x1
+ 1407 02ef 76       		.byte	0x76
+ 1408 02f0 72000000 		.4byte	0x72
+ 1409 02f4 02       		.uleb128 0x2
+ 1410 02f5 91       		.byte	0x91
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 30
+
+
+ 1411 02f6 6C       		.sleb128 -20
+ 1412 02f7 00       		.byte	0
+ 1413 02f8 14       		.uleb128 0x14
+ 1414 02f9 E8000000 		.4byte	.LASF28
+ 1415 02fd 01       		.byte	0x1
+ 1416 02fe 84       		.byte	0x84
+ 1417 02ff 72000000 		.4byte	0x72
+ 1418 0303 00000000 		.4byte	.LFB8
+ 1419 0307 52000000 		.4byte	.LFE8-.LFB8
+ 1420 030b 01       		.uleb128 0x1
+ 1421 030c 9C       		.byte	0x9c
+ 1422 030d 3A030000 		.4byte	0x33a
+ 1423 0311 10       		.uleb128 0x10
+ 1424 0312 6C00     		.ascii	"l\000"
+ 1425 0314 01       		.byte	0x1
+ 1426 0315 84       		.byte	0x84
+ 1427 0316 F9000000 		.4byte	0xf9
+ 1428 031a 02       		.uleb128 0x2
+ 1429 031b 91       		.byte	0x91
+ 1430 031c 6C       		.sleb128 -20
+ 1431 031d 11       		.uleb128 0x11
+ 1432 031e 77020000 		.4byte	.LASF24
+ 1433 0322 01       		.byte	0x1
+ 1434 0323 84       		.byte	0x84
+ 1435 0324 25000000 		.4byte	0x25
+ 1436 0328 02       		.uleb128 0x2
+ 1437 0329 91       		.byte	0x91
+ 1438 032a 68       		.sleb128 -24
+ 1439 032b 0B       		.uleb128 0xb
+ 1440 032c D3000000 		.4byte	.LASF26
+ 1441 0330 01       		.byte	0x1
+ 1442 0331 86       		.byte	0x86
+ 1443 0332 72000000 		.4byte	0x72
+ 1444 0336 02       		.uleb128 0x2
+ 1445 0337 91       		.byte	0x91
+ 1446 0338 74       		.sleb128 -12
+ 1447 0339 00       		.byte	0
+ 1448 033a 15       		.uleb128 0x15
+ 1449 033b 54010000 		.4byte	.LASF29
+ 1450 033f 01       		.byte	0x1
+ 1451 0340 8F       		.byte	0x8f
+ 1452 0341 00000000 		.4byte	.LFB9
+ 1453 0345 18000000 		.4byte	.LFE9-.LFB9
+ 1454 0349 01       		.uleb128 0x1
+ 1455 034a 9C       		.byte	0x9c
+ 1456 034b 5C030000 		.4byte	0x35c
+ 1457 034f 10       		.uleb128 0x10
+ 1458 0350 6C00     		.ascii	"l\000"
+ 1459 0352 01       		.byte	0x1
+ 1460 0353 8F       		.byte	0x8f
+ 1461 0354 F9000000 		.4byte	0xf9
+ 1462 0358 02       		.uleb128 0x2
+ 1463 0359 91       		.byte	0x91
+ 1464 035a 74       		.sleb128 -12
+ 1465 035b 00       		.byte	0
+ 1466 035c 14       		.uleb128 0x14
+ 1467 035d 4B020000 		.4byte	.LASF30
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 31
+
+
+ 1468 0361 01       		.byte	0x1
+ 1469 0362 97       		.byte	0x97
+ 1470 0363 F9000000 		.4byte	0xf9
+ 1471 0367 00000000 		.4byte	.LFB10
+ 1472 036b 68000000 		.4byte	.LFE10-.LFB10
+ 1473 036f 01       		.uleb128 0x1
+ 1474 0370 9C       		.byte	0x9c
+ 1475 0371 BB030000 		.4byte	0x3bb
+ 1476 0375 10       		.uleb128 0x10
+ 1477 0376 6C00     		.ascii	"l\000"
+ 1478 0378 01       		.byte	0x1
+ 1479 0379 97       		.byte	0x97
+ 1480 037a F9000000 		.4byte	0xf9
+ 1481 037e 02       		.uleb128 0x2
+ 1482 037f 91       		.byte	0x91
+ 1483 0380 6C       		.sleb128 -20
+ 1484 0381 11       		.uleb128 0x11
+ 1485 0382 77020000 		.4byte	.LASF24
+ 1486 0386 01       		.byte	0x1
+ 1487 0387 97       		.byte	0x97
+ 1488 0388 25000000 		.4byte	0x25
+ 1489 038c 02       		.uleb128 0x2
+ 1490 038d 91       		.byte	0x91
+ 1491 038e 68       		.sleb128 -24
+ 1492 038f 11       		.uleb128 0x11
+ 1493 0390 CE020000 		.4byte	.LASF31
+ 1494 0394 01       		.byte	0x1
+ 1495 0395 97       		.byte	0x97
+ 1496 0396 25000000 		.4byte	0x25
+ 1497 039a 02       		.uleb128 0x2
+ 1498 039b 91       		.byte	0x91
+ 1499 039c 64       		.sleb128 -28
+ 1500 039d 0C       		.uleb128 0xc
+ 1501 039e F9000000 		.4byte	.LASF16
+ 1502 03a2 CB030000 		.4byte	0x3cb
+ 1503 03a6 05       		.uleb128 0x5
+ 1504 03a7 03       		.byte	0x3
+ 1505 03a8 C0000000 		.4byte	__func__.4702
+ 1506 03ac 0B       		.uleb128 0xb
+ 1507 03ad 19010000 		.4byte	.LASF17
+ 1508 03b1 01       		.byte	0x1
+ 1509 03b2 9A       		.byte	0x9a
+ 1510 03b3 F9000000 		.4byte	0xf9
+ 1511 03b7 02       		.uleb128 0x2
+ 1512 03b8 91       		.byte	0x91
+ 1513 03b9 74       		.sleb128 -12
+ 1514 03ba 00       		.byte	0
+ 1515 03bb 0D       		.uleb128 0xd
+ 1516 03bc 7B000000 		.4byte	0x7b
+ 1517 03c0 CB030000 		.4byte	0x3cb
+ 1518 03c4 0E       		.uleb128 0xe
+ 1519 03c5 6B000000 		.4byte	0x6b
+ 1520 03c9 0F       		.byte	0xf
+ 1521 03ca 00       		.byte	0
+ 1522 03cb 05       		.uleb128 0x5
+ 1523 03cc BB030000 		.4byte	0x3bb
+ 1524 03d0 14       		.uleb128 0x14
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 32
+
+
+ 1525 03d1 37020000 		.4byte	.LASF32
+ 1526 03d5 01       		.byte	0x1
+ 1527 03d6 A4       		.byte	0xa4
+ 1528 03d7 F9000000 		.4byte	0xf9
+ 1529 03db 00000000 		.4byte	.LFB11
+ 1530 03df 26000000 		.4byte	.LFE11-.LFB11
+ 1531 03e3 01       		.uleb128 0x1
+ 1532 03e4 9C       		.byte	0x9c
+ 1533 03e5 04040000 		.4byte	0x404
+ 1534 03e9 10       		.uleb128 0x10
+ 1535 03ea 6C00     		.ascii	"l\000"
+ 1536 03ec 01       		.byte	0x1
+ 1537 03ed A4       		.byte	0xa4
+ 1538 03ee F9000000 		.4byte	0xf9
+ 1539 03f2 02       		.uleb128 0x2
+ 1540 03f3 91       		.byte	0x91
+ 1541 03f4 74       		.sleb128 -12
+ 1542 03f5 11       		.uleb128 0x11
+ 1543 03f6 77020000 		.4byte	.LASF24
+ 1544 03fa 01       		.byte	0x1
+ 1545 03fb A4       		.byte	0xa4
+ 1546 03fc 25000000 		.4byte	0x25
+ 1547 0400 02       		.uleb128 0x2
+ 1548 0401 91       		.byte	0x91
+ 1549 0402 70       		.sleb128 -16
+ 1550 0403 00       		.byte	0
+ 1551 0404 14       		.uleb128 0x14
+ 1552 0405 D9000000 		.4byte	.LASF33
+ 1553 0409 01       		.byte	0x1
+ 1554 040a AC       		.byte	0xac
+ 1555 040b F9000000 		.4byte	0xf9
+ 1556 040f 00000000 		.4byte	.LFB12
+ 1557 0413 1A000000 		.4byte	.LFE12-.LFB12
+ 1558 0417 01       		.uleb128 0x1
+ 1559 0418 9C       		.byte	0x9c
+ 1560 0419 2A040000 		.4byte	0x42a
+ 1561 041d 10       		.uleb128 0x10
+ 1562 041e 6C00     		.ascii	"l\000"
+ 1563 0420 01       		.byte	0x1
+ 1564 0421 AC       		.byte	0xac
+ 1565 0422 F9000000 		.4byte	0xf9
+ 1566 0426 02       		.uleb128 0x2
+ 1567 0427 91       		.byte	0x91
+ 1568 0428 74       		.sleb128 -12
+ 1569 0429 00       		.byte	0
+ 1570 042a 0F       		.uleb128 0xf
+ 1571 042b BA010000 		.4byte	.LASF34
+ 1572 042f 01       		.byte	0x1
+ 1573 0430 B4       		.byte	0xb4
+ 1574 0431 00000000 		.4byte	.LFB13
+ 1575 0435 20000000 		.4byte	.LFE13-.LFB13
+ 1576 0439 01       		.uleb128 0x1
+ 1577 043a 9C       		.byte	0x9c
+ 1578 043b 5A040000 		.4byte	0x45a
+ 1579 043f 10       		.uleb128 0x10
+ 1580 0440 6C00     		.ascii	"l\000"
+ 1581 0442 01       		.byte	0x1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 33
+
+
+ 1582 0443 B4       		.byte	0xb4
+ 1583 0444 F9000000 		.4byte	0xf9
+ 1584 0448 02       		.uleb128 0x2
+ 1585 0449 91       		.byte	0x91
+ 1586 044a 74       		.sleb128 -12
+ 1587 044b 11       		.uleb128 0x11
+ 1588 044c BD020000 		.4byte	.LASF35
+ 1589 0450 01       		.byte	0x1
+ 1590 0451 B4       		.byte	0xb4
+ 1591 0452 F9000000 		.4byte	0xf9
+ 1592 0456 02       		.uleb128 0x2
+ 1593 0457 91       		.byte	0x91
+ 1594 0458 70       		.sleb128 -16
+ 1595 0459 00       		.byte	0
+ 1596 045a 0F       		.uleb128 0xf
+ 1597 045b 06020000 		.4byte	.LASF36
+ 1598 045f 01       		.byte	0x1
+ 1599 0460 BC       		.byte	0xbc
+ 1600 0461 00000000 		.4byte	.LFB14
+ 1601 0465 78000000 		.4byte	.LFE14-.LFB14
+ 1602 0469 01       		.uleb128 0x1
+ 1603 046a 9C       		.byte	0x9c
+ 1604 046b 98040000 		.4byte	0x498
+ 1605 046f 10       		.uleb128 0x10
+ 1606 0470 6C00     		.ascii	"l\000"
+ 1607 0472 01       		.byte	0x1
+ 1608 0473 BC       		.byte	0xbc
+ 1609 0474 F9000000 		.4byte	0xf9
+ 1610 0478 02       		.uleb128 0x2
+ 1611 0479 91       		.byte	0x91
+ 1612 047a 74       		.sleb128 -12
+ 1613 047b 11       		.uleb128 0x11
+ 1614 047c BD020000 		.4byte	.LASF35
+ 1615 0480 01       		.byte	0x1
+ 1616 0481 BC       		.byte	0xbc
+ 1617 0482 F9000000 		.4byte	0xf9
+ 1618 0486 02       		.uleb128 0x2
+ 1619 0487 91       		.byte	0x91
+ 1620 0488 70       		.sleb128 -16
+ 1621 0489 11       		.uleb128 0x11
+ 1622 048a 77020000 		.4byte	.LASF24
+ 1623 048e 01       		.byte	0x1
+ 1624 048f BC       		.byte	0xbc
+ 1625 0490 25000000 		.4byte	0x25
+ 1626 0494 02       		.uleb128 0x2
+ 1627 0495 91       		.byte	0x91
+ 1628 0496 6C       		.sleb128 -20
+ 1629 0497 00       		.byte	0
+ 1630 0498 16       		.uleb128 0x16
+ 1631 0499 25020000 		.4byte	.LASF41
+ 1632 049d 01       		.byte	0x1
+ 1633 049e C9       		.byte	0xc9
+ 1634 049f 00000000 		.4byte	.LFB15
+ 1635 04a3 20000000 		.4byte	.LFE15-.LFB15
+ 1636 04a7 01       		.uleb128 0x1
+ 1637 04a8 9C       		.byte	0x9c
+ 1638 04a9 10       		.uleb128 0x10
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 34
+
+
+ 1639 04aa 6C00     		.ascii	"l\000"
+ 1640 04ac 01       		.byte	0x1
+ 1641 04ad C9       		.byte	0xc9
+ 1642 04ae F9000000 		.4byte	0xf9
+ 1643 04b2 02       		.uleb128 0x2
+ 1644 04b3 91       		.byte	0x91
+ 1645 04b4 74       		.sleb128 -12
+ 1646 04b5 00       		.byte	0
+ 1647 04b6 00       		.byte	0
+ 1648              		.section	.debug_abbrev,"",%progbits
+ 1649              	.Ldebug_abbrev0:
+ 1650 0000 01       		.uleb128 0x1
+ 1651 0001 11       		.uleb128 0x11
+ 1652 0002 01       		.byte	0x1
+ 1653 0003 25       		.uleb128 0x25
+ 1654 0004 0E       		.uleb128 0xe
+ 1655 0005 13       		.uleb128 0x13
+ 1656 0006 0B       		.uleb128 0xb
+ 1657 0007 03       		.uleb128 0x3
+ 1658 0008 0E       		.uleb128 0xe
+ 1659 0009 1B       		.uleb128 0x1b
+ 1660 000a 0E       		.uleb128 0xe
+ 1661 000b 55       		.uleb128 0x55
+ 1662 000c 17       		.uleb128 0x17
+ 1663 000d 11       		.uleb128 0x11
+ 1664 000e 01       		.uleb128 0x1
+ 1665 000f 10       		.uleb128 0x10
+ 1666 0010 17       		.uleb128 0x17
+ 1667 0011 00       		.byte	0
+ 1668 0012 00       		.byte	0
+ 1669 0013 02       		.uleb128 0x2
+ 1670 0014 24       		.uleb128 0x24
+ 1671 0015 00       		.byte	0
+ 1672 0016 0B       		.uleb128 0xb
+ 1673 0017 0B       		.uleb128 0xb
+ 1674 0018 3E       		.uleb128 0x3e
+ 1675 0019 0B       		.uleb128 0xb
+ 1676 001a 03       		.uleb128 0x3
+ 1677 001b 0E       		.uleb128 0xe
+ 1678 001c 00       		.byte	0
+ 1679 001d 00       		.byte	0
+ 1680 001e 03       		.uleb128 0x3
+ 1681 001f 24       		.uleb128 0x24
+ 1682 0020 00       		.byte	0
+ 1683 0021 0B       		.uleb128 0xb
+ 1684 0022 0B       		.uleb128 0xb
+ 1685 0023 3E       		.uleb128 0x3e
+ 1686 0024 0B       		.uleb128 0xb
+ 1687 0025 03       		.uleb128 0x3
+ 1688 0026 08       		.uleb128 0x8
+ 1689 0027 00       		.byte	0
+ 1690 0028 00       		.byte	0
+ 1691 0029 04       		.uleb128 0x4
+ 1692 002a 0F       		.uleb128 0xf
+ 1693 002b 00       		.byte	0
+ 1694 002c 0B       		.uleb128 0xb
+ 1695 002d 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 35
+
+
+ 1696 002e 00       		.byte	0
+ 1697 002f 00       		.byte	0
+ 1698 0030 05       		.uleb128 0x5
+ 1699 0031 26       		.uleb128 0x26
+ 1700 0032 00       		.byte	0
+ 1701 0033 49       		.uleb128 0x49
+ 1702 0034 13       		.uleb128 0x13
+ 1703 0035 00       		.byte	0
+ 1704 0036 00       		.byte	0
+ 1705 0037 06       		.uleb128 0x6
+ 1706 0038 16       		.uleb128 0x16
+ 1707 0039 00       		.byte	0
+ 1708 003a 03       		.uleb128 0x3
+ 1709 003b 0E       		.uleb128 0xe
+ 1710 003c 3A       		.uleb128 0x3a
+ 1711 003d 0B       		.uleb128 0xb
+ 1712 003e 3B       		.uleb128 0x3b
+ 1713 003f 0B       		.uleb128 0xb
+ 1714 0040 49       		.uleb128 0x49
+ 1715 0041 13       		.uleb128 0x13
+ 1716 0042 00       		.byte	0
+ 1717 0043 00       		.byte	0
+ 1718 0044 07       		.uleb128 0x7
+ 1719 0045 13       		.uleb128 0x13
+ 1720 0046 01       		.byte	0x1
+ 1721 0047 03       		.uleb128 0x3
+ 1722 0048 0E       		.uleb128 0xe
+ 1723 0049 0B       		.uleb128 0xb
+ 1724 004a 0B       		.uleb128 0xb
+ 1725 004b 3A       		.uleb128 0x3a
+ 1726 004c 0B       		.uleb128 0xb
+ 1727 004d 3B       		.uleb128 0x3b
+ 1728 004e 0B       		.uleb128 0xb
+ 1729 004f 01       		.uleb128 0x1
+ 1730 0050 13       		.uleb128 0x13
+ 1731 0051 00       		.byte	0
+ 1732 0052 00       		.byte	0
+ 1733 0053 08       		.uleb128 0x8
+ 1734 0054 0D       		.uleb128 0xd
+ 1735 0055 00       		.byte	0
+ 1736 0056 03       		.uleb128 0x3
+ 1737 0057 0E       		.uleb128 0xe
+ 1738 0058 3A       		.uleb128 0x3a
+ 1739 0059 0B       		.uleb128 0xb
+ 1740 005a 3B       		.uleb128 0x3b
+ 1741 005b 0B       		.uleb128 0xb
+ 1742 005c 49       		.uleb128 0x49
+ 1743 005d 13       		.uleb128 0x13
+ 1744 005e 38       		.uleb128 0x38
+ 1745 005f 0B       		.uleb128 0xb
+ 1746 0060 00       		.byte	0
+ 1747 0061 00       		.byte	0
+ 1748 0062 09       		.uleb128 0x9
+ 1749 0063 0F       		.uleb128 0xf
+ 1750 0064 00       		.byte	0
+ 1751 0065 0B       		.uleb128 0xb
+ 1752 0066 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 36
+
+
+ 1753 0067 49       		.uleb128 0x49
+ 1754 0068 13       		.uleb128 0x13
+ 1755 0069 00       		.byte	0
+ 1756 006a 00       		.byte	0
+ 1757 006b 0A       		.uleb128 0xa
+ 1758 006c 2E       		.uleb128 0x2e
+ 1759 006d 01       		.byte	0x1
+ 1760 006e 3F       		.uleb128 0x3f
+ 1761 006f 19       		.uleb128 0x19
+ 1762 0070 03       		.uleb128 0x3
+ 1763 0071 0E       		.uleb128 0xe
+ 1764 0072 3A       		.uleb128 0x3a
+ 1765 0073 0B       		.uleb128 0xb
+ 1766 0074 3B       		.uleb128 0x3b
+ 1767 0075 0B       		.uleb128 0xb
+ 1768 0076 49       		.uleb128 0x49
+ 1769 0077 13       		.uleb128 0x13
+ 1770 0078 11       		.uleb128 0x11
+ 1771 0079 01       		.uleb128 0x1
+ 1772 007a 12       		.uleb128 0x12
+ 1773 007b 06       		.uleb128 0x6
+ 1774 007c 40       		.uleb128 0x40
+ 1775 007d 18       		.uleb128 0x18
+ 1776 007e 9642     		.uleb128 0x2116
+ 1777 0080 19       		.uleb128 0x19
+ 1778 0081 01       		.uleb128 0x1
+ 1779 0082 13       		.uleb128 0x13
+ 1780 0083 00       		.byte	0
+ 1781 0084 00       		.byte	0
+ 1782 0085 0B       		.uleb128 0xb
+ 1783 0086 34       		.uleb128 0x34
+ 1784 0087 00       		.byte	0
+ 1785 0088 03       		.uleb128 0x3
+ 1786 0089 0E       		.uleb128 0xe
+ 1787 008a 3A       		.uleb128 0x3a
+ 1788 008b 0B       		.uleb128 0xb
+ 1789 008c 3B       		.uleb128 0x3b
+ 1790 008d 0B       		.uleb128 0xb
+ 1791 008e 49       		.uleb128 0x49
+ 1792 008f 13       		.uleb128 0x13
+ 1793 0090 02       		.uleb128 0x2
+ 1794 0091 18       		.uleb128 0x18
+ 1795 0092 00       		.byte	0
+ 1796 0093 00       		.byte	0
+ 1797 0094 0C       		.uleb128 0xc
+ 1798 0095 34       		.uleb128 0x34
+ 1799 0096 00       		.byte	0
+ 1800 0097 03       		.uleb128 0x3
+ 1801 0098 0E       		.uleb128 0xe
+ 1802 0099 49       		.uleb128 0x49
+ 1803 009a 13       		.uleb128 0x13
+ 1804 009b 34       		.uleb128 0x34
+ 1805 009c 19       		.uleb128 0x19
+ 1806 009d 02       		.uleb128 0x2
+ 1807 009e 18       		.uleb128 0x18
+ 1808 009f 00       		.byte	0
+ 1809 00a0 00       		.byte	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 37
+
+
+ 1810 00a1 0D       		.uleb128 0xd
+ 1811 00a2 01       		.uleb128 0x1
+ 1812 00a3 01       		.byte	0x1
+ 1813 00a4 49       		.uleb128 0x49
+ 1814 00a5 13       		.uleb128 0x13
+ 1815 00a6 01       		.uleb128 0x1
+ 1816 00a7 13       		.uleb128 0x13
+ 1817 00a8 00       		.byte	0
+ 1818 00a9 00       		.byte	0
+ 1819 00aa 0E       		.uleb128 0xe
+ 1820 00ab 21       		.uleb128 0x21
+ 1821 00ac 00       		.byte	0
+ 1822 00ad 49       		.uleb128 0x49
+ 1823 00ae 13       		.uleb128 0x13
+ 1824 00af 2F       		.uleb128 0x2f
+ 1825 00b0 0B       		.uleb128 0xb
+ 1826 00b1 00       		.byte	0
+ 1827 00b2 00       		.byte	0
+ 1828 00b3 0F       		.uleb128 0xf
+ 1829 00b4 2E       		.uleb128 0x2e
+ 1830 00b5 01       		.byte	0x1
+ 1831 00b6 3F       		.uleb128 0x3f
+ 1832 00b7 19       		.uleb128 0x19
+ 1833 00b8 03       		.uleb128 0x3
+ 1834 00b9 0E       		.uleb128 0xe
+ 1835 00ba 3A       		.uleb128 0x3a
+ 1836 00bb 0B       		.uleb128 0xb
+ 1837 00bc 3B       		.uleb128 0x3b
+ 1838 00bd 0B       		.uleb128 0xb
+ 1839 00be 27       		.uleb128 0x27
+ 1840 00bf 19       		.uleb128 0x19
+ 1841 00c0 11       		.uleb128 0x11
+ 1842 00c1 01       		.uleb128 0x1
+ 1843 00c2 12       		.uleb128 0x12
+ 1844 00c3 06       		.uleb128 0x6
+ 1845 00c4 40       		.uleb128 0x40
+ 1846 00c5 18       		.uleb128 0x18
+ 1847 00c6 9642     		.uleb128 0x2116
+ 1848 00c8 19       		.uleb128 0x19
+ 1849 00c9 01       		.uleb128 0x1
+ 1850 00ca 13       		.uleb128 0x13
+ 1851 00cb 00       		.byte	0
+ 1852 00cc 00       		.byte	0
+ 1853 00cd 10       		.uleb128 0x10
+ 1854 00ce 05       		.uleb128 0x5
+ 1855 00cf 00       		.byte	0
+ 1856 00d0 03       		.uleb128 0x3
+ 1857 00d1 08       		.uleb128 0x8
+ 1858 00d2 3A       		.uleb128 0x3a
+ 1859 00d3 0B       		.uleb128 0xb
+ 1860 00d4 3B       		.uleb128 0x3b
+ 1861 00d5 0B       		.uleb128 0xb
+ 1862 00d6 49       		.uleb128 0x49
+ 1863 00d7 13       		.uleb128 0x13
+ 1864 00d8 02       		.uleb128 0x2
+ 1865 00d9 18       		.uleb128 0x18
+ 1866 00da 00       		.byte	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 38
+
+
+ 1867 00db 00       		.byte	0
+ 1868 00dc 11       		.uleb128 0x11
+ 1869 00dd 05       		.uleb128 0x5
+ 1870 00de 00       		.byte	0
+ 1871 00df 03       		.uleb128 0x3
+ 1872 00e0 0E       		.uleb128 0xe
+ 1873 00e1 3A       		.uleb128 0x3a
+ 1874 00e2 0B       		.uleb128 0xb
+ 1875 00e3 3B       		.uleb128 0x3b
+ 1876 00e4 0B       		.uleb128 0xb
+ 1877 00e5 49       		.uleb128 0x49
+ 1878 00e6 13       		.uleb128 0x13
+ 1879 00e7 02       		.uleb128 0x2
+ 1880 00e8 18       		.uleb128 0x18
+ 1881 00e9 00       		.byte	0
+ 1882 00ea 00       		.byte	0
+ 1883 00eb 12       		.uleb128 0x12
+ 1884 00ec 0B       		.uleb128 0xb
+ 1885 00ed 01       		.byte	0x1
+ 1886 00ee 11       		.uleb128 0x11
+ 1887 00ef 01       		.uleb128 0x1
+ 1888 00f0 12       		.uleb128 0x12
+ 1889 00f1 06       		.uleb128 0x6
+ 1890 00f2 00       		.byte	0
+ 1891 00f3 00       		.byte	0
+ 1892 00f4 13       		.uleb128 0x13
+ 1893 00f5 2E       		.uleb128 0x2e
+ 1894 00f6 01       		.byte	0x1
+ 1895 00f7 3F       		.uleb128 0x3f
+ 1896 00f8 19       		.uleb128 0x19
+ 1897 00f9 03       		.uleb128 0x3
+ 1898 00fa 0E       		.uleb128 0xe
+ 1899 00fb 3A       		.uleb128 0x3a
+ 1900 00fc 0B       		.uleb128 0xb
+ 1901 00fd 3B       		.uleb128 0x3b
+ 1902 00fe 0B       		.uleb128 0xb
+ 1903 00ff 27       		.uleb128 0x27
+ 1904 0100 19       		.uleb128 0x19
+ 1905 0101 49       		.uleb128 0x49
+ 1906 0102 13       		.uleb128 0x13
+ 1907 0103 11       		.uleb128 0x11
+ 1908 0104 01       		.uleb128 0x1
+ 1909 0105 12       		.uleb128 0x12
+ 1910 0106 06       		.uleb128 0x6
+ 1911 0107 40       		.uleb128 0x40
+ 1912 0108 18       		.uleb128 0x18
+ 1913 0109 9742     		.uleb128 0x2117
+ 1914 010b 19       		.uleb128 0x19
+ 1915 010c 01       		.uleb128 0x1
+ 1916 010d 13       		.uleb128 0x13
+ 1917 010e 00       		.byte	0
+ 1918 010f 00       		.byte	0
+ 1919 0110 14       		.uleb128 0x14
+ 1920 0111 2E       		.uleb128 0x2e
+ 1921 0112 01       		.byte	0x1
+ 1922 0113 3F       		.uleb128 0x3f
+ 1923 0114 19       		.uleb128 0x19
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 39
+
+
+ 1924 0115 03       		.uleb128 0x3
+ 1925 0116 0E       		.uleb128 0xe
+ 1926 0117 3A       		.uleb128 0x3a
+ 1927 0118 0B       		.uleb128 0xb
+ 1928 0119 3B       		.uleb128 0x3b
+ 1929 011a 0B       		.uleb128 0xb
+ 1930 011b 27       		.uleb128 0x27
+ 1931 011c 19       		.uleb128 0x19
+ 1932 011d 49       		.uleb128 0x49
+ 1933 011e 13       		.uleb128 0x13
+ 1934 011f 11       		.uleb128 0x11
+ 1935 0120 01       		.uleb128 0x1
+ 1936 0121 12       		.uleb128 0x12
+ 1937 0122 06       		.uleb128 0x6
+ 1938 0123 40       		.uleb128 0x40
+ 1939 0124 18       		.uleb128 0x18
+ 1940 0125 9642     		.uleb128 0x2116
+ 1941 0127 19       		.uleb128 0x19
+ 1942 0128 01       		.uleb128 0x1
+ 1943 0129 13       		.uleb128 0x13
+ 1944 012a 00       		.byte	0
+ 1945 012b 00       		.byte	0
+ 1946 012c 15       		.uleb128 0x15
+ 1947 012d 2E       		.uleb128 0x2e
+ 1948 012e 01       		.byte	0x1
+ 1949 012f 3F       		.uleb128 0x3f
+ 1950 0130 19       		.uleb128 0x19
+ 1951 0131 03       		.uleb128 0x3
+ 1952 0132 0E       		.uleb128 0xe
+ 1953 0133 3A       		.uleb128 0x3a
+ 1954 0134 0B       		.uleb128 0xb
+ 1955 0135 3B       		.uleb128 0x3b
+ 1956 0136 0B       		.uleb128 0xb
+ 1957 0137 27       		.uleb128 0x27
+ 1958 0138 19       		.uleb128 0x19
+ 1959 0139 11       		.uleb128 0x11
+ 1960 013a 01       		.uleb128 0x1
+ 1961 013b 12       		.uleb128 0x12
+ 1962 013c 06       		.uleb128 0x6
+ 1963 013d 40       		.uleb128 0x40
+ 1964 013e 18       		.uleb128 0x18
+ 1965 013f 9742     		.uleb128 0x2117
+ 1966 0141 19       		.uleb128 0x19
+ 1967 0142 01       		.uleb128 0x1
+ 1968 0143 13       		.uleb128 0x13
+ 1969 0144 00       		.byte	0
+ 1970 0145 00       		.byte	0
+ 1971 0146 16       		.uleb128 0x16
+ 1972 0147 2E       		.uleb128 0x2e
+ 1973 0148 01       		.byte	0x1
+ 1974 0149 3F       		.uleb128 0x3f
+ 1975 014a 19       		.uleb128 0x19
+ 1976 014b 03       		.uleb128 0x3
+ 1977 014c 0E       		.uleb128 0xe
+ 1978 014d 3A       		.uleb128 0x3a
+ 1979 014e 0B       		.uleb128 0xb
+ 1980 014f 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 40
+
+
+ 1981 0150 0B       		.uleb128 0xb
+ 1982 0151 27       		.uleb128 0x27
+ 1983 0152 19       		.uleb128 0x19
+ 1984 0153 11       		.uleb128 0x11
+ 1985 0154 01       		.uleb128 0x1
+ 1986 0155 12       		.uleb128 0x12
+ 1987 0156 06       		.uleb128 0x6
+ 1988 0157 40       		.uleb128 0x40
+ 1989 0158 18       		.uleb128 0x18
+ 1990 0159 9642     		.uleb128 0x2116
+ 1991 015b 19       		.uleb128 0x19
+ 1992 015c 00       		.byte	0
+ 1993 015d 00       		.byte	0
+ 1994 015e 00       		.byte	0
+ 1995              		.section	.debug_aranges,"",%progbits
+ 1996 0000 94000000 		.4byte	0x94
+ 1997 0004 0200     		.2byte	0x2
+ 1998 0006 00000000 		.4byte	.Ldebug_info0
+ 1999 000a 04       		.byte	0x4
+ 2000 000b 00       		.byte	0
+ 2001 000c 0000     		.2byte	0
+ 2002 000e 0000     		.2byte	0
+ 2003 0010 00000000 		.4byte	.LFB0
+ 2004 0014 54000000 		.4byte	.LFE0-.LFB0
+ 2005 0018 00000000 		.4byte	.LFB1
+ 2006 001c 84000000 		.4byte	.LFE1-.LFB1
+ 2007 0020 00000000 		.4byte	.LFB2
+ 2008 0024 16000000 		.4byte	.LFE2-.LFB2
+ 2009 0028 00000000 		.4byte	.LFB3
+ 2010 002c 36000000 		.4byte	.LFE3-.LFB3
+ 2011 0030 00000000 		.4byte	.LFB4
+ 2012 0034 48000000 		.4byte	.LFE4-.LFB4
+ 2013 0038 00000000 		.4byte	.LFB5
+ 2014 003c 40000000 		.4byte	.LFE5-.LFB5
+ 2015 0040 00000000 		.4byte	.LFB6
+ 2016 0044 44000000 		.4byte	.LFE6-.LFB6
+ 2017 0048 00000000 		.4byte	.LFB7
+ 2018 004c 60000000 		.4byte	.LFE7-.LFB7
+ 2019 0050 00000000 		.4byte	.LFB8
+ 2020 0054 52000000 		.4byte	.LFE8-.LFB8
+ 2021 0058 00000000 		.4byte	.LFB9
+ 2022 005c 18000000 		.4byte	.LFE9-.LFB9
+ 2023 0060 00000000 		.4byte	.LFB10
+ 2024 0064 68000000 		.4byte	.LFE10-.LFB10
+ 2025 0068 00000000 		.4byte	.LFB11
+ 2026 006c 26000000 		.4byte	.LFE11-.LFB11
+ 2027 0070 00000000 		.4byte	.LFB12
+ 2028 0074 1A000000 		.4byte	.LFE12-.LFB12
+ 2029 0078 00000000 		.4byte	.LFB13
+ 2030 007c 20000000 		.4byte	.LFE13-.LFB13
+ 2031 0080 00000000 		.4byte	.LFB14
+ 2032 0084 78000000 		.4byte	.LFE14-.LFB14
+ 2033 0088 00000000 		.4byte	.LFB15
+ 2034 008c 20000000 		.4byte	.LFE15-.LFB15
+ 2035 0090 00000000 		.4byte	0
+ 2036 0094 00000000 		.4byte	0
+ 2037              		.section	.debug_ranges,"",%progbits
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 41
+
+
+ 2038              	.Ldebug_ranges0:
+ 2039 0000 00000000 		.4byte	.LFB0
+ 2040 0004 54000000 		.4byte	.LFE0
+ 2041 0008 00000000 		.4byte	.LFB1
+ 2042 000c 84000000 		.4byte	.LFE1
+ 2043 0010 00000000 		.4byte	.LFB2
+ 2044 0014 16000000 		.4byte	.LFE2
+ 2045 0018 00000000 		.4byte	.LFB3
+ 2046 001c 36000000 		.4byte	.LFE3
+ 2047 0020 00000000 		.4byte	.LFB4
+ 2048 0024 48000000 		.4byte	.LFE4
+ 2049 0028 00000000 		.4byte	.LFB5
+ 2050 002c 40000000 		.4byte	.LFE5
+ 2051 0030 00000000 		.4byte	.LFB6
+ 2052 0034 44000000 		.4byte	.LFE6
+ 2053 0038 00000000 		.4byte	.LFB7
+ 2054 003c 60000000 		.4byte	.LFE7
+ 2055 0040 00000000 		.4byte	.LFB8
+ 2056 0044 52000000 		.4byte	.LFE8
+ 2057 0048 00000000 		.4byte	.LFB9
+ 2058 004c 18000000 		.4byte	.LFE9
+ 2059 0050 00000000 		.4byte	.LFB10
+ 2060 0054 68000000 		.4byte	.LFE10
+ 2061 0058 00000000 		.4byte	.LFB11
+ 2062 005c 26000000 		.4byte	.LFE11
+ 2063 0060 00000000 		.4byte	.LFB12
+ 2064 0064 1A000000 		.4byte	.LFE12
+ 2065 0068 00000000 		.4byte	.LFB13
+ 2066 006c 20000000 		.4byte	.LFE13
+ 2067 0070 00000000 		.4byte	.LFB14
+ 2068 0074 78000000 		.4byte	.LFE14
+ 2069 0078 00000000 		.4byte	.LFB15
+ 2070 007c 20000000 		.4byte	.LFE15
+ 2071 0080 00000000 		.4byte	0
+ 2072 0084 00000000 		.4byte	0
+ 2073              		.section	.debug_line,"",%progbits
+ 2074              	.Ldebug_line0:
+ 2075 0000 A9010000 		.section	.debug_str,"MS",%progbits,1
+ 2075      02003100 
+ 2075      00000201 
+ 2075      FB0E0D00 
+ 2075      01010101 
+ 2076              	.LASF21:
+ 2077 0000 61727261 		.ascii	"arraylist_size\000"
+ 2077      796C6973 
+ 2077      745F7369 
+ 2077      7A6500
+ 2078              	.LASF12:
+ 2079 000f 63617061 		.ascii	"capacity\000"
+ 2079      63697479 
+ 2079      00
+ 2080              	.LASF14:
+ 2081 0018 61727261 		.ascii	"arraylist_create\000"
+ 2081      796C6973 
+ 2081      745F6372 
+ 2081      65617465 
+ 2081      00
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 42
+
+
+ 2082              	.LASF15:
+ 2083 0029 61727261 		.ascii	"arraylist_allocate\000"
+ 2083      796C6973 
+ 2083      745F616C 
+ 2083      6C6F6361 
+ 2083      746500
+ 2084              	.LASF37:
+ 2085 003c 474E5520 		.ascii	"GNU C99 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2085      43393920 
+ 2085      352E342E 
+ 2085      31203230 
+ 2085      31363036 
+ 2086 006f 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 2086      20726576 
+ 2086      6973696F 
+ 2086      6E203233 
+ 2086      37373135 
+ 2087 00a2 30202D73 		.ascii	"0 -std=c99 -ffunction-sections -ffat-lto-objects\000"
+ 2087      74643D63 
+ 2087      3939202D 
+ 2087      6666756E 
+ 2087      6374696F 
+ 2088              	.LASF26:
+ 2089 00d3 76616C75 		.ascii	"value\000"
+ 2089      6500
+ 2090              	.LASF33:
+ 2091 00d9 61727261 		.ascii	"arraylist_copy\000"
+ 2091      796C6973 
+ 2091      745F636F 
+ 2091      707900
+ 2092              	.LASF28:
+ 2093 00e8 61727261 		.ascii	"arraylist_remove\000"
+ 2093      796C6973 
+ 2093      745F7265 
+ 2093      6D6F7665 
+ 2093      00
+ 2094              	.LASF16:
+ 2095 00f9 5F5F6675 		.ascii	"__func__\000"
+ 2095      6E635F5F 
+ 2095      00
+ 2096              	.LASF11:
+ 2097 0102 73697A65 		.ascii	"size\000"
+ 2097      00
+ 2098              	.LASF6:
+ 2099 0107 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2099      20756E73 
+ 2099      69676E65 
+ 2099      6420696E 
+ 2099      7400
+ 2100              	.LASF17:
+ 2101 0119 6E65775F 		.ascii	"new_list\000"
+ 2101      6C697374 
+ 2101      00
+ 2102              	.LASF4:
+ 2103 0122 73686F72 		.ascii	"short unsigned int\000"
+ 2103      7420756E 
+ 2103      7369676E 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 43
+
+
+ 2103      65642069 
+ 2103      6E7400
+ 2104              	.LASF27:
+ 2105 0135 61727261 		.ascii	"arraylist_insert\000"
+ 2105      796C6973 
+ 2105      745F696E 
+ 2105      73657274 
+ 2105      00
+ 2106              	.LASF2:
+ 2107 0146 756E7369 		.ascii	"unsigned char\000"
+ 2107      676E6564 
+ 2107      20636861 
+ 2107      7200
+ 2108              	.LASF29:
+ 2109 0154 61727261 		.ascii	"arraylist_clear\000"
+ 2109      796C6973 
+ 2109      745F636C 
+ 2109      65617200 
+ 2110              	.LASF13:
+ 2111 0164 626F6479 		.ascii	"body\000"
+ 2111      00
+ 2112              	.LASF39:
+ 2113 0169 483A5C44 		.ascii	"H:\\Documents\\GitHub\\301-Robot\\psoc student pack"
+ 2113      6F63756D 
+ 2113      656E7473 
+ 2113      5C476974 
+ 2113      4875625C 
+ 2114 0198 5C70736F 		.ascii	"\\psoc_code_base\\CS301_Class.cydsn\000"
+ 2114      635F636F 
+ 2114      64655F62 
+ 2114      6173655C 
+ 2114      43533330 
+ 2115              	.LASF34:
+ 2116 01ba 61727261 		.ascii	"arraylist_join\000"
+ 2116      796C6973 
+ 2116      745F6A6F 
+ 2116      696E00
+ 2117              	.LASF18:
+ 2118 01c9 6E65775F 		.ascii	"new_capacity\000"
+ 2118      63617061 
+ 2118      63697479 
+ 2118      00
+ 2119              	.LASF38:
+ 2120 01d6 61727261 		.ascii	"arraylist.c\000"
+ 2120      796C6973 
+ 2120      742E6300 
+ 2121              	.LASF0:
+ 2122 01e2 756E7369 		.ascii	"unsigned int\000"
+ 2122      676E6564 
+ 2122      20696E74 
+ 2122      00
+ 2123              	.LASF8:
+ 2124 01ef 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2124      206C6F6E 
+ 2124      6720756E 
+ 2124      7369676E 
+ 2124      65642069 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 44
+
+
+ 2125              	.LASF36:
+ 2126 0206 61727261 		.ascii	"arraylist_splice\000"
+ 2126      796C6973 
+ 2126      745F7370 
+ 2126      6C696365 
+ 2126      00
+ 2127              	.LASF23:
+ 2128 0217 61727261 		.ascii	"arraylist_get\000"
+ 2128      796C6973 
+ 2128      745F6765 
+ 2128      7400
+ 2129              	.LASF41:
+ 2130 0225 61727261 		.ascii	"arraylist_destroy\000"
+ 2130      796C6973 
+ 2130      745F6465 
+ 2130      7374726F 
+ 2130      7900
+ 2131              	.LASF32:
+ 2132 0237 61727261 		.ascii	"arraylist_slice_end\000"
+ 2132      796C6973 
+ 2132      745F736C 
+ 2132      6963655F 
+ 2132      656E6400 
+ 2133              	.LASF30:
+ 2134 024b 61727261 		.ascii	"arraylist_slice\000"
+ 2134      796C6973 
+ 2134      745F736C 
+ 2134      69636500 
+ 2135              	.LASF9:
+ 2136 025b 73697A65 		.ascii	"sizetype\000"
+ 2136      74797065 
+ 2136      00
+ 2137              	.LASF7:
+ 2138 0264 6C6F6E67 		.ascii	"long long int\000"
+ 2138      206C6F6E 
+ 2138      6720696E 
+ 2138      7400
+ 2139              	.LASF10:
+ 2140 0272 63686172 		.ascii	"char\000"
+ 2140      00
+ 2141              	.LASF24:
+ 2142 0277 696E6465 		.ascii	"index\000"
+ 2142      7800
+ 2143              	.LASF25:
+ 2144 027d 61727261 		.ascii	"arraylist_set\000"
+ 2144      796C6973 
+ 2144      745F7365 
+ 2144      7400
+ 2145              	.LASF3:
+ 2146 028b 73686F72 		.ascii	"short int\000"
+ 2146      7420696E 
+ 2146      7400
+ 2147              	.LASF5:
+ 2148 0295 6C6F6E67 		.ascii	"long int\000"
+ 2148      20696E74 
+ 2148      00
+ 2149              	.LASF19:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccVBLNLj.s 			page 45
+
+
+ 2150 029e 61727261 		.ascii	"arraylist_add\000"
+ 2150      796C6973 
+ 2150      745F6164 
+ 2150      6400
+ 2151              	.LASF20:
+ 2152 02ac 6974656D 		.ascii	"item\000"
+ 2152      00
+ 2153              	.LASF1:
+ 2154 02b1 7369676E 		.ascii	"signed char\000"
+ 2154      65642063 
+ 2154      68617200 
+ 2155              	.LASF35:
+ 2156 02bd 736F7572 		.ascii	"source\000"
+ 2156      636500
+ 2157              	.LASF40:
+ 2158 02c4 61727261 		.ascii	"arraylist\000"
+ 2158      796C6973 
+ 2158      7400
+ 2159              	.LASF31:
+ 2160 02ce 6C656E67 		.ascii	"length\000"
+ 2160      746800
+ 2161              	.LASF22:
+ 2162 02d5 61727261 		.ascii	"arraylist_pop\000"
+ 2162      796C6973 
+ 2162      745F706F 
+ 2162      7000
+ 2163              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

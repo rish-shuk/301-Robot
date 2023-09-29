@@ -36,7 +36,28 @@ struct Location
 // Pathfinding functions
 bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]);
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
-void traverseMap(int map[MAX_ROWS][MAX_COLS]);
-void findPath(int map[MAX_ROWS][MAX_COLS]);
+void findPath();
+
+// ASTAR
+typedef struct {
+    int x;
+    int y;
+} Position;
+
+typedef struct {
+    Position parent, position;
+    int f, g, h;
+} Node;
+
+typedef struct {
+    int dx;
+    int dy;
+} Moves;
+
+bool is_valid_Position(int x, int y);
+bool is_walkable(int map[MAX_ROWS][MAX_COLS], int x, int y);
+int heuristic(Position a, Position b);
+void reconstruct_path(int map[MAX_ROWS][MAX_COLS], Position came_from[MAX_ROWS][MAX_COLS], Position current, Position start);
+void astar(int map[MAX_ROWS][MAX_COLS], Position start, Position end);
 
 #endif /* MAP_FUNCTIONS_H */

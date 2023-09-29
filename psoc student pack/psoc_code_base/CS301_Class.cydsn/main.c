@@ -81,20 +81,6 @@ CY_ISR (speedTimer) {
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
-CY_ISR(S1_DETECTED) {
-    // Sensor has detected WHITE
-    s1 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
-}
-
-CY_ISR(S2_DETECTED) {
-    // Sensor has detected WHITE
-    s2 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
-}
-
 CY_ISR(S3_DETECTED) {
     // Sensor has detected WHITE
     s3 = 1; // , Black = 0, White = 1
@@ -142,8 +128,6 @@ int main()
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
-    S1_detected_StartEx(S1_DETECTED);
-    S2_detected_StartEx(S2_DETECTED);
     S3_detected_StartEx(S3_DETECTED);
     S4_detected_StartEx(S4_DETECTED);
     S5_detected_StartEx(S5_DETECTED);
@@ -217,13 +201,18 @@ void ResetSensorFlags() {
 float yBlockSize = 12.84;
 float xBlockSize = 9.13;
 float blockSize;
-uint8 currentRow;
-uint8 currentCol; // need to initialise
+uint8 currentRow = 1;
+uint8 currentCol = 1; // need to initialise
 
 enum DirectionState getDirection() {
-    directionState = Stop;
+    //directionState = Stop;
     currentOrientation = Up; // initialise at start
     previousDirection = currentDirection;
+
+    if(currentRow == 1 && currentCol == 5) {
+        directionState = Stop;
+        return directionState;
+    }
     //currentDirection = Stop;
     // determine block size
     if(previousOrientation == Up || previousOrientation == Down) {
@@ -238,11 +227,12 @@ enum DirectionState getDirection() {
             if (stopBuffer <= 10) {
                 directionState = Stop;
             } else {
-                directionState = ForwardAfterTurn;
+                directionState = Backward;
             }
             //currentDirection = previousDirection;
             return directionState;
         }
+        /*
         
         if (previousDirection == ForwardAfterTurn) {
             if (s3 || s4) {
@@ -279,6 +269,7 @@ enum DirectionState getDirection() {
             }
         }
 
+        */
         // course correction
         if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
             if(s6) {
@@ -312,48 +303,60 @@ enum DirectionState getDirection() {
         switch (previousOrientation) {
             case Up:
                 if(map[currentRow][currentCol + 1] == 8) {
+                    currentCol++;
                     currentOrientation = Up;
                     directionState = Forward;
                 } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentRow--;
                     currentOrientation = Left;
                     directionState = TurnLeft;
                 } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentRow++;
                     currentOrientation = Right;
                     directionState = TurnRight;
                 }
                 break;
             case Down:
                 if(map[currentRow][currentCol - 1] == 8) {
+                    currentCol--;
                     currentOrientation = Down;
                     directionState = Forward;
                 } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentRow--;
                     currentOrientation = Right;
                     directionState = TurnRight;
                 } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentRow++;
                     currentOrientation = Left;
                     directionState = TurnLeft;
                 }
                 break;
             case Left:
                 if(map[currentRow - 1][currentCol] == 8) {
+                    currentRow--;
                     currentOrientation = Left;
                     directionState = Forward;
                 } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentCol++;
                     currentOrientation = Up;
                     directionState = TurnRight;
                 } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentCol--;
                     currentOrientation = Down;
                     directionState = TurnLeft;
                 }
                 break;
             case Right:
                 if(map[currentRow + 1][currentCol] == 8) {
+                    currentRow++;
                     currentOrientation = Right;
                     directionState = Forward;
                 } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentCol++;
                     currentOrientation = Up;
                     directionState = TurnLeft;
                 } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentCol--;
                     currentOrientation = Down;
                     directionState = TurnRight;
                 }
