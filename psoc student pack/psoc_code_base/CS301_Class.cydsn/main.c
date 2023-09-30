@@ -46,19 +46,17 @@ enum DirectionState previousDirection = Unknown;
 enum Orientation currentOrientation = Up;
 enum Orientation previousOrientation = Up;
 // ----------------------------------------
-uint8 s1, s2, s3, s4, s5, s6 = 0; // black = 0, white = 1- initialise sensor signals
+uint8 s3, s4, s5, s6 = 0; // black = 0, white = 1- initialise sensor signals
 //* ========================================
-uint32 totalMilliseconds = 0;
+// uint32 totalMilliseconds = 0; // unused
 float totalDistance = 0; // in mm
 //* ========================================
 char buffer[69];
-int quadDec2Count = 0;
-int timerInt = 0;
-int keepLedOn = 0;
+int quadDec2Count, calculateSpeed, keepLedOn = 0;
 uint32 stopBuffer = 0;
 
 CY_ISR (speedTimer) {
-    timerInt = 1;
+    calculateSpeed = 1;
     //quadDec_M1 used for turning macros
     quadDec2Count = QuadDec_M2_GetCounter();
     
@@ -78,20 +76,6 @@ CY_ISR (speedTimer) {
     QuadDec_M2_Start(); // restart counter
     
     SpeedTimer_ReadStatusRegister(); // clear interrupt
-}
-
-CY_ISR(S1_DETECTED) {
-    // Sensor has detected WHITE
-    s1 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
-}
-
-CY_ISR(S2_DETECTED) {
-    // Sensor has detected WHITE
-    s2 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
 }
 
 CY_ISR(S3_DETECTED) {
@@ -119,7 +103,6 @@ CY_ISR(S6_DETECTED) {
 }
 
 CY_ISR(TIMER_FINISH) {
-    //LED_Write(0u);
     if (currentDirection == Stop) {
         stopBuffer = stopBuffer + 1;
     } else {
@@ -141,8 +124,6 @@ int main()
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
-    S1_detected_StartEx(S1_DETECTED);
-    S2_detected_StartEx(S2_DETECTED);
     S3_detected_StartEx(S3_DETECTED);
     S4_detected_StartEx(S4_DETECTED);
     S5_detected_StartEx(S5_DETECTED);
@@ -160,15 +141,9 @@ int main()
     //usbPutString("Initialised UART");
     for(;;)
     {
-        //traverseMap(map);
-        //rotationAntiClockwise();
-        //rotationClockwise();
-        
-        
-        
-        if(timerInt == 1) {
-            timerInt = 0;
-            // calculate RPM of M2
+        if(calculateSpeed) {
+            calculateSpeed = 0; // reset flag
+            // calculate RPM of M2 when timer finishes (1s)- need to change to be slower
             quadCountToRPM(quadDec2Count);
             //sprintf(buffer, "%lu", totalDistance);
             //usbPutString(buffer);
@@ -200,36 +175,32 @@ int16 quadCountToRPM(uint16 count)
 
 // Resets all sensor flags to 0 - i.e. currently out of map
 void ResetSensorFlags() {
-    s1 = 0;
-    s2 = 0;
     s3 = 0;
     s4 = 0;
     s5 = 0;
     s6 = 0;
 }
 
-// This function checks the sensor flags s1-s6 through a boolean truth table and
+// This function checks the sensor flags s3-s6 through a boolean truth table and
 // returns a enum direction state depending on the flag configuration
 // if no conditons are met, it returns Unknown -- need to fix this edge case
 // s1 = 0 -- Black
 // s1 = 1 -- White
-float yBlockSize = 12.84;
-float xBlockSize = 9.13;
 float blockSize;
 uint8 currentRow;
 uint8 currentCol; // need to initialise
+directionState = Stop;
+currentOrientation = Up; // manually set at start
 
 enum DirectionState CheckSensorDirection() {
-    directionState = Stop;
-    currentOrientation = Up; // initialise at start
     previousDirection = currentDirection;
     // determine orientation and relevant blocksize
     if(currentOrientation == Up || Down) {
-        blockSize = yBlockSize;
+        blockSize = 12.84; // yBlocksize
     } else {
-        blockSize = xBlockSize;
+        blockSize = 9.13; // xBlocksize
     }
-    // BLOCK TRACKING
+    // BLOCK TRACKING- update position of robot in map
     if (totalDistance >= blockSize) {
         switch(currentOrientation) {
             case Up:
@@ -271,26 +242,26 @@ enum DirectionState CheckSensorDirection() {
     }
 
     if(previousDirection == TurnRight) {
-        if(s5 && s6) {
+        if(s5 && s6) { // keep turning, haven't reached path yet
             directionState = TurnRight;
             currentDirection = previousDirection;
             return directionState;
         } 
-        else if (!s5 || !s6) {
-            directionState = Stop;
+        else if (!s5 || !s6) { // reached path
+            directionState = Stop; // stop, transition into stop buffer
             currentDirection = previousDirection;
             return directionState;
         }
     }    
 
     if(previousDirection == TurnLeft) {
-        if(s5 && s6) {
+        if(s5 && s6) { // keep turning, haven't reached path yet
             directionState = TurnLeft;
             currentDirection = previousDirection;
             return directionState;
         } 
-        else if (!s5 || !s6) {
-            directionState = Stop;
+        else if (!s5 || !s6) { // reached path
+            directionState = Stop; // stop, transition into stop buffer
             currentDirection = previousDirection;
             return directionState;
         }
@@ -310,10 +281,11 @@ enum DirectionState CheckSensorDirection() {
         return directionState;
     }*/
 
-    // reached fork/ alternate paths or needs to turn
-    if((previousDirection == Forward && (s3 || s4)) || (previousDirection == waitForTurn && s3 && s4)) {
+    // if robot is going forward, or waiting for turn and finds a turn
+    if((previousDirection == Forward && (!s3 || !s4)) || (previousDirection == waitForTurn && (!s3 || !s4))) {
         // check for next step in calculated path, robot will know it's location and next step
         // optimal steps are marked with an 8
+        // add a stop?
         switch (previousOrientation) {
             case Up:
                 if(map[currentRow][currentCol + 1] == 8) {
@@ -393,52 +365,6 @@ enum DirectionState CheckSensorDirection() {
         previousOrientation = currentOrientation; // unchanged orientation
         return directionState;   
     }
-    
-    //turn left 0111
-    /*if (!s3 && s4 && s5 && s6) {
-        directionState = TurnLeft;
-        switch(previousOrientation) {
-            case Up:
-                currentDirection = Left;
-                break;
-            case Down:
-                currentDirection = Right;
-                break;
-            case Left:
-                currentDirection = Up;
-                break;
-            case Right:
-                currentDirection = Down;
-                break;
-            default:
-                break;
-        }
-        previousDirection = currentDirection;
-        return directionState;
-    }*/
-    
-    // turn right if 1011
-    /*if (s3 && !s4 && s5 && s6) {
-        directionState = TurnRight;
-        switch(previousOrientation) {
-            case Up:
-                currentDirection = Right;
-                break;
-            case Down:
-                currentDirection = Left;
-                break;
-            case Left:
-                currentDirection = Down;
-                break;
-            case Right:
-                currentDirection = Up;
-                break;
-            default:
-                break;
-        }
-        previousDirection = currentDirection;
-        return directionState;
-    }*/
     
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
