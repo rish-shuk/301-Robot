@@ -18,8 +18,6 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-
-
 // MAP INITIALISATION CODE
 
 /*void printMap(char map[MAX_ROWS][MAX_COLS]) {
@@ -30,36 +28,20 @@
         }
         printf("\n");
     }
-}
-
-
-
-struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]) {
-    struct Location randomLocation;
-    int isNotValid = 1; // true
-    while (isNotValid) {
-        int random_row = rand() % MAX_ROWS;
-        int random_col = rand() % MAX_COLS; // get random row and column
-        // check point on map to see if it's a path
-        if (map[random_row][random_col] == '0') {
-            randomLocation.row = random_row;
-            randomLocation.col = random_col;
-            isNotValid = 0; // found valid location
-        }
-    }
-    return randomLocation;
-} */
+}*/
 
 struct Location {
     int row;
     int col;
 };
+
 // pathfinding 
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
 bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]) {
     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == '0');
 }
+
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
 
     int visitedMap[MAX_ROWS][MAX_COLS];
@@ -174,97 +156,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
             }
         }
     }
-    printMap(map);
-    //printMap(map);
-    //return retSteps;
-}
-
-
-void traverseMap(char map[MAX_ROWS][MAX_COLS]) {
-    int currentRow, currentCol = 0;
-    struct Location targetLocation;
-    for(int i = 0; i < MAX_ROWS; i++) {
-        for(int j = 0; j < MAX_COLS; j++) {
-            if(map[i][j] == 'S') {
-                currentRow = i;
-                currentCol = j;
-            } else if(map[i][j] == 'X') {
-                targetLocation.row = i;
-                targetLocation.col = j;
-            }
-    }
-
-    bool leftOrient, rightOrient, upOrient, downOrient = false; // initialise orientation booleans- check which direction they're facing
-    struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
-    int visited[MAX_ROWS][MAX_COLS];
-    for(int i = 0; i < MAX_ROWS; i++) {
-        for(int j = 0; j < MAX_COLS; j++) {
-            visited[i][j] = 0; // initialise all points as unvisited
-        }
-    }
-        // traverse map, check for * or X until targetLocation reached
-    while (currentRow != targetLocation.row && currentCol != targetLocation.col) {
-        for(int i = 0; i < 4; i++) {
-            int newRow = currentRow + moves[i].row;
-            int newCol = currentCol + moves[i].col;
-
-            // check next step in path and rotate and move accordingly- begin traversal
-            if(map[newRow][newCol] == 'x' && visited[newRow][newCol] == 0) {
-                visited[newRow][newCol] = 1; // mark new location as visited
-                // move robot NEED TO CALIBRATE FOR DISTANCES AND DETERMINE ORIENTATION TO SEE IF A ROTATION IS NEEDED
-                switch (i)
-                {
-                case 0:
-                    // increment column (move right)
-                    if(upOrient) {
-                        // rotation clockwise
-                    } else if(downOrient) {
-                        // rotation anticlockwise
-                    }
-                    rightOrient = true;
-                    // MOVE FORWARD
-                    // STOP
-                    break;
-                case 1:
-                    // decrement column (move left)
-                    if(upOrient) {
-                        // rotation anticlockwise
-                    } else if(downOrient) {
-                        // rotation clockwise
-                    }
-                    leftOrient = true;
-                    // MOVE FORWARD 
-                    // STOP
-                    break;
-                case 2:
-                    // increment row (move up)
-                    if(rightOrient) {
-                        // rotation anticlockwise
-                    } else if(leftOrient) {
-                        // rotation clockwise
-                    }
-                    upOrient = true;
-                    // MOVE FORWARD
-                    // stop
-                    break;
-                case 3:
-                    // decrement row (move down)
-                    if(rightOrient) {
-                        // rotation clockwise
-                    } else if(leftOrient) {
-                        // rotation anticlockwise
-                    }
-                    downOrient = true;
-                    // MOVE FORWARD
-                    // STOP
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-    }
-    }
+    // printMap(map);
 }
 
 void findPath(int map[MAX_ROWS][MAX_COLS]) {
