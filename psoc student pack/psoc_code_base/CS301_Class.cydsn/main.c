@@ -38,12 +38,13 @@ void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn, ForwardAfterTurn, Backward};
+enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
+enum OrientationState currentOrientation = Up;
+enum OrientationState previousOrientation = Up;
 // --- YIPPE
 // ----------------------------------------
-uint8 s1 = 0; // black = 0, white = 1
-uint8 s2 = 0;
 uint8 s3 = 0;
 uint8 s4 = 0;
 uint8 s5 = 0;
@@ -51,7 +52,7 @@ uint8 s6 = 0;
 //* ========================================
 // Calculating Distance
 #define WHEEL_DIAMETER_MM 64.5
-#define STOPPING_DISTANCE 10000 // in MM
+
 uint32 totalMilliseconds = 0;
 float totalDistance = 0; // in mm
 //* ========================================
@@ -85,20 +86,6 @@ CY_ISR (speedTimer) {
     QuadDec_M2_Start(); // restart counter
     
     SpeedTimer_ReadStatusRegister(); // clear interrupt
-}
-
-CY_ISR(S1_DETECTED) {
-    // Sensor has detected WHITE
-    s1 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
-}
-
-CY_ISR(S2_DETECTED) {
-    // Sensor has detected WHITE
-    s2 = 1; // , Black = 0, White = 1
-    //LED_Write(1u);
-    //moveForward();
 }
 
 CY_ISR(S3_DETECTED) {
@@ -148,8 +135,6 @@ int main()
     //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
-    S1_detected_StartEx(S1_DETECTED);
-    S2_detected_StartEx(S2_DETECTED);
     S3_detected_StartEx(S3_DETECTED);
     S4_detected_StartEx(S4_DETECTED);
     S5_detected_StartEx(S5_DETECTED);
@@ -206,24 +191,31 @@ int16 quadCountToRPM(uint16 count)
 
 // Resets all sensor flags to 0 - i.e. currently out of map
 void ResetSensorFlags() {
-    s1 = 0;
-    s2 = 0;
     s3 = 0;
     s4 = 0;
     s5 = 0;
     s6 = 0;
 }
 
+float yBlocksize = 128.4;
+float xBlocksize = 91.3;
+float blocksize;
 // This function checks the sensor flags s1-s6 through a boolean truth table and
 // returns a enum direction state depending on the flag configuration
 // if no conditons are met, it returns Unknown -- need to fix this edge case
 // s1 = 0 -- Black
 // s1 = 1 -- White
 enum DirectionState CheckSensorDirection() {
+    if(currentOrientation == Up || currentOrientation == Down){
+        blocksize = 128.4;
+    } else {
+        blocksize = 91.3;
+    }
+    
     enum DirectionState directionState = Stop;
     previousDirection = currentDirection;
     
-    if (totalDistance >= STOPPING_DISTANCE) {
+    if (totalDistance >= blocksize) {
         directionState = Stop;
         return directionState;
     }
