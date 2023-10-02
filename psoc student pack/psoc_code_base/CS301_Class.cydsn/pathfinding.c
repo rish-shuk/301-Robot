@@ -38,7 +38,7 @@ struct Location {
 // pathfinding 
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
-bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]) {
+bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == '0');
 }
 

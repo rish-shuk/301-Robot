@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccI5IOAk.s 			page 1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 1
 
 
    1              		.syntax unified
@@ -19,227 +19,2834 @@ ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccI5IOAk.s 			page 1
   16              		.text
   17              	.Ltext0:
   18              		.cfi_sections	.debug_frame
-  19              	.Letext0:
-  20              		.section	.debug_info,"",%progbits
-  21              	.Ldebug_info0:
-  22 0000 75000000 		.4byte	0x75
-  23 0004 0400     		.2byte	0x4
-  24 0006 00000000 		.4byte	.Ldebug_abbrev0
-  25 000a 04       		.byte	0x4
-  26 000b 01       		.uleb128 0x1
-  27 000c 44000000 		.4byte	.LASF12
-  28 0010 0C       		.byte	0xc
-  29 0011 3F010000 		.4byte	.LASF13
-  30 0015 E5000000 		.4byte	.LASF14
-  31 0019 00000000 		.4byte	.Ldebug_line0
-  32 001d 02       		.uleb128 0x2
-  33 001e 01       		.byte	0x1
-  34 001f 06       		.byte	0x6
-  35 0020 60010000 		.4byte	.LASF0
-  36 0024 02       		.uleb128 0x2
-  37 0025 01       		.byte	0x1
-  38 0026 08       		.byte	0x8
-  39 0027 D2000000 		.4byte	.LASF1
-  40 002b 02       		.uleb128 0x2
-  41 002c 02       		.byte	0x2
-  42 002d 05       		.byte	0x5
-  43 002e 78010000 		.4byte	.LASF2
-  44 0032 02       		.uleb128 0x2
-  45 0033 02       		.byte	0x2
-  46 0034 07       		.byte	0x7
-  47 0035 4D010000 		.4byte	.LASF3
-  48 0039 02       		.uleb128 0x2
-  49 003a 04       		.byte	0x4
-  50 003b 05       		.byte	0x5
-  51 003c 36010000 		.4byte	.LASF4
-  52 0040 02       		.uleb128 0x2
-  53 0041 04       		.byte	0x4
-  54 0042 07       		.byte	0x7
-  55 0043 1B000000 		.4byte	.LASF5
-  56 0047 02       		.uleb128 0x2
-  57 0048 08       		.byte	0x8
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccI5IOAk.s 			page 2
+  19              		.global	map
+  20              		.data
+  21              		.align	2
+  22              		.type	map, %object
+  23              		.size	map, 1140
+  24              	map:
+  25 0000 01000000 		.word	1
+  26 0004 01000000 		.word	1
+  27 0008 01000000 		.word	1
+  28 000c 01000000 		.word	1
+  29 0010 01000000 		.word	1
+  30 0014 01000000 		.word	1
+  31 0018 01000000 		.word	1
+  32 001c 01000000 		.word	1
+  33 0020 01000000 		.word	1
+  34 0024 01000000 		.word	1
+  35 0028 01000000 		.word	1
+  36 002c 01000000 		.word	1
+  37 0030 01000000 		.word	1
+  38 0034 01000000 		.word	1
+  39 0038 01000000 		.word	1
+  40 003c 01000000 		.word	1
+  41 0040 01000000 		.word	1
+  42 0044 01000000 		.word	1
+  43 0048 01000000 		.word	1
+  44 004c 01000000 		.word	1
+  45 0050 00000000 		.word	0
+  46 0054 00000000 		.word	0
+  47 0058 00000000 		.word	0
+  48 005c 00000000 		.word	0
+  49 0060 00000000 		.word	0
+  50 0064 01000000 		.word	1
+  51 0068 00000000 		.word	0
+  52 006c 00000000 		.word	0
+  53 0070 00000000 		.word	0
+  54 0074 00000000 		.word	0
+  55 0078 00000000 		.word	0
+  56 007c 00000000 		.word	0
+  57 0080 00000000 		.word	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 2
 
 
-  58 0049 05       		.byte	0x5
-  59 004a 00000000 		.4byte	.LASF6
-  60 004e 02       		.uleb128 0x2
-  61 004f 08       		.byte	0x8
-  62 0050 07       		.byte	0x7
-  63 0051 2D000000 		.4byte	.LASF7
-  64 0055 03       		.uleb128 0x3
-  65 0056 04       		.byte	0x4
-  66 0057 05       		.byte	0x5
-  67 0058 696E7400 		.ascii	"int\000"
-  68 005c 02       		.uleb128 0x2
-  69 005d 04       		.byte	0x4
-  70 005e 07       		.byte	0x7
-  71 005f 0E000000 		.4byte	.LASF8
-  72 0063 02       		.uleb128 0x2
-  73 0064 08       		.byte	0x8
-  74 0065 04       		.byte	0x4
-  75 0066 6C010000 		.4byte	.LASF9
-  76 006a 02       		.uleb128 0x2
-  77 006b 04       		.byte	0x4
-  78 006c 07       		.byte	0x7
-  79 006d 82010000 		.4byte	.LASF10
-  80 0071 02       		.uleb128 0x2
-  81 0072 01       		.byte	0x1
-  82 0073 08       		.byte	0x8
-  83 0074 E0000000 		.4byte	.LASF11
-  84 0078 00       		.byte	0
-  85              		.section	.debug_abbrev,"",%progbits
-  86              	.Ldebug_abbrev0:
-  87 0000 01       		.uleb128 0x1
-  88 0001 11       		.uleb128 0x11
-  89 0002 01       		.byte	0x1
-  90 0003 25       		.uleb128 0x25
-  91 0004 0E       		.uleb128 0xe
-  92 0005 13       		.uleb128 0x13
-  93 0006 0B       		.uleb128 0xb
-  94 0007 03       		.uleb128 0x3
-  95 0008 0E       		.uleb128 0xe
-  96 0009 1B       		.uleb128 0x1b
-  97 000a 0E       		.uleb128 0xe
-  98 000b 10       		.uleb128 0x10
-  99 000c 17       		.uleb128 0x17
- 100 000d 00       		.byte	0
- 101 000e 00       		.byte	0
- 102 000f 02       		.uleb128 0x2
- 103 0010 24       		.uleb128 0x24
- 104 0011 00       		.byte	0
- 105 0012 0B       		.uleb128 0xb
- 106 0013 0B       		.uleb128 0xb
- 107 0014 3E       		.uleb128 0x3e
- 108 0015 0B       		.uleb128 0xb
- 109 0016 03       		.uleb128 0x3
- 110 0017 0E       		.uleb128 0xe
- 111 0018 00       		.byte	0
- 112 0019 00       		.byte	0
- 113 001a 03       		.uleb128 0x3
- 114 001b 24       		.uleb128 0x24
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccI5IOAk.s 			page 3
+  58 0084 00000000 		.word	0
+  59 0088 00000000 		.word	0
+  60 008c 00000000 		.word	0
+  61 0090 00000000 		.word	0
+  62 0094 01000000 		.word	1
+  63 0098 01000000 		.word	1
+  64 009c 01000000 		.word	1
+  65 00a0 01000000 		.word	1
+  66 00a4 01000000 		.word	1
+  67 00a8 01000000 		.word	1
+  68 00ac 00000000 		.word	0
+  69 00b0 01000000 		.word	1
+  70 00b4 00000000 		.word	0
+  71 00b8 01000000 		.word	1
+  72 00bc 01000000 		.word	1
+  73 00c0 01000000 		.word	1
+  74 00c4 01000000 		.word	1
+  75 00c8 01000000 		.word	1
+  76 00cc 01000000 		.word	1
+  77 00d0 01000000 		.word	1
+  78 00d4 00000000 		.word	0
+  79 00d8 01000000 		.word	1
+  80 00dc 00000000 		.word	0
+  81 00e0 01000000 		.word	1
+  82 00e4 01000000 		.word	1
+  83 00e8 00000000 		.word	0
+  84 00ec 00000000 		.word	0
+  85 00f0 00000000 		.word	0
+  86 00f4 00000000 		.word	0
+  87 00f8 00000000 		.word	0
+  88 00fc 00000000 		.word	0
+  89 0100 00000000 		.word	0
+  90 0104 00000000 		.word	0
+  91 0108 00000000 		.word	0
+  92 010c 00000000 		.word	0
+  93 0110 00000000 		.word	0
+  94 0114 00000000 		.word	0
+  95 0118 00000000 		.word	0
+  96 011c 01000000 		.word	1
+  97 0120 00000000 		.word	0
+  98 0124 01000000 		.word	1
+  99 0128 00000000 		.word	0
+ 100 012c 01000000 		.word	1
+ 101 0130 01000000 		.word	1
+ 102 0134 00000000 		.word	0
+ 103 0138 01000000 		.word	1
+ 104 013c 00000000 		.word	0
+ 105 0140 01000000 		.word	1
+ 106 0144 01000000 		.word	1
+ 107 0148 01000000 		.word	1
+ 108 014c 01000000 		.word	1
+ 109 0150 01000000 		.word	1
+ 110 0154 00000000 		.word	0
+ 111 0158 01000000 		.word	1
+ 112 015c 00000000 		.word	0
+ 113 0160 01000000 		.word	1
+ 114 0164 01000000 		.word	1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 3
 
 
- 115 001c 00       		.byte	0
- 116 001d 0B       		.uleb128 0xb
- 117 001e 0B       		.uleb128 0xb
- 118 001f 3E       		.uleb128 0x3e
- 119 0020 0B       		.uleb128 0xb
- 120 0021 03       		.uleb128 0x3
- 121 0022 08       		.uleb128 0x8
- 122 0023 00       		.byte	0
- 123 0024 00       		.byte	0
- 124 0025 00       		.byte	0
- 125              		.section	.debug_aranges,"",%progbits
- 126 0000 14000000 		.4byte	0x14
- 127 0004 0200     		.2byte	0x2
- 128 0006 00000000 		.4byte	.Ldebug_info0
- 129 000a 04       		.byte	0x4
- 130 000b 00       		.byte	0
- 131 000c 0000     		.2byte	0
- 132 000e 0000     		.2byte	0
- 133 0010 00000000 		.4byte	0
- 134 0014 00000000 		.4byte	0
- 135              		.section	.debug_line,"",%progbits
- 136              	.Ldebug_line0:
- 137 0000 19000000 		.section	.debug_str,"MS",%progbits,1
- 137      02001300 
- 137      00000201 
- 137      FB0E0D00 
- 137      01010101 
- 138              	.LASF6:
- 139 0000 6C6F6E67 		.ascii	"long long int\000"
- 139      206C6F6E 
- 139      6720696E 
- 139      7400
- 140              	.LASF8:
- 141 000e 756E7369 		.ascii	"unsigned int\000"
- 141      676E6564 
- 141      20696E74 
- 141      00
- 142              	.LASF5:
- 143 001b 6C6F6E67 		.ascii	"long unsigned int\000"
- 143      20756E73 
- 143      69676E65 
- 143      6420696E 
- 143      7400
- 144              	.LASF7:
- 145 002d 6C6F6E67 		.ascii	"long long unsigned int\000"
- 145      206C6F6E 
- 145      6720756E 
- 145      7369676E 
- 145      65642069 
- 146              	.LASF12:
- 147 0044 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 147      43313120 
- 147      352E342E 
- 147      31203230 
- 147      31363036 
- 148 0077 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 148      20726576 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccI5IOAk.s 			page 4
+ 115 0168 01000000 		.word	1
+ 116 016c 00000000 		.word	0
+ 117 0170 01000000 		.word	1
+ 118 0174 00000000 		.word	0
+ 119 0178 01000000 		.word	1
+ 120 017c 01000000 		.word	1
+ 121 0180 00000000 		.word	0
+ 122 0184 01000000 		.word	1
+ 123 0188 00000000 		.word	0
+ 124 018c 00000000 		.word	0
+ 125 0190 00000000 		.word	0
+ 126 0194 01000000 		.word	1
+ 127 0198 00000000 		.word	0
+ 128 019c 00000000 		.word	0
+ 129 01a0 00000000 		.word	0
+ 130 01a4 01000000 		.word	1
+ 131 01a8 00000000 		.word	0
+ 132 01ac 01000000 		.word	1
+ 133 01b0 00000000 		.word	0
+ 134 01b4 00000000 		.word	0
+ 135 01b8 00000000 		.word	0
+ 136 01bc 01000000 		.word	1
+ 137 01c0 00000000 		.word	0
+ 138 01c4 01000000 		.word	1
+ 139 01c8 01000000 		.word	1
+ 140 01cc 00000000 		.word	0
+ 141 01d0 01000000 		.word	1
+ 142 01d4 01000000 		.word	1
+ 143 01d8 01000000 		.word	1
+ 144 01dc 00000000 		.word	0
+ 145 01e0 01000000 		.word	1
+ 146 01e4 00000000 		.word	0
+ 147 01e8 01000000 		.word	1
+ 148 01ec 00000000 		.word	0
+ 149 01f0 01000000 		.word	1
+ 150 01f4 00000000 		.word	0
+ 151 01f8 01000000 		.word	1
+ 152 01fc 00000000 		.word	0
+ 153 0200 01000000 		.word	1
+ 154 0204 01000000 		.word	1
+ 155 0208 01000000 		.word	1
+ 156 020c 00000000 		.word	0
+ 157 0210 01000000 		.word	1
+ 158 0214 01000000 		.word	1
+ 159 0218 00000000 		.word	0
+ 160 021c 00000000 		.word	0
+ 161 0220 00000000 		.word	0
+ 162 0224 00000000 		.word	0
+ 163 0228 00000000 		.word	0
+ 164 022c 01000000 		.word	1
+ 165 0230 00000000 		.word	0
+ 166 0234 01000000 		.word	1
+ 167 0238 00000000 		.word	0
+ 168 023c 01000000 		.word	1
+ 169 0240 00000000 		.word	0
+ 170 0244 01000000 		.word	1
+ 171 0248 00000000 		.word	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 4
 
 
- 148      6973696F 
- 148      6E203233 
- 148      37373135 
- 149 00aa 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
- 149      66756E63 
- 149      74696F6E 
- 149      2D736563 
- 149      74696F6E 
- 150              	.LASF1:
- 151 00d2 756E7369 		.ascii	"unsigned char\000"
- 151      676E6564 
- 151      20636861 
- 151      7200
- 152              	.LASF11:
- 153 00e0 63686172 		.ascii	"char\000"
- 153      00
- 154              	.LASF14:
- 155 00e5 483A5C44 		.ascii	"H:\\Documents\\GitHub\\301-Robot\\psoc student pack"
- 155      6F63756D 
- 155      656E7473 
- 155      5C476974 
- 155      4875625C 
- 156 0114 5C70736F 		.ascii	"\\psoc_code_base\\CS301_Class.cydsn\000"
- 156      635F636F 
- 156      64655F62 
- 156      6173655C 
- 156      43533330 
- 157              	.LASF4:
- 158 0136 6C6F6E67 		.ascii	"long int\000"
- 158      20696E74 
- 158      00
- 159              	.LASF13:
- 160 013f 70617468 		.ascii	"pathfinding.c\000"
- 160      66696E64 
- 160      696E672E 
- 160      6300
- 161              	.LASF3:
- 162 014d 73686F72 		.ascii	"short unsigned int\000"
- 162      7420756E 
- 162      7369676E 
- 162      65642069 
- 162      6E7400
- 163              	.LASF0:
- 164 0160 7369676E 		.ascii	"signed char\000"
- 164      65642063 
- 164      68617200 
- 165              	.LASF9:
- 166 016c 6C6F6E67 		.ascii	"long double\000"
- 166      20646F75 
- 166      626C6500 
- 167              	.LASF2:
- 168 0178 73686F72 		.ascii	"short int\000"
- 168      7420696E 
- 168      7400
- 169              	.LASF10:
- 170 0182 73697A65 		.ascii	"sizetype\000"
- 170      74797065 
-ARM GAS  C:\Users\ikui753\AppData\Local\Temp\ccI5IOAk.s 			page 5
+ 172 024c 01000000 		.word	1
+ 173 0250 00000000 		.word	0
+ 174 0254 00000000 		.word	0
+ 175 0258 00000000 		.word	0
+ 176 025c 01000000 		.word	1
+ 177 0260 01000000 		.word	1
+ 178 0264 00000000 		.word	0
+ 179 0268 01000000 		.word	1
+ 180 026c 01000000 		.word	1
+ 181 0270 01000000 		.word	1
+ 182 0274 01000000 		.word	1
+ 183 0278 01000000 		.word	1
+ 184 027c 00000000 		.word	0
+ 185 0280 01000000 		.word	1
+ 186 0284 00000000 		.word	0
+ 187 0288 01000000 		.word	1
+ 188 028c 01000000 		.word	1
+ 189 0290 01000000 		.word	1
+ 190 0294 00000000 		.word	0
+ 191 0298 01000000 		.word	1
+ 192 029c 00000000 		.word	0
+ 193 02a0 01000000 		.word	1
+ 194 02a4 01000000 		.word	1
+ 195 02a8 01000000 		.word	1
+ 196 02ac 01000000 		.word	1
+ 197 02b0 00000000 		.word	0
+ 198 02b4 00000000 		.word	0
+ 199 02b8 00000000 		.word	0
+ 200 02bc 00000000 		.word	0
+ 201 02c0 00000000 		.word	0
+ 202 02c4 00000000 		.word	0
+ 203 02c8 00000000 		.word	0
+ 204 02cc 01000000 		.word	1
+ 205 02d0 00000000 		.word	0
+ 206 02d4 00000000 		.word	0
+ 207 02d8 00000000 		.word	0
+ 208 02dc 01000000 		.word	1
+ 209 02e0 00000000 		.word	0
+ 210 02e4 01000000 		.word	1
+ 211 02e8 00000000 		.word	0
+ 212 02ec 00000000 		.word	0
+ 213 02f0 00000000 		.word	0
+ 214 02f4 01000000 		.word	1
+ 215 02f8 01000000 		.word	1
+ 216 02fc 01000000 		.word	1
+ 217 0300 01000000 		.word	1
+ 218 0304 01000000 		.word	1
+ 219 0308 01000000 		.word	1
+ 220 030c 01000000 		.word	1
+ 221 0310 01000000 		.word	1
+ 222 0314 00000000 		.word	0
+ 223 0318 01000000 		.word	1
+ 224 031c 01000000 		.word	1
+ 225 0320 01000000 		.word	1
+ 226 0324 00000000 		.word	0
+ 227 0328 01000000 		.word	1
+ 228 032c 00000000 		.word	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 5
 
 
- 170      00
- 171              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
+ 229 0330 01000000 		.word	1
+ 230 0334 01000000 		.word	1
+ 231 0338 01000000 		.word	1
+ 232 033c 00000000 		.word	0
+ 233 0340 01000000 		.word	1
+ 234 0344 01000000 		.word	1
+ 235 0348 00000000 		.word	0
+ 236 034c 00000000 		.word	0
+ 237 0350 00000000 		.word	0
+ 238 0354 00000000 		.word	0
+ 239 0358 00000000 		.word	0
+ 240 035c 00000000 		.word	0
+ 241 0360 00000000 		.word	0
+ 242 0364 00000000 		.word	0
+ 243 0368 00000000 		.word	0
+ 244 036c 01000000 		.word	1
+ 245 0370 00000000 		.word	0
+ 246 0374 01000000 		.word	1
+ 247 0378 00000000 		.word	0
+ 248 037c 00000000 		.word	0
+ 249 0380 00000000 		.word	0
+ 250 0384 00000000 		.word	0
+ 251 0388 00000000 		.word	0
+ 252 038c 01000000 		.word	1
+ 253 0390 01000000 		.word	1
+ 254 0394 00000000 		.word	0
+ 255 0398 01000000 		.word	1
+ 256 039c 01000000 		.word	1
+ 257 03a0 01000000 		.word	1
+ 258 03a4 01000000 		.word	1
+ 259 03a8 01000000 		.word	1
+ 260 03ac 01000000 		.word	1
+ 261 03b0 01000000 		.word	1
+ 262 03b4 00000000 		.word	0
+ 263 03b8 01000000 		.word	1
+ 264 03bc 00000000 		.word	0
+ 265 03c0 01000000 		.word	1
+ 266 03c4 01000000 		.word	1
+ 267 03c8 01000000 		.word	1
+ 268 03cc 01000000 		.word	1
+ 269 03d0 01000000 		.word	1
+ 270 03d4 00000000 		.word	0
+ 271 03d8 01000000 		.word	1
+ 272 03dc 01000000 		.word	1
+ 273 03e0 00000000 		.word	0
+ 274 03e4 00000000 		.word	0
+ 275 03e8 00000000 		.word	0
+ 276 03ec 00000000 		.word	0
+ 277 03f0 00000000 		.word	0
+ 278 03f4 00000000 		.word	0
+ 279 03f8 00000000 		.word	0
+ 280 03fc 01000000 		.word	1
+ 281 0400 00000000 		.word	0
+ 282 0404 00000000 		.word	0
+ 283 0408 00000000 		.word	0
+ 284 040c 00000000 		.word	0
+ 285 0410 00000000 		.word	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 6
+
+
+ 286 0414 00000000 		.word	0
+ 287 0418 00000000 		.word	0
+ 288 041c 00000000 		.word	0
+ 289 0420 00000000 		.word	0
+ 290 0424 01000000 		.word	1
+ 291 0428 01000000 		.word	1
+ 292 042c 01000000 		.word	1
+ 293 0430 01000000 		.word	1
+ 294 0434 01000000 		.word	1
+ 295 0438 01000000 		.word	1
+ 296 043c 01000000 		.word	1
+ 297 0440 01000000 		.word	1
+ 298 0444 01000000 		.word	1
+ 299 0448 01000000 		.word	1
+ 300 044c 01000000 		.word	1
+ 301 0450 01000000 		.word	1
+ 302 0454 01000000 		.word	1
+ 303 0458 01000000 		.word	1
+ 304 045c 01000000 		.word	1
+ 305 0460 01000000 		.word	1
+ 306 0464 01000000 		.word	1
+ 307 0468 01000000 		.word	1
+ 308 046c 01000000 		.word	1
+ 309 0470 01000000 		.word	1
+ 310              		.global	food_list
+ 311              		.align	2
+ 312              		.type	food_list, %object
+ 313              		.size	food_list, 40
+ 314              	food_list:
+ 315 0474 01000000 		.word	1
+ 316 0478 09000000 		.word	9
+ 317 047c 05000000 		.word	5
+ 318 0480 05000000 		.word	5
+ 319 0484 07000000 		.word	7
+ 320 0488 01000000 		.word	1
+ 321 048c 0D000000 		.word	13
+ 322 0490 05000000 		.word	5
+ 323 0494 09000000 		.word	9
+ 324 0498 09000000 		.word	9
+ 325              		.global	moves
+ 326              		.align	2
+ 327              		.type	moves, %object
+ 328              		.size	moves, 32
+ 329              	moves:
+ 330 049c 00000000 		.word	0
+ 331 04a0 01000000 		.word	1
+ 332 04a4 00000000 		.word	0
+ 333 04a8 FFFFFFFF 		.word	-1
+ 334 04ac 01000000 		.word	1
+ 335 04b0 00000000 		.word	0
+ 336 04b4 FFFFFFFF 		.word	-1
+ 337 04b8 00000000 		.word	0
+ 338              		.section	.text.isValidMove,"ax",%progbits
+ 339              		.align	2
+ 340              		.global	isValidMove
+ 341              		.thumb
+ 342              		.thumb_func
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 7
+
+
+ 343              		.type	isValidMove, %function
+ 344              	isValidMove:
+ 345              	.LFB1:
+ 346              		.file 1 "pathfinding.c"
+   1:pathfinding.c **** /* ========================================
+   2:pathfinding.c ****  *
+   3:pathfinding.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:pathfinding.c ****  * All Rights Reserved
+   5:pathfinding.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:pathfinding.c ****  *
+   7:pathfinding.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:pathfinding.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:pathfinding.c ****  *
+  10:pathfinding.c ****  * ========================================
+  11:pathfinding.c **** */
+  12:pathfinding.c **** #include <stdio.h>
+  13:pathfinding.c **** #include <stdlib.h>
+  14:pathfinding.c **** #include <time.h>
+  15:pathfinding.c **** #include <stdbool.h>
+  16:pathfinding.c **** #include "map.h"
+  17:pathfinding.c **** 
+  18:pathfinding.c **** #define MAX_ROWS 15
+  19:pathfinding.c **** #define MAX_COLS 19
+  20:pathfinding.c **** #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
+  21:pathfinding.c **** // MAP INITIALISATION CODE
+  22:pathfinding.c **** 
+  23:pathfinding.c **** /*void printMap(char map[MAX_ROWS][MAX_COLS]) {
+  24:pathfinding.c ****     // Print the map in a grid format
+  25:pathfinding.c ****     for (int i = 0; i < MAX_ROWS; i++) {
+  26:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+  27:pathfinding.c ****             printf("%c", map[i][j]);
+  28:pathfinding.c ****         }
+  29:pathfinding.c ****         printf("\n");
+  30:pathfinding.c ****     }
+  31:pathfinding.c **** }*/
+  32:pathfinding.c **** 
+  33:pathfinding.c **** struct Location {
+  34:pathfinding.c ****     int row;
+  35:pathfinding.c ****     int col;
+  36:pathfinding.c **** };
+  37:pathfinding.c **** 
+  38:pathfinding.c **** // pathfinding 
+  39:pathfinding.c **** struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
+  40:pathfinding.c **** 
+  41:pathfinding.c **** bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
+ 347              		.loc 1 41 0
+ 348              		.cfi_startproc
+ 349              		@ args = 4, pretend = 0, frame = 16
+ 350              		@ frame_needed = 1, uses_anonymous_args = 0
+ 351              		@ link register save eliminated.
+ 352 0000 80B4     		push	{r7}
+ 353              		.cfi_def_cfa_offset 4
+ 354              		.cfi_offset 7, -4
+ 355 0002 85B0     		sub	sp, sp, #20
+ 356              		.cfi_def_cfa_offset 24
+ 357 0004 00AF     		add	r7, sp, #0
+ 358              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 8
+
+
+ 359 0006 F860     		str	r0, [r7, #12]
+ 360 0008 B960     		str	r1, [r7, #8]
+ 361 000a 7A60     		str	r2, [r7, #4]
+ 362 000c 3B60     		str	r3, [r7]
+  42:pathfinding.c ****     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == '0');
+ 363              		.loc 1 42 0
+ 364 000e FB68     		ldr	r3, [r7, #12]
+ 365 0010 002B     		cmp	r3, #0
+ 366 0012 17DB     		blt	.L2
+ 367              		.loc 1 42 0 is_stmt 0 discriminator 1
+ 368 0014 FA68     		ldr	r2, [r7, #12]
+ 369 0016 7B68     		ldr	r3, [r7, #4]
+ 370 0018 9A42     		cmp	r2, r3
+ 371 001a 13DA     		bge	.L2
+ 372              		.loc 1 42 0 discriminator 3
+ 373 001c BB68     		ldr	r3, [r7, #8]
+ 374 001e 002B     		cmp	r3, #0
+ 375 0020 10DB     		blt	.L2
+ 376              		.loc 1 42 0 discriminator 5
+ 377 0022 BA68     		ldr	r2, [r7, #8]
+ 378 0024 3B68     		ldr	r3, [r7]
+ 379 0026 9A42     		cmp	r2, r3
+ 380 0028 0CDA     		bge	.L2
+ 381              		.loc 1 42 0 discriminator 7
+ 382 002a FB68     		ldr	r3, [r7, #12]
+ 383 002c 4C22     		movs	r2, #76
+ 384 002e 02FB03F3 		mul	r3, r2, r3
+ 385 0032 BA69     		ldr	r2, [r7, #24]
+ 386 0034 1344     		add	r3, r3, r2
+ 387 0036 BA68     		ldr	r2, [r7, #8]
+ 388 0038 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 389 003c 302B     		cmp	r3, #48
+ 390 003e 01D1     		bne	.L2
+ 391              		.loc 1 42 0 discriminator 9
+ 392 0040 0123     		movs	r3, #1
+ 393 0042 00E0     		b	.L3
+ 394              	.L2:
+ 395              		.loc 1 42 0 discriminator 10
+ 396 0044 0023     		movs	r3, #0
+ 397              	.L3:
+ 398              		.loc 1 42 0 discriminator 12
+ 399 0046 03F00103 		and	r3, r3, #1
+ 400 004a DBB2     		uxtb	r3, r3
+  43:pathfinding.c **** }
+ 401              		.loc 1 43 0 is_stmt 1 discriminator 12
+ 402 004c 1846     		mov	r0, r3
+ 403 004e 1437     		adds	r7, r7, #20
+ 404              		.cfi_def_cfa_offset 4
+ 405 0050 BD46     		mov	sp, r7
+ 406              		.cfi_def_cfa_register 13
+ 407              		@ sp needed
+ 408 0052 80BC     		pop	{r7}
+ 409              		.cfi_restore 7
+ 410              		.cfi_def_cfa_offset 0
+ 411 0054 7047     		bx	lr
+ 412              		.cfi_endproc
+ 413              	.LFE1:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 9
+
+
+ 414              		.size	isValidMove, .-isValidMove
+ 415 0056 00BF     		.section	.text.dijkstra,"ax",%progbits
+ 416              		.align	2
+ 417              		.global	dijkstra
+ 418              		.thumb
+ 419              		.thumb_func
+ 420              		.type	dijkstra, %function
+ 421              	dijkstra:
+ 422              	.LFB2:
+  44:pathfinding.c **** 
+  45:pathfinding.c **** void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetloc
+ 423              		.loc 1 45 0
+ 424              		.cfi_startproc
+ 425              		@ args = 12, pretend = 8, frame = 5816
+ 426              		@ frame_needed = 1, uses_anonymous_args = 0
+ 427 0000 82B0     		sub	sp, sp, #8
+ 428              		.cfi_def_cfa_offset 8
+ 429 0002 90B5     		push	{r4, r7, lr}
+ 430              		.cfi_def_cfa_offset 20
+ 431              		.cfi_offset 4, -20
+ 432              		.cfi_offset 7, -16
+ 433              		.cfi_offset 14, -12
+ 434 0004 ADF5B65D 		sub	sp, sp, #5824
+ 435              		.cfi_def_cfa_offset 5844
+ 436 0008 81B0     		sub	sp, sp, #4
+ 437              		.cfi_def_cfa_offset 5848
+ 438 000a 02AF     		add	r7, sp, #8
+ 439              		.cfi_def_cfa 7, 5840
+ 440 000c 07F11804 		add	r4, r7, #24
+ 441 0010 0C3C     		subs	r4, r4, #12
+ 442 0012 2060     		str	r0, [r4]
+ 443 0014 07F11800 		add	r0, r7, #24
+ 444 0018 1438     		subs	r0, r0, #20
+ 445 001a 80E80600 		stmia	r0, {r1, r2}
+ 446 001e 07F5B652 		add	r2, r7, #5824
+ 447 0022 02F10C02 		add	r2, r2, #12
+ 448 0026 1360     		str	r3, [r2]
+ 449              	.LBB2:
+  46:pathfinding.c **** 
+  47:pathfinding.c ****     int visitedMap[MAX_ROWS][MAX_COLS];
+  48:pathfinding.c ****     for (int i = 0; i < MAX_ROWS; i++) {
+ 450              		.loc 1 48 0
+ 451 0028 0023     		movs	r3, #0
+ 452 002a 07F5B552 		add	r2, r7, #5792
+ 453 002e 02F11402 		add	r2, r2, #20
+ 454 0032 1360     		str	r3, [r2]
+ 455 0034 3AE0     		b	.L6
+ 456              	.L9:
+ 457              	.LBB3:
+  49:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 458              		.loc 1 49 0
+ 459 0036 0023     		movs	r3, #0
+ 460 0038 07F5B552 		add	r2, r7, #5792
+ 461 003c 02F11002 		add	r2, r2, #16
+ 462 0040 1360     		str	r3, [r2]
+ 463 0042 21E0     		b	.L7
+ 464              	.L8:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 10
+
+
+  50:pathfinding.c ****             visitedMap[i][j] = 1; // fill visited array with 1s- mark as unvisited
+ 465              		.loc 1 50 0 discriminator 3
+ 466 0044 07F58F51 		add	r1, r7, #4576
+ 467 0048 01F11001 		add	r1, r1, #16
+ 468 004c 07F5B553 		add	r3, r7, #5792
+ 469 0050 03F11403 		add	r3, r3, #20
+ 470 0054 1A68     		ldr	r2, [r3]
+ 471 0056 1346     		mov	r3, r2
+ 472 0058 DB00     		lsls	r3, r3, #3
+ 473 005a 1344     		add	r3, r3, r2
+ 474 005c 5B00     		lsls	r3, r3, #1
+ 475 005e 1344     		add	r3, r3, r2
+ 476 0060 07F5B552 		add	r2, r7, #5792
+ 477 0064 02F11002 		add	r2, r2, #16
+ 478 0068 1268     		ldr	r2, [r2]
+ 479 006a 1344     		add	r3, r3, r2
+ 480 006c 0122     		movs	r2, #1
+ 481 006e 41F82320 		str	r2, [r1, r3, lsl #2]
+  49:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 482              		.loc 1 49 0 discriminator 3
+ 483 0072 07F5B553 		add	r3, r7, #5792
+ 484 0076 03F11003 		add	r3, r3, #16
+ 485 007a 1B68     		ldr	r3, [r3]
+ 486 007c 0133     		adds	r3, r3, #1
+ 487 007e 07F5B552 		add	r2, r7, #5792
+ 488 0082 02F11002 		add	r2, r2, #16
+ 489 0086 1360     		str	r3, [r2]
+ 490              	.L7:
+  49:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 491              		.loc 1 49 0 is_stmt 0 discriminator 1
+ 492 0088 07F5B553 		add	r3, r7, #5792
+ 493 008c 03F11003 		add	r3, r3, #16
+ 494 0090 1B68     		ldr	r3, [r3]
+ 495 0092 122B     		cmp	r3, #18
+ 496 0094 D6DD     		ble	.L8
+ 497              	.LBE3:
+  48:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 498              		.loc 1 48 0 is_stmt 1 discriminator 2
+ 499 0096 07F5B553 		add	r3, r7, #5792
+ 500 009a 03F11403 		add	r3, r3, #20
+ 501 009e 1B68     		ldr	r3, [r3]
+ 502 00a0 0133     		adds	r3, r3, #1
+ 503 00a2 07F5B552 		add	r2, r7, #5792
+ 504 00a6 02F11402 		add	r2, r2, #20
+ 505 00aa 1360     		str	r3, [r2]
+ 506              	.L6:
+  48:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 507              		.loc 1 48 0 is_stmt 0 discriminator 1
+ 508 00ac 07F5B553 		add	r3, r7, #5792
+ 509 00b0 03F11403 		add	r3, r3, #20
+ 510 00b4 1B68     		ldr	r3, [r3]
+ 511 00b6 0E2B     		cmp	r3, #14
+ 512 00b8 BDDD     		ble	.L9
+ 513              	.LBE2:
+  51:pathfinding.c ****         }
+  52:pathfinding.c ****     }
+  53:pathfinding.c **** 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 11
+
+
+  54:pathfinding.c ****     struct PriorityQueue {
+  55:pathfinding.c ****         struct Location location;
+  56:pathfinding.c ****         int distance;
+  57:pathfinding.c ****     };
+  58:pathfinding.c **** 
+  59:pathfinding.c ****     struct PriorityQueue pq[MAX_ROWS * MAX_COLS]; // initialise priority queue
+  60:pathfinding.c ****     int pqSize = 0;
+ 514              		.loc 1 60 0 is_stmt 1
+ 515 00ba 0023     		movs	r3, #0
+ 516 00bc 07F5B552 		add	r2, r7, #5792
+ 517 00c0 02F10C02 		add	r2, r2, #12
+ 518 00c4 1360     		str	r3, [r2]
+ 519              	.LBB4:
+  61:pathfinding.c **** 
+  62:pathfinding.c ****     // Initialize distances and paths arrays
+  63:pathfinding.c ****     int distances[MAX_ROWS][MAX_COLS]; // array to record distance of each location
+  64:pathfinding.c ****     //struct Location paths[MAX_ROWS * MAX_COLS]; // 1d array to record path- each element is a loc
+  65:pathfinding.c **** 
+  66:pathfinding.c ****     for (int i = 0; i < MAX_ROWS; i++) {
+ 520              		.loc 1 66 0
+ 521 00c6 0023     		movs	r3, #0
+ 522 00c8 07F5B552 		add	r2, r7, #5792
+ 523 00cc 02F10802 		add	r2, r2, #8
+ 524 00d0 1360     		str	r3, [r2]
+ 525 00d2 3AE0     		b	.L10
+ 526              	.L13:
+ 527              	.LBB5:
+  67:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 528              		.loc 1 67 0
+ 529 00d4 0023     		movs	r3, #0
+ 530 00d6 07F5B552 		add	r2, r7, #5792
+ 531 00da 02F10402 		add	r2, r2, #4
+ 532 00de 1360     		str	r3, [r2]
+ 533 00e0 21E0     		b	.L11
+ 534              	.L12:
+  68:pathfinding.c ****             distances[i][j] = 1000; // initialise distances as infinity
+ 535              		.loc 1 68 0 discriminator 3
+ 536 00e2 07F13802 		add	r2, r7, #56
+ 537 00e6 183A     		subs	r2, r2, #24
+ 538 00e8 07F5B553 		add	r3, r7, #5792
+ 539 00ec 03F10803 		add	r3, r3, #8
+ 540 00f0 1968     		ldr	r1, [r3]
+ 541 00f2 0B46     		mov	r3, r1
+ 542 00f4 DB00     		lsls	r3, r3, #3
+ 543 00f6 0B44     		add	r3, r3, r1
+ 544 00f8 5B00     		lsls	r3, r3, #1
+ 545 00fa 0B44     		add	r3, r3, r1
+ 546 00fc 07F5B551 		add	r1, r7, #5792
+ 547 0100 01F10401 		add	r1, r1, #4
+ 548 0104 0968     		ldr	r1, [r1]
+ 549 0106 0B44     		add	r3, r3, r1
+ 550 0108 4FF47A71 		mov	r1, #1000
+ 551 010c 42F82310 		str	r1, [r2, r3, lsl #2]
+  67:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 552              		.loc 1 67 0 discriminator 3
+ 553 0110 07F5B553 		add	r3, r7, #5792
+ 554 0114 03F10403 		add	r3, r3, #4
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 12
+
+
+ 555 0118 1B68     		ldr	r3, [r3]
+ 556 011a 0133     		adds	r3, r3, #1
+ 557 011c 07F5B552 		add	r2, r7, #5792
+ 558 0120 02F10402 		add	r2, r2, #4
+ 559 0124 1360     		str	r3, [r2]
+ 560              	.L11:
+  67:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 561              		.loc 1 67 0 is_stmt 0 discriminator 1
+ 562 0126 07F5B553 		add	r3, r7, #5792
+ 563 012a 03F10403 		add	r3, r3, #4
+ 564 012e 1B68     		ldr	r3, [r3]
+ 565 0130 122B     		cmp	r3, #18
+ 566 0132 D6DD     		ble	.L12
+ 567              	.LBE5:
+  66:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 568              		.loc 1 66 0 is_stmt 1 discriminator 2
+ 569 0134 07F5B553 		add	r3, r7, #5792
+ 570 0138 03F10803 		add	r3, r3, #8
+ 571 013c 1B68     		ldr	r3, [r3]
+ 572 013e 0133     		adds	r3, r3, #1
+ 573 0140 07F5B552 		add	r2, r7, #5792
+ 574 0144 02F10802 		add	r2, r2, #8
+ 575 0148 1360     		str	r3, [r2]
+ 576              	.L10:
+  66:pathfinding.c ****         for (int j = 0; j < MAX_COLS; j++) {
+ 577              		.loc 1 66 0 is_stmt 0 discriminator 1
+ 578 014a 07F5B553 		add	r3, r7, #5792
+ 579 014e 03F10803 		add	r3, r3, #8
+ 580 0152 1B68     		ldr	r3, [r3]
+ 581 0154 0E2B     		cmp	r3, #14
+ 582 0156 BDDD     		ble	.L13
+ 583              	.LBE4:
+  69:pathfinding.c ****         }
+  70:pathfinding.c ****     }
+  71:pathfinding.c **** 
+  72:pathfinding.c ****     int stepNum = 0;
+ 584              		.loc 1 72 0 is_stmt 1
+ 585 0158 0023     		movs	r3, #0
+ 586 015a 07F5B552 		add	r2, r7, #5792
+ 587 015e 1360     		str	r3, [r2]
+  73:pathfinding.c ****     distances[startlocation.row][startlocation.col] = 0; // initialise distance of startLoc to 0
+ 588              		.loc 1 73 0
+ 589 0160 07F11803 		add	r3, r7, #24
+ 590 0164 143B     		subs	r3, r3, #20
+ 591 0166 1968     		ldr	r1, [r3]
+ 592 0168 07F11803 		add	r3, r7, #24
+ 593 016c 143B     		subs	r3, r3, #20
+ 594 016e 5868     		ldr	r0, [r3, #4]
+ 595 0170 07F13802 		add	r2, r7, #56
+ 596 0174 183A     		subs	r2, r2, #24
+ 597 0176 0B46     		mov	r3, r1
+ 598 0178 DB00     		lsls	r3, r3, #3
+ 599 017a 0B44     		add	r3, r3, r1
+ 600 017c 5B00     		lsls	r3, r3, #1
+ 601 017e 0B44     		add	r3, r3, r1
+ 602 0180 0344     		add	r3, r3, r0
+ 603 0182 0021     		movs	r1, #0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 13
+
+
+ 604 0184 42F82310 		str	r1, [r2, r3, lsl #2]
+  74:pathfinding.c ****     //paths[stepNum] = startlocation; // add start to path array
+  75:pathfinding.c ****     stepNum++; // increment stepNum
+ 605              		.loc 1 75 0
+ 606 0188 07F5B553 		add	r3, r7, #5792
+ 607 018c 1B68     		ldr	r3, [r3]
+ 608 018e 0133     		adds	r3, r3, #1
+ 609 0190 07F5B552 		add	r2, r7, #5792
+ 610 0194 1360     		str	r3, [r2]
+  76:pathfinding.c **** 
+  77:pathfinding.c ****     pq[pqSize].location = startlocation; // add startLocation to Priority queue
+ 611              		.loc 1 77 0
+ 612 0196 07F59362 		add	r2, r7, #1176
+ 613 019a 043A     		subs	r2, r2, #4
+ 614 019c 07F5B553 		add	r3, r7, #5792
+ 615 01a0 03F10C03 		add	r3, r3, #12
+ 616 01a4 1968     		ldr	r1, [r3]
+ 617 01a6 0B46     		mov	r3, r1
+ 618 01a8 5B00     		lsls	r3, r3, #1
+ 619 01aa 0B44     		add	r3, r3, r1
+ 620 01ac 9B00     		lsls	r3, r3, #2
+ 621 01ae 1A44     		add	r2, r2, r3
+ 622 01b0 07F11803 		add	r3, r7, #24
+ 623 01b4 143B     		subs	r3, r3, #20
+ 624 01b6 93E80300 		ldmia	r3, {r0, r1}
+ 625 01ba 82E80300 		stmia	r2, {r0, r1}
+  78:pathfinding.c ****     pq[pqSize].distance = 0; // add startlocation distance to priority queue
+ 626              		.loc 1 78 0
+ 627 01be 07F59362 		add	r2, r7, #1176
+ 628 01c2 043A     		subs	r2, r2, #4
+ 629 01c4 07F5B553 		add	r3, r7, #5792
+ 630 01c8 03F10C03 		add	r3, r3, #12
+ 631 01cc 1968     		ldr	r1, [r3]
+ 632 01ce 0B46     		mov	r3, r1
+ 633 01d0 5B00     		lsls	r3, r3, #1
+ 634 01d2 0B44     		add	r3, r3, r1
+ 635 01d4 9B00     		lsls	r3, r3, #2
+ 636 01d6 1344     		add	r3, r3, r2
+ 637 01d8 0833     		adds	r3, r3, #8
+ 638 01da 0022     		movs	r2, #0
+ 639 01dc 1A60     		str	r2, [r3]
+  79:pathfinding.c ****     pqSize++; // increment pqSize- pq is not empty
+ 640              		.loc 1 79 0
+ 641 01de 07F5B553 		add	r3, r7, #5792
+ 642 01e2 03F10C03 		add	r3, r3, #12
+ 643 01e6 1B68     		ldr	r3, [r3]
+ 644 01e8 0133     		adds	r3, r3, #1
+ 645 01ea 07F5B552 		add	r2, r7, #5792
+ 646 01ee 02F10C02 		add	r2, r2, #12
+ 647 01f2 1360     		str	r3, [r2]
+  80:pathfinding.c **** 
+  81:pathfinding.c ****     while (pqSize > 0) {
+ 648              		.loc 1 81 0
+ 649 01f4 E9E1     		b	.L14
+ 650              	.L24:
+ 651              	.LBB6:
+  82:pathfinding.c ****         int idx = 0;
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 14
+
+
+ 652              		.loc 1 82 0
+ 653 01f6 0023     		movs	r3, #0
+ 654 01f8 07F5B452 		add	r2, r7, #5760
+ 655 01fc 02F11C02 		add	r2, r2, #28
+ 656 0200 1360     		str	r3, [r2]
+ 657              	.LBB7:
+  83:pathfinding.c ****         for (int i = 1; i < pqSize; i++) {
+ 658              		.loc 1 83 0
+ 659 0202 0123     		movs	r3, #1
+ 660 0204 07F5B452 		add	r2, r7, #5760
+ 661 0208 02F11802 		add	r2, r2, #24
+ 662 020c 1360     		str	r3, [r2]
+ 663 020e 34E0     		b	.L15
+ 664              	.L17:
+  84:pathfinding.c ****             if (pq[i].distance < pq[idx].distance) {
+ 665              		.loc 1 84 0
+ 666 0210 07F59362 		add	r2, r7, #1176
+ 667 0214 043A     		subs	r2, r2, #4
+ 668 0216 07F5B453 		add	r3, r7, #5760
+ 669 021a 03F11803 		add	r3, r3, #24
+ 670 021e 1968     		ldr	r1, [r3]
+ 671 0220 0B46     		mov	r3, r1
+ 672 0222 5B00     		lsls	r3, r3, #1
+ 673 0224 0B44     		add	r3, r3, r1
+ 674 0226 9B00     		lsls	r3, r3, #2
+ 675 0228 1344     		add	r3, r3, r2
+ 676 022a 0833     		adds	r3, r3, #8
+ 677 022c 1868     		ldr	r0, [r3]
+ 678 022e 07F59362 		add	r2, r7, #1176
+ 679 0232 043A     		subs	r2, r2, #4
+ 680 0234 07F5B453 		add	r3, r7, #5760
+ 681 0238 03F11C03 		add	r3, r3, #28
+ 682 023c 1968     		ldr	r1, [r3]
+ 683 023e 0B46     		mov	r3, r1
+ 684 0240 5B00     		lsls	r3, r3, #1
+ 685 0242 0B44     		add	r3, r3, r1
+ 686 0244 9B00     		lsls	r3, r3, #2
+ 687 0246 1344     		add	r3, r3, r2
+ 688 0248 0833     		adds	r3, r3, #8
+ 689 024a 1B68     		ldr	r3, [r3]
+ 690 024c 9842     		cmp	r0, r3
+ 691 024e 09DA     		bge	.L16
+  85:pathfinding.c ****                 idx = i; // find the shortest distance location 
+ 692              		.loc 1 85 0
+ 693 0250 07F5B453 		add	r3, r7, #5760
+ 694 0254 03F11803 		add	r3, r3, #24
+ 695 0258 1B68     		ldr	r3, [r3]
+ 696 025a 07F5B452 		add	r2, r7, #5760
+ 697 025e 02F11C02 		add	r2, r2, #28
+ 698 0262 1360     		str	r3, [r2]
+ 699              	.L16:
+  83:pathfinding.c ****         for (int i = 1; i < pqSize; i++) {
+ 700              		.loc 1 83 0 discriminator 2
+ 701 0264 07F5B453 		add	r3, r7, #5760
+ 702 0268 03F11803 		add	r3, r3, #24
+ 703 026c 1B68     		ldr	r3, [r3]
+ 704 026e 0133     		adds	r3, r3, #1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 15
+
+
+ 705 0270 07F5B452 		add	r2, r7, #5760
+ 706 0274 02F11802 		add	r2, r2, #24
+ 707 0278 1360     		str	r3, [r2]
+ 708              	.L15:
+  83:pathfinding.c ****         for (int i = 1; i < pqSize; i++) {
+ 709              		.loc 1 83 0 is_stmt 0 discriminator 1
+ 710 027a 07F5B453 		add	r3, r7, #5760
+ 711 027e 03F11803 		add	r3, r3, #24
+ 712 0282 1A68     		ldr	r2, [r3]
+ 713 0284 07F5B553 		add	r3, r7, #5792
+ 714 0288 03F10C03 		add	r3, r3, #12
+ 715 028c 1B68     		ldr	r3, [r3]
+ 716 028e 9A42     		cmp	r2, r3
+ 717 0290 BEDB     		blt	.L17
+ 718              	.LBE7:
+  86:pathfinding.c ****             }
+  87:pathfinding.c ****         }
+  88:pathfinding.c ****         struct PriorityQueue current = pq[idx]; // record current location
+ 719              		.loc 1 88 0 is_stmt 1
+ 720 0292 07F11801 		add	r1, r7, #24
+ 721 0296 0439     		subs	r1, r1, #4
+ 722 0298 07F59362 		add	r2, r7, #1176
+ 723 029c 043A     		subs	r2, r2, #4
+ 724 029e 07F5B453 		add	r3, r7, #5760
+ 725 02a2 03F11C03 		add	r3, r3, #28
+ 726 02a6 1868     		ldr	r0, [r3]
+ 727 02a8 0346     		mov	r3, r0
+ 728 02aa 5B00     		lsls	r3, r3, #1
+ 729 02ac 0344     		add	r3, r3, r0
+ 730 02ae 9B00     		lsls	r3, r3, #2
+ 731 02b0 1A44     		add	r2, r2, r3
+ 732 02b2 0B46     		mov	r3, r1
+ 733 02b4 07CA     		ldmia	r2, {r0, r1, r2}
+ 734 02b6 83E80700 		stmia	r3, {r0, r1, r2}
+  89:pathfinding.c ****         pq[idx] = pq[pqSize - 1];
+ 735              		.loc 1 89 0
+ 736 02ba 07F5B553 		add	r3, r7, #5792
+ 737 02be 03F10C03 		add	r3, r3, #12
+ 738 02c2 1B68     		ldr	r3, [r3]
+ 739 02c4 591E     		subs	r1, r3, #1
+ 740 02c6 07F59362 		add	r2, r7, #1176
+ 741 02ca 043A     		subs	r2, r2, #4
+ 742 02cc 07F5B453 		add	r3, r7, #5760
+ 743 02d0 03F11C03 		add	r3, r3, #28
+ 744 02d4 1868     		ldr	r0, [r3]
+ 745 02d6 0346     		mov	r3, r0
+ 746 02d8 5B00     		lsls	r3, r3, #1
+ 747 02da 0344     		add	r3, r3, r0
+ 748 02dc 9B00     		lsls	r3, r3, #2
+ 749 02de D018     		adds	r0, r2, r3
+ 750 02e0 07F59362 		add	r2, r7, #1176
+ 751 02e4 043A     		subs	r2, r2, #4
+ 752 02e6 0B46     		mov	r3, r1
+ 753 02e8 5B00     		lsls	r3, r3, #1
+ 754 02ea 0B44     		add	r3, r3, r1
+ 755 02ec 9B00     		lsls	r3, r3, #2
+ 756 02ee 1A44     		add	r2, r2, r3
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 16
+
+
+ 757 02f0 0346     		mov	r3, r0
+ 758 02f2 07CA     		ldmia	r2, {r0, r1, r2}
+ 759 02f4 83E80700 		stmia	r3, {r0, r1, r2}
+  90:pathfinding.c ****         pqSize--; // decrement pqSize
+ 760              		.loc 1 90 0
+ 761 02f8 07F5B553 		add	r3, r7, #5792
+ 762 02fc 03F10C03 		add	r3, r3, #12
+ 763 0300 1B68     		ldr	r3, [r3]
+ 764 0302 013B     		subs	r3, r3, #1
+ 765 0304 07F5B552 		add	r2, r7, #5792
+ 766 0308 02F10C02 		add	r2, r2, #12
+ 767 030c 1360     		str	r3, [r2]
+  91:pathfinding.c **** 
+  92:pathfinding.c ****         int row = current.location.row;
+ 768              		.loc 1 92 0
+ 769 030e 07F11803 		add	r3, r7, #24
+ 770 0312 043B     		subs	r3, r3, #4
+ 771 0314 1B68     		ldr	r3, [r3]
+ 772 0316 07F5B452 		add	r2, r7, #5760
+ 773 031a 1360     		str	r3, [r2]
+  93:pathfinding.c ****         int col = current.location.col; // get current location details
+ 774              		.loc 1 93 0
+ 775 031c 07F11803 		add	r3, r7, #24
+ 776 0320 043B     		subs	r3, r3, #4
+ 777 0322 5B68     		ldr	r3, [r3, #4]
+ 778 0324 07F5B352 		add	r2, r7, #5728
+ 779 0328 02F11C02 		add	r2, r2, #28
+ 780 032c 1360     		str	r3, [r2]
+  94:pathfinding.c **** 
+  95:pathfinding.c ****         if (visitedMap[row][col] == 1) {
+ 781              		.loc 1 95 0
+ 782 032e 07F58F51 		add	r1, r7, #4576
+ 783 0332 01F11001 		add	r1, r1, #16
+ 784 0336 07F5B453 		add	r3, r7, #5760
+ 785 033a 1A68     		ldr	r2, [r3]
+ 786 033c 1346     		mov	r3, r2
+ 787 033e DB00     		lsls	r3, r3, #3
+ 788 0340 1344     		add	r3, r3, r2
+ 789 0342 5B00     		lsls	r3, r3, #1
+ 790 0344 1344     		add	r3, r3, r2
+ 791 0346 07F5B352 		add	r2, r7, #5728
+ 792 034a 02F11C02 		add	r2, r2, #28
+ 793 034e 1268     		ldr	r2, [r2]
+ 794 0350 1344     		add	r3, r3, r2
+ 795 0352 51F82330 		ldr	r3, [r1, r3, lsl #2]
+ 796 0356 012B     		cmp	r3, #1
+ 797 0358 40F03781 		bne	.L14
+  96:pathfinding.c ****             visitedMap[row][col] = 0; // mark as visited if unvisited
+ 798              		.loc 1 96 0
+ 799 035c 07F58F51 		add	r1, r7, #4576
+ 800 0360 01F11001 		add	r1, r1, #16
+ 801 0364 07F5B453 		add	r3, r7, #5760
+ 802 0368 1A68     		ldr	r2, [r3]
+ 803 036a 1346     		mov	r3, r2
+ 804 036c DB00     		lsls	r3, r3, #3
+ 805 036e 1344     		add	r3, r3, r2
+ 806 0370 5B00     		lsls	r3, r3, #1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 17
+
+
+ 807 0372 1344     		add	r3, r3, r2
+ 808 0374 07F5B352 		add	r2, r7, #5728
+ 809 0378 02F11C02 		add	r2, r2, #28
+ 810 037c 1268     		ldr	r2, [r2]
+ 811 037e 1344     		add	r3, r3, r2
+ 812 0380 0022     		movs	r2, #0
+ 813 0382 41F82320 		str	r2, [r1, r3, lsl #2]
+  97:pathfinding.c **** 
+  98:pathfinding.c ****             if (row == targetlocation.row && col == targetlocation.col) {
+ 814              		.loc 1 98 0
+ 815 0386 07F5B653 		add	r3, r7, #5824
+ 816 038a 03F10C03 		add	r3, r3, #12
+ 817 038e 1A68     		ldr	r2, [r3]
+ 818 0390 07F5B453 		add	r3, r7, #5760
+ 819 0394 1B68     		ldr	r3, [r3]
+ 820 0396 9A42     		cmp	r2, r3
+ 821 0398 0CD1     		bne	.L19
+ 822              		.loc 1 98 0 is_stmt 0 discriminator 1
+ 823 039a 07F5B653 		add	r3, r7, #5824
+ 824 039e 03F11003 		add	r3, r3, #16
+ 825 03a2 1A68     		ldr	r2, [r3]
+ 826 03a4 07F5B353 		add	r3, r7, #5728
+ 827 03a8 03F11C03 		add	r3, r3, #28
+ 828 03ac 1B68     		ldr	r3, [r3]
+ 829 03ae 9A42     		cmp	r2, r3
+ 830 03b0 00F01481 		beq	.L30
+ 831              	.L19:
+ 832              	.LBB8:
+  99:pathfinding.c ****                 break; // if reached target destination, end
+ 100:pathfinding.c ****             }
+ 101:pathfinding.c ****             // make a move, check if valid
+ 102:pathfinding.c ****             for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
+ 833              		.loc 1 102 0 is_stmt 1
+ 834 03b4 0023     		movs	r3, #0
+ 835 03b6 07F5B452 		add	r2, r7, #5760
+ 836 03ba 02F11402 		add	r2, r2, #20
+ 837 03be 1360     		str	r3, [r2]
+ 838 03c0 FBE0     		b	.L21
+ 839              	.L23:
+ 840              	.LBB9:
+ 103:pathfinding.c ****                 int newRow = row + moves[i].row;
+ 841              		.loc 1 103 0
+ 842 03c2 C94A     		ldr	r2, .L31
+ 843 03c4 07F5B453 		add	r3, r7, #5760
+ 844 03c8 03F11403 		add	r3, r3, #20
+ 845 03cc 1B68     		ldr	r3, [r3]
+ 846 03ce 52F83320 		ldr	r2, [r2, r3, lsl #3]
+ 847 03d2 07F5B453 		add	r3, r7, #5760
+ 848 03d6 1B68     		ldr	r3, [r3]
+ 849 03d8 1344     		add	r3, r3, r2
+ 850 03da 07F5B352 		add	r2, r7, #5728
+ 851 03de 02F11802 		add	r2, r2, #24
+ 852 03e2 1360     		str	r3, [r2]
+ 104:pathfinding.c ****                 int newCol = col + moves[i].col;
+ 853              		.loc 1 104 0
+ 854 03e4 C04A     		ldr	r2, .L31
+ 855 03e6 07F5B453 		add	r3, r7, #5760
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 18
+
+
+ 856 03ea 03F11403 		add	r3, r3, #20
+ 857 03ee 1B68     		ldr	r3, [r3]
+ 858 03f0 DB00     		lsls	r3, r3, #3
+ 859 03f2 1344     		add	r3, r3, r2
+ 860 03f4 5A68     		ldr	r2, [r3, #4]
+ 861 03f6 07F5B353 		add	r3, r7, #5728
+ 862 03fa 03F11C03 		add	r3, r3, #28
+ 863 03fe 1B68     		ldr	r3, [r3]
+ 864 0400 1344     		add	r3, r3, r2
+ 865 0402 07F5B352 		add	r2, r7, #5728
+ 866 0406 02F11402 		add	r2, r2, #20
+ 867 040a 1360     		str	r3, [r2]
+ 105:pathfinding.c **** 
+ 106:pathfinding.c ****                 if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && visitedMap[newRow][newC
+ 868              		.loc 1 106 0
+ 869 040c 07F11803 		add	r3, r7, #24
+ 870 0410 0C3B     		subs	r3, r3, #12
+ 871 0412 1B68     		ldr	r3, [r3]
+ 872 0414 0093     		str	r3, [sp]
+ 873 0416 1323     		movs	r3, #19
+ 874 0418 0F22     		movs	r2, #15
+ 875 041a 07F5B351 		add	r1, r7, #5728
+ 876 041e 01F11401 		add	r1, r1, #20
+ 877 0422 0968     		ldr	r1, [r1]
+ 878 0424 07F5B350 		add	r0, r7, #5728
+ 879 0428 00F11800 		add	r0, r0, #24
+ 880 042c 0068     		ldr	r0, [r0]
+ 881 042e FFF7FEFF 		bl	isValidMove
+ 882 0432 0346     		mov	r3, r0
+ 883 0434 002B     		cmp	r3, #0
+ 884 0436 00F0B580 		beq	.L22
+ 885              		.loc 1 106 0 is_stmt 0 discriminator 1
+ 886 043a 07F58F51 		add	r1, r7, #4576
+ 887 043e 01F11001 		add	r1, r1, #16
+ 888 0442 07F5B353 		add	r3, r7, #5728
+ 889 0446 03F11803 		add	r3, r3, #24
+ 890 044a 1A68     		ldr	r2, [r3]
+ 891 044c 1346     		mov	r3, r2
+ 892 044e DB00     		lsls	r3, r3, #3
+ 893 0450 1344     		add	r3, r3, r2
+ 894 0452 5B00     		lsls	r3, r3, #1
+ 895 0454 1344     		add	r3, r3, r2
+ 896 0456 07F5B352 		add	r2, r7, #5728
+ 897 045a 02F11402 		add	r2, r2, #20
+ 898 045e 1268     		ldr	r2, [r2]
+ 899 0460 1344     		add	r3, r3, r2
+ 900 0462 51F82330 		ldr	r3, [r1, r3, lsl #2]
+ 901 0466 012B     		cmp	r3, #1
+ 902 0468 40F09C80 		bne	.L22
+ 903              	.LBB10:
+ 107:pathfinding.c ****                     int newDistance = distances[row][col] + 1;
+ 904              		.loc 1 107 0 is_stmt 1
+ 905 046c 07F13802 		add	r2, r7, #56
+ 906 0470 183A     		subs	r2, r2, #24
+ 907 0472 07F5B453 		add	r3, r7, #5760
+ 908 0476 1968     		ldr	r1, [r3]
+ 909 0478 0B46     		mov	r3, r1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 19
+
+
+ 910 047a DB00     		lsls	r3, r3, #3
+ 911 047c 0B44     		add	r3, r3, r1
+ 912 047e 5B00     		lsls	r3, r3, #1
+ 913 0480 0B44     		add	r3, r3, r1
+ 914 0482 07F5B351 		add	r1, r7, #5728
+ 915 0486 01F11C01 		add	r1, r1, #28
+ 916 048a 0968     		ldr	r1, [r1]
+ 917 048c 0B44     		add	r3, r3, r1
+ 918 048e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 919 0492 0133     		adds	r3, r3, #1
+ 920 0494 07F5B352 		add	r2, r7, #5728
+ 921 0498 02F11002 		add	r2, r2, #16
+ 922 049c 1360     		str	r3, [r2]
+ 108:pathfinding.c ****                     // take the shortest distance between new and existing
+ 109:pathfinding.c ****                     if (newDistance < distances[newRow][newCol]) {
+ 923              		.loc 1 109 0
+ 924 049e 07F13802 		add	r2, r7, #56
+ 925 04a2 183A     		subs	r2, r2, #24
+ 926 04a4 07F5B353 		add	r3, r7, #5728
+ 927 04a8 03F11803 		add	r3, r3, #24
+ 928 04ac 1968     		ldr	r1, [r3]
+ 929 04ae 0B46     		mov	r3, r1
+ 930 04b0 DB00     		lsls	r3, r3, #3
+ 931 04b2 0B44     		add	r3, r3, r1
+ 932 04b4 5B00     		lsls	r3, r3, #1
+ 933 04b6 0B44     		add	r3, r3, r1
+ 934 04b8 07F5B351 		add	r1, r7, #5728
+ 935 04bc 01F11401 		add	r1, r1, #20
+ 936 04c0 0968     		ldr	r1, [r1]
+ 937 04c2 0B44     		add	r3, r3, r1
+ 938 04c4 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 939 04c8 07F5B353 		add	r3, r7, #5728
+ 940 04cc 03F11003 		add	r3, r3, #16
+ 941 04d0 1B68     		ldr	r3, [r3]
+ 942 04d2 9A42     		cmp	r2, r3
+ 943 04d4 66DD     		ble	.L22
+ 110:pathfinding.c ****                         distances[newRow][newCol] = newDistance; // take new distance if less than 
+ 944              		.loc 1 110 0
+ 945 04d6 07F13802 		add	r2, r7, #56
+ 946 04da 183A     		subs	r2, r2, #24
+ 947 04dc 07F5B353 		add	r3, r7, #5728
+ 948 04e0 03F11803 		add	r3, r3, #24
+ 949 04e4 1968     		ldr	r1, [r3]
+ 950 04e6 0B46     		mov	r3, r1
+ 951 04e8 DB00     		lsls	r3, r3, #3
+ 952 04ea 0B44     		add	r3, r3, r1
+ 953 04ec 5B00     		lsls	r3, r3, #1
+ 954 04ee 0B44     		add	r3, r3, r1
+ 955 04f0 07F5B351 		add	r1, r7, #5728
+ 956 04f4 01F11401 		add	r1, r1, #20
+ 957 04f8 0968     		ldr	r1, [r1]
+ 958 04fa 0B44     		add	r3, r3, r1
+ 959 04fc 07F5B351 		add	r1, r7, #5728
+ 960 0500 01F11001 		add	r1, r1, #16
+ 961 0504 0968     		ldr	r1, [r1]
+ 962 0506 42F82310 		str	r1, [r2, r3, lsl #2]
+ 111:pathfinding.c ****                         //paths[stepNum] = (struct Location){newRow, newCol}; // add location to pa
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 20
+
+
+ 112:pathfinding.c ****                         
+ 113:pathfinding.c ****                         pq[pqSize].location.row = newRow; // update location
+ 963              		.loc 1 113 0
+ 964 050a 07F59362 		add	r2, r7, #1176
+ 965 050e 043A     		subs	r2, r2, #4
+ 966 0510 07F5B553 		add	r3, r7, #5792
+ 967 0514 03F10C03 		add	r3, r3, #12
+ 968 0518 1968     		ldr	r1, [r3]
+ 969 051a 0B46     		mov	r3, r1
+ 970 051c 5B00     		lsls	r3, r3, #1
+ 971 051e 0B44     		add	r3, r3, r1
+ 972 0520 9B00     		lsls	r3, r3, #2
+ 973 0522 1344     		add	r3, r3, r2
+ 974 0524 07F5B352 		add	r2, r7, #5728
+ 975 0528 02F11802 		add	r2, r2, #24
+ 976 052c 1268     		ldr	r2, [r2]
+ 977 052e 1A60     		str	r2, [r3]
+ 114:pathfinding.c ****                         pq[pqSize].location.col = newCol; // update location
+ 978              		.loc 1 114 0
+ 979 0530 07F59362 		add	r2, r7, #1176
+ 980 0534 043A     		subs	r2, r2, #4
+ 981 0536 07F5B553 		add	r3, r7, #5792
+ 982 053a 03F10C03 		add	r3, r3, #12
+ 983 053e 1968     		ldr	r1, [r3]
+ 984 0540 0B46     		mov	r3, r1
+ 985 0542 5B00     		lsls	r3, r3, #1
+ 986 0544 0B44     		add	r3, r3, r1
+ 987 0546 9B00     		lsls	r3, r3, #2
+ 988 0548 1344     		add	r3, r3, r2
+ 989 054a 0433     		adds	r3, r3, #4
+ 990 054c 07F5B352 		add	r2, r7, #5728
+ 991 0550 02F11402 		add	r2, r2, #20
+ 992 0554 1268     		ldr	r2, [r2]
+ 993 0556 1A60     		str	r2, [r3]
+ 115:pathfinding.c ****                         pq[pqSize].distance = newDistance; // update distance
+ 994              		.loc 1 115 0
+ 995 0558 07F59362 		add	r2, r7, #1176
+ 996 055c 043A     		subs	r2, r2, #4
+ 997 055e 07F5B553 		add	r3, r7, #5792
+ 998 0562 03F10C03 		add	r3, r3, #12
+ 999 0566 1968     		ldr	r1, [r3]
+ 1000 0568 0B46     		mov	r3, r1
+ 1001 056a 5B00     		lsls	r3, r3, #1
+ 1002 056c 0B44     		add	r3, r3, r1
+ 1003 056e 9B00     		lsls	r3, r3, #2
+ 1004 0570 1344     		add	r3, r3, r2
+ 1005 0572 0833     		adds	r3, r3, #8
+ 1006 0574 07F5B352 		add	r2, r7, #5728
+ 1007 0578 02F11002 		add	r2, r2, #16
+ 1008 057c 1268     		ldr	r2, [r2]
+ 1009 057e 1A60     		str	r2, [r3]
+ 116:pathfinding.c ****                         
+ 117:pathfinding.c ****                         stepNum++;
+ 1010              		.loc 1 117 0
+ 1011 0580 07F5B553 		add	r3, r7, #5792
+ 1012 0584 1B68     		ldr	r3, [r3]
+ 1013 0586 0133     		adds	r3, r3, #1
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 21
+
+
+ 1014 0588 07F5B552 		add	r2, r7, #5792
+ 1015 058c 1360     		str	r3, [r2]
+ 118:pathfinding.c ****                         pqSize++;
+ 1016              		.loc 1 118 0
+ 1017 058e 07F5B553 		add	r3, r7, #5792
+ 1018 0592 03F10C03 		add	r3, r3, #12
+ 1019 0596 1B68     		ldr	r3, [r3]
+ 1020 0598 0133     		adds	r3, r3, #1
+ 1021 059a 07F5B552 		add	r2, r7, #5792
+ 1022 059e 02F10C02 		add	r2, r2, #12
+ 1023 05a2 1360     		str	r3, [r2]
+ 1024              	.L22:
+ 1025              	.LBE10:
+ 1026              	.LBE9:
+ 102:pathfinding.c ****                 int newRow = row + moves[i].row;
+ 1027              		.loc 1 102 0 discriminator 2
+ 1028 05a4 07F5B453 		add	r3, r7, #5760
+ 1029 05a8 03F11403 		add	r3, r3, #20
+ 1030 05ac 1B68     		ldr	r3, [r3]
+ 1031 05ae 0133     		adds	r3, r3, #1
+ 1032 05b0 07F5B452 		add	r2, r7, #5760
+ 1033 05b4 02F11402 		add	r2, r2, #20
+ 1034 05b8 1360     		str	r3, [r2]
+ 1035              	.L21:
+ 102:pathfinding.c ****                 int newRow = row + moves[i].row;
+ 1036              		.loc 1 102 0 is_stmt 0 discriminator 1
+ 1037 05ba 07F5B453 		add	r3, r7, #5760
+ 1038 05be 03F11403 		add	r3, r3, #20
+ 1039 05c2 1B68     		ldr	r3, [r3]
+ 1040 05c4 032B     		cmp	r3, #3
+ 1041 05c6 7FF6FCAE 		bls	.L23
+ 1042              	.L14:
+ 1043              	.LBE8:
+ 1044              	.LBE6:
+  81:pathfinding.c ****         int idx = 0;
+ 1045              		.loc 1 81 0 is_stmt 1
+ 1046 05ca 07F5B553 		add	r3, r7, #5792
+ 1047 05ce 03F10C03 		add	r3, r3, #12
+ 1048 05d2 1B68     		ldr	r3, [r3]
+ 1049 05d4 002B     		cmp	r3, #0
+ 1050 05d6 3FF70EAE 		bgt	.L24
+ 1051 05da 00E0     		b	.L20
+ 1052              	.L30:
+ 1053              	.LBB11:
+  99:pathfinding.c ****             }
+ 1054              		.loc 1 99 0
+ 1055 05dc 00BF     		nop
+ 1056              	.L20:
+ 1057              	.LBE11:
+ 119:pathfinding.c ****                     }
+ 120:pathfinding.c ****                 }
+ 121:pathfinding.c ****             }
+ 122:pathfinding.c ****         }
+ 123:pathfinding.c ****     }
+ 124:pathfinding.c **** 
+ 125:pathfinding.c ****     // PATH RECONSTRUCTION
+ 126:pathfinding.c ****     // initialise maximum distance- will be decremented
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 22
+
+
+ 127:pathfinding.c ****     int shortestDist = distances[targetlocation.row][targetlocation.col];
+ 1058              		.loc 1 127 0
+ 1059 05de 07F5B653 		add	r3, r7, #5824
+ 1060 05e2 03F10C03 		add	r3, r3, #12
+ 1061 05e6 1968     		ldr	r1, [r3]
+ 1062 05e8 07F5B653 		add	r3, r7, #5824
+ 1063 05ec 03F11003 		add	r3, r3, #16
+ 1064 05f0 1868     		ldr	r0, [r3]
+ 1065 05f2 07F13802 		add	r2, r7, #56
+ 1066 05f6 183A     		subs	r2, r2, #24
+ 1067 05f8 0B46     		mov	r3, r1
+ 1068 05fa DB00     		lsls	r3, r3, #3
+ 1069 05fc 0B44     		add	r3, r3, r1
+ 1070 05fe 5B00     		lsls	r3, r3, #1
+ 1071 0600 0B44     		add	r3, r3, r1
+ 1072 0602 0344     		add	r3, r3, r0
+ 1073 0604 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 1074 0608 07F5B452 		add	r2, r7, #5760
+ 1075 060c 02F11002 		add	r2, r2, #16
+ 1076 0610 1360     		str	r3, [r2]
+ 128:pathfinding.c ****     // retsteps can be generated from here
+ 129:pathfinding.c ****     struct Location *retSteps = malloc(sizeof(struct Location) * shortestDist); // store every step
+ 1077              		.loc 1 129 0
+ 1078 0612 07F5B453 		add	r3, r7, #5760
+ 1079 0616 03F11003 		add	r3, r3, #16
+ 1080 061a 1B68     		ldr	r3, [r3]
+ 1081 061c DB00     		lsls	r3, r3, #3
+ 1082 061e 1846     		mov	r0, r3
+ 1083 0620 FFF7FEFF 		bl	malloc
+ 1084 0624 0346     		mov	r3, r0
+ 1085 0626 07F5B352 		add	r2, r7, #5728
+ 1086 062a 02F10C02 		add	r2, r2, #12
+ 1087 062e 1360     		str	r3, [r2]
+ 130:pathfinding.c ****     int currentRow = targetlocation.row;
+ 1088              		.loc 1 130 0
+ 1089 0630 07F5B653 		add	r3, r7, #5824
+ 1090 0634 03F10C03 		add	r3, r3, #12
+ 1091 0638 1B68     		ldr	r3, [r3]
+ 1092 063a 07F5B452 		add	r2, r7, #5760
+ 1093 063e 02F10C02 		add	r2, r2, #12
+ 1094 0642 1360     		str	r3, [r2]
+ 131:pathfinding.c ****     int currentCol = targetlocation.col;
+ 1095              		.loc 1 131 0
+ 1096 0644 07F5B653 		add	r3, r7, #5824
+ 1097 0648 03F11003 		add	r3, r3, #16
+ 1098 064c 1B68     		ldr	r3, [r3]
+ 1099 064e 07F5B452 		add	r2, r7, #5760
+ 1100 0652 02F10802 		add	r2, r2, #8
+ 1101 0656 1360     		str	r3, [r2]
+ 132:pathfinding.c ****     retSteps[shortestDist-1].row = currentRow; 
+ 1102              		.loc 1 132 0
+ 1103 0658 07F5B453 		add	r3, r7, #5760
+ 1104 065c 03F11003 		add	r3, r3, #16
+ 1105 0660 1B68     		ldr	r3, [r3]
+ 1106 0662 03F10053 		add	r3, r3, #536870912
+ 1107 0666 013B     		subs	r3, r3, #1
+ 1108 0668 DB00     		lsls	r3, r3, #3
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 23
+
+
+ 1109 066a 07F5B352 		add	r2, r7, #5728
+ 1110 066e 02F10C02 		add	r2, r2, #12
+ 1111 0672 1268     		ldr	r2, [r2]
+ 1112 0674 1344     		add	r3, r3, r2
+ 1113 0676 07F5B452 		add	r2, r7, #5760
+ 1114 067a 02F10C02 		add	r2, r2, #12
+ 1115 067e 1268     		ldr	r2, [r2]
+ 1116 0680 1A60     		str	r2, [r3]
+ 133:pathfinding.c ****     retSteps[shortestDist-1].col = currentCol; // add targetLocation to retSteps
+ 1117              		.loc 1 133 0
+ 1118 0682 07F5B453 		add	r3, r7, #5760
+ 1119 0686 03F11003 		add	r3, r3, #16
+ 1120 068a 1B68     		ldr	r3, [r3]
+ 1121 068c 03F10053 		add	r3, r3, #536870912
+ 1122 0690 013B     		subs	r3, r3, #1
+ 1123 0692 DB00     		lsls	r3, r3, #3
+ 1124 0694 07F5B352 		add	r2, r7, #5728
+ 1125 0698 02F10C02 		add	r2, r2, #12
+ 1126 069c 1268     		ldr	r2, [r2]
+ 1127 069e 1344     		add	r3, r3, r2
+ 1128 06a0 07F5B452 		add	r2, r7, #5760
+ 1129 06a4 02F10802 		add	r2, r2, #8
+ 1130 06a8 1268     		ldr	r2, [r2]
+ 1131 06aa 5A60     		str	r2, [r3, #4]
+ 134:pathfinding.c ****     //printf("retSteps[%d]: %d,%d\n", shortestDist-1, currentRow, currentCol);
+ 135:pathfinding.c ****     map[currentRow][currentCol] = 9; // mark finish location
+ 1132              		.loc 1 135 0
+ 1133 06ac 07F5B453 		add	r3, r7, #5760
+ 1134 06b0 03F10C03 		add	r3, r3, #12
+ 1135 06b4 1B68     		ldr	r3, [r3]
+ 1136 06b6 4C22     		movs	r2, #76
+ 1137 06b8 02FB03F2 		mul	r2, r2, r3
+ 1138 06bc 07F11803 		add	r3, r7, #24
+ 1139 06c0 0C3B     		subs	r3, r3, #12
+ 1140 06c2 1B68     		ldr	r3, [r3]
+ 1141 06c4 1344     		add	r3, r3, r2
+ 1142 06c6 07F5B452 		add	r2, r7, #5760
+ 1143 06ca 02F10802 		add	r2, r2, #8
+ 1144 06ce 1268     		ldr	r2, [r2]
+ 1145 06d0 0921     		movs	r1, #9
+ 1146 06d2 43F82210 		str	r1, [r3, r2, lsl #2]
+ 136:pathfinding.c ****     //printf("%d,%d\n", currentRow, currentCol); // print optimal step
+ 137:pathfinding.c ****     // reconstruct path by reversing paths array and taking shortest distance
+ 138:pathfinding.c ****     while(shortestDist > 0) {    
+ 1147              		.loc 1 138 0
+ 1148 06d6 FCE0     		b	.L25
+ 1149              	.L29:
+ 1150              	.LBB12:
+ 139:pathfinding.c ****         // make a move, check if valid and is the next step in path
+ 140:pathfinding.c ****         for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
+ 1151              		.loc 1 140 0
+ 1152 06d8 0023     		movs	r3, #0
+ 1153 06da 07F5B452 		add	r2, r7, #5760
+ 1154 06de 02F10402 		add	r2, r2, #4
+ 1155 06e2 1360     		str	r3, [r2]
+ 1156 06e4 EDE0     		b	.L26
+ 1157              	.L32:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 24
+
+
+ 1158 06e6 00BF     		.align	2
+ 1159              	.L31:
+ 1160 06e8 00000000 		.word	moves
+ 1161              	.L28:
+ 1162              	.LBB13:
+ 141:pathfinding.c ****             int newRow = currentRow + moves[i].row;
+ 1163              		.loc 1 141 0
+ 1164 06ec 814A     		ldr	r2, .L33
+ 1165 06ee 07F5B453 		add	r3, r7, #5760
+ 1166 06f2 03F10403 		add	r3, r3, #4
+ 1167 06f6 1B68     		ldr	r3, [r3]
+ 1168 06f8 52F83320 		ldr	r2, [r2, r3, lsl #3]
+ 1169 06fc 07F5B453 		add	r3, r7, #5760
+ 1170 0700 03F10C03 		add	r3, r3, #12
+ 1171 0704 1B68     		ldr	r3, [r3]
+ 1172 0706 1344     		add	r3, r3, r2
+ 1173 0708 07F5B352 		add	r2, r7, #5728
+ 1174 070c 02F10802 		add	r2, r2, #8
+ 1175 0710 1360     		str	r3, [r2]
+ 142:pathfinding.c ****             int newCol = currentCol + moves[i].col;
+ 1176              		.loc 1 142 0
+ 1177 0712 784A     		ldr	r2, .L33
+ 1178 0714 07F5B453 		add	r3, r7, #5760
+ 1179 0718 03F10403 		add	r3, r3, #4
+ 1180 071c 1B68     		ldr	r3, [r3]
+ 1181 071e DB00     		lsls	r3, r3, #3
+ 1182 0720 1344     		add	r3, r3, r2
+ 1183 0722 5A68     		ldr	r2, [r3, #4]
+ 1184 0724 07F5B453 		add	r3, r7, #5760
+ 1185 0728 03F10803 		add	r3, r3, #8
+ 1186 072c 1B68     		ldr	r3, [r3]
+ 1187 072e 1344     		add	r3, r3, r2
+ 1188 0730 07F5B352 		add	r2, r7, #5728
+ 1189 0734 02F10402 		add	r2, r2, #4
+ 1190 0738 1360     		str	r3, [r2]
+ 143:pathfinding.c **** 
+ 144:pathfinding.c ****             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] =
+ 1191              		.loc 1 144 0
+ 1192 073a 07F11803 		add	r3, r7, #24
+ 1193 073e 0C3B     		subs	r3, r3, #12
+ 1194 0740 1B68     		ldr	r3, [r3]
+ 1195 0742 0093     		str	r3, [sp]
+ 1196 0744 1323     		movs	r3, #19
+ 1197 0746 0F22     		movs	r2, #15
+ 1198 0748 07F5B351 		add	r1, r7, #5728
+ 1199 074c 01F10401 		add	r1, r1, #4
+ 1200 0750 0968     		ldr	r1, [r1]
+ 1201 0752 07F5B350 		add	r0, r7, #5728
+ 1202 0756 00F10800 		add	r0, r0, #8
+ 1203 075a 0068     		ldr	r0, [r0]
+ 1204 075c FFF7FEFF 		bl	isValidMove
+ 1205 0760 0346     		mov	r3, r0
+ 1206 0762 002B     		cmp	r3, #0
+ 1207 0764 00F0A280 		beq	.L27
+ 1208              		.loc 1 144 0 is_stmt 0 discriminator 1
+ 1209 0768 07F13802 		add	r2, r7, #56
+ 1210 076c 183A     		subs	r2, r2, #24
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 25
+
+
+ 1211 076e 07F5B353 		add	r3, r7, #5728
+ 1212 0772 03F10803 		add	r3, r3, #8
+ 1213 0776 1968     		ldr	r1, [r3]
+ 1214 0778 0B46     		mov	r3, r1
+ 1215 077a DB00     		lsls	r3, r3, #3
+ 1216 077c 0B44     		add	r3, r3, r1
+ 1217 077e 5B00     		lsls	r3, r3, #1
+ 1218 0780 0B44     		add	r3, r3, r1
+ 1219 0782 07F5B351 		add	r1, r7, #5728
+ 1220 0786 01F10401 		add	r1, r1, #4
+ 1221 078a 0968     		ldr	r1, [r1]
+ 1222 078c 0B44     		add	r3, r3, r1
+ 1223 078e 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 1224 0792 07F5B453 		add	r3, r7, #5760
+ 1225 0796 03F11003 		add	r3, r3, #16
+ 1226 079a 1B68     		ldr	r3, [r3]
+ 1227 079c 013B     		subs	r3, r3, #1
+ 1228 079e 9A42     		cmp	r2, r3
+ 1229 07a0 40F08480 		bne	.L27
+ 145:pathfinding.c ****                 map[newRow][newCol] = 8; // mark optimal step
+ 1230              		.loc 1 145 0 is_stmt 1
+ 1231 07a4 07F5B353 		add	r3, r7, #5728
+ 1232 07a8 03F10803 		add	r3, r3, #8
+ 1233 07ac 1B68     		ldr	r3, [r3]
+ 1234 07ae 4C22     		movs	r2, #76
+ 1235 07b0 02FB03F2 		mul	r2, r2, r3
+ 1236 07b4 07F11803 		add	r3, r7, #24
+ 1237 07b8 0C3B     		subs	r3, r3, #12
+ 1238 07ba 1B68     		ldr	r3, [r3]
+ 1239 07bc 1344     		add	r3, r3, r2
+ 1240 07be 07F5B352 		add	r2, r7, #5728
+ 1241 07c2 02F10402 		add	r2, r2, #4
+ 1242 07c6 1268     		ldr	r2, [r2]
+ 1243 07c8 0821     		movs	r1, #8
+ 1244 07ca 43F82210 		str	r1, [r3, r2, lsl #2]
+ 146:pathfinding.c ****                 shortestDist--; // decrement distance
+ 1245              		.loc 1 146 0
+ 1246 07ce 07F5B453 		add	r3, r7, #5760
+ 1247 07d2 03F11003 		add	r3, r3, #16
+ 1248 07d6 1B68     		ldr	r3, [r3]
+ 1249 07d8 013B     		subs	r3, r3, #1
+ 1250 07da 07F5B452 		add	r2, r7, #5760
+ 1251 07de 02F11002 		add	r2, r2, #16
+ 1252 07e2 1360     		str	r3, [r2]
+ 147:pathfinding.c ****                 currentRow = newRow; 
+ 1253              		.loc 1 147 0
+ 1254 07e4 07F5B353 		add	r3, r7, #5728
+ 1255 07e8 03F10803 		add	r3, r3, #8
+ 1256 07ec 1B68     		ldr	r3, [r3]
+ 1257 07ee 07F5B452 		add	r2, r7, #5760
+ 1258 07f2 02F10C02 		add	r2, r2, #12
+ 1259 07f6 1360     		str	r3, [r2]
+ 148:pathfinding.c ****                 currentCol = newCol; // change current location
+ 1260              		.loc 1 148 0
+ 1261 07f8 07F5B353 		add	r3, r7, #5728
+ 1262 07fc 03F10403 		add	r3, r3, #4
+ 1263 0800 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 26
+
+
+ 1264 0802 07F5B452 		add	r2, r7, #5760
+ 1265 0806 02F10802 		add	r2, r2, #8
+ 1266 080a 1360     		str	r3, [r2]
+ 149:pathfinding.c ****                 //printf("retSteps[%d]: %d,%d\n", shortestDist,currentRow,currentCol); // print vis
+ 150:pathfinding.c ****                 retSteps[shortestDist].row = currentRow; 
+ 1267              		.loc 1 150 0
+ 1268 080c 07F5B453 		add	r3, r7, #5760
+ 1269 0810 03F11003 		add	r3, r3, #16
+ 1270 0814 1B68     		ldr	r3, [r3]
+ 1271 0816 DB00     		lsls	r3, r3, #3
+ 1272 0818 07F5B352 		add	r2, r7, #5728
+ 1273 081c 02F10C02 		add	r2, r2, #12
+ 1274 0820 1268     		ldr	r2, [r2]
+ 1275 0822 1344     		add	r3, r3, r2
+ 1276 0824 07F5B452 		add	r2, r7, #5760
+ 1277 0828 02F10C02 		add	r2, r2, #12
+ 1278 082c 1268     		ldr	r2, [r2]
+ 1279 082e 1A60     		str	r2, [r3]
+ 151:pathfinding.c ****                 retSteps[shortestDist].col = currentCol; // add currentRow and currentCol to retste
+ 1280              		.loc 1 151 0
+ 1281 0830 07F5B453 		add	r3, r7, #5760
+ 1282 0834 03F11003 		add	r3, r3, #16
+ 1283 0838 1B68     		ldr	r3, [r3]
+ 1284 083a DB00     		lsls	r3, r3, #3
+ 1285 083c 07F5B352 		add	r2, r7, #5728
+ 1286 0840 02F10C02 		add	r2, r2, #12
+ 1287 0844 1268     		ldr	r2, [r2]
+ 1288 0846 1344     		add	r3, r3, r2
+ 1289 0848 07F5B452 		add	r2, r7, #5760
+ 1290 084c 02F10802 		add	r2, r2, #8
+ 1291 0850 1268     		ldr	r2, [r2]
+ 1292 0852 5A60     		str	r2, [r3, #4]
+ 152:pathfinding.c ****                 if(currentRow == startlocation.row && currentCol == startlocation.col) {
+ 1293              		.loc 1 152 0
+ 1294 0854 07F11803 		add	r3, r7, #24
+ 1295 0858 143B     		subs	r3, r3, #20
+ 1296 085a 1A68     		ldr	r2, [r3]
+ 1297 085c 07F5B453 		add	r3, r7, #5760
+ 1298 0860 03F10C03 		add	r3, r3, #12
+ 1299 0864 1B68     		ldr	r3, [r3]
+ 1300 0866 9A42     		cmp	r2, r3
+ 1301 0868 20D1     		bne	.L27
+ 1302              		.loc 1 152 0 is_stmt 0 discriminator 1
+ 1303 086a 07F11803 		add	r3, r7, #24
+ 1304 086e 143B     		subs	r3, r3, #20
+ 1305 0870 5A68     		ldr	r2, [r3, #4]
+ 1306 0872 07F5B453 		add	r3, r7, #5760
+ 1307 0876 03F10803 		add	r3, r3, #8
+ 1308 087a 1B68     		ldr	r3, [r3]
+ 1309 087c 9A42     		cmp	r2, r3
+ 1310 087e 15D1     		bne	.L27
+ 153:pathfinding.c ****                     map[currentRow][currentCol] = 2; // mark start location
+ 1311              		.loc 1 153 0 is_stmt 1
+ 1312 0880 07F5B453 		add	r3, r7, #5760
+ 1313 0884 03F10C03 		add	r3, r3, #12
+ 1314 0888 1B68     		ldr	r3, [r3]
+ 1315 088a 4C22     		movs	r2, #76
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 27
+
+
+ 1316 088c 02FB03F2 		mul	r2, r2, r3
+ 1317 0890 07F11803 		add	r3, r7, #24
+ 1318 0894 0C3B     		subs	r3, r3, #12
+ 1319 0896 1B68     		ldr	r3, [r3]
+ 1320 0898 1344     		add	r3, r3, r2
+ 1321 089a 07F5B452 		add	r2, r7, #5760
+ 1322 089e 02F10802 		add	r2, r2, #8
+ 1323 08a2 1268     		ldr	r2, [r2]
+ 1324 08a4 0221     		movs	r1, #2
+ 1325 08a6 43F82210 		str	r1, [r3, r2, lsl #2]
+ 154:pathfinding.c ****                     break;
+ 1326              		.loc 1 154 0
+ 1327 08aa 12E0     		b	.L25
+ 1328              	.L27:
+ 1329              	.LBE13:
+ 140:pathfinding.c ****             int newRow = currentRow + moves[i].row;
+ 1330              		.loc 1 140 0 discriminator 2
+ 1331 08ac 07F5B453 		add	r3, r7, #5760
+ 1332 08b0 03F10403 		add	r3, r3, #4
+ 1333 08b4 1B68     		ldr	r3, [r3]
+ 1334 08b6 0133     		adds	r3, r3, #1
+ 1335 08b8 07F5B452 		add	r2, r7, #5760
+ 1336 08bc 02F10402 		add	r2, r2, #4
+ 1337 08c0 1360     		str	r3, [r2]
+ 1338              	.L26:
+ 140:pathfinding.c ****             int newRow = currentRow + moves[i].row;
+ 1339              		.loc 1 140 0 is_stmt 0 discriminator 1
+ 1340 08c2 07F5B453 		add	r3, r7, #5760
+ 1341 08c6 03F10403 		add	r3, r3, #4
+ 1342 08ca 1B68     		ldr	r3, [r3]
+ 1343 08cc 032B     		cmp	r3, #3
+ 1344 08ce 7FF60DAF 		bls	.L28
+ 1345              	.L25:
+ 1346              	.LBE12:
+ 138:pathfinding.c ****         // make a move, check if valid and is the next step in path
+ 1347              		.loc 1 138 0 is_stmt 1
+ 1348 08d2 07F5B453 		add	r3, r7, #5760
+ 1349 08d6 03F11003 		add	r3, r3, #16
+ 1350 08da 1B68     		ldr	r3, [r3]
+ 1351 08dc 002B     		cmp	r3, #0
+ 1352 08de 3FF7FBAE 		bgt	.L29
+ 155:pathfinding.c ****                 }   
+ 156:pathfinding.c ****             }
+ 157:pathfinding.c ****         }
+ 158:pathfinding.c ****     }
+ 159:pathfinding.c ****     // printMap(map);
+ 160:pathfinding.c **** }
+ 1353              		.loc 1 160 0
+ 1354 08e2 00BF     		nop
+ 1355 08e4 07F5B557 		add	r7, r7, #5792
+ 1356 08e8 1C37     		adds	r7, r7, #28
+ 1357              		.cfi_def_cfa_offset 20
+ 1358 08ea BD46     		mov	sp, r7
+ 1359              		.cfi_def_cfa_register 13
+ 1360              		@ sp needed
+ 1361 08ec BDE89040 		pop	{r4, r7, lr}
+ 1362              		.cfi_restore 14
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 28
+
+
+ 1363              		.cfi_restore 7
+ 1364              		.cfi_restore 4
+ 1365              		.cfi_def_cfa_offset 8
+ 1366 08f0 02B0     		add	sp, sp, #8
+ 1367              		.cfi_def_cfa_offset 0
+ 1368 08f2 7047     		bx	lr
+ 1369              	.L34:
+ 1370              		.align	2
+ 1371              	.L33:
+ 1372 08f4 00000000 		.word	moves
+ 1373              		.cfi_endproc
+ 1374              	.LFE2:
+ 1375              		.size	dijkstra, .-dijkstra
+ 1376              		.section	.rodata
+ 1377              		.align	2
+ 1378              	.LC0:
+ 1379 0000 01000000 		.word	1
+ 1380 0004 01000000 		.word	1
+ 1381              		.align	2
+ 1382              	.LC1:
+ 1383 0008 01000000 		.word	1
+ 1384 000c 05000000 		.word	5
+ 1385              		.section	.text.findPath,"ax",%progbits
+ 1386              		.align	2
+ 1387              		.global	findPath
+ 1388              		.thumb
+ 1389              		.thumb_func
+ 1390              		.type	findPath, %function
+ 1391              	findPath:
+ 1392              	.LFB3:
+ 161:pathfinding.c **** 
+ 162:pathfinding.c **** void findPath(int map[MAX_ROWS][MAX_COLS]) {
+ 1393              		.loc 1 162 0
+ 1394              		.cfi_startproc
+ 1395              		@ args = 0, pretend = 0, frame = 24
+ 1396              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1397 0000 80B5     		push	{r7, lr}
+ 1398              		.cfi_def_cfa_offset 8
+ 1399              		.cfi_offset 7, -8
+ 1400              		.cfi_offset 14, -4
+ 1401 0002 88B0     		sub	sp, sp, #32
+ 1402              		.cfi_def_cfa_offset 40
+ 1403 0004 02AF     		add	r7, sp, #8
+ 1404              		.cfi_def_cfa 7, 32
+ 1405 0006 7860     		str	r0, [r7, #4]
+ 163:pathfinding.c ****     struct Location startLocation = {1,1};
+ 1406              		.loc 1 163 0
+ 1407 0008 0D4A     		ldr	r2, .L36
+ 1408 000a 07F11003 		add	r3, r7, #16
+ 1409 000e 92E80300 		ldmia	r2, {r0, r1}
+ 1410 0012 83E80300 		stmia	r3, {r0, r1}
+ 164:pathfinding.c ****     struct Location targetLocation = {1,5};
+ 1411              		.loc 1 164 0
+ 1412 0016 0B4A     		ldr	r2, .L36+4
+ 1413 0018 07F10803 		add	r3, r7, #8
+ 1414 001c 92E80300 		ldmia	r2, {r0, r1}
+ 1415 0020 83E80300 		stmia	r3, {r0, r1}
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 29
+
+
+ 165:pathfinding.c ****     dijkstra(map, startLocation, targetLocation); // find shortest path
+ 1416              		.loc 1 165 0
+ 1417 0024 FB68     		ldr	r3, [r7, #12]
+ 1418 0026 0093     		str	r3, [sp]
+ 1419 0028 BB68     		ldr	r3, [r7, #8]
+ 1420 002a 07F11002 		add	r2, r7, #16
+ 1421 002e 06CA     		ldmia	r2, {r1, r2}
+ 1422 0030 7868     		ldr	r0, [r7, #4]
+ 1423 0032 FFF7FEFF 		bl	dijkstra
+ 166:pathfinding.c **** }
+ 1424              		.loc 1 166 0
+ 1425 0036 00BF     		nop
+ 1426 0038 1837     		adds	r7, r7, #24
+ 1427              		.cfi_def_cfa_offset 8
+ 1428 003a BD46     		mov	sp, r7
+ 1429              		.cfi_def_cfa_register 13
+ 1430              		@ sp needed
+ 1431 003c 80BD     		pop	{r7, pc}
+ 1432              	.L37:
+ 1433 003e 00BF     		.align	2
+ 1434              	.L36:
+ 1435 0040 00000000 		.word	.LC0
+ 1436 0044 08000000 		.word	.LC1
+ 1437              		.cfi_endproc
+ 1438              	.LFE3:
+ 1439              		.size	findPath, .-findPath
+ 1440              		.text
+ 1441              	.Letext0:
+ 1442              		.file 2 "map.h"
+ 1443              		.section	.debug_info,"",%progbits
+ 1444              	.Ldebug_info0:
+ 1445 0000 20040000 		.4byte	0x420
+ 1446 0004 0400     		.2byte	0x4
+ 1447 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1448 000a 04       		.byte	0x4
+ 1449 000b 01       		.uleb128 0x1
+ 1450 000c 10020000 		.4byte	.LASF39
+ 1451 0010 0C       		.byte	0xc
+ 1452 0011 75000000 		.4byte	.LASF40
+ 1453 0015 C7000000 		.4byte	.LASF41
+ 1454 0019 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 1455 001d 00000000 		.4byte	0
+ 1456 0021 00000000 		.4byte	.Ldebug_line0
+ 1457 0025 02       		.uleb128 0x2
+ 1458 0026 01       		.byte	0x1
+ 1459 0027 06       		.byte	0x6
+ 1460 0028 DC010000 		.4byte	.LASF0
+ 1461 002c 02       		.uleb128 0x2
+ 1462 002d 01       		.byte	0x1
+ 1463 002e 08       		.byte	0x8
+ 1464 002f 67000000 		.4byte	.LASF1
+ 1465 0033 02       		.uleb128 0x2
+ 1466 0034 02       		.byte	0x2
+ 1467 0035 05       		.byte	0x5
+ 1468 0036 A5010000 		.4byte	.LASF2
+ 1469 003a 02       		.uleb128 0x2
+ 1470 003b 02       		.byte	0x2
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 30
+
+
+ 1471 003c 07       		.byte	0x7
+ 1472 003d 92000000 		.4byte	.LASF3
+ 1473 0041 02       		.uleb128 0x2
+ 1474 0042 04       		.byte	0x4
+ 1475 0043 05       		.byte	0x5
+ 1476 0044 C7010000 		.4byte	.LASF4
+ 1477 0048 02       		.uleb128 0x2
+ 1478 0049 04       		.byte	0x4
+ 1479 004a 07       		.byte	0x7
+ 1480 004b B5000000 		.4byte	.LASF5
+ 1481 004f 02       		.uleb128 0x2
+ 1482 0050 08       		.byte	0x8
+ 1483 0051 05       		.byte	0x5
+ 1484 0052 88010000 		.4byte	.LASF6
+ 1485 0056 02       		.uleb128 0x2
+ 1486 0057 08       		.byte	0x8
+ 1487 0058 07       		.byte	0x7
+ 1488 0059 3B010000 		.4byte	.LASF7
+ 1489 005d 03       		.uleb128 0x3
+ 1490 005e 04       		.byte	0x4
+ 1491 005f 05       		.byte	0x5
+ 1492 0060 696E7400 		.ascii	"int\000"
+ 1493 0064 02       		.uleb128 0x2
+ 1494 0065 04       		.byte	0x4
+ 1495 0066 07       		.byte	0x7
+ 1496 0067 2E010000 		.4byte	.LASF8
+ 1497 006b 02       		.uleb128 0x2
+ 1498 006c 08       		.byte	0x8
+ 1499 006d 04       		.byte	0x4
+ 1500 006e D0010000 		.4byte	.LASF9
+ 1501 0072 02       		.uleb128 0x2
+ 1502 0073 04       		.byte	0x4
+ 1503 0074 07       		.byte	0x7
+ 1504 0075 7A010000 		.4byte	.LASF10
+ 1505 0079 02       		.uleb128 0x2
+ 1506 007a 01       		.byte	0x1
+ 1507 007b 08       		.byte	0x8
+ 1508 007c 96010000 		.4byte	.LASF11
+ 1509 0080 04       		.uleb128 0x4
+ 1510 0081 AC000000 		.4byte	.LASF17
+ 1511 0085 08       		.byte	0x8
+ 1512 0086 01       		.byte	0x1
+ 1513 0087 21       		.byte	0x21
+ 1514 0088 A5000000 		.4byte	0xa5
+ 1515 008c 05       		.uleb128 0x5
+ 1516 008d 726F7700 		.ascii	"row\000"
+ 1517 0091 01       		.byte	0x1
+ 1518 0092 22       		.byte	0x22
+ 1519 0093 5D000000 		.4byte	0x5d
+ 1520 0097 00       		.byte	0
+ 1521 0098 05       		.uleb128 0x5
+ 1522 0099 636F6C00 		.ascii	"col\000"
+ 1523 009d 01       		.byte	0x1
+ 1524 009e 23       		.byte	0x23
+ 1525 009f 5D000000 		.4byte	0x5d
+ 1526 00a3 04       		.byte	0x4
+ 1527 00a4 00       		.byte	0
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 31
+
+
+ 1528 00a5 06       		.uleb128 0x6
+ 1529 00a6 E8010000 		.4byte	.LASF42
+ 1530 00aa 01       		.byte	0x1
+ 1531 00ab 29       		.byte	0x29
+ 1532 00ac 01010000 		.4byte	0x101
+ 1533 00b0 00000000 		.4byte	.LFB1
+ 1534 00b4 56000000 		.4byte	.LFE1-.LFB1
+ 1535 00b8 01       		.uleb128 0x1
+ 1536 00b9 9C       		.byte	0x9c
+ 1537 00ba 01010000 		.4byte	0x101
+ 1538 00be 07       		.uleb128 0x7
+ 1539 00bf 7200     		.ascii	"r\000"
+ 1540 00c1 01       		.byte	0x1
+ 1541 00c2 29       		.byte	0x29
+ 1542 00c3 5D000000 		.4byte	0x5d
+ 1543 00c7 02       		.uleb128 0x2
+ 1544 00c8 91       		.byte	0x91
+ 1545 00c9 74       		.sleb128 -12
+ 1546 00ca 07       		.uleb128 0x7
+ 1547 00cb 6300     		.ascii	"c\000"
+ 1548 00cd 01       		.byte	0x1
+ 1549 00ce 29       		.byte	0x29
+ 1550 00cf 5D000000 		.4byte	0x5d
+ 1551 00d3 02       		.uleb128 0x2
+ 1552 00d4 91       		.byte	0x91
+ 1553 00d5 70       		.sleb128 -16
+ 1554 00d6 08       		.uleb128 0x8
+ 1555 00d7 83010000 		.4byte	.LASF12
+ 1556 00db 01       		.byte	0x1
+ 1557 00dc 29       		.byte	0x29
+ 1558 00dd 5D000000 		.4byte	0x5d
+ 1559 00e1 02       		.uleb128 0x2
+ 1560 00e2 91       		.byte	0x91
+ 1561 00e3 6C       		.sleb128 -20
+ 1562 00e4 08       		.uleb128 0x8
+ 1563 00e5 52000000 		.4byte	.LASF13
+ 1564 00e9 01       		.byte	0x1
+ 1565 00ea 29       		.byte	0x29
+ 1566 00eb 5D000000 		.4byte	0x5d
+ 1567 00ef 02       		.uleb128 0x2
+ 1568 00f0 91       		.byte	0x91
+ 1569 00f1 68       		.sleb128 -24
+ 1570 00f2 07       		.uleb128 0x7
+ 1571 00f3 6D617000 		.ascii	"map\000"
+ 1572 00f7 01       		.byte	0x1
+ 1573 00f8 29       		.byte	0x29
+ 1574 00f9 18010000 		.4byte	0x118
+ 1575 00fd 02       		.uleb128 0x2
+ 1576 00fe 91       		.byte	0x91
+ 1577 00ff 00       		.sleb128 0
+ 1578 0100 00       		.byte	0
+ 1579 0101 02       		.uleb128 0x2
+ 1580 0102 01       		.byte	0x1
+ 1581 0103 02       		.byte	0x2
+ 1582 0104 FC010000 		.4byte	.LASF14
+ 1583 0108 09       		.uleb128 0x9
+ 1584 0109 5D000000 		.4byte	0x5d
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 32
+
+
+ 1585 010d 18010000 		.4byte	0x118
+ 1586 0111 0A       		.uleb128 0xa
+ 1587 0112 72000000 		.4byte	0x72
+ 1588 0116 12       		.byte	0x12
+ 1589 0117 00       		.byte	0
+ 1590 0118 0B       		.uleb128 0xb
+ 1591 0119 04       		.byte	0x4
+ 1592 011a 08010000 		.4byte	0x108
+ 1593 011e 0C       		.uleb128 0xc
+ 1594 011f 00000000 		.4byte	.LASF33
+ 1595 0123 01       		.byte	0x1
+ 1596 0124 2D       		.byte	0x2d
+ 1597 0125 00000000 		.4byte	.LFB2
+ 1598 0129 F8080000 		.4byte	.LFE2-.LFB2
+ 1599 012d 01       		.uleb128 0x1
+ 1600 012e 9C       		.byte	0x9c
+ 1601 012f 5D030000 		.4byte	0x35d
+ 1602 0133 07       		.uleb128 0x7
+ 1603 0134 6D617000 		.ascii	"map\000"
+ 1604 0138 01       		.byte	0x1
+ 1605 0139 2D       		.byte	0x2d
+ 1606 013a 18010000 		.4byte	0x118
+ 1607 013e 03       		.uleb128 0x3
+ 1608 013f 91       		.byte	0x91
+ 1609 0140 BC52     		.sleb128 -5828
+ 1610 0142 08       		.uleb128 0x8
+ 1611 0143 02020000 		.4byte	.LASF15
+ 1612 0147 01       		.byte	0x1
+ 1613 0148 2D       		.byte	0x2d
+ 1614 0149 80000000 		.4byte	0x80
+ 1615 014d 03       		.uleb128 0x3
+ 1616 014e 91       		.byte	0x91
+ 1617 014f B452     		.sleb128 -5836
+ 1618 0151 08       		.uleb128 0x8
+ 1619 0152 83000000 		.4byte	.LASF16
+ 1620 0156 01       		.byte	0x1
+ 1621 0157 2D       		.byte	0x2d
+ 1622 0158 80000000 		.4byte	0x80
+ 1623 015c 02       		.uleb128 0x2
+ 1624 015d 91       		.byte	0x91
+ 1625 015e 7C       		.sleb128 -4
+ 1626 015f 0D       		.uleb128 0xd
+ 1627 0160 18010000 		.4byte	.LASF21
+ 1628 0164 01       		.byte	0x1
+ 1629 0165 2F       		.byte	0x2f
+ 1630 0166 5D030000 		.4byte	0x35d
+ 1631 016a 03       		.uleb128 0x3
+ 1632 016b 91       		.byte	0x91
+ 1633 016c A076     		.sleb128 -1248
+ 1634 016e 04       		.uleb128 0x4
+ 1635 016f 2F000000 		.4byte	.LASF18
+ 1636 0173 0C       		.byte	0xc
+ 1637 0174 01       		.byte	0x1
+ 1638 0175 36       		.byte	0x36
+ 1639 0176 93010000 		.4byte	0x193
+ 1640 017a 0E       		.uleb128 0xe
+ 1641 017b 11000000 		.4byte	.LASF19
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 33
+
+
+ 1642 017f 01       		.byte	0x1
+ 1643 0180 37       		.byte	0x37
+ 1644 0181 80000000 		.4byte	0x80
+ 1645 0185 00       		.byte	0
+ 1646 0186 0E       		.uleb128 0xe
+ 1647 0187 57000000 		.4byte	.LASF20
+ 1648 018b 01       		.byte	0x1
+ 1649 018c 38       		.byte	0x38
+ 1650 018d 5D000000 		.4byte	0x5d
+ 1651 0191 08       		.byte	0x8
+ 1652 0192 00       		.byte	0
+ 1653 0193 0F       		.uleb128 0xf
+ 1654 0194 707100   		.ascii	"pq\000"
+ 1655 0197 01       		.byte	0x1
+ 1656 0198 3B       		.byte	0x3b
+ 1657 0199 73030000 		.4byte	0x373
+ 1658 019d 03       		.uleb128 0x3
+ 1659 019e 91       		.byte	0x91
+ 1660 019f C45B     		.sleb128 -4668
+ 1661 01a1 0D       		.uleb128 0xd
+ 1662 01a2 60000000 		.4byte	.LASF22
+ 1663 01a6 01       		.byte	0x1
+ 1664 01a7 3C       		.byte	0x3c
+ 1665 01a8 5D000000 		.4byte	0x5d
+ 1666 01ac 02       		.uleb128 0x2
+ 1667 01ad 91       		.byte	0x91
+ 1668 01ae 5C       		.sleb128 -36
+ 1669 01af 0D       		.uleb128 0xd
+ 1670 01b0 70010000 		.4byte	.LASF23
+ 1671 01b4 01       		.byte	0x1
+ 1672 01b5 3F       		.byte	0x3f
+ 1673 01b6 5D030000 		.4byte	0x35d
+ 1674 01ba 03       		.uleb128 0x3
+ 1675 01bb 91       		.byte	0x91
+ 1676 01bc D052     		.sleb128 -5808
+ 1677 01be 0D       		.uleb128 0xd
+ 1678 01bf F4010000 		.4byte	.LASF24
+ 1679 01c3 01       		.byte	0x1
+ 1680 01c4 48       		.byte	0x48
+ 1681 01c5 5D000000 		.4byte	0x5d
+ 1682 01c9 02       		.uleb128 0x2
+ 1683 01ca 91       		.byte	0x91
+ 1684 01cb 50       		.sleb128 -48
+ 1685 01cc 0D       		.uleb128 0xd
+ 1686 01cd AF010000 		.4byte	.LASF25
+ 1687 01d1 01       		.byte	0x1
+ 1688 01d2 7F       		.byte	0x7f
+ 1689 01d3 5D000000 		.4byte	0x5d
+ 1690 01d7 02       		.uleb128 0x2
+ 1691 01d8 91       		.byte	0x91
+ 1692 01d9 40       		.sleb128 -64
+ 1693 01da 0D       		.uleb128 0xd
+ 1694 01db 60010000 		.4byte	.LASF26
+ 1695 01df 01       		.byte	0x1
+ 1696 01e0 81       		.byte	0x81
+ 1697 01e1 84030000 		.4byte	0x384
+ 1698 01e5 03       		.uleb128 0x3
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 34
+
+
+ 1699 01e6 91       		.byte	0x91
+ 1700 01e7 9C7F     		.sleb128 -100
+ 1701 01e9 0D       		.uleb128 0xd
+ 1702 01ea BC010000 		.4byte	.LASF27
+ 1703 01ee 01       		.byte	0x1
+ 1704 01ef 82       		.byte	0x82
+ 1705 01f0 5D000000 		.4byte	0x5d
+ 1706 01f4 03       		.uleb128 0x3
+ 1707 01f5 91       		.byte	0x91
+ 1708 01f6 BC7F     		.sleb128 -68
+ 1709 01f8 0D       		.uleb128 0xd
+ 1710 01f9 23010000 		.4byte	.LASF28
+ 1711 01fd 01       		.byte	0x1
+ 1712 01fe 83       		.byte	0x83
+ 1713 01ff 5D000000 		.4byte	0x5d
+ 1714 0203 03       		.uleb128 0x3
+ 1715 0204 91       		.byte	0x91
+ 1716 0205 B87F     		.sleb128 -72
+ 1717 0207 10       		.uleb128 0x10
+ 1718 0208 28000000 		.4byte	.LBB2
+ 1719 020c 92000000 		.4byte	.LBE2-.LBB2
+ 1720 0210 37020000 		.4byte	0x237
+ 1721 0214 0F       		.uleb128 0xf
+ 1722 0215 6900     		.ascii	"i\000"
+ 1723 0217 01       		.byte	0x1
+ 1724 0218 30       		.byte	0x30
+ 1725 0219 5D000000 		.4byte	0x5d
+ 1726 021d 02       		.uleb128 0x2
+ 1727 021e 91       		.byte	0x91
+ 1728 021f 64       		.sleb128 -28
+ 1729 0220 11       		.uleb128 0x11
+ 1730 0221 36000000 		.4byte	.LBB3
+ 1731 0225 60000000 		.4byte	.LBE3-.LBB3
+ 1732 0229 0F       		.uleb128 0xf
+ 1733 022a 6A00     		.ascii	"j\000"
+ 1734 022c 01       		.byte	0x1
+ 1735 022d 31       		.byte	0x31
+ 1736 022e 5D000000 		.4byte	0x5d
+ 1737 0232 02       		.uleb128 0x2
+ 1738 0233 91       		.byte	0x91
+ 1739 0234 60       		.sleb128 -32
+ 1740 0235 00       		.byte	0
+ 1741 0236 00       		.byte	0
+ 1742 0237 10       		.uleb128 0x10
+ 1743 0238 C6000000 		.4byte	.LBB4
+ 1744 023c 92000000 		.4byte	.LBE4-.LBB4
+ 1745 0240 67020000 		.4byte	0x267
+ 1746 0244 0F       		.uleb128 0xf
+ 1747 0245 6900     		.ascii	"i\000"
+ 1748 0247 01       		.byte	0x1
+ 1749 0248 42       		.byte	0x42
+ 1750 0249 5D000000 		.4byte	0x5d
+ 1751 024d 02       		.uleb128 0x2
+ 1752 024e 91       		.byte	0x91
+ 1753 024f 58       		.sleb128 -40
+ 1754 0250 11       		.uleb128 0x11
+ 1755 0251 D4000000 		.4byte	.LBB5
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 35
+
+
+ 1756 0255 60000000 		.4byte	.LBE5-.LBB5
+ 1757 0259 0F       		.uleb128 0xf
+ 1758 025a 6A00     		.ascii	"j\000"
+ 1759 025c 01       		.byte	0x1
+ 1760 025d 43       		.byte	0x43
+ 1761 025e 5D000000 		.4byte	0x5d
+ 1762 0262 02       		.uleb128 0x2
+ 1763 0263 91       		.byte	0x91
+ 1764 0264 54       		.sleb128 -44
+ 1765 0265 00       		.byte	0
+ 1766 0266 00       		.byte	0
+ 1767 0267 12       		.uleb128 0x12
+ 1768 0268 00000000 		.4byte	.Ldebug_ranges0+0
+ 1769 026c 1D030000 		.4byte	0x31d
+ 1770 0270 0F       		.uleb128 0xf
+ 1771 0271 69647800 		.ascii	"idx\000"
+ 1772 0275 01       		.byte	0x1
+ 1773 0276 52       		.byte	0x52
+ 1774 0277 5D000000 		.4byte	0x5d
+ 1775 027b 02       		.uleb128 0x2
+ 1776 027c 91       		.byte	0x91
+ 1777 027d 4C       		.sleb128 -52
+ 1778 027e 0D       		.uleb128 0xd
+ 1779 027f 09000000 		.4byte	.LASF29
+ 1780 0283 01       		.byte	0x1
+ 1781 0284 58       		.byte	0x58
+ 1782 0285 6E010000 		.4byte	0x16e
+ 1783 0289 03       		.uleb128 0x3
+ 1784 028a 91       		.byte	0x91
+ 1785 028b C452     		.sleb128 -5820
+ 1786 028d 0F       		.uleb128 0xf
+ 1787 028e 726F7700 		.ascii	"row\000"
+ 1788 0292 01       		.byte	0x1
+ 1789 0293 5C       		.byte	0x5c
+ 1790 0294 5D000000 		.4byte	0x5d
+ 1791 0298 03       		.uleb128 0x3
+ 1792 0299 91       		.byte	0x91
+ 1793 029a B07F     		.sleb128 -80
+ 1794 029c 0F       		.uleb128 0xf
+ 1795 029d 636F6C00 		.ascii	"col\000"
+ 1796 02a1 01       		.byte	0x1
+ 1797 02a2 5D       		.byte	0x5d
+ 1798 02a3 5D000000 		.4byte	0x5d
+ 1799 02a7 03       		.uleb128 0x3
+ 1800 02a8 91       		.byte	0x91
+ 1801 02a9 AC7F     		.sleb128 -84
+ 1802 02ab 10       		.uleb128 0x10
+ 1803 02ac 02020000 		.4byte	.LBB7
+ 1804 02b0 90000000 		.4byte	.LBE7-.LBB7
+ 1805 02b4 C5020000 		.4byte	0x2c5
+ 1806 02b8 0F       		.uleb128 0xf
+ 1807 02b9 6900     		.ascii	"i\000"
+ 1808 02bb 01       		.byte	0x1
+ 1809 02bc 53       		.byte	0x53
+ 1810 02bd 5D000000 		.4byte	0x5d
+ 1811 02c1 02       		.uleb128 0x2
+ 1812 02c2 91       		.byte	0x91
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 36
+
+
+ 1813 02c3 48       		.sleb128 -56
+ 1814 02c4 00       		.byte	0
+ 1815 02c5 11       		.uleb128 0x11
+ 1816 02c6 B4030000 		.4byte	.LBB8
+ 1817 02ca 16020000 		.4byte	.LBE8-.LBB8
+ 1818 02ce 0F       		.uleb128 0xf
+ 1819 02cf 6900     		.ascii	"i\000"
+ 1820 02d1 01       		.byte	0x1
+ 1821 02d2 66       		.byte	0x66
+ 1822 02d3 5D000000 		.4byte	0x5d
+ 1823 02d7 02       		.uleb128 0x2
+ 1824 02d8 91       		.byte	0x91
+ 1825 02d9 44       		.sleb128 -60
+ 1826 02da 11       		.uleb128 0x11
+ 1827 02db C2030000 		.4byte	.LBB9
+ 1828 02df E2010000 		.4byte	.LBE9-.LBB9
+ 1829 02e3 0D       		.uleb128 0xd
+ 1830 02e4 69010000 		.4byte	.LASF30
+ 1831 02e8 01       		.byte	0x1
+ 1832 02e9 67       		.byte	0x67
+ 1833 02ea 5D000000 		.4byte	0x5d
+ 1834 02ee 03       		.uleb128 0x3
+ 1835 02ef 91       		.byte	0x91
+ 1836 02f0 A87F     		.sleb128 -88
+ 1837 02f2 0D       		.uleb128 0xd
+ 1838 02f3 A5000000 		.4byte	.LASF31
+ 1839 02f7 01       		.byte	0x1
+ 1840 02f8 68       		.byte	0x68
+ 1841 02f9 5D000000 		.4byte	0x5d
+ 1842 02fd 03       		.uleb128 0x3
+ 1843 02fe 91       		.byte	0x91
+ 1844 02ff A47F     		.sleb128 -92
+ 1845 0301 11       		.uleb128 0x11
+ 1846 0302 6C040000 		.4byte	.LBB10
+ 1847 0306 38010000 		.4byte	.LBE10-.LBB10
+ 1848 030a 0D       		.uleb128 0xd
+ 1849 030b 3D000000 		.4byte	.LASF32
+ 1850 030f 01       		.byte	0x1
+ 1851 0310 6B       		.byte	0x6b
+ 1852 0311 5D000000 		.4byte	0x5d
+ 1853 0315 03       		.uleb128 0x3
+ 1854 0316 91       		.byte	0x91
+ 1855 0317 A07F     		.sleb128 -96
+ 1856 0319 00       		.byte	0
+ 1857 031a 00       		.byte	0
+ 1858 031b 00       		.byte	0
+ 1859 031c 00       		.byte	0
+ 1860 031d 11       		.uleb128 0x11
+ 1861 031e D8060000 		.4byte	.LBB12
+ 1862 0322 FA010000 		.4byte	.LBE12-.LBB12
+ 1863 0326 0F       		.uleb128 0xf
+ 1864 0327 6900     		.ascii	"i\000"
+ 1865 0329 01       		.byte	0x1
+ 1866 032a 8C       		.byte	0x8c
+ 1867 032b 5D000000 		.4byte	0x5d
+ 1868 032f 03       		.uleb128 0x3
+ 1869 0330 91       		.byte	0x91
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 37
+
+
+ 1870 0331 B47F     		.sleb128 -76
+ 1871 0333 11       		.uleb128 0x11
+ 1872 0334 EC060000 		.4byte	.LBB13
+ 1873 0338 C0010000 		.4byte	.LBE13-.LBB13
+ 1874 033c 0D       		.uleb128 0xd
+ 1875 033d 69010000 		.4byte	.LASF30
+ 1876 0341 01       		.byte	0x1
+ 1877 0342 8D       		.byte	0x8d
+ 1878 0343 5D000000 		.4byte	0x5d
+ 1879 0347 03       		.uleb128 0x3
+ 1880 0348 91       		.byte	0x91
+ 1881 0349 987F     		.sleb128 -104
+ 1882 034b 0D       		.uleb128 0xd
+ 1883 034c A5000000 		.4byte	.LASF31
+ 1884 0350 01       		.byte	0x1
+ 1885 0351 8E       		.byte	0x8e
+ 1886 0352 5D000000 		.4byte	0x5d
+ 1887 0356 03       		.uleb128 0x3
+ 1888 0357 91       		.byte	0x91
+ 1889 0358 947F     		.sleb128 -108
+ 1890 035a 00       		.byte	0
+ 1891 035b 00       		.byte	0
+ 1892 035c 00       		.byte	0
+ 1893 035d 09       		.uleb128 0x9
+ 1894 035e 5D000000 		.4byte	0x5d
+ 1895 0362 73030000 		.4byte	0x373
+ 1896 0366 0A       		.uleb128 0xa
+ 1897 0367 72000000 		.4byte	0x72
+ 1898 036b 0E       		.byte	0xe
+ 1899 036c 0A       		.uleb128 0xa
+ 1900 036d 72000000 		.4byte	0x72
+ 1901 0371 12       		.byte	0x12
+ 1902 0372 00       		.byte	0
+ 1903 0373 09       		.uleb128 0x9
+ 1904 0374 6E010000 		.4byte	0x16e
+ 1905 0378 84030000 		.4byte	0x384
+ 1906 037c 13       		.uleb128 0x13
+ 1907 037d 72000000 		.4byte	0x72
+ 1908 0381 1C01     		.2byte	0x11c
+ 1909 0383 00       		.byte	0
+ 1910 0384 0B       		.uleb128 0xb
+ 1911 0385 04       		.byte	0x4
+ 1912 0386 80000000 		.4byte	0x80
+ 1913 038a 0C       		.uleb128 0xc
+ 1914 038b 49000000 		.4byte	.LASF34
+ 1915 038f 01       		.byte	0x1
+ 1916 0390 A2       		.byte	0xa2
+ 1917 0391 00000000 		.4byte	.LFB3
+ 1918 0395 48000000 		.4byte	.LFE3-.LFB3
+ 1919 0399 01       		.uleb128 0x1
+ 1920 039a 9C       		.byte	0x9c
+ 1921 039b CA030000 		.4byte	0x3ca
+ 1922 039f 07       		.uleb128 0x7
+ 1923 03a0 6D617000 		.ascii	"map\000"
+ 1924 03a4 01       		.byte	0x1
+ 1925 03a5 A2       		.byte	0xa2
+ 1926 03a6 18010000 		.4byte	0x118
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 38
+
+
+ 1927 03aa 02       		.uleb128 0x2
+ 1928 03ab 91       		.byte	0x91
+ 1929 03ac 64       		.sleb128 -28
+ 1930 03ad 0D       		.uleb128 0xd
+ 1931 03ae 52010000 		.4byte	.LASF35
+ 1932 03b2 01       		.byte	0x1
+ 1933 03b3 A3       		.byte	0xa3
+ 1934 03b4 80000000 		.4byte	0x80
+ 1935 03b8 02       		.uleb128 0x2
+ 1936 03b9 91       		.byte	0x91
+ 1937 03ba 70       		.sleb128 -16
+ 1938 03bb 0D       		.uleb128 0xd
+ 1939 03bc 20000000 		.4byte	.LASF36
+ 1940 03c0 01       		.byte	0x1
+ 1941 03c1 A4       		.byte	0xa4
+ 1942 03c2 80000000 		.4byte	0x80
+ 1943 03c6 02       		.uleb128 0x2
+ 1944 03c7 91       		.byte	0x91
+ 1945 03c8 68       		.sleb128 -24
+ 1946 03c9 00       		.byte	0
+ 1947 03ca 14       		.uleb128 0x14
+ 1948 03cb 6D617000 		.ascii	"map\000"
+ 1949 03cf 02       		.byte	0x2
+ 1950 03d0 03       		.byte	0x3
+ 1951 03d1 5D030000 		.4byte	0x35d
+ 1952 03d5 05       		.uleb128 0x5
+ 1953 03d6 03       		.byte	0x3
+ 1954 03d7 00000000 		.4byte	map
+ 1955 03db 09       		.uleb128 0x9
+ 1956 03dc 5D000000 		.4byte	0x5d
+ 1957 03e0 F1030000 		.4byte	0x3f1
+ 1958 03e4 0A       		.uleb128 0xa
+ 1959 03e5 72000000 		.4byte	0x72
+ 1960 03e9 04       		.byte	0x4
+ 1961 03ea 0A       		.uleb128 0xa
+ 1962 03eb 72000000 		.4byte	0x72
+ 1963 03ef 01       		.byte	0x1
+ 1964 03f0 00       		.byte	0
+ 1965 03f1 15       		.uleb128 0x15
+ 1966 03f2 9B010000 		.4byte	.LASF37
+ 1967 03f6 02       		.byte	0x2
+ 1968 03f7 15       		.byte	0x15
+ 1969 03f8 DB030000 		.4byte	0x3db
+ 1970 03fc 05       		.uleb128 0x5
+ 1971 03fd 03       		.byte	0x3
+ 1972 03fe 00000000 		.4byte	food_list
+ 1973 0402 09       		.uleb128 0x9
+ 1974 0403 80000000 		.4byte	0x80
+ 1975 0407 12040000 		.4byte	0x412
+ 1976 040b 0A       		.uleb128 0xa
+ 1977 040c 72000000 		.4byte	0x72
+ 1978 0410 03       		.byte	0x3
+ 1979 0411 00       		.byte	0
+ 1980 0412 15       		.uleb128 0x15
+ 1981 0413 1A000000 		.4byte	.LASF38
+ 1982 0417 01       		.byte	0x1
+ 1983 0418 27       		.byte	0x27
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 39
+
+
+ 1984 0419 02040000 		.4byte	0x402
+ 1985 041d 05       		.uleb128 0x5
+ 1986 041e 03       		.byte	0x3
+ 1987 041f 00000000 		.4byte	moves
+ 1988 0423 00       		.byte	0
+ 1989              		.section	.debug_abbrev,"",%progbits
+ 1990              	.Ldebug_abbrev0:
+ 1991 0000 01       		.uleb128 0x1
+ 1992 0001 11       		.uleb128 0x11
+ 1993 0002 01       		.byte	0x1
+ 1994 0003 25       		.uleb128 0x25
+ 1995 0004 0E       		.uleb128 0xe
+ 1996 0005 13       		.uleb128 0x13
+ 1997 0006 0B       		.uleb128 0xb
+ 1998 0007 03       		.uleb128 0x3
+ 1999 0008 0E       		.uleb128 0xe
+ 2000 0009 1B       		.uleb128 0x1b
+ 2001 000a 0E       		.uleb128 0xe
+ 2002 000b 55       		.uleb128 0x55
+ 2003 000c 17       		.uleb128 0x17
+ 2004 000d 11       		.uleb128 0x11
+ 2005 000e 01       		.uleb128 0x1
+ 2006 000f 10       		.uleb128 0x10
+ 2007 0010 17       		.uleb128 0x17
+ 2008 0011 00       		.byte	0
+ 2009 0012 00       		.byte	0
+ 2010 0013 02       		.uleb128 0x2
+ 2011 0014 24       		.uleb128 0x24
+ 2012 0015 00       		.byte	0
+ 2013 0016 0B       		.uleb128 0xb
+ 2014 0017 0B       		.uleb128 0xb
+ 2015 0018 3E       		.uleb128 0x3e
+ 2016 0019 0B       		.uleb128 0xb
+ 2017 001a 03       		.uleb128 0x3
+ 2018 001b 0E       		.uleb128 0xe
+ 2019 001c 00       		.byte	0
+ 2020 001d 00       		.byte	0
+ 2021 001e 03       		.uleb128 0x3
+ 2022 001f 24       		.uleb128 0x24
+ 2023 0020 00       		.byte	0
+ 2024 0021 0B       		.uleb128 0xb
+ 2025 0022 0B       		.uleb128 0xb
+ 2026 0023 3E       		.uleb128 0x3e
+ 2027 0024 0B       		.uleb128 0xb
+ 2028 0025 03       		.uleb128 0x3
+ 2029 0026 08       		.uleb128 0x8
+ 2030 0027 00       		.byte	0
+ 2031 0028 00       		.byte	0
+ 2032 0029 04       		.uleb128 0x4
+ 2033 002a 13       		.uleb128 0x13
+ 2034 002b 01       		.byte	0x1
+ 2035 002c 03       		.uleb128 0x3
+ 2036 002d 0E       		.uleb128 0xe
+ 2037 002e 0B       		.uleb128 0xb
+ 2038 002f 0B       		.uleb128 0xb
+ 2039 0030 3A       		.uleb128 0x3a
+ 2040 0031 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 40
+
+
+ 2041 0032 3B       		.uleb128 0x3b
+ 2042 0033 0B       		.uleb128 0xb
+ 2043 0034 01       		.uleb128 0x1
+ 2044 0035 13       		.uleb128 0x13
+ 2045 0036 00       		.byte	0
+ 2046 0037 00       		.byte	0
+ 2047 0038 05       		.uleb128 0x5
+ 2048 0039 0D       		.uleb128 0xd
+ 2049 003a 00       		.byte	0
+ 2050 003b 03       		.uleb128 0x3
+ 2051 003c 08       		.uleb128 0x8
+ 2052 003d 3A       		.uleb128 0x3a
+ 2053 003e 0B       		.uleb128 0xb
+ 2054 003f 3B       		.uleb128 0x3b
+ 2055 0040 0B       		.uleb128 0xb
+ 2056 0041 49       		.uleb128 0x49
+ 2057 0042 13       		.uleb128 0x13
+ 2058 0043 38       		.uleb128 0x38
+ 2059 0044 0B       		.uleb128 0xb
+ 2060 0045 00       		.byte	0
+ 2061 0046 00       		.byte	0
+ 2062 0047 06       		.uleb128 0x6
+ 2063 0048 2E       		.uleb128 0x2e
+ 2064 0049 01       		.byte	0x1
+ 2065 004a 3F       		.uleb128 0x3f
+ 2066 004b 19       		.uleb128 0x19
+ 2067 004c 03       		.uleb128 0x3
+ 2068 004d 0E       		.uleb128 0xe
+ 2069 004e 3A       		.uleb128 0x3a
+ 2070 004f 0B       		.uleb128 0xb
+ 2071 0050 3B       		.uleb128 0x3b
+ 2072 0051 0B       		.uleb128 0xb
+ 2073 0052 27       		.uleb128 0x27
+ 2074 0053 19       		.uleb128 0x19
+ 2075 0054 49       		.uleb128 0x49
+ 2076 0055 13       		.uleb128 0x13
+ 2077 0056 11       		.uleb128 0x11
+ 2078 0057 01       		.uleb128 0x1
+ 2079 0058 12       		.uleb128 0x12
+ 2080 0059 06       		.uleb128 0x6
+ 2081 005a 40       		.uleb128 0x40
+ 2082 005b 18       		.uleb128 0x18
+ 2083 005c 9742     		.uleb128 0x2117
+ 2084 005e 19       		.uleb128 0x19
+ 2085 005f 01       		.uleb128 0x1
+ 2086 0060 13       		.uleb128 0x13
+ 2087 0061 00       		.byte	0
+ 2088 0062 00       		.byte	0
+ 2089 0063 07       		.uleb128 0x7
+ 2090 0064 05       		.uleb128 0x5
+ 2091 0065 00       		.byte	0
+ 2092 0066 03       		.uleb128 0x3
+ 2093 0067 08       		.uleb128 0x8
+ 2094 0068 3A       		.uleb128 0x3a
+ 2095 0069 0B       		.uleb128 0xb
+ 2096 006a 3B       		.uleb128 0x3b
+ 2097 006b 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 41
+
+
+ 2098 006c 49       		.uleb128 0x49
+ 2099 006d 13       		.uleb128 0x13
+ 2100 006e 02       		.uleb128 0x2
+ 2101 006f 18       		.uleb128 0x18
+ 2102 0070 00       		.byte	0
+ 2103 0071 00       		.byte	0
+ 2104 0072 08       		.uleb128 0x8
+ 2105 0073 05       		.uleb128 0x5
+ 2106 0074 00       		.byte	0
+ 2107 0075 03       		.uleb128 0x3
+ 2108 0076 0E       		.uleb128 0xe
+ 2109 0077 3A       		.uleb128 0x3a
+ 2110 0078 0B       		.uleb128 0xb
+ 2111 0079 3B       		.uleb128 0x3b
+ 2112 007a 0B       		.uleb128 0xb
+ 2113 007b 49       		.uleb128 0x49
+ 2114 007c 13       		.uleb128 0x13
+ 2115 007d 02       		.uleb128 0x2
+ 2116 007e 18       		.uleb128 0x18
+ 2117 007f 00       		.byte	0
+ 2118 0080 00       		.byte	0
+ 2119 0081 09       		.uleb128 0x9
+ 2120 0082 01       		.uleb128 0x1
+ 2121 0083 01       		.byte	0x1
+ 2122 0084 49       		.uleb128 0x49
+ 2123 0085 13       		.uleb128 0x13
+ 2124 0086 01       		.uleb128 0x1
+ 2125 0087 13       		.uleb128 0x13
+ 2126 0088 00       		.byte	0
+ 2127 0089 00       		.byte	0
+ 2128 008a 0A       		.uleb128 0xa
+ 2129 008b 21       		.uleb128 0x21
+ 2130 008c 00       		.byte	0
+ 2131 008d 49       		.uleb128 0x49
+ 2132 008e 13       		.uleb128 0x13
+ 2133 008f 2F       		.uleb128 0x2f
+ 2134 0090 0B       		.uleb128 0xb
+ 2135 0091 00       		.byte	0
+ 2136 0092 00       		.byte	0
+ 2137 0093 0B       		.uleb128 0xb
+ 2138 0094 0F       		.uleb128 0xf
+ 2139 0095 00       		.byte	0
+ 2140 0096 0B       		.uleb128 0xb
+ 2141 0097 0B       		.uleb128 0xb
+ 2142 0098 49       		.uleb128 0x49
+ 2143 0099 13       		.uleb128 0x13
+ 2144 009a 00       		.byte	0
+ 2145 009b 00       		.byte	0
+ 2146 009c 0C       		.uleb128 0xc
+ 2147 009d 2E       		.uleb128 0x2e
+ 2148 009e 01       		.byte	0x1
+ 2149 009f 3F       		.uleb128 0x3f
+ 2150 00a0 19       		.uleb128 0x19
+ 2151 00a1 03       		.uleb128 0x3
+ 2152 00a2 0E       		.uleb128 0xe
+ 2153 00a3 3A       		.uleb128 0x3a
+ 2154 00a4 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 42
+
+
+ 2155 00a5 3B       		.uleb128 0x3b
+ 2156 00a6 0B       		.uleb128 0xb
+ 2157 00a7 27       		.uleb128 0x27
+ 2158 00a8 19       		.uleb128 0x19
+ 2159 00a9 11       		.uleb128 0x11
+ 2160 00aa 01       		.uleb128 0x1
+ 2161 00ab 12       		.uleb128 0x12
+ 2162 00ac 06       		.uleb128 0x6
+ 2163 00ad 40       		.uleb128 0x40
+ 2164 00ae 18       		.uleb128 0x18
+ 2165 00af 9642     		.uleb128 0x2116
+ 2166 00b1 19       		.uleb128 0x19
+ 2167 00b2 01       		.uleb128 0x1
+ 2168 00b3 13       		.uleb128 0x13
+ 2169 00b4 00       		.byte	0
+ 2170 00b5 00       		.byte	0
+ 2171 00b6 0D       		.uleb128 0xd
+ 2172 00b7 34       		.uleb128 0x34
+ 2173 00b8 00       		.byte	0
+ 2174 00b9 03       		.uleb128 0x3
+ 2175 00ba 0E       		.uleb128 0xe
+ 2176 00bb 3A       		.uleb128 0x3a
+ 2177 00bc 0B       		.uleb128 0xb
+ 2178 00bd 3B       		.uleb128 0x3b
+ 2179 00be 0B       		.uleb128 0xb
+ 2180 00bf 49       		.uleb128 0x49
+ 2181 00c0 13       		.uleb128 0x13
+ 2182 00c1 02       		.uleb128 0x2
+ 2183 00c2 18       		.uleb128 0x18
+ 2184 00c3 00       		.byte	0
+ 2185 00c4 00       		.byte	0
+ 2186 00c5 0E       		.uleb128 0xe
+ 2187 00c6 0D       		.uleb128 0xd
+ 2188 00c7 00       		.byte	0
+ 2189 00c8 03       		.uleb128 0x3
+ 2190 00c9 0E       		.uleb128 0xe
+ 2191 00ca 3A       		.uleb128 0x3a
+ 2192 00cb 0B       		.uleb128 0xb
+ 2193 00cc 3B       		.uleb128 0x3b
+ 2194 00cd 0B       		.uleb128 0xb
+ 2195 00ce 49       		.uleb128 0x49
+ 2196 00cf 13       		.uleb128 0x13
+ 2197 00d0 38       		.uleb128 0x38
+ 2198 00d1 0B       		.uleb128 0xb
+ 2199 00d2 00       		.byte	0
+ 2200 00d3 00       		.byte	0
+ 2201 00d4 0F       		.uleb128 0xf
+ 2202 00d5 34       		.uleb128 0x34
+ 2203 00d6 00       		.byte	0
+ 2204 00d7 03       		.uleb128 0x3
+ 2205 00d8 08       		.uleb128 0x8
+ 2206 00d9 3A       		.uleb128 0x3a
+ 2207 00da 0B       		.uleb128 0xb
+ 2208 00db 3B       		.uleb128 0x3b
+ 2209 00dc 0B       		.uleb128 0xb
+ 2210 00dd 49       		.uleb128 0x49
+ 2211 00de 13       		.uleb128 0x13
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 43
+
+
+ 2212 00df 02       		.uleb128 0x2
+ 2213 00e0 18       		.uleb128 0x18
+ 2214 00e1 00       		.byte	0
+ 2215 00e2 00       		.byte	0
+ 2216 00e3 10       		.uleb128 0x10
+ 2217 00e4 0B       		.uleb128 0xb
+ 2218 00e5 01       		.byte	0x1
+ 2219 00e6 11       		.uleb128 0x11
+ 2220 00e7 01       		.uleb128 0x1
+ 2221 00e8 12       		.uleb128 0x12
+ 2222 00e9 06       		.uleb128 0x6
+ 2223 00ea 01       		.uleb128 0x1
+ 2224 00eb 13       		.uleb128 0x13
+ 2225 00ec 00       		.byte	0
+ 2226 00ed 00       		.byte	0
+ 2227 00ee 11       		.uleb128 0x11
+ 2228 00ef 0B       		.uleb128 0xb
+ 2229 00f0 01       		.byte	0x1
+ 2230 00f1 11       		.uleb128 0x11
+ 2231 00f2 01       		.uleb128 0x1
+ 2232 00f3 12       		.uleb128 0x12
+ 2233 00f4 06       		.uleb128 0x6
+ 2234 00f5 00       		.byte	0
+ 2235 00f6 00       		.byte	0
+ 2236 00f7 12       		.uleb128 0x12
+ 2237 00f8 0B       		.uleb128 0xb
+ 2238 00f9 01       		.byte	0x1
+ 2239 00fa 55       		.uleb128 0x55
+ 2240 00fb 17       		.uleb128 0x17
+ 2241 00fc 01       		.uleb128 0x1
+ 2242 00fd 13       		.uleb128 0x13
+ 2243 00fe 00       		.byte	0
+ 2244 00ff 00       		.byte	0
+ 2245 0100 13       		.uleb128 0x13
+ 2246 0101 21       		.uleb128 0x21
+ 2247 0102 00       		.byte	0
+ 2248 0103 49       		.uleb128 0x49
+ 2249 0104 13       		.uleb128 0x13
+ 2250 0105 2F       		.uleb128 0x2f
+ 2251 0106 05       		.uleb128 0x5
+ 2252 0107 00       		.byte	0
+ 2253 0108 00       		.byte	0
+ 2254 0109 14       		.uleb128 0x14
+ 2255 010a 34       		.uleb128 0x34
+ 2256 010b 00       		.byte	0
+ 2257 010c 03       		.uleb128 0x3
+ 2258 010d 08       		.uleb128 0x8
+ 2259 010e 3A       		.uleb128 0x3a
+ 2260 010f 0B       		.uleb128 0xb
+ 2261 0110 3B       		.uleb128 0x3b
+ 2262 0111 0B       		.uleb128 0xb
+ 2263 0112 49       		.uleb128 0x49
+ 2264 0113 13       		.uleb128 0x13
+ 2265 0114 3F       		.uleb128 0x3f
+ 2266 0115 19       		.uleb128 0x19
+ 2267 0116 02       		.uleb128 0x2
+ 2268 0117 18       		.uleb128 0x18
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 44
+
+
+ 2269 0118 00       		.byte	0
+ 2270 0119 00       		.byte	0
+ 2271 011a 15       		.uleb128 0x15
+ 2272 011b 34       		.uleb128 0x34
+ 2273 011c 00       		.byte	0
+ 2274 011d 03       		.uleb128 0x3
+ 2275 011e 0E       		.uleb128 0xe
+ 2276 011f 3A       		.uleb128 0x3a
+ 2277 0120 0B       		.uleb128 0xb
+ 2278 0121 3B       		.uleb128 0x3b
+ 2279 0122 0B       		.uleb128 0xb
+ 2280 0123 49       		.uleb128 0x49
+ 2281 0124 13       		.uleb128 0x13
+ 2282 0125 3F       		.uleb128 0x3f
+ 2283 0126 19       		.uleb128 0x19
+ 2284 0127 02       		.uleb128 0x2
+ 2285 0128 18       		.uleb128 0x18
+ 2286 0129 00       		.byte	0
+ 2287 012a 00       		.byte	0
+ 2288 012b 00       		.byte	0
+ 2289              		.section	.debug_aranges,"",%progbits
+ 2290 0000 2C000000 		.4byte	0x2c
+ 2291 0004 0200     		.2byte	0x2
+ 2292 0006 00000000 		.4byte	.Ldebug_info0
+ 2293 000a 04       		.byte	0x4
+ 2294 000b 00       		.byte	0
+ 2295 000c 0000     		.2byte	0
+ 2296 000e 0000     		.2byte	0
+ 2297 0010 00000000 		.4byte	.LFB1
+ 2298 0014 56000000 		.4byte	.LFE1-.LFB1
+ 2299 0018 00000000 		.4byte	.LFB2
+ 2300 001c F8080000 		.4byte	.LFE2-.LFB2
+ 2301 0020 00000000 		.4byte	.LFB3
+ 2302 0024 48000000 		.4byte	.LFE3-.LFB3
+ 2303 0028 00000000 		.4byte	0
+ 2304 002c 00000000 		.4byte	0
+ 2305              		.section	.debug_ranges,"",%progbits
+ 2306              	.Ldebug_ranges0:
+ 2307 0000 F6010000 		.4byte	.LBB6
+ 2308 0004 CA050000 		.4byte	.LBE6
+ 2309 0008 DC050000 		.4byte	.LBB11
+ 2310 000c DE050000 		.4byte	.LBE11
+ 2311 0010 00000000 		.4byte	0
+ 2312 0014 00000000 		.4byte	0
+ 2313 0018 00000000 		.4byte	.LFB1
+ 2314 001c 56000000 		.4byte	.LFE1
+ 2315 0020 00000000 		.4byte	.LFB2
+ 2316 0024 F8080000 		.4byte	.LFE2
+ 2317 0028 00000000 		.4byte	.LFB3
+ 2318 002c 48000000 		.4byte	.LFE3
+ 2319 0030 00000000 		.4byte	0
+ 2320 0034 00000000 		.4byte	0
+ 2321              		.section	.debug_line,"",%progbits
+ 2322              	.Ldebug_line0:
+ 2323 0000 75010000 		.section	.debug_str,"MS",%progbits,1
+ 2323      02002D00 
+ 2323      00000201 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 45
+
+
+ 2323      FB0E0D00 
+ 2323      01010101 
+ 2324              	.LASF33:
+ 2325 0000 64696A6B 		.ascii	"dijkstra\000"
+ 2325      73747261 
+ 2325      00
+ 2326              	.LASF29:
+ 2327 0009 63757272 		.ascii	"current\000"
+ 2327      656E7400 
+ 2328              	.LASF19:
+ 2329 0011 6C6F6361 		.ascii	"location\000"
+ 2329      74696F6E 
+ 2329      00
+ 2330              	.LASF38:
+ 2331 001a 6D6F7665 		.ascii	"moves\000"
+ 2331      7300
+ 2332              	.LASF36:
+ 2333 0020 74617267 		.ascii	"targetLocation\000"
+ 2333      65744C6F 
+ 2333      63617469 
+ 2333      6F6E00
+ 2334              	.LASF18:
+ 2335 002f 5072696F 		.ascii	"PriorityQueue\000"
+ 2335      72697479 
+ 2335      51756575 
+ 2335      6500
+ 2336              	.LASF32:
+ 2337 003d 6E657744 		.ascii	"newDistance\000"
+ 2337      69737461 
+ 2337      6E636500 
+ 2338              	.LASF34:
+ 2339 0049 66696E64 		.ascii	"findPath\000"
+ 2339      50617468 
+ 2339      00
+ 2340              	.LASF13:
+ 2341 0052 636F6C73 		.ascii	"cols\000"
+ 2341      00
+ 2342              	.LASF20:
+ 2343 0057 64697374 		.ascii	"distance\000"
+ 2343      616E6365 
+ 2343      00
+ 2344              	.LASF22:
+ 2345 0060 70715369 		.ascii	"pqSize\000"
+ 2345      7A6500
+ 2346              	.LASF1:
+ 2347 0067 756E7369 		.ascii	"unsigned char\000"
+ 2347      676E6564 
+ 2347      20636861 
+ 2347      7200
+ 2348              	.LASF40:
+ 2349 0075 70617468 		.ascii	"pathfinding.c\000"
+ 2349      66696E64 
+ 2349      696E672E 
+ 2349      6300
+ 2350              	.LASF16:
+ 2351 0083 74617267 		.ascii	"targetlocation\000"
+ 2351      65746C6F 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 46
+
+
+ 2351      63617469 
+ 2351      6F6E00
+ 2352              	.LASF3:
+ 2353 0092 73686F72 		.ascii	"short unsigned int\000"
+ 2353      7420756E 
+ 2353      7369676E 
+ 2353      65642069 
+ 2353      6E7400
+ 2354              	.LASF31:
+ 2355 00a5 6E657743 		.ascii	"newCol\000"
+ 2355      6F6C00
+ 2356              	.LASF17:
+ 2357 00ac 4C6F6361 		.ascii	"Location\000"
+ 2357      74696F6E 
+ 2357      00
+ 2358              	.LASF5:
+ 2359 00b5 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2359      20756E73 
+ 2359      69676E65 
+ 2359      6420696E 
+ 2359      7400
+ 2360              	.LASF41:
+ 2361 00c7 483A5C44 		.ascii	"H:\\Documents\\GitHub\\301-Robot\\psoc student pack"
+ 2361      6F63756D 
+ 2361      656E7473 
+ 2361      5C476974 
+ 2361      4875625C 
+ 2362 00f6 5C70736F 		.ascii	"\\psoc_code_base\\CS301_Class.cydsn\000"
+ 2362      635F636F 
+ 2362      64655F62 
+ 2362      6173655C 
+ 2362      43533330 
+ 2363              	.LASF21:
+ 2364 0118 76697369 		.ascii	"visitedMap\000"
+ 2364      7465644D 
+ 2364      617000
+ 2365              	.LASF28:
+ 2366 0123 63757272 		.ascii	"currentCol\000"
+ 2366      656E7443 
+ 2366      6F6C00
+ 2367              	.LASF8:
+ 2368 012e 756E7369 		.ascii	"unsigned int\000"
+ 2368      676E6564 
+ 2368      20696E74 
+ 2368      00
+ 2369              	.LASF7:
+ 2370 013b 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2370      206C6F6E 
+ 2370      6720756E 
+ 2370      7369676E 
+ 2370      65642069 
+ 2371              	.LASF35:
+ 2372 0152 73746172 		.ascii	"startLocation\000"
+ 2372      744C6F63 
+ 2372      6174696F 
+ 2372      6E00
+ 2373              	.LASF26:
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 47
+
+
+ 2374 0160 72657453 		.ascii	"retSteps\000"
+ 2374      74657073 
+ 2374      00
+ 2375              	.LASF30:
+ 2376 0169 6E657752 		.ascii	"newRow\000"
+ 2376      6F7700
+ 2377              	.LASF23:
+ 2378 0170 64697374 		.ascii	"distances\000"
+ 2378      616E6365 
+ 2378      7300
+ 2379              	.LASF10:
+ 2380 017a 73697A65 		.ascii	"sizetype\000"
+ 2380      74797065 
+ 2380      00
+ 2381              	.LASF12:
+ 2382 0183 726F7773 		.ascii	"rows\000"
+ 2382      00
+ 2383              	.LASF6:
+ 2384 0188 6C6F6E67 		.ascii	"long long int\000"
+ 2384      206C6F6E 
+ 2384      6720696E 
+ 2384      7400
+ 2385              	.LASF11:
+ 2386 0196 63686172 		.ascii	"char\000"
+ 2386      00
+ 2387              	.LASF37:
+ 2388 019b 666F6F64 		.ascii	"food_list\000"
+ 2388      5F6C6973 
+ 2388      7400
+ 2389              	.LASF2:
+ 2390 01a5 73686F72 		.ascii	"short int\000"
+ 2390      7420696E 
+ 2390      7400
+ 2391              	.LASF25:
+ 2392 01af 73686F72 		.ascii	"shortestDist\000"
+ 2392      74657374 
+ 2392      44697374 
+ 2392      00
+ 2393              	.LASF27:
+ 2394 01bc 63757272 		.ascii	"currentRow\000"
+ 2394      656E7452 
+ 2394      6F7700
+ 2395              	.LASF4:
+ 2396 01c7 6C6F6E67 		.ascii	"long int\000"
+ 2396      20696E74 
+ 2396      00
+ 2397              	.LASF9:
+ 2398 01d0 6C6F6E67 		.ascii	"long double\000"
+ 2398      20646F75 
+ 2398      626C6500 
+ 2399              	.LASF0:
+ 2400 01dc 7369676E 		.ascii	"signed char\000"
+ 2400      65642063 
+ 2400      68617200 
+ 2401              	.LASF42:
+ 2402 01e8 69735661 		.ascii	"isValidMove\000"
+ 2402      6C69644D 
+ARM GAS  C:\Users\ikui753\AppData\Local\Temp\cchDWyCp.s 			page 48
+
+
+ 2402      6F766500 
+ 2403              	.LASF24:
+ 2404 01f4 73746570 		.ascii	"stepNum\000"
+ 2404      4E756D00 
+ 2405              	.LASF14:
+ 2406 01fc 5F426F6F 		.ascii	"_Bool\000"
+ 2406      6C00
+ 2407              	.LASF15:
+ 2408 0202 73746172 		.ascii	"startlocation\000"
+ 2408      746C6F63 
+ 2408      6174696F 
+ 2408      6E00
+ 2409              	.LASF39:
+ 2410 0210 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2410      43313120 
+ 2410      352E342E 
+ 2410      31203230 
+ 2410      31363036 
+ 2411 0243 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 2411      20726576 
+ 2411      6973696F 
+ 2411      6E203233 
+ 2411      37373135 
+ 2412 0276 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 2412      66756E63 
+ 2412      74696F6E 
+ 2412      2D736563 
+ 2412      74696F6E 
+ 2413              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
