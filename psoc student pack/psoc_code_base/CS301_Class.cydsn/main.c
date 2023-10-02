@@ -185,8 +185,6 @@ int16 quadCountToRPM(uint16 count)
 
 // Resets all sensor flags to 0 - i.e. currently out of map
 void ResetSensorFlags() {
-    s1 = 0;
-    s2 = 0;
     s3 = 0;
     s4 = 0;
     s5 = 0;
@@ -198,15 +196,15 @@ void ResetSensorFlags() {
 // if no conditons are met, it returns Unknown -- need to fix this edge case
 // s1 = 0 -- Black
 // s1 = 1 -- White
-float yBlockSize = 12.84;
-float xBlockSize = 9.13;
+float yBlockSize = 128.4;
+float xBlockSize = 91.3;
 float blockSize;
 uint8 currentRow = 1;
 uint8 currentCol = 1; // need to initialise
 
 enum DirectionState getDirection() {
-    //directionState = Stop;
-    currentOrientation = Up; // initialise at start
+    directionState = Stop;
+    currentOrientation = Right; // initialise at start
     previousDirection = currentDirection;
 
     if(currentRow == 1 && currentCol == 5) {
@@ -222,16 +220,17 @@ enum DirectionState getDirection() {
     }
     // find next direction after we reach a new coordinate
     if(totalDistance <= blockSize) {
+        
         // MOVEMENT
+        /*
         if (previousDirection == Stop) {
             if (stopBuffer <= 10) {
                 directionState = Stop;
-            } else {
-                directionState = Backward;
             }
             //currentDirection = previousDirection;
             return directionState;
         }
+        */
         /*
         
         if (previousDirection == ForwardAfterTurn) {
