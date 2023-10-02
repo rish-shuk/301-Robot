@@ -19,13 +19,10 @@
 #include <stdlib.h>
 
 // Speed Macros
-<<<<<<< HEAD
 uint16 setPWMAbove50(float percentage);
 uint16 setPWMBelow50(float percentage);
-=======
 uint16 calculateSpeed(uint16 count);
 
->>>>>>> parent of 8cfde69 (refactor: :clown_face: make calculate speed function name more descriptive)
 // Direction/ Movement macros
 //* ========================================
 // Stop moving
