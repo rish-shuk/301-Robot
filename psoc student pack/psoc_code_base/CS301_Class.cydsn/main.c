@@ -41,8 +41,8 @@ enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheR
 enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
-enum OrientationState currentOrientation = Up;
-enum OrientationState previousOrientation = Up;
+enum OrientationState currentOrientation = Down;
+enum OrientationState previousOrientation = Down;
 // --- YIPPE
 // ----------------------------------------
 uint8 s3 = 0;
@@ -197,8 +197,8 @@ void ResetSensorFlags() {
     s6 = 0;
 }
 
-float yBlocksize = 128.4;
-float xBlocksize = 91.3;
+float yBlocksize = 127.5;
+float xBlocksize = 92.5;
 float blocksize;
 // This function checks the sensor flags s1-s6 through a boolean truth table and
 // returns a enum direction state depending on the flag configuration
@@ -206,10 +206,11 @@ float blocksize;
 // s1 = 0 -- Black
 // s1 = 1 -- White
 enum DirectionState CheckSensorDirection() {
+    // determine blocksize
     if(currentOrientation == Up || currentOrientation == Down){
-        blocksize = 128.4;
+        blocksize = yBlocksize;
     } else {
-        blocksize = 91.3;
+        blocksize = xBlocksize;
     }
     
     enum DirectionState directionState = Stop;
@@ -219,7 +220,9 @@ enum DirectionState CheckSensorDirection() {
         directionState = Stop;
         return directionState;
     }
-   
+    
+    // check path direction
+    
     if (previousDirection == Stop) {
         if (stopBuffer <= 10) {
             directionState = Stop;
@@ -243,6 +246,20 @@ enum DirectionState CheckSensorDirection() {
             return directionState;
         } 
         else if (!s5 || !s6) {
+            /*switch(previousOrientation) {
+                case Right:
+                    currentOrientation = Down;
+                    break;
+                case Left:
+                    currentOrientation = Up;
+                    break;
+                case Up:
+                    currentOrientation = Right;
+                    break;
+                case Down:
+                    currentOrientation = Left;
+                    break;
+            }*/
             directionState = Stop;
             return directionState;
         }
