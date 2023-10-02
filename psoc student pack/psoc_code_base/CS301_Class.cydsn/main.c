@@ -21,10 +21,11 @@
 //* ========================================
 #include "defines.h"
 #include "vars.h"
-//#include "pathfinding.h"
+#include "pathfinding.h"
 #include "initialise.h"
 #include "movement.h"
 #include "usbUART.h"
+#include "map.h"
 //* ========================================
 // USBUART
 void usbPutString(char *s);
@@ -41,8 +42,9 @@ enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheR
 enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
-enum OrientationState currentOrientation = Down;
-enum OrientationState previousOrientation = Down;
+enum OrientationState currentOrientation = Right;
+enum OrientationState previousOrientation = Right;
+enum DirectionState GetNextStep();
 // --- YIPPE
 // ----------------------------------------
 uint8 s3 = 0;
@@ -199,12 +201,85 @@ void ResetSensorFlags() {
 
 float yBlocksize = 127.5;
 float xBlocksize = 92.5;
+uint8 currentRow = 1;
+uint8 currentCol = 1;
 float blocksize;
 // This function checks the sensor flags s1-s6 through a boolean truth table and
 // returns a enum direction state depending on the flag configuration
 // if no conditons are met, it returns Unknown -- need to fix this edge case
 // s1 = 0 -- Black
 // s1 = 1 -- White
+
+enum DirectionState GetNextStep() {
+    // Returns the direction state the robot has to make to follow the path.   
+    enum DirectionState directionState = Stop;
+    switch (previousOrientation) {
+            case Up:
+                if(map[currentRow][currentCol + 1] == 8) {
+                    currentOrientation = Up;
+                    directionState = Forward;
+                    currentCol++;
+                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentOrientation = Left;
+                    directionState = TurnLeft;
+                    currentRow--;
+                } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentOrientation = Right;
+                    directionState = TurnRight;
+                    currentRow++;
+                }
+                break;
+            case Down:
+                if(map[currentRow][currentCol - 1] == 8) {
+                    currentOrientation = Down;
+                    directionState = Forward;
+                    currentCol--;
+                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentOrientation = Right;
+                    directionState = TurnRight;
+                    currentRow--;
+                } else if (map[currentRow + 1][currentCol] == 8) {
+                    currentOrientation = Left;
+                    directionState = TurnLeft;
+                    currentRow++;
+                }
+                break;
+            case Left:
+                if(map[currentRow - 1][currentCol] == 8) {
+                    currentOrientation = Left;
+                    directionState = Forward;
+                    currentRow--;
+                } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentOrientation = Up;
+                    directionState = TurnRight;
+                    currentRow++;
+                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentOrientation = Down;
+                    directionState = TurnLeft;
+                    currentCol--;
+                }
+                break;
+            case Right:
+                if(map[currentRow + 1][currentCol] == 8) {
+                    currentOrientation = Right;
+                    directionState = Forward;
+                    currentRow++;
+                } else if (map[currentRow][currentCol + 1] == 8) {
+                    currentOrientation = Up;
+                    directionState = TurnLeft;
+                    currentCol++;
+                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentOrientation = Down;
+                    directionState = TurnRight;
+                    currentCol--;
+                }
+                break;
+            default:
+                break;
+        }
+    return directionState;
+}
+
 enum DirectionState CheckSensorDirection() {
     // determine blocksize
     if(currentOrientation == Up || currentOrientation == Down){
@@ -217,13 +292,13 @@ enum DirectionState CheckSensorDirection() {
     previousDirection = currentDirection;
     
     if (totalDistance >= blocksize) {
-        directionState = Stop;
+        directionState = GetNextStep(); // get next step
+        totalDistance = 0;
         return directionState;
     }
     
-    // check path direction
     
-    if (previousDirection == Stop) {
+    /*if (previousDirection == Stop) {
         if (stopBuffer <= 10) {
             directionState = Stop;
         } else {
@@ -237,29 +312,15 @@ enum DirectionState CheckSensorDirection() {
             directionState = Forward;
             return directionState;
         }
-    }
+    }*/
     
 
-    if(previousDirection == TurnRight) {
+    /*if(previousDirection == TurnRight) {
         if(s5 && s6) {
             directionState = TurnRight;
             return directionState;
         } 
         else if (!s5 || !s6) {
-            /*switch(previousOrientation) {
-                case Right:
-                    currentOrientation = Down;
-                    break;
-                case Left:
-                    currentOrientation = Up;
-                    break;
-                case Up:
-                    currentOrientation = Right;
-                    break;
-                case Down:
-                    currentOrientation = Left;
-                    break;
-            }*/
             directionState = Stop;
             return directionState;
         }
@@ -288,7 +349,7 @@ enum DirectionState CheckSensorDirection() {
         }
         directionState = waitForTurn;
         return directionState;
-    }
+    }*/
     
 
 
@@ -300,30 +361,6 @@ enum DirectionState CheckSensorDirection() {
     
     // course correction
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        
-        /*
-        // If both are on white, we assume we are off the line and use the back two sensors as backup c.c
-        if (s5 && s6) {
-            
-            if (s1 && s2) {
-                directionState = Forward;
-                return directionState;
-            }
-            if (!s1) {
-                directionState = AdjustToTheRight;
-                return directionState;
-            }
-            if (!s2) {
-                directionState = AdjustToTheLeft;
-                return directionState;
-            }
-            
-            directionState = Forward;
-            return directionState;
-        }
-            */
-        
-        
         if(s6) {
             directionState = AdjustToTheLeft; // keep adjusting to the left
             return directionState;
