@@ -197,12 +197,6 @@ float yBlocksize = 127.5;
 float xBlocksize = 92.5;
 uint8 currentRow = 1;
 uint8 currentCol = 1;
-float blocksize;
-// This function checks the sensor flags s1-s6 through a boolean truth table and
-// returns a enum direction state depending on the flag configuration
-// if no conditons are met, it returns Unknown -- need to fix this edge case
-// s1 = 0 -- Black
-// s1 = 1 -- White
 
 enum DirectionState GetNextStep() {
     // Determines robot movement and orientation to follow optimal path
@@ -279,7 +273,7 @@ enum DirectionState GetNextStep() {
 }
 
 enum DirectionState CheckSensorDirection() {
-    blocksize = getBlocksize(currentOrientation); // determine blocksize
+    float blocksize = getBlocksize(currentOrientation); // determine blocksize
     enum DirectionState directionState = Stop; // initialise state as stop
     previousDirection = currentDirection; // store currentDirection as previousDirection for next pass
     
@@ -289,49 +283,47 @@ enum DirectionState CheckSensorDirection() {
         return directionState;
     }
     
-    
+    // STOP BUFFER * ========================================
     if (previousDirection == Stop) {
         if (stopBuffer <= 10) {
-            directionState = Stop;
+            directionState = Stop; // stop buffer- prevents overturning
         } else {
             directionState = ForwardAfterTurn;
         }
         return directionState;
     }
-    
+
+    // TURNING- will only turn due to getNextStep() * ========================================    
     if (previousDirection == ForwardAfterTurn) {
         if (s3 || s4) {
-            directionState = Forward;
+            directionState = Forward; // turns when robot has rotated 90º
             return directionState;
         }
     }
-    
 
     if(previousDirection == TurnRight) {
-        
         if(s5 && s6) {
-            directionState = TurnRight;
+            directionState = TurnRight; // keep turning while s5 & s6 are high
             return directionState;
         } 
-        
         else if (!s5 || !s6) {
-            directionState = Stop;
+            directionState = Stop; // stop turning when s5 & s6 are low
             return directionState;
         }
     }    
 
     if(previousDirection == TurnLeft) {
         if(s5 && s6) {
-            directionState = TurnLeft;
+            directionState = TurnLeft; // keep turning while s5 & s6 are high
             return directionState;
         } 
         else if (!s5 || !s6) {
-            directionState = Stop;
+            directionState = Stop; // stop turning when s5 & s6 are low
             return directionState;
         }
     }
     
-    // course correction
+    // COURSE CORRECTION * ========================================
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         if(s6) {
             directionState = AdjustToTheLeft; // keep adjusting to the left
@@ -343,23 +335,11 @@ enum DirectionState CheckSensorDirection() {
         }
     }
     
-    // forward 111100
+    // FORWARD * ========================================
     if (s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
     }
-    
-    /*//turn left 110111
-    if (!s3 && s4 && s5 && s6) {
-        directionState = TurnLeft;
-        return directionState;
-    }
-    
-    // turn right if 111011
-    if (s3 && !s4 && s5 && s6) {
-        directionState = TurnRight;
-        return directionState;
-    }*/
 
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
