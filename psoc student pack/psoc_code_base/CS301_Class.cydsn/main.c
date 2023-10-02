@@ -129,12 +129,10 @@ CY_ISR(TIMER_FINISH) {
 
 int main()
 {
-// --------------------------------    
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
-    //findPath(map, "");// find shortest path- store this in map
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
     S3_detected_StartEx(S3_DETECTED);
@@ -142,7 +140,8 @@ int main()
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-    //stopMoving();
+
+    findPath(map);// find shortest path- store this in map wasn't being called before
 
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
@@ -153,12 +152,6 @@ int main()
     //usbPutString("Initialised UART");
     for(;;)
     {
-        //traverseMap(map);
-        //rotationAntiClockwise();
-        //rotationClockwise();
-        
-        
-        
         if(timerInt == 1) {
             timerInt = 0;
             // calculate RPM of M2
@@ -211,7 +204,7 @@ float blocksize;
 // s1 = 1 -- White
 
 enum DirectionState GetNextStep() {
-    // Returns the direction state the robot has to make to follow the path.   
+    // Determines robot movement and orientation to follow optimal path
     enum DirectionState directionState = Stop;
     if((currentRow == 3) && (currentCol == 5)) {
         directionState = Stop;
@@ -220,9 +213,9 @@ enum DirectionState GetNextStep() {
     switch (previousOrientation) {
             case Up:
                 if(map[currentRow][currentCol + 1] == 8) {
-                    currentOrientation = Up;
+                    currentOrientation = Up; 
                     directionState = Forward;
-                    currentCol++;
+                    currentCol++; // update position
                 } else if (map[currentRow - 1][currentCol] == 8) {
                     currentOrientation = Left;
                     directionState = TurnLeft;
@@ -230,7 +223,7 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Right;
                     directionState = TurnRight;
-                    currentRow++;
+                    currentRow++; // update position
                 }
                 break;
             case Down:
@@ -245,37 +238,37 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Left;
                     directionState = TurnLeft;
-                    currentRow++;
+                    currentRow++; // update position
                 }
                 break;
             case Left:
                 if(map[currentRow - 1][currentCol] == 8) {
                     currentOrientation = Left;
                     directionState = Forward;
-                    currentRow--;
+                    currentRow--; // update position
                 } else if (map[currentRow][currentCol - 1] == 8) {
                     currentOrientation = Up;
                     directionState = TurnRight;
-                    currentRow++;
+                    currentRow++; // update position
                 } else if (map[currentRow][currentCol + 1] == 8) {
                     currentOrientation = Down;
                     directionState = TurnLeft;
-                    currentCol--;
+                    currentCol--; // update position
                 }
                 break;
             case Right:
                 if(map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Right;
                     directionState = Forward;
-                    currentRow++;
+                    currentRow++; // update position
                 } else if (map[currentRow][currentCol - 1] == 8) {
                     currentOrientation = Up;
                     directionState = TurnLeft;
-                    currentCol++;
+                    currentCol++; // update position
                 } else if (map[currentRow][currentCol + 1] == 8) {
                     currentOrientation = Down;
                     directionState = TurnRight;
-                    currentCol--;
+                    currentCol--; // update position
                 }
                 break;
             default:
