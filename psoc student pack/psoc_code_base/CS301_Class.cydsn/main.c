@@ -308,6 +308,7 @@ enum DirectionState CheckSensorDirection() {
         } 
         else if (!s5 || !s6) {
             directionState = Stop; // stop turning when s5 & s6 are low
+            totalDistance = 0; // correct totalDistance
             return directionState;
         }
     }    
@@ -319,6 +320,7 @@ enum DirectionState CheckSensorDirection() {
         } 
         else if (!s5 || !s6) {
             directionState = Stop; // stop turning when s5 & s6 are low
+            totalDistance = 0; // correct totalDistance
             return directionState;
         }
     }
@@ -339,6 +341,16 @@ enum DirectionState CheckSensorDirection() {
     if (s3 && s4 && !s5 && !s6) {
         directionState = Forward;
         return directionState;   
+    }
+    // SENSORS ALL HIGH CONDITION- waiting for a turn * ========================================
+    if(s3 && s4 && s5 && s6) {
+        directionState = waitForTurn; // need to keep going forward until s3 || s4 are low before turning
+        return directionState;
+    }
+
+    if (previousDirection == waitForTurn && (s3 || s4)) {
+        directionState = GetNextStep(); // determine which way to turn
+        return directionState;
     }
 
     // If currentDirection is Unknown, we continue with the previous direction.
