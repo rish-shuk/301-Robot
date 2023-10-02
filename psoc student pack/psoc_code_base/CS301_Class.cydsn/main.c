@@ -37,6 +37,7 @@ int16 quadCountToRPM(uint16 count);
 // Sensors, Course correction and Movement Direction.
 void ResetSensorFlags();
 void SetRobotMovement();
+float getBlocksize(enum OrientationState currentOrientation);
 enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn, ForwardAfterTurn, Backward};
 enum OrientationState {Up, Down, Left, Right};
@@ -278,19 +279,13 @@ enum DirectionState GetNextStep() {
 }
 
 enum DirectionState CheckSensorDirection() {
-    // determine blocksize
-    if(currentOrientation == Up || currentOrientation == Down){
-        blocksize = yBlocksize;
-    } else {
-        blocksize = xBlocksize;
-    }
-    
-    enum DirectionState directionState = Stop;
-    previousDirection = currentDirection;
+    blocksize = getBlocksize(currentOrientation); // determine blocksize
+    enum DirectionState directionState = Stop; // initialise state as stop
+    previousDirection = currentDirection; // store currentDirection as previousDirection for next pass
     
     if (totalDistance >= blocksize) {
         directionState = GetNextStep(); // get next step at each block
-        totalDistance = 0;
+        totalDistance = 0; // reset distance
         return directionState;
     }
     
@@ -415,5 +410,13 @@ void SetRobotMovement() {
         case Unknown:
             // UNKNOWN CONFIGURATION
             break;  
+    }
+}
+
+float getBlocksize(enum OrientationState currentOrientation) {
+    if(currentOrientation == Up || currentOrientation == Down) {
+        return 128.4;
+    } else {
+        return 92.5;
     }
 }
