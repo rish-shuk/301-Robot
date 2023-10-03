@@ -37,9 +37,8 @@ int16 quadCountToRPM(uint16 count);
 // Sensors, Course correction and Movement Direction.
 void ResetSensorFlags();
 void SetRobotMovement();
-float getBlocksize(enum OrientationState currentOrientation);
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, HardForward, waitForTurn, ForwardAfterTurn, Backward};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, StopOnBlock, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
 enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
@@ -73,7 +72,6 @@ CY_ISR (speedTimer) {
     quadDec2Count = QuadDec_M2_GetCounter();
     
     if ((currentDirection == Forward || 
-        currentDirection == HardForward ||
         currentDirection == waitForTurn || 
         currentDirection == ForwardAfterTurn ||
         currentDirection == AdjustToTheLeft ||
@@ -116,7 +114,6 @@ CY_ISR(S6_DETECTED) {
 }
 
 CY_ISR(TIMER_FINISH) {
-    //LED_Write(0u);
     if (currentDirection == Stop) {
         stopBuffer = stopBuffer + 1;
     } else {
@@ -199,10 +196,11 @@ uint8 currentRow = 1;
 uint8 currentCol = 1;
 
 enum DirectionState GetNextStep() {
+    enum DirectionState directionState;
     // Determines robot movement and orientation to follow optimal path
-    enum DirectionState directionState = Stop;
+    //enum DirectionState directionState = Stop;
     if((currentRow == 3) && (currentCol == 5)) {
-        directionState = Stop;
+        directionState = Stop; 
         return directionState;
     }
     switch (previousOrientation) {
@@ -214,11 +212,11 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow - 1][currentCol] == 8) {
                     currentOrientation = Left;
                     directionState = TurnLeft;
-                    currentRow--;
+                    //currentRow--;
                 } else if (map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Right;
                     directionState = TurnRight;
-                    currentRow++; // update position
+                    //currentRow++; // update position
                 }
                 break;
             case Down:
@@ -229,11 +227,11 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow - 1][currentCol] == 8) {
                     currentOrientation = Right;
                     directionState = TurnRight;
-                    currentRow--;
+                    //currentRow--;
                 } else if (map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Left;
-                    directionState = TurnLeft;
-                    currentRow++; // update position
+                    //directionState = TurnLeft;
+                    //currentRow++; // update position
                 }
                 break;
             case Left:
@@ -244,11 +242,11 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow][currentCol - 1] == 8) {
                     currentOrientation = Up;
                     directionState = TurnRight;
-                    currentRow++; // update position
+                    //currentRow++; // update position
                 } else if (map[currentRow][currentCol + 1] == 8) {
                     currentOrientation = Down;
                     directionState = TurnLeft;
-                    currentCol--; // update position
+                    //currentCol--; // update position
                 }
                 break;
             case Right:
@@ -259,11 +257,11 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow][currentCol - 1] == 8) {
                     currentOrientation = Up;
                     directionState = TurnLeft;
-                    currentCol++; // update position
+                    //currentCol++; // update position
                 } else if (map[currentRow][currentCol + 1] == 8) {
                     currentOrientation = Down;
-                    directionState = TurnRight;
-                    currentCol--; // update position
+                    directionState = waitForRightTurn;
+                    //currentCol--; // update position
                 }
                 break;
             default:
@@ -273,7 +271,12 @@ enum DirectionState GetNextStep() {
 }
 
 enum DirectionState CheckSensorDirection() {
-    float blocksize = getBlocksize(currentOrientation); // determine blocksize
+    float blocksize;
+    if(currentOrientation == Up || currentOrientation == Down) {
+        blocksize = 128.40;
+    } else {
+        blocksize = 92.50;
+    }
     enum DirectionState directionState = Stop; // initialise state as stop
     previousDirection = currentDirection; // store currentDirection as previousDirection for next pass
     
@@ -343,7 +346,7 @@ enum DirectionState CheckSensorDirection() {
         return directionState;   
     }
     // SENSORS ALL HIGH CONDITION- waiting for a turn * ========================================
-    if(s3 && s4 && s5 && s6) {
+    if(s5 && s6) {
         directionState = waitForTurn; // need to keep going forward until s3 || s4 are low before turning
         return directionState;
     }
@@ -359,9 +362,10 @@ enum DirectionState CheckSensorDirection() {
         directionState = Forward;
         return directionState;
     }
-    
+
+    currentDirection = Forward;
     // Possible reason
-    return previousDirection;
+    return currentDirection;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
@@ -405,10 +409,3 @@ void SetRobotMovement() {
     }
 }
 
-float getBlocksize(enum OrientationState currentOrientation) {
-    if(currentOrientation == Up || currentOrientation == Down) {
-        return 128.4;
-    } else {
-        return 92.5;
-    }
-}

@@ -97,6 +97,7 @@
 #include "USBUART_Dp_aliases.h"
 #include "USBUART_Dp.h"
 #include "UART_IntClock.h"
+#include "cy_em_eeprom.h"
 #include "core_cm3_psoc5.h"
 #include "CyDmac.h"
 #include "CyFlash.h"
@@ -105,7 +106,6 @@
 #include "cyPm.h"
 #include "CySpc.h"
 #include "cytypes.h"
-#include "cy_em_eeprom.h"
 
 /*[]*/
 
