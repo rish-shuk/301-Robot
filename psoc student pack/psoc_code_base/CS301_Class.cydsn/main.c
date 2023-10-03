@@ -140,6 +140,7 @@ int main()
     Timer_LED_Start();
 
     findPath(map);// find shortest path- store this in map wasn't being called before
+    GetNextStep();
 
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
@@ -214,60 +215,60 @@ enum DirectionState GetNextStep() {
         
     switch (previousOrientation) {
             case Up:
-                if(map[currentRow - 1][currentCol] == 8) {
+                if(map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
                     currentOrientation = Up; 
                     directionState = Forward;
                     currentRow--;// update position
-                } else if (map[currentRow][currentCol - 1] == 8) {
+                } else if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
                     currentOrientation = Left;
                     directionState = TurnLeft;
                     //currentRow--;
-                } else if (map[currentRow][currentCol + 1] == 8) {
+                } else if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
                     currentOrientation = Right;
                     directionState = TurnRight;
                     //currentRow++; // update position
                 }
                 break;
             case Down:
-                if(map[currentRow + 1][currentCol] == 8) {
+                if(map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
                     currentOrientation = Down;
                     directionState = Forward;
                     currentRow++;
-                } else if (map[currentRow][currentCol - 1] == 8) {
+                } else if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
                     currentOrientation = Right;
                     directionState = TurnRight;
                     //currentRow--;
-                } else if (map[currentRow][currentCol + 1] == 8) {
+                } else if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
                     currentOrientation = Left;
                     //directionState = TurnLeft;
                     //currentRow++; // update position
                 }
                 break;
             case Left:
-                if(map[currentRow][currentCol - 1] == 8) {
+                if(map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
                     currentOrientation = Left;
                     directionState = Forward;
                     currentCol--; // update position
-                } else if (map[currentRow - 1][currentCol] == 8) {
+                } else if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
                     currentOrientation = Up;
                     directionState = TurnRight;
                     //currentRow++; // update position
-                } else if (map[currentRow + 1][currentCol] == 8) {
+                } else if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
                     currentOrientation = Down;
                     directionState = TurnLeft;
                     //currentCol--; // update position
                 }
                 break;
             case Right:
-                if(map[currentRow][currentCol + 1] == 8) {
+                if(map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
                     currentOrientation = Right;
                     directionState = Forward;
                     currentCol++; // update position
-                } else if (map[currentRow - 1][currentCol] == 8) {
+                } else if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
                     currentOrientation = Up;
                     directionState = waitForLeftTurn;
                     //currentCol++; // update position
-                } else if (map[currentRow + 1][currentCol] == 8) {
+                } else if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
                     currentOrientation = Down;
                     directionState = waitForRightTurn;
                     //currentCol--; // update position
@@ -277,7 +278,7 @@ enum DirectionState GetNextStep() {
                 break;
         }
     
-    return Backward;
+    return directionState;
 }
 
 enum DirectionState CheckSensorDirection() {
@@ -287,12 +288,12 @@ enum DirectionState CheckSensorDirection() {
     } else {
         blocksize = 128.40;
     }
-    enum DirectionState directionState = Forward; // initialise state as stop
-    previousDirection = currentDirection; // store currentDirection as previousDirection for next pass
+    enum DirectionState directionState = Stop; // initialise state as stop
     
     if (totalDistance >= blocksize) {
         directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
+        previousDirection = directionState;
         return directionState;
     }
     
@@ -300,6 +301,7 @@ enum DirectionState CheckSensorDirection() {
     if (previousDirection == Stop) {
         if (stopBuffer <= 50) {
             directionState = Stop; // stop buffer- prevents overturning
+            previousDirection = directionState;
         } else {
             //directionState = ForwardAfterTurn;
         }
@@ -372,11 +374,13 @@ enum DirectionState CheckSensorDirection() {
         if(s6) {
             //usbPutString("Adjust to the left\n");
             directionState = AdjustToTheLeft; // keep adjusting to the left
+            previousDirection = directionState;
             return directionState;
         }
         if(s5) {
             //usbPutString("Adjust to the right\n");
             directionState = AdjustToTheRight; // keep adjusting to the right
+            previousDirection = directionState;
             return directionState;
         }
     }
@@ -385,6 +389,7 @@ enum DirectionState CheckSensorDirection() {
     if (s3 && s4 && !s5 && !s6) {
         //usbPutString("Forward\n");
         directionState = Forward;
+        previousDirection = directionState;
         return directionState;   
     }
     // SENSORS ALL HIGH CONDITION- waiting for a turn * ========================================
@@ -403,10 +408,12 @@ enum DirectionState CheckSensorDirection() {
     // However, if the previous direction is also Unknown, we will just move forward.
     if (previousDirection == Unknown) {
         directionState = Forward;
+        previousDirection = directionState;
         return directionState;
     }
 
     // Possible reason
+    previousDirection = currentDirection;
     return previousDirection;
 }
 
