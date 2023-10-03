@@ -186,7 +186,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
 void findPath(int map[MAX_ROWS][MAX_COLS]) {
     struct Location startLocation = {1,1};
-    struct Location targetLocation = {1,5};
+    struct Location targetLocation = {1,9};
     dijkstra(map, startLocation, targetLocation); // find shortest path
     map[0][0] = 7;
 }

@@ -221,11 +221,11 @@ enum DirectionState GetNextStep() {
                     currentRow--;// update position
                 } else if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
                     currentOrientation = Left;
-                    directionState = TurnLeft;
+                    directionState = waitForLeftTurn;
                     //currentRow--;
                 } else if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
                     currentOrientation = Right;
-                    directionState = TurnRight;
+                    directionState = waitForRightTurn;
                     //currentRow++; // update position
                 }
                 break;
@@ -235,12 +235,12 @@ enum DirectionState GetNextStep() {
                     directionState = Forward;
                     currentRow++;
                 } else if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
-                    currentOrientation = Right;
-                    directionState = TurnRight;
+                    currentOrientation = Left;
+                    directionState = waitForRightTurn;
                     //currentRow--;
                 } else if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
-                    currentOrientation = Left;
-                    //directionState = TurnLeft;
+                    currentOrientation = Right;
+                    directionState = waitForLeftTurn;
                     //currentRow++; // update position
                 }
                 break;
@@ -251,11 +251,11 @@ enum DirectionState GetNextStep() {
                     currentCol--; // update position
                 } else if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
                     currentOrientation = Up;
-                    directionState = TurnRight;
+                    directionState = waitForRightTurn;
                     //currentRow++; // update position
                 } else if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
                     currentOrientation = Down;
-                    directionState = TurnLeft;
+                    directionState = waitForLeftTurn;
                     //currentCol--; // update position
                 }
                 break;
@@ -281,6 +281,8 @@ enum DirectionState GetNextStep() {
     return directionState;
 }
 
+uint8 stoppedAfterTurn = 0;
+
 enum DirectionState CheckSensorDirection() {
     float blocksize;
     if(currentOrientation == Up || currentOrientation == Down) {
@@ -290,6 +292,13 @@ enum DirectionState CheckSensorDirection() {
     }
     enum DirectionState directionState = Stop; // initialise state as stop
     
+    if (stoppedAfterTurn == 1) {
+        directionState = GetNextStep(); // get next step at each block
+        totalDistance = 0; // reset distance
+        previousDirection = directionState;
+        stoppedAfterTurn = 0;
+        return directionState;
+    }
     if (totalDistance >= blocksize) {
         directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
@@ -309,10 +318,11 @@ enum DirectionState CheckSensorDirection() {
     }
 
     // TURNING- will only turn due to getNextStep() * ========================================    
-    /*if (previousDirection == ForwardAfterTurn) {
+    if (previousDirection == ForwardAfterTurn) {
         if (s3 || s4) {
             //usbPutString("Forward\n");
             directionState = Forward; // turns when robot has rotated 90º
+            previousDirection = directionState;
             return directionState;
         }
     }
@@ -321,10 +331,12 @@ enum DirectionState CheckSensorDirection() {
         if(!s4) {
             //usbPutString("Turn Right\n");
             directionState = TurnRight;
+            previousDirection = directionState;
             return directionState;
         } else {
             //usbPutString("Wait for Right Turn\n");
             directionState = waitForRightTurn;
+            previousDirection = directionState;
             return directionState;
         }
     }
@@ -333,10 +345,12 @@ enum DirectionState CheckSensorDirection() {
         if(!s3) {
             //usbPutString("Turn Left\n");
             directionState = TurnLeft;
+            previousDirection = directionState;
             return directionState;
         } else {
             //usbPutString("Wait for Left Turn\n");
             directionState = waitForLeftTurn;
+            previousDirection = directionState;
             return directionState;
         }
     }
@@ -345,12 +359,15 @@ enum DirectionState CheckSensorDirection() {
         if(s5 && s6) {
             //usbPutString("Turn Right\n");
             directionState = TurnRight; // keep turning while s5 & s6 are high
+            previousDirection = directionState;
             return directionState;
         } 
         else if (!s5 || !s6) {
             //usbPutString("Stop after Right Turn");
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct totalDistance
+            previousDirection = directionState;
+            stoppedAfterTurn = 1;
             return directionState;
         }
     }    
@@ -359,15 +376,18 @@ enum DirectionState CheckSensorDirection() {
         if(s5 && s6) {
             //usbPutString("Turn Left\n");
             directionState = TurnLeft; // keep turning while s5 & s6 are high
+            previousDirection = directionState;
             return directionState;
         } 
         else if (!s5 || !s6) {
            // usbPutString("Stop after Left Turn\n");
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct totalDistance
+            previousDirection = directionState;
+            stoppedAfterTurn = 1;
             return directionState;
         }
-    }*/
+    }
     
     // COURSE CORRECTION * ========================================
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
