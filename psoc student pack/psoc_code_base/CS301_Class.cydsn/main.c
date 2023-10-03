@@ -38,7 +38,7 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, StopOnBlock, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
 enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
@@ -199,66 +199,66 @@ enum DirectionState GetNextStep() {
     enum DirectionState directionState;
     // Determines robot movement and orientation to follow optimal path
     //enum DirectionState directionState = Stop;
-    if((currentRow == 3) && (currentCol == 5)) {
+    if((currentRow == 1) && (currentCol == 5)) {
         directionState = Stop; 
         return directionState;
     }
     switch (previousOrientation) {
             case Up:
-                if(map[currentRow][currentCol + 1] == 8) {
+                if(map[currentRow - 1][currentCol] == 8) {
                     currentOrientation = Up; 
                     directionState = Forward;
-                    currentCol++; // update position
-                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentRow--;// update position
+                } else if (map[currentRow][currentCol - 1] == 8) {
                     currentOrientation = Left;
                     directionState = TurnLeft;
                     //currentRow--;
-                } else if (map[currentRow + 1][currentCol] == 8) {
+                } else if (map[currentRow][currentCol + 1] == 8) {
                     currentOrientation = Right;
                     directionState = TurnRight;
                     //currentRow++; // update position
                 }
                 break;
             case Down:
-                if(map[currentRow][currentCol - 1] == 8) {
+                if(map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Down;
                     directionState = Forward;
-                    currentCol--;
-                } else if (map[currentRow - 1][currentCol] == 8) {
+                    currentRow++;
+                } else if (map[currentRow][currentCol - 1] == 8) {
                     currentOrientation = Right;
                     directionState = TurnRight;
                     //currentRow--;
-                } else if (map[currentRow + 1][currentCol] == 8) {
+                } else if (map[currentRow][currentCol + 1] == 8) {
                     currentOrientation = Left;
                     //directionState = TurnLeft;
                     //currentRow++; // update position
                 }
                 break;
             case Left:
-                if(map[currentRow - 1][currentCol] == 8) {
+                if(map[currentRow][currentCol - 1] == 8) {
                     currentOrientation = Left;
                     directionState = Forward;
-                    currentRow--; // update position
-                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentCol--; // update position
+                } else if (map[currentRow - 1][currentCol] == 8) {
                     currentOrientation = Up;
                     directionState = TurnRight;
                     //currentRow++; // update position
-                } else if (map[currentRow][currentCol + 1] == 8) {
+                } else if (map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Down;
                     directionState = TurnLeft;
                     //currentCol--; // update position
                 }
                 break;
             case Right:
-                if(map[currentRow + 1][currentCol] == 8) {
+                if(map[currentRow][currentCol + 1] == 8) {
                     currentOrientation = Right;
                     directionState = Forward;
-                    currentRow++; // update position
-                } else if (map[currentRow][currentCol - 1] == 8) {
+                    currentCol++; // update position
+                } else if (map[currentRow - 1][currentCol] == 8) {
                     currentOrientation = Up;
-                    directionState = TurnLeft;
+                    directionState = waitForLeftTurn;
                     //currentCol++; // update position
-                } else if (map[currentRow][currentCol + 1] == 8) {
+                } else if (map[currentRow + 1][currentCol] == 8) {
                     currentOrientation = Down;
                     directionState = waitForRightTurn;
                     //currentCol--; // update position
@@ -305,7 +305,7 @@ enum DirectionState CheckSensorDirection() {
     }
 
     if(previousDirection == waitForRightTurn) {
-        if(s5) {
+        if(s4) {
             directionState = TurnRight;
             return directionState;
         } else {
@@ -315,7 +315,7 @@ enum DirectionState CheckSensorDirection() {
     }
 
     if(previousDirection == waitForLeftTurn) {
-        if(s5) {
+        if(s3) {
             directionState = TurnLeft;
             return directionState;
         } else {
@@ -366,7 +366,7 @@ enum DirectionState CheckSensorDirection() {
         return directionState;   
     }
     // SENSORS ALL HIGH CONDITION- waiting for a turn * ========================================
-    if(s5 && s6) {
+    if(s5 && s6 && (previousDirection != waitForTurn)) {
         directionState = waitForTurn; // need to keep going forward until s3 || s4 are low before turning
         return directionState;
     }
@@ -383,9 +383,8 @@ enum DirectionState CheckSensorDirection() {
         return directionState;
     }
 
-    currentDirection = Forward;
     // Possible reason
-    return currentDirection;
+    return previousDirection;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
@@ -412,8 +411,6 @@ void SetRobotMovement() {
         case Stop:
             stopMoving();
             break;
-        case HardForward:
-            break;
         case waitForTurn:
             moveForward(); 
             break;
@@ -422,6 +419,12 @@ void SetRobotMovement() {
             break;
         case Backward:
             moveBackward();
+            break;
+        case waitForLeftTurn:
+            moveForward();
+            break;
+        case waitForRightTurn:
+            moveForward();
             break;
         case Unknown:
             // UNKNOWN CONFIGURATION
