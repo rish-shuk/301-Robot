@@ -64,7 +64,7 @@ struct Location {
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
 bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
-    return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == '0');
+    return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == 0);
 }
 
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
@@ -188,6 +188,7 @@ void findPath(int map[MAX_ROWS][MAX_COLS]) {
     struct Location startLocation = {1,1};
     struct Location targetLocation = {1,5};
     dijkstra(map, startLocation, targetLocation); // find shortest path
+    map[0][0] = 7;
 }
 
 /* [] END OF FILE */

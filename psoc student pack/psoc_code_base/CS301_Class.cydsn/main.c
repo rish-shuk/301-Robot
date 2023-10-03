@@ -198,11 +198,20 @@ uint8 currentCol = 1;
 enum DirectionState GetNextStep() {
     enum DirectionState directionState;
     // Determines robot movement and orientation to follow optimal path
-    //enum DirectionState directionState = Stop;
-    if((currentRow == 1) && (currentCol == 5)) {
+    // enum DirectionState directionState = Stop;
+    previousOrientation = currentOrientation;
+    
+    if(map[currentRow][currentCol] == 9) {
         directionState = Stop; 
         return directionState;
     }
+    /*
+    if (totalDistance >= (yBlocksize)) {
+        directionState = Stop;
+        return directionState;
+    }
+    */
+        
     switch (previousOrientation) {
             case Up:
                 if(map[currentRow - 1][currentCol] == 8) {
@@ -267,17 +276,18 @@ enum DirectionState GetNextStep() {
             default:
                 break;
         }
-    return directionState;
+    
+    return Backward;
 }
 
 enum DirectionState CheckSensorDirection() {
     float blocksize;
     if(currentOrientation == Up || currentOrientation == Down) {
-        blocksize = 128.40;
-    } else {
         blocksize = 92.50;
+    } else {
+        blocksize = 128.40;
     }
-    enum DirectionState directionState = Stop; // initialise state as stop
+    enum DirectionState directionState = Forward; // initialise state as stop
     previousDirection = currentDirection; // store currentDirection as previousDirection for next pass
     
     if (totalDistance >= blocksize) {
@@ -288,37 +298,42 @@ enum DirectionState CheckSensorDirection() {
     
     // STOP BUFFER * ========================================
     if (previousDirection == Stop) {
-        if (stopBuffer <= 10) {
+        if (stopBuffer <= 50) {
             directionState = Stop; // stop buffer- prevents overturning
         } else {
-            directionState = ForwardAfterTurn;
+            //directionState = ForwardAfterTurn;
         }
         return directionState;
     }
 
     // TURNING- will only turn due to getNextStep() * ========================================    
-    if (previousDirection == ForwardAfterTurn) {
+    /*if (previousDirection == ForwardAfterTurn) {
         if (s3 || s4) {
+            //usbPutString("Forward\n");
             directionState = Forward; // turns when robot has rotated 90º
             return directionState;
         }
     }
 
     if(previousDirection == waitForRightTurn) {
-        if(s4) {
+        if(!s4) {
+            //usbPutString("Turn Right\n");
             directionState = TurnRight;
             return directionState;
         } else {
+            //usbPutString("Wait for Right Turn\n");
             directionState = waitForRightTurn;
             return directionState;
         }
     }
 
     if(previousDirection == waitForLeftTurn) {
-        if(s3) {
+        if(!s3) {
+            //usbPutString("Turn Left\n");
             directionState = TurnLeft;
             return directionState;
         } else {
+            //usbPutString("Wait for Left Turn\n");
             directionState = waitForLeftTurn;
             return directionState;
         }
@@ -326,10 +341,12 @@ enum DirectionState CheckSensorDirection() {
 
     if(previousDirection == TurnRight) {
         if(s5 && s6) {
+            //usbPutString("Turn Right\n");
             directionState = TurnRight; // keep turning while s5 & s6 are high
             return directionState;
         } 
         else if (!s5 || !s6) {
+            //usbPutString("Stop after Right Turn");
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct totalDistance
             return directionState;
@@ -338,23 +355,27 @@ enum DirectionState CheckSensorDirection() {
 
     if(previousDirection == TurnLeft) {
         if(s5 && s6) {
+            //usbPutString("Turn Left\n");
             directionState = TurnLeft; // keep turning while s5 & s6 are high
             return directionState;
         } 
         else if (!s5 || !s6) {
+           // usbPutString("Stop after Left Turn\n");
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct totalDistance
             return directionState;
         }
-    }
+    }*/
     
     // COURSE CORRECTION * ========================================
     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
         if(s6) {
+            //usbPutString("Adjust to the left\n");
             directionState = AdjustToTheLeft; // keep adjusting to the left
             return directionState;
         }
         if(s5) {
+            //usbPutString("Adjust to the right\n");
             directionState = AdjustToTheRight; // keep adjusting to the right
             return directionState;
         }
@@ -362,19 +383,21 @@ enum DirectionState CheckSensorDirection() {
     
     // FORWARD * ========================================
     if (s3 && s4 && !s5 && !s6) {
+        //usbPutString("Forward\n");
         directionState = Forward;
         return directionState;   
     }
     // SENSORS ALL HIGH CONDITION- waiting for a turn * ========================================
-    if(s5 && s6 && (previousDirection != waitForTurn)) {
+    /*if(s5 && s6 && (previousDirection != waitForTurn)) {
         directionState = waitForTurn; // need to keep going forward until s3 || s4 are low before turning
         return directionState;
     }
 
     if (previousDirection == waitForTurn && (s3 || s4)) {
+        //usbPutString("Wait For Turn\n");
         directionState = GetNextStep(); // determine which way to turn
         return directionState;
-    }
+    }*/
 
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
@@ -431,4 +454,3 @@ void SetRobotMovement() {
             break;  
     }
 }
-
