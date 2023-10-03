@@ -304,6 +304,26 @@ enum DirectionState CheckSensorDirection() {
         }
     }
 
+    if(previousDirection == waitForRightTurn) {
+        if(s5) {
+            directionState = TurnRight;
+            return directionState;
+        } else {
+            directionState = waitForRightTurn;
+            return directionState;
+        }
+    }
+
+    if(previousDirection == waitForLeftTurn) {
+        if(s5) {
+            directionState = TurnLeft;
+            return directionState;
+        } else {
+            directionState = waitForLeftTurn;
+            return directionState;
+        }
+    }
+
     if(previousDirection == TurnRight) {
         if(s5 && s6) {
             directionState = TurnRight; // keep turning while s5 & s6 are high
