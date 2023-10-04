@@ -1,54 +1,12 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#include "map.h"
+#include "map2.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-
-int map[15][19] = {
-{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1},
-{1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,1},
-{1,1,1,0,1,0,1,0,1,1,1,0,1,0,1,1,1,0,1},
-{1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1},
-{1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1},
-{1,0,1,0,1,0,0,0,1,0,1,0,1,0,1,0,0,0,1},
-{1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,1},
-{1,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,0,0,1},
-{1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1},
-{1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1},
-{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-};
-
-int start_pos[2] = {1,1};
-
-int food_list[5][2]= {
-{1,9},
-{5,5},
-{7,1},
-{13,5},
-{9,9}
-};
-
-
-// MAP INITIALISATION CODE
 
 void printMap(int map[MAX_ROWS][MAX_COLS]) {
     // Print the map in a grid format
@@ -65,7 +23,22 @@ struct Location {
     int col;
 };
 
-// pathfinding 
+struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
+    struct Location randomLocation;
+    int isNotValid = 1; // true
+    while (isNotValid) {
+        int random_row = rand() % MAX_ROWS;
+        int random_col = rand() % MAX_COLS; // get random row and column
+        // check point on map to see if it's a path
+        if (map[random_row][random_col] == 0) {
+            randomLocation.row = random_row;
+            randomLocation.col = random_col;
+            isNotValid = 0; // found valid location
+        }
+    }
+    return randomLocation;
+}
+
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
 bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
@@ -186,14 +159,102 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
             }
         }
     }
-    // printMap(map);
+    //printMap(map);
+    //return retSteps;
 }
 
-void findPath(int map[MAX_ROWS][MAX_COLS]) {
-    struct Location startLocation = {1,1};
-    struct Location targetLocation = {1,9};
+void traverseMap(int map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
+    int currentRow = startLocation.row;
+    int currentCol = startLocation.col; // get starting location
+    bool leftOrient, rightOrient, upOrient, downOrient = false; // initialise orientation booleans- check which direction they're facing
+    struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // initialise moves
+    int visited[MAX_ROWS][MAX_COLS];
+    for(int i = 0; i < MAX_ROWS; i++) {
+        for(int j = 0; j < MAX_COLS; j++) {
+            visited[i][j] = 0; // initialise all points as unvisited
+        }
+    }
+        // traverse map, check for * or X until targetLocation reached
+    while (currentRow != targetLocation.row && currentCol != targetLocation.col) {
+        for(int i = 0; i < 4; i++) {
+            int newRow = currentRow + moves[i].row;
+            int newCol = currentCol + moves[i].col;
+
+            // check next step in path and rotate and move accordingly- begin traversal
+            if(map[newRow][newCol] == 'x' && visited[newRow][newCol] == 0) {
+                visited[newRow][newCol] = 1; // mark new location as visited
+                // move robot NEED TO CALIBRATE FOR DISTANCES AND DETERMINE ORIENTATION TO SEE IF A ROTATION IS NEEDED
+                switch (i)
+                {
+                case 0:
+                    // increment column (move right)
+                    if(upOrient) {
+                        // rotation clockwise
+                    } else if(downOrient) {
+                        // rotation anticlockwise
+                    }
+                    rightOrient = true;
+                    // MOVE FORWARD
+                    // STOP
+                    break;
+                case 1:
+                    // decrement column (move left)
+                    if(upOrient) {
+                        // rotation anticlockwise
+                    } else if(downOrient) {
+                        // rotation clockwise
+                    }
+                    leftOrient = true;
+                    // MOVE FORWARD 
+                    // STOP
+                    break;
+                case 2:
+                    // increment row (move up)
+                    if(rightOrient) {
+                        // rotation anticlockwise
+                    } else if(leftOrient) {
+                        // rotation clockwise
+                    }
+                    upOrient = true;
+                    // MOVE FORWARD
+                    // stop
+                    break;
+                case 3:
+                    // decrement row (move down)
+                    if(rightOrient) {
+                        // rotation clockwise
+                    } else if(leftOrient) {
+                        // rotation anticlockwise
+                    }
+                    downOrient = true;
+                    // MOVE FORWARD
+                    // STOP
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    srand(time(NULL)); // Seed the random number generator with the current time
+    //printMap(map);
+    //struct Location startLocation = getRandomLocation(map); 
+    //struct Location targetLocation = getRandomLocation(map); // generate random start and target location
+    struct Location startLocation; 
+    startLocation.row = 1;
+    startLocation.col = 1;
+    struct Location targetLocation; // generate random start and target location
+    targetLocation.row = 1;
+    targetLocation.col = 9;
+    printf("\n");
+    printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
+    printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
+
     dijkstra(map, startLocation, targetLocation); // find shortest path
-    printMap();
+    printMap(map);
+    // traverseMap(map, startLocation, targetLocation);
+    return 0;
 }
-
-/* [] END OF FILE */
