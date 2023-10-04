@@ -42,8 +42,8 @@ enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheR
 enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
-enum OrientationState currentOrientation = Right;
-enum OrientationState previousOrientation = Right;
+enum OrientationState currentOrientation = Down;
+enum OrientationState previousOrientation = Down;
 enum DirectionState GetNextStep();
 // --- YIPPE
 // ----------------------------------------
@@ -317,7 +317,7 @@ enum DirectionState CheckSensorDirection() {
         return directionState;
     }
 
-    // TURNING- will only turn due to getNextStep() * ========================================    
+    // TURNING * ========================================    
     if (previousDirection == ForwardAfterTurn) {
         if (s3 || s4) {
             //usbPutString("Forward\n");
@@ -367,7 +367,7 @@ enum DirectionState CheckSensorDirection() {
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct totalDistance
             previousDirection = directionState;
-            stoppedAfterTurn = 1;
+            stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
             return directionState;
         }
     }    
@@ -384,7 +384,7 @@ enum DirectionState CheckSensorDirection() {
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct totalDistance
             previousDirection = directionState;
-            stoppedAfterTurn = 1;
+            stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
             return directionState;
         }
     }
