@@ -191,8 +191,8 @@ void ResetSensorFlags() {
     s6 = 0;
 }
 
-float yBlocksize = 127.5;
-float xBlocksize = 92.5;
+float xBlocksize = 135;
+float yBlocksize = 80;
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
@@ -286,12 +286,13 @@ uint8 stoppedAfterTurn = 0;
 enum DirectionState CheckSensorDirection() {
     float blocksize;
     if(currentOrientation == Up || currentOrientation == Down) {
-        blocksize = 92.50;
+        blocksize = yBlocksize;
     } else {
-        blocksize = 128.40;
+        blocksize = xBlocksize;
     }
     enum DirectionState directionState = Stop; // initialise state as stop
     
+    // GET NEXT STEP * ========================================
     if (stoppedAfterTurn == 1) {
         directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
@@ -365,7 +366,7 @@ enum DirectionState CheckSensorDirection() {
         else if (!s5 || !s6) {
             //usbPutString("Stop after Right Turn");
             directionState = Stop; // stop turning when s5 & s6 are low
-            totalDistance = 0; // correct totalDistance
+            totalDistance = 0; // correct/ RESET totalDistance
             previousDirection = directionState;
             stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
             return directionState;
@@ -382,7 +383,7 @@ enum DirectionState CheckSensorDirection() {
         else if (!s5 || !s6) {
            // usbPutString("Stop after Left Turn\n");
             directionState = Stop; // stop turning when s5 & s6 are low
-            totalDistance = 0; // correct totalDistance
+            totalDistance = 0; // correct/ RESET totalDistance
             previousDirection = directionState;
             stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
             return directionState;

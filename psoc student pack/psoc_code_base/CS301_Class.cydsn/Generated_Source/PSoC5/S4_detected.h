@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: S4_detected.h
-* Version 1.71
+* Version 1.70
 *
 *  Description:
 *   Provides the function definitions for the Interrupt Controller.

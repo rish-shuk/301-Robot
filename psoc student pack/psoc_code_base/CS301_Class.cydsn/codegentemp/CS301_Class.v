@@ -1,6 +1,6 @@
 // ======================================================================
 // CS301_Class.v generated from TopDesign.cysch
-// 10/03/2023 at 12:29
+// 10/05/2023 at 11:29
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -72,56 +72,62 @@
 `define CYDEV_CHIP_MEMBER_4E 6
 `define CYDEV_CHIP_REVISION_4E_PRODUCTION 0
 `define CYDEV_CHIP_REVISION_4E_CCG2_NO_USBPD 0
-`define CYDEV_CHIP_MEMBER_4O 7
+`define CYDEV_CHIP_MEMBER_4X 7
+`define CYDEV_CHIP_REVISION_4X_PRODUCTION 0
+`define CYDEV_CHIP_MEMBER_4O 8
 `define CYDEV_CHIP_REVISION_4O_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4R 8
+`define CYDEV_CHIP_MEMBER_4R 9
 `define CYDEV_CHIP_REVISION_4R_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4T 9
+`define CYDEV_CHIP_MEMBER_4T 10
 `define CYDEV_CHIP_REVISION_4T_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4N 10
+`define CYDEV_CHIP_MEMBER_4N 11
 `define CYDEV_CHIP_REVISION_4N_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4S 11
+`define CYDEV_CHIP_MEMBER_4S 12
 `define CYDEV_CHIP_REVISION_4S_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4Q 12
+`define CYDEV_CHIP_MEMBER_4W 13
+`define CYDEV_CHIP_REVISION_4W_PRODUCTION 0
+`define CYDEV_CHIP_MEMBER_4Q 14
 `define CYDEV_CHIP_REVISION_4Q_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4D 13
+`define CYDEV_CHIP_MEMBER_4Y 15
+`define CYDEV_CHIP_REVISION_4Y_PRODUCTION 0
+`define CYDEV_CHIP_MEMBER_4D 16
 `define CYDEV_CHIP_REVISION_4D_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4J 14
+`define CYDEV_CHIP_MEMBER_4J 17
 `define CYDEV_CHIP_REVISION_4J_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4K 15
+`define CYDEV_CHIP_MEMBER_4K 18
 `define CYDEV_CHIP_REVISION_4K_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4V 16
+`define CYDEV_CHIP_MEMBER_4V 19
 `define CYDEV_CHIP_REVISION_4V_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4H 17
+`define CYDEV_CHIP_MEMBER_4H 20
 `define CYDEV_CHIP_REVISION_4H_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4A 18
+`define CYDEV_CHIP_MEMBER_4A 21
 `define CYDEV_CHIP_REVISION_4A_PRODUCTION 17
 `define CYDEV_CHIP_REVISION_4A_ES0 17
-`define CYDEV_CHIP_MEMBER_4F 19
+`define CYDEV_CHIP_MEMBER_4F 22
 `define CYDEV_CHIP_REVISION_4F_PRODUCTION 0
 `define CYDEV_CHIP_REVISION_4F_PRODUCTION_256K 0
 `define CYDEV_CHIP_REVISION_4F_PRODUCTION_256DMA 0
-`define CYDEV_CHIP_MEMBER_4P 20
+`define CYDEV_CHIP_MEMBER_4P 23
 `define CYDEV_CHIP_REVISION_4P_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4M 21
+`define CYDEV_CHIP_MEMBER_4M 24
 `define CYDEV_CHIP_REVISION_4M_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4L 22
+`define CYDEV_CHIP_MEMBER_4L 25
 `define CYDEV_CHIP_REVISION_4L_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_4I 23
+`define CYDEV_CHIP_MEMBER_4I 26
 `define CYDEV_CHIP_REVISION_4I_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_6A 24
+`define CYDEV_CHIP_MEMBER_6A 27
 `define CYDEV_CHIP_REVISION_6A_ES 17
 `define CYDEV_CHIP_REVISION_6A_PRODUCTION 33
 `define CYDEV_CHIP_REVISION_6A_NO_UDB 33
-`define CYDEV_CHIP_MEMBER_PDL_FM0P_TYPE1 25
+`define CYDEV_CHIP_MEMBER_PDL_FM0P_TYPE1 28
 `define CYDEV_CHIP_REVISION_PDL_FM0P_TYPE1_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_PDL_FM0P_TYPE2 26
+`define CYDEV_CHIP_MEMBER_PDL_FM0P_TYPE2 29
 `define CYDEV_CHIP_REVISION_PDL_FM0P_TYPE2_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_PDL_FM0P_TYPE3 27
+`define CYDEV_CHIP_MEMBER_PDL_FM0P_TYPE3 30
 `define CYDEV_CHIP_REVISION_PDL_FM0P_TYPE3_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_FM3 28
+`define CYDEV_CHIP_MEMBER_FM3 31
 `define CYDEV_CHIP_REVISION_FM3_PRODUCTION 0
-`define CYDEV_CHIP_MEMBER_FM4 29
+`define CYDEV_CHIP_MEMBER_FM4 32
 `define CYDEV_CHIP_REVISION_FM4_PRODUCTION 0
 `define CYDEV_CHIP_FAMILY_USED 3
 `define CYDEV_CHIP_MEMBER_USED 2
@@ -1349,19 +1355,6 @@ module Timer_v2_80_8 (
 
 endmodule
 
-// Component: EdgeDetect_v1_0
-`ifdef CY_BLK_DIR
-`undef CY_BLK_DIR
-`endif
-
-`ifdef WARP
-`define CY_BLK_DIR "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0"
-`include "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0\EdgeDetect_v1_0.v"
-`else
-`define CY_BLK_DIR "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0"
-`include "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0\EdgeDetect_v1_0.v"
-`endif
-
 // Timer_v2_80(CaptureAlternatingFall=false, CaptureAlternatingRise=false, CaptureCount=2, CaptureCounterEnabled=false, CaptureInputEnabled=true, CaptureMode=1, CONTROL3=1, ControlRegRemoved=0, CtlModeReplacementString=SyncCtl, CyGetRegReplacementString=CY_GET_REG16, CySetRegReplacementString=CY_SET_REG16, DeviceFamily=PSoC5, EnableMode=0, FF16=true, FF8=false, FixedFunction=true, FixedFunctionUsed=1, HWCaptureCounterEnabled=false, InterruptOnCapture=false, InterruptOnFIFOFull=false, InterruptOnTC=true, IntOnCapture=0, IntOnFIFOFull=0, IntOnTC=1, NumberOfCaptures=1, param45=1, Period=969, RegDefReplacementString=reg16, RegSizeReplacementString=uint16, Resolution=16, RstStatusReplacementString=rstSts, RunMode=0, SiliconRevision=0, SoftwareCaptureModeEnabled=false, SoftwareTriggerModeEnabled=false, TriggerInputEnabled=false, TriggerMode=0, UDB16=false, UDB24=false, UDB32=false, UDB8=false, UDBControlReg=false, UsesHWEnable=0, VerilogSectionReplacementString=sT16, CY_API_CALLBACK_HEADER_INCLUDE=, CY_COMMENT=, CY_COMPONENT_NAME=Timer_v2_80, CY_CONFIG_TITLE=Timer_LED, CY_CONST_CONFIG=true, CY_CONTROL_FILE=<:default:>, CY_DATASHEET_FILE=<:default:>, CY_FITTER_NAME=Timer_LED, CY_INSTANCE_SHORT_NAME=Timer_LED, CY_MAJOR_VERSION=2, CY_MINOR_VERSION=80, CY_PDL_DRIVER_NAME=, CY_PDL_DRIVER_REQ_VERSION=, CY_PDL_DRIVER_SUBGROUP=, CY_PDL_DRIVER_VARIANT=, CY_REMOVE=false, CY_SUPPRESS_API_GEN=false, CY_VERSION=PSoC Creator  4.2, INSTANCE_NAME=Timer_LED, )
 module Timer_v2_80_9 (
     reset,
@@ -1427,6 +1420,19 @@ module Timer_v2_80_9 (
 
 endmodule
 
+// Component: EdgeDetect_v1_0
+`ifdef CY_BLK_DIR
+`undef CY_BLK_DIR
+`endif
+
+`ifdef WARP
+`define CY_BLK_DIR "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0"
+`include "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0\EdgeDetect_v1_0.v"
+`else
+`define CY_BLK_DIR "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0"
+`include "C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\CyComponentLibrary\CyComponentLibrary.cylib\EdgeDetect_v1_0\EdgeDetect_v1_0.v"
+`endif
+
 // top
 module top ;
 
@@ -1435,7 +1441,6 @@ module top ;
           wire  Net_5441;
           wire  Net_5438;
           wire  Net_5435;
-          wire  Net_5432;
           wire  Net_5396;
           wire  Net_5393;
           wire  Net_5392;
@@ -1443,7 +1448,6 @@ module top ;
           wire  Net_5394;
           wire  Net_5430;
           wire  Net_5487;
-          wire  Net_5358;
           wire  Net_4429;
           wire  Net_5665;
           wire  Net_5664;
@@ -1505,7 +1509,6 @@ module top ;
           wire  Net_3229;
           wire  Net_4335;
           wire  Net_4334;
-          wire  Net_5431;
           wire  Net_5434;
           wire  Net_5437;
           wire  Net_5440;
@@ -1516,8 +1519,7 @@ module top ;
           wire  Net_3246;
           wire  Net_1849;
           wire  Net_5372;
-          wire  Net_4630;
-          wire  Net_4660;
+          wire  Net_5666;
           wire  Net_5389;
           wire  Net_5391;
           wire  Net_4412;
@@ -2546,85 +2548,11 @@ module top ;
 
 	assign tmpOE__S3_net = (`CYDEV_CHIP_MEMBER_USED == `CYDEV_CHIP_MEMBER_3A && `CYDEV_CHIP_REVISION_USED < `CYDEV_CHIP_REVISION_3A_ES3) ? ~{1'b1} : {1'b1};
 
-	wire [0:0] tmpOE__S2_net;
-	wire [0:0] tmpIO_0__S2_net;
-	wire [0:0] tmpINTERRUPT_0__S2_net;
-	electrical [0:0] tmpSIOVREF__S2_net;
-
-	cy_psoc3_pins_v1_10
-		#(.id("77715107-f8d5-47e5-a629-0fb83101ac6b"),
-		  .drive_mode(3'b001),
-		  .ibuf_enabled(1'b1),
-		  .init_dr_st(1'b0),
-		  .input_clk_en(0),
-		  .input_sync(1'b0),
-		  .input_sync_mode(1'b0),
-		  .intr_mode(2'b00),
-		  .invert_in_clock(0),
-		  .invert_in_clock_en(0),
-		  .invert_in_reset(0),
-		  .invert_out_clock(0),
-		  .invert_out_clock_en(0),
-		  .invert_out_reset(0),
-		  .io_voltage(""),
-		  .layout_mode("CONTIGUOUS"),
-		  .oe_conn(1'b0),
-		  .oe_reset(0),
-		  .oe_sync(1'b0),
-		  .output_clk_en(0),
-		  .output_clock_mode(1'b0),
-		  .output_conn(1'b0),
-		  .output_mode(1'b0),
-		  .output_reset(0),
-		  .output_sync(1'b0),
-		  .pa_in_clock(-1),
-		  .pa_in_clock_en(-1),
-		  .pa_in_reset(-1),
-		  .pa_out_clock(-1),
-		  .pa_out_clock_en(-1),
-		  .pa_out_reset(-1),
-		  .pin_aliases(""),
-		  .pin_mode("I"),
-		  .por_state(4),
-		  .sio_group_cnt(0),
-		  .sio_hyst(1'b1),
-		  .sio_ibuf(""),
-		  .sio_info(2'b00),
-		  .sio_obuf(""),
-		  .sio_refsel(""),
-		  .sio_vtrip(""),
-		  .sio_hifreq(""),
-		  .sio_vohsel(""),
-		  .slew_rate(1'b0),
-		  .spanning(0),
-		  .use_annotation(1'b0),
-		  .vtrip(2'b00),
-		  .width(1),
-		  .ovt_hyst_trim(1'b0),
-		  .ovt_needed(1'b0),
-		  .ovt_slew_control(2'b00),
-		  .input_buffer_sel(2'b00))
-		S2
-		 (.oe(tmpOE__S2_net),
-		  .y({1'b0}),
-		  .fb({Net_5431}),
-		  .io({tmpIO_0__S2_net[0:0]}),
-		  .siovref(tmpSIOVREF__S2_net),
-		  .interrupt({tmpINTERRUPT_0__S2_net[0:0]}),
-		  .in_clock({1'b0}),
-		  .in_clock_en({1'b1}),
-		  .in_reset({1'b0}),
-		  .out_clock({1'b0}),
-		  .out_clock_en({1'b1}),
-		  .out_reset({1'b0}));
-
-	assign tmpOE__S2_net = (`CYDEV_CHIP_MEMBER_USED == `CYDEV_CHIP_MEMBER_3A && `CYDEV_CHIP_REVISION_USED < `CYDEV_CHIP_REVISION_3A_ES3) ? ~{1'b1} : {1'b1};
-
 
 	cy_isr_v1_0
 		#(.int_type(2'b10))
-		isr_TX
-		 (.int_signal(Net_3406));
+		isr_RX
+		 (.int_signal(Net_1898));
 
 
     USBFS_v3_20_4 USBUART (
@@ -3330,8 +3258,8 @@ module top ;
 
 	cy_isr_v1_0
 		#(.int_type(2'b10))
-		isr_RX
-		 (.int_signal(Net_1898));
+		isr_TX
+		 (.int_signal(Net_3406));
 
 
     // -- Mux start --
@@ -3419,19 +3347,6 @@ module top ;
 		 (.int_signal(Net_5372));
 
 
-    EdgeDetect_v1_0 EdgeDetect_1 (
-        .d(Net_4630),
-        .det(Net_5358),
-        .clock(Net_4660));
-    defparam EdgeDetect_1.EdgeType = 0;
-
-
-	cy_isr_v1_0
-		#(.int_type(2'b10))
-		S1_detected
-		 (.int_signal(Net_5358));
-
-
 
 	cy_clock_v1_0
 		#(.id("538b0a8a-8b84-4a2c-ab91-c1c9dc93faf8"),
@@ -3441,82 +3356,8 @@ module top ;
 		  .is_direct(1),
 		  .is_digital(1))
 		Clock_1
-		 (.clock_out(Net_4660));
+		 (.clock_out(Net_5666));
 
-
-	wire [0:0] tmpOE__S1_net;
-	wire [0:0] tmpIO_0__S1_net;
-	wire [0:0] tmpINTERRUPT_0__S1_net;
-	electrical [0:0] tmpSIOVREF__S1_net;
-
-	cy_psoc3_pins_v1_10
-		#(.id("0bcf7c42-2f2e-4728-87df-b06d8e2a47ff"),
-		  .drive_mode(3'b001),
-		  .ibuf_enabled(1'b1),
-		  .init_dr_st(1'b0),
-		  .input_clk_en(0),
-		  .input_sync(1'b1),
-		  .input_sync_mode(1'b0),
-		  .intr_mode(2'b00),
-		  .invert_in_clock(0),
-		  .invert_in_clock_en(0),
-		  .invert_in_reset(0),
-		  .invert_out_clock(0),
-		  .invert_out_clock_en(0),
-		  .invert_out_reset(0),
-		  .io_voltage(""),
-		  .layout_mode("CONTIGUOUS"),
-		  .oe_conn(1'b0),
-		  .oe_reset(0),
-		  .oe_sync(1'b0),
-		  .output_clk_en(0),
-		  .output_clock_mode(1'b0),
-		  .output_conn(1'b0),
-		  .output_mode(1'b0),
-		  .output_reset(0),
-		  .output_sync(1'b0),
-		  .pa_in_clock(-1),
-		  .pa_in_clock_en(-1),
-		  .pa_in_reset(-1),
-		  .pa_out_clock(-1),
-		  .pa_out_clock_en(-1),
-		  .pa_out_reset(-1),
-		  .pin_aliases(""),
-		  .pin_mode("I"),
-		  .por_state(4),
-		  .sio_group_cnt(0),
-		  .sio_hyst(1'b1),
-		  .sio_ibuf(""),
-		  .sio_info(2'b00),
-		  .sio_obuf(""),
-		  .sio_refsel(""),
-		  .sio_vtrip(""),
-		  .sio_hifreq(""),
-		  .sio_vohsel(""),
-		  .slew_rate(1'b0),
-		  .spanning(0),
-		  .use_annotation(1'b0),
-		  .vtrip(2'b00),
-		  .width(1),
-		  .ovt_hyst_trim(1'b0),
-		  .ovt_needed(1'b0),
-		  .ovt_slew_control(2'b00),
-		  .input_buffer_sel(2'b00))
-		S1
-		 (.oe(tmpOE__S1_net),
-		  .y({1'b0}),
-		  .fb({Net_4630}),
-		  .io({tmpIO_0__S1_net[0:0]}),
-		  .siovref(tmpSIOVREF__S1_net),
-		  .interrupt({tmpINTERRUPT_0__S1_net[0:0]}),
-		  .in_clock({1'b0}),
-		  .in_clock_en({1'b1}),
-		  .in_reset({1'b0}),
-		  .out_clock({1'b0}),
-		  .out_clock_en({1'b1}),
-		  .out_reset({1'b0}));
-
-	assign tmpOE__S1_net = (`CYDEV_CHIP_MEMBER_USED == `CYDEV_CHIP_MEMBER_3A && `CYDEV_CHIP_REVISION_USED < `CYDEV_CHIP_REVISION_3A_ES3) ? ~{1'b1} : {1'b1};
 
 
 	cy_clock_v1_0
@@ -3550,55 +3391,35 @@ module top ;
     defparam Timer_LED.Resolution = 16;
     defparam Timer_LED.SiliconRevision = "0";
 
-    EdgeDetect_v1_0 EdgeDetect_2 (
-        .d(Net_5431),
-        .det(Net_5432),
-        .clock(Net_4660));
-    defparam EdgeDetect_2.EdgeType = 0;
-
     EdgeDetect_v1_0 EdgeDetect_3 (
         .d(Net_5434),
         .det(Net_5435),
-        .clock(Net_4660));
+        .clock(Net_5666));
     defparam EdgeDetect_3.EdgeType = 0;
 
     EdgeDetect_v1_0 EdgeDetect_4 (
         .d(Net_5437),
         .det(Net_5438),
-        .clock(Net_4660));
+        .clock(Net_5666));
     defparam EdgeDetect_4.EdgeType = 0;
 
     EdgeDetect_v1_0 EdgeDetect_5 (
         .d(Net_5440),
         .det(Net_5441),
-        .clock(Net_4660));
+        .clock(Net_5666));
     defparam EdgeDetect_5.EdgeType = 0;
 
     EdgeDetect_v1_0 EdgeDetect_6 (
         .d(Net_5443),
         .det(Net_5444),
-        .clock(Net_4660));
+        .clock(Net_5666));
     defparam EdgeDetect_6.EdgeType = 0;
 
 
 	cy_isr_v1_0
 		#(.int_type(2'b10))
-		S2_detected
-		 (.int_signal(Net_5432));
-
-
-
-	cy_isr_v1_0
-		#(.int_type(2'b10))
-		S3_detected
-		 (.int_signal(Net_5435));
-
-
-
-	cy_isr_v1_0
-		#(.int_type(2'b10))
-		S4_detected
-		 (.int_signal(Net_5438));
+		S6_detected
+		 (.int_signal(Net_5444));
 
 
 
@@ -3611,8 +3432,15 @@ module top ;
 
 	cy_isr_v1_0
 		#(.int_type(2'b10))
-		S6_detected
-		 (.int_signal(Net_5444));
+		S4_detected
+		 (.int_signal(Net_5438));
+
+
+
+	cy_isr_v1_0
+		#(.int_type(2'b10))
+		S3_detected
+		 (.int_signal(Net_5435));
 
 
 
