@@ -16,7 +16,7 @@ unsigned int map[15][19] = {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 };
 
-unsigned int start_pos[2] = {1,1};
+//unsigned int start_pos[2] = {1,1};
 
 unsigned int food_list[5][2]= {
 	{1,9},
