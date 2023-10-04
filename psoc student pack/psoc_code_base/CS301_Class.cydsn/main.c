@@ -191,8 +191,8 @@ void ResetSensorFlags() {
     s6 = 0;
 }
 
-float xBlocksize = 135;
-float yBlocksize = 80;
+float xBlocksize = 128.4;
+float yBlocksize = 91.1;
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
