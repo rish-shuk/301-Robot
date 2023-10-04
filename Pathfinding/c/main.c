@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#include "map.h"
+#include "map2.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
@@ -247,8 +247,8 @@ int main() {
     startLocation.row = 1;
     startLocation.col = 1;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 3;
-    targetLocation.col = 5;
+    targetLocation.row = 1;
+    targetLocation.col = 9;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
