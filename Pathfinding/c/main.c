@@ -172,8 +172,8 @@ int main() {
     startLocation.row = 1;
     startLocation.col = 1;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 1;
-    targetLocation.col = 9;
+    targetLocation.row = 5;
+    targetLocation.col = 3;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location

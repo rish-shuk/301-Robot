@@ -297,8 +297,7 @@ enum DirectionState CheckSensorDirection() {
     
     // GET NEXT STEP * ========================================
     // intersection/ turn check
-    ignoreSensor = 0;
-    if(!ignoreSensor && (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 || !s4)
+    if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 || !s4)
         && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
             previousDirection != TurnLeft && previousDirection != TurnRight)) {
             
@@ -347,7 +346,7 @@ enum DirectionState CheckSensorDirection() {
             directionState = Stop; // stop buffer- prevents overturning
             previousDirection = directionState;
         } else {
-            directionState = ForwardAfterTurn;
+            //directionState = ForwardAfterTurn;
         }
         return directionState;
     }
@@ -401,7 +400,7 @@ enum DirectionState CheckSensorDirection() {
             previousDirection = directionState;
             return directionState;
         } 
-        else if (!s5 || !s6) {
+        else if (!s5 && !s6) {
             //ignoreSensor = 1; // ignore turn check after turn completed
             //usbPutString("Stop after Right Turn");
             directionState = Stop; // stop turning when s5 & s6 are low
@@ -419,7 +418,7 @@ enum DirectionState CheckSensorDirection() {
             previousDirection = directionState;
             return directionState;
         } 
-        else if (!s5 || !s6) {
+        else if (!s5 && !s6) {
             //ignoreSensor = 1; // ignore sensor after turn
            // usbPutString("Stop after Left Turn\n");
             directionState = Stop; // stop turning when s5 & s6 are low
