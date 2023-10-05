@@ -62,16 +62,16 @@ void adjustLeft() {
 
 // Anti-clockwise
 void turnLeft() {
-    uint16 count1 = (32767 - (maxTurningPWM));
-    uint16 count2 = (32767 - (maxTurningPWM)); // try 45%
+    uint16 count1 = (32767 - (maxTurningPWM * 0.9));
+    uint16 count2 = (32767 - (maxTurningPWM * 0.9)); // try 45%
     PWM_1_WriteCompare(count1); // 40% -- Left Wheel spins Clockwise
     PWM_2_WriteCompare(count2); // 40% -- Right wheel spins clockwise
 }
 
 // Clockwise
 void turnRight() {
-    uint16 count1 = (32767 + (maxTurningPWM));
-    uint16 count2 = (32767 + (maxTurningPWM));
+    uint16 count1 = (32767 + (maxTurningPWM * 0.9));
+    uint16 count2 = (32767 + (maxTurningPWM * 0.9));
     PWM_1_WriteCompare(count1); // 60% -- Left wheel spins clockwise
     PWM_2_WriteCompare(count2); // 60% - Right wheel spins Anti Clockwise
 }
@@ -81,7 +81,7 @@ void moveForward() {
     float totalMultiplier = minMovementMultiplier + (rangeMovementMultiplier * MOVEMENT_SPEED_MULTIPLIER);
     
     uint16 count1 = (32767 + (maxForwardPWM * totalMultiplier));
-    uint16 count2 = (32767 - (maxForwardPWM * totalMultiplier));
+    uint16 count2 = (32767 - (maxForwardPWM * totalMultiplier * 0.5)); // left wheel is slower, so need to compensate
     PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
     PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
 }
