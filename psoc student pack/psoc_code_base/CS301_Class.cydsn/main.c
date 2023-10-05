@@ -205,7 +205,7 @@ enum DirectionState GetNextStep() {
     previousOrientation = currentOrientation;
     
     if(map[currentRow][currentCol] == 9) {
-        directionState = Stop; 
+        directionState = Stop; // reached target
         return directionState;
     }
     /*
@@ -295,6 +295,29 @@ enum DirectionState CheckSensorDirection() {
     enum DirectionState directionState = Stop; // initialise state as stop
     
     // GET NEXT STEP * ========================================
+    // intersection check
+    // if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && !s3 && !s4) {
+        
+    //     // switch (currentOrientation) {
+    //     //     case Up:
+    //     //         currentRow++;
+    //     //         break;
+    //     //     case Down:
+    //     //         currentRow--;
+    //     //         break;
+    //     //     case Right:
+    //     //         currentCol++;
+    //     //         break;
+    //     //     case Left:
+    //     //         currentCol--;
+    //     //         break;
+    //     // }
+        
+    //     directionState = GetNextStep(); // get next step at each block
+    //     totalDistance = 0; // reset distance
+    //     previousDirection = directionState;
+    //     return directionState;
+    // }
     if (stoppedAfterTurn == 1) {
         if (stopBuffer <= 50) {
             directionState = Stop; // stop buffer- prevents overturning
@@ -316,7 +339,7 @@ enum DirectionState CheckSensorDirection() {
     
     // STOP BUFFER * ========================================
     if (previousDirection == Stop) {
-        if (stopBuffer <= 100) {
+        if (stopBuffer <= 50) {
             directionState = Stop; // stop buffer- prevents overturning
             previousDirection = directionState;
         } else {
