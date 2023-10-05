@@ -73,6 +73,8 @@ CY_ISR (speedTimer) {
     
     if ((currentDirection == Forward || 
         currentDirection == waitForTurn || 
+        currentDirection == waitForLeftTurn ||
+        currentDirection == waitForRightTurn ||
         currentDirection == ForwardAfterTurn ||
         currentDirection == AdjustToTheLeft ||
         currentDirection == AdjustToTheRight) &&
@@ -191,8 +193,8 @@ void ResetSensorFlags() {
     s6 = 0;
 }
 
-float xBlocksize = 128.4;
-float yBlocksize = 91.1;
+float xBlocksize = 127.5; // 127.5
+float yBlocksize = 80; // 80
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
@@ -294,6 +296,11 @@ enum DirectionState CheckSensorDirection() {
     
     // GET NEXT STEP * ========================================
     if (stoppedAfterTurn == 1) {
+        if (stopBuffer <= 50) {
+            directionState = Stop; // stop buffer- prevents overturning
+            previousDirection = directionState;
+            return directionState;
+        }
         directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
         previousDirection = directionState;
@@ -309,7 +316,7 @@ enum DirectionState CheckSensorDirection() {
     
     // STOP BUFFER * ========================================
     if (previousDirection == Stop) {
-        if (stopBuffer <= 50) {
+        if (stopBuffer <= 100) {
             directionState = Stop; // stop buffer- prevents overturning
             previousDirection = directionState;
         } else {
