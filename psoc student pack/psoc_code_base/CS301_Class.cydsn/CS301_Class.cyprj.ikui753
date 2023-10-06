@@ -85,7 +85,7 @@
 <CyGuid_f44455c5-3770-4452-b988-0a7a7ff46256 type_name="CyDesigner.Common.ProjMgmt.Model.CyConfigDependencies" version="1">
 <dependency_info name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM3" xml_contents_version="2">
 <CyGuid_1173175f-1b9b-4ad4-a065-754a48a27021 type_name="CyDesigner.Common.Base.CyFileDeps" version="1">
-<file name=".\CortexM3\ARM_GCC_541\Debug\movement.o">
+<file name=".\CortexM3\ARM_GCC_541\Debug\main.o">
 <dep name=".\Generated_Source\PSoC5\CONTROL.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_PWM.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_QENC.h" />
@@ -178,7 +178,13 @@
 <dep name=".\Generated_Source\PSoC5\timer_clock.h" />
 <dep name=".\USBUART.h" />
 <dep name=".\defines.h" />
-<dep name=".\movement.c" />
+<dep name=".\initialise.h" />
+<dep name=".\main.c" />
+<dep name=".\map.h" />
+<dep name=".\movement.h" />
+<dep name=".\pathfinding.h" />
+<dep name=".\usbUART.h" />
+<dep name=".\vars.h" />
 </file>
 <file name=".\Generated_Source\PSoC5\CONTROL.h" />
 <file name=".\Generated_Source\PSoC5\Clock_PWM.h" />
@@ -272,13 +278,12 @@
 <file name=".\Generated_Source\PSoC5\timer_clock.h" />
 <file name=".\USBUART.h" />
 <file name=".\defines.h" />
-<file name=".\movement.c" />
-<file name=".\CortexM3\ARM_GCC_541\Debug\pathfinding.o">
-<dep name=".\map.h" />
-<dep name=".\pathfinding.c" />
-</file>
+<file name=".\initialise.h" />
+<file name=".\main.c" />
 <file name=".\map.h" />
-<file name=".\pathfinding.c" />
+<file name=".\movement.h" />
+<file name=".\pathfinding.h" />
+<file name=".\vars.h" />
 <file name=".\CortexM3\ARM_GCC_541\Debug\USBUART.o">
 <dep name=".\Generated_Source\PSoC5\CONTROL.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_PWM.h" />
@@ -470,7 +475,6 @@
 </file>
 <file name=".\Generated_Source\PSoC5\USBUART.c" />
 <file name=".\usbUART.c" />
-<file name=".\vars.h" />
 <file name=".\CortexM3\ARM_GCC_541\Debug\USBUART_audio.o">
 <dep name=".\Generated_Source\PSoC5\CONTROL.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_PWM.h" />
@@ -1719,19 +1723,6 @@
 <dep name=".\defines.h" />
 </file>
 <file name=".\Generated_Source\PSoC5\USBUART_vnd.c" />
-<file name=".\CortexM3\ARM_GCC_541\Debug\isr_speed.o">
-<dep name=".\Generated_Source\PSoC5\CyFlash.h" />
-<dep name=".\Generated_Source\PSoC5\CyLib.h" />
-<dep name=".\Generated_Source\PSoC5\CySpc.h" />
-<dep name=".\Generated_Source\PSoC5\cyPm.h" />
-<dep name=".\Generated_Source\PSoC5\cydevice.h" />
-<dep name=".\Generated_Source\PSoC5\cydevice_trm.h" />
-<dep name=".\Generated_Source\PSoC5\cyfitter.h" />
-<dep name=".\Generated_Source\PSoC5\cytypes.h" />
-<dep name=".\Generated_Source\PSoC5\isr_speed.c" />
-<dep name=".\Generated_Source\PSoC5\isr_speed.h" />
-</file>
-<file name=".\Generated_Source\PSoC5\isr_speed.c" />
 <file name=".\CortexM3\ARM_GCC_541\Debug\initialise.o">
 <dep name=".\Generated_Source\PSoC5\CONTROL.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_PWM.h" />
@@ -1829,8 +1820,7 @@
 <dep name=".\initialise.h" />
 </file>
 <file name=".\initialise.c" />
-<file name=".\initialise.h" />
-<file name=".\CortexM3\ARM_GCC_541\Debug\main.o">
+<file name=".\CortexM3\ARM_GCC_541\Debug\movement.o">
 <dep name=".\Generated_Source\PSoC5\CONTROL.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_PWM.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_QENC.h" />
@@ -1923,17 +1913,14 @@
 <dep name=".\Generated_Source\PSoC5\timer_clock.h" />
 <dep name=".\USBUART.h" />
 <dep name=".\defines.h" />
-<dep name=".\initialise.h" />
-<dep name=".\main.c" />
-<dep name=".\map.h" />
-<dep name=".\movement.h" />
-<dep name=".\pathfinding.h" />
-<dep name=".\usbUART.h" />
-<dep name=".\vars.h" />
+<dep name=".\movement.c" />
 </file>
-<file name=".\main.c" />
-<file name=".\movement.h" />
-<file name=".\pathfinding.h" />
+<file name=".\movement.c" />
+<file name=".\CortexM3\ARM_GCC_541\Debug\pathfinding.o">
+<dep name=".\map.h" />
+<dep name=".\pathfinding.c" />
+</file>
+<file name=".\pathfinding.c" />
 <file name=".\CortexM3\ARM_GCC_541\Debug\tacho.o">
 <dep name=".\Generated_Source\PSoC5\CONTROL.h" />
 <dep name=".\Generated_Source\PSoC5\Clock_PWM.h" />
@@ -2791,6 +2778,19 @@
 <dep name=".\Generated_Source\PSoC5\isr_Timer_LED.h" />
 </file>
 <file name=".\Generated_Source\PSoC5\isr_Timer_LED.c" />
+<file name=".\CortexM3\ARM_GCC_541\Debug\isr_speed.o">
+<dep name=".\Generated_Source\PSoC5\CyFlash.h" />
+<dep name=".\Generated_Source\PSoC5\CyLib.h" />
+<dep name=".\Generated_Source\PSoC5\CySpc.h" />
+<dep name=".\Generated_Source\PSoC5\cyPm.h" />
+<dep name=".\Generated_Source\PSoC5\cydevice.h" />
+<dep name=".\Generated_Source\PSoC5\cydevice_trm.h" />
+<dep name=".\Generated_Source\PSoC5\cyfitter.h" />
+<dep name=".\Generated_Source\PSoC5\cytypes.h" />
+<dep name=".\Generated_Source\PSoC5\isr_speed.c" />
+<dep name=".\Generated_Source\PSoC5\isr_speed.h" />
+</file>
+<file name=".\Generated_Source\PSoC5\isr_speed.c" />
 <file name=".\CortexM3\ARM_GCC_541\Debug\timer_clock.o">
 <dep name=".\Generated_Source\PSoC5\cydevice.h" />
 <dep name=".\Generated_Source\PSoC5\cydevice_trm.h" />
@@ -3895,7 +3895,7 @@
 <v>C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\warp\lib\common\stdlogic\rtlpkg.vif</v>
 <v>C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\warp\lib\common\stdlogic\cy_psoc3.vif</v>
 </warp_dep>
-<deps_time v="133410249475864972" />
+<deps_time v="133410350009124769" />
 <top_block v="TopDesign" />
 <last_generation v="374" />
 <pdl_path v="" />
@@ -3905,7 +3905,7 @@
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
 <link_deps_times>
-<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM3" v="133410257613627373" />
+<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM3" v="133410378947779561" />
 </link_deps_times>
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
 </dataGuid>

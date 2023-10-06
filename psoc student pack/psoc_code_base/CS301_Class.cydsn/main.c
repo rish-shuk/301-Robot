@@ -45,6 +45,12 @@ enum DirectionState previousDirection = Unknown;
 enum OrientationState currentOrientation = Right;
 enum OrientationState previousOrientation = Right;
 enum DirectionState GetNextStep();
+enum DirectionState RecheckPosition();
+uint8 stopFlag = 0;
+
+void ValidatePosition();
+
+
 // --- YIPPE
 // ----------------------------------------
 uint8 s3 = 0;
@@ -116,7 +122,7 @@ CY_ISR(S6_DETECTED) {
 }
 
 CY_ISR(TIMER_FINISH) {
-    if (currentDirection == Stop) {
+    if (stopFlag == 1) {
         stopBuffer = stopBuffer + 1;
     } else {
         stopBuffer = 0;
@@ -193,7 +199,7 @@ void ResetSensorFlags() {
     s6 = 0;
 }
 
-float xBlocksize = 127.5; // 127.5
+float xBlocksize = 123; // 127.5
 float yBlocksize = 80; // 80
 uint8 currentRow = 1;
 uint8 currentCol = 1;
@@ -279,6 +285,178 @@ enum DirectionState GetNextStep() {
     return directionState;
 }
 
+enum DirectionState RecheckPosition() {
+    // Called when we are at intersection/ turn
+    // Check our position on the map and see if it aligns with the junction
+    
+    // CHECK FOR PATH
+    if (currentOrientation == Up || currentOrientation == Down) { // check left right for path
+        if(map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol - 1] == 8 ||
+            map[currentRow][currentCol + 1] == 9 || map[currentRow][currentCol - 1] == 9) {
+            return currentDirection;// if correct location, break
+        } else {
+            return GetNextStep(); // need to increment location
+        }
+    }
+    else if (currentOrientation == Left || currentOrientation == Right) { // check up down for path
+        if(map[currentRow + 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 8 ||
+            map[currentRow + 1][currentCol] == 9 || map[currentRow - 1][currentCol] == 9) {
+            return currentDirection;// if correct location, break
+        } else {
+            return GetNextStep(); // need to increment location
+        }
+    }
+    
+    return currentDirection;
+}
+
+enum JunctionType {LeftJunction, RightJunction, LeftJunctionAfterTurn, RightJunctionAfterTurn, BranchLeft, BranchRight, TIntersection, InvertedTIntersection, Straight};
+
+enum JunctionType GetJunctionType();
+
+enum JunctionType GetJunctionType() {
+    if((!s5 || !s6) && !s3){
+        return BranchLeft;
+        
+    }else if((!s5 || !s6) && !s4){
+        return BranchRight;
+        
+    }else if((!s5 || !s6) && (!s3 && !s4)){
+        return TIntersection;
+        
+    }else if(!s3 && !s4){
+        return InvertedTIntersection;
+        
+    }else if(!s3 && s4 && (s5 || s6)){
+        return LeftJunction;
+
+    }else if(s3 && !s4 && (s5 || s6)){
+        return RightJunction;
+    }else if (!s3 && s4 && !(s5 || s6)) {
+        return LeftJunctionAfterTurn;
+    }else if (s3 && !s4 && !(s5 || s6)){
+        return RightJunctionAfterTurn;
+    }else{
+        return Straight; 
+    }
+}
+
+enum JunctionType ConvertJunctionTypeToUpOrientation(enum JunctionType junctionToConvert);
+
+enum JunctionType ConvertJunctionTypeToUpOrientation(enum JunctionType junctionToConvert) {
+        switch (currentOrientation) {
+        case Up:
+            return junctionToConvert;
+            break;
+        case Down:
+            switch (junctionToConvert) {
+                // {LeftJunction, RightJunction, BranchLeft, BranchRight, TIntersection, InvertedTIntersection, Straight}
+                case LeftJunction:
+                    return RightJunction;
+                    break;
+                case RightJunction:
+                    return LeftJunction;
+                    break;
+                case BranchLeft:
+                    return BranchRight;
+                    break;
+                case BranchRight:
+                    return BranchLeft;
+                    break;
+                case TIntersection:
+                    return InvertedTIntersection;
+                    break;
+                case InvertedTIntersection:
+                    return TIntersection;
+                    break;
+                case LeftJunctionAfterTurn:
+                    break;
+                case RightJunctionAfterTurn:
+                    break;
+                case Straight:
+                    return junctionToConvert;
+                    break;
+            }
+            
+            break;
+        case Left:
+            switch (junctionToConvert) {
+                // {LeftJunction, RightJunction, BranchLeft, BranchRight, TIntersection, InvertedTIntersection, Straight}
+                case LeftJunction:
+                    return TIntersection;
+                    break;
+                case RightJunction:
+                    return InvertedTIntersection;
+                    break;
+                case BranchLeft:
+                    break;
+                case BranchRight:
+                    break;
+                case TIntersection:
+                    break;
+                case InvertedTIntersection:
+                    break;
+                case LeftJunctionAfterTurn:
+                    break;
+                case RightJunctionAfterTurn:
+                    break;
+                case Straight:
+                    return junctionToConvert;
+                    break;
+            }
+            break;
+        case Right:
+            switch (junctionToConvert) {
+                // {LeftJunction, RightJunction, BranchLeft, BranchRight, TIntersection, InvertedTIntersection, Straight}
+                case LeftJunction:
+                    break;
+                case RightJunction:
+                    break;
+                case BranchLeft:
+                    break;
+                case BranchRight:
+                    break;
+                case TIntersection:
+                    break;
+                case InvertedTIntersection:
+                    break;
+                case LeftJunctionAfterTurn:
+                    break;
+                case RightJunctionAfterTurn:
+                    break;
+                case Straight:
+                    return junctionToConvert;
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
+    return junctionToConvert;
+}
+
+void ValidatePosition() {
+    // Check robot position by checking what intersection/junction we are at
+        // Use orientation and check Up, down, left, right
+    // -- GET JUNCTION TYPE TO CHECK FROM ROBOT POSITION BASED ON SENSORS
+    enum JunctionType relativeJunction = GetJunctionType();
+    // -- GET JUNCTION TYPE TO CHECK FROM ROBOT POSITION BASED ON SENSORS
+    
+    // -- REMEMBER TO KEEP IN MIND ORIENTATION
+    // Check Up, Down, Left, Right of currentRow, currentCol position to see if it aligns with robot intersection/junction
+    enum JunctionType junctionToCheck = ConvertJunctionTypeToUpOrientation(relativeJunction);
+    
+    // If Robot posiiton aligns with map position THEN continue with current direction and don't change currentRow, currentCol
+    // OTHERWISE, 
+        // positionToCheck = map[add/subtract row/col] depending on orientation 
+        // check around positionToCheck to see if it aligns with robotNodePosition 
+            // If the next node aligns with the robotNodePosition
+                // THEN we are behind by a node, so we call GetNextStep() early
+            // OTHERWISE
+            // If the previous node aligns with the robotNodePosition
+                // THEN we are ahead by a node, so we move our current row and column back to the previous node and call GetNextStep() again;
+}
+
 uint8 stoppedAfterTurn = 0;
 uint8 ignoreSensor = 0;
 
@@ -290,36 +468,17 @@ enum DirectionState CheckSensorDirection() {
         blocksize = xBlocksize;
     }
     enum DirectionState directionState = Stop; // initialise state as stop
-    
+   
     // GET NEXT STEP * ========================================
-    // intersection/ turn check
-    if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
-        && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
-            previousDirection != TurnLeft && previousDirection != TurnRight)) {
-            
-    //     // switch (currentOrientation) {
-    //     //     case Up:
-    //     //         currentRow++;
-    //     //         break;
-    //     //     case Down:
-    //     //         currentRow--;
-    //     //         break;
-    //     //     case Right:
-    //     //         currentCol++;
-    //     //         break;
-    //     //     case Left:
-    //     //         currentCol--;
-    //     //         break;
-    //     // }
-        
-        directionState = GetNextStep(); // get next step at each block
-        totalDistance = 0; // reset distance
-        previousDirection = directionState;
-        return directionState;
+    // Check if robot position aligns with our map 
+    if (!s3 || !s4) {
+         ValidatePosition();
     }
+            
     if (stoppedAfterTurn == 1) {
         if (stopBuffer <= 50) {
-            directionState = Stop; // stop buffer- prevents overturning
+            //directionState = Stop; // stop buffer- prevents overturning
+            stopFlag = 1;
             previousDirection = directionState;
             return directionState;
         }
@@ -327,6 +486,7 @@ enum DirectionState CheckSensorDirection() {
         totalDistance = 0; // reset distance
         previousDirection = directionState;
         stoppedAfterTurn = 0;
+        stopFlag = 0;
         return directionState;
     }
     if (totalDistance >= blocksize) {
@@ -339,9 +499,11 @@ enum DirectionState CheckSensorDirection() {
     // STOP BUFFER * ========================================
     if (previousDirection == Stop) {
         if (stopBuffer <= 50) {
-            directionState = Stop; // stop buffer- prevents overturning
+            //directionState = Stop; // stop buffer- prevents overturning
+            stopFlag = 1;
             previousDirection = directionState;
         } else {
+            stopFlag = 0;
             //directionState = ForwardAfterTurn;
         }
         return directionState;
