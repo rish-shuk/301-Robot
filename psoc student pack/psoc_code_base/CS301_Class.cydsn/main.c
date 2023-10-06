@@ -595,16 +595,10 @@ uint8 CheckIfJunctionExistsAtRowCol(enum JunctionType junctionToCheck, uint8 row
 
 void ValidatePosition() {
     // Check robot position by checking what intersection/junction we are at
-        // Use orientation and check Up, down, left, right
-    // -- GET JUNCTION TYPE TO CHECK FROM ROBOT POSITION BASED ON SENSORS
-    enum JunctionType relativeJunction = GetJunctionType();
-    // -- GET JUNCTION TYPE TO CHECK FROM ROBOT POSITION BASED ON SENSORS
+    // // Check Up, Down, Left, Right of currentRow, currentCol position to see if it aligns with robot intersection/junction
     
-    // -- REMEMBER TO KEEP IN MIND ORIENTATION
-    // Check Up, Down, Left, Right of currentRow, currentCol position to see if it aligns with robot intersection/junction
-    enum JunctionType junctionToCheck = ConvertJunctionTypeToUpOrientation(relativeJunction);
-    
-    // If Robot posiiton aligns with map position THEN continue with current direction and don't change currentRow, currentCol
+    // If Robot posiiton aligns with map position 
+    // THEN continue with current direction and don't change currentRow, currentCol
     // OTHERWISE, 
         // positionToCheck = map[add/subtract row/col] depending on orientation 
         // check around positionToCheck to see if it aligns with robotNodePosition 
@@ -613,6 +607,66 @@ void ValidatePosition() {
             // OTHERWISE
             // If the previous node aligns with the robotNodePosition
                 // THEN we are ahead by a node, so we move our current row and column back to the previous node and call GetNextStep() again;
+    
+    
+    // -- GET JUNCTION TYPE TO CHECK FROM ROBOT POSITION BASED ON SENSORS
+    enum JunctionType relativeJunction = GetJunctionType();
+    // -- GET JUNCTION TYPE TO CHECK FROM ROBOT POSITION BASED ON 
+    
+    // ---- CONVERT JUNCTION RELATIVE TO ORIENTATION INTO JUNCTION BASED ON UP ORIENTATION
+    enum JunctionType junctionToCheck = ConvertJunctionTypeToUpOrientation(relativeJunction);
+    // ---- CONVERT JUNCTION RELATIVE TO ORIENTATION INTO JUNCTION BASED ON UP ORIENTATION
+    
+    // Check if current robot position aligns with map position
+    if (CheckIfJunctionExistsAtRowCol(junctionToCheck, currentRow, currentCol) == 1) {
+        // Robot position aligns with map position so we continue with current direction
+    }
+    
+    // If we get up to this point, then the current robot position DOES NOT align with the map position
+    // So we check previous node and next node if any of their junctions match the current robot junction.
+    int nextRow = 0;
+    int nextCol = 0;
+    int prevRow = 0;
+    int prevCol = 0;
+    switch (currentOrientation) {
+        case Up:
+            // Facing Up, our next node is [Row - 1][Col]
+            // Our prev node is [Row + 1][Col]
+            nextRow = -1;
+            prevRow = 1;
+            break;
+        case Down:
+            // Facing Down, our next node is [Row + 1][Col]
+            // Our prev node is [Row - 1][Col]
+            nextRow = 1;
+            prevRow = -1;
+            break;
+        case Left:
+            // Facing Left, our next node is [Row][Col - 1]
+            // Our prev node is [Row][Col + 1]
+            nextCol = -1;
+            prevCol = 1;
+            break;
+        case Right:
+            // Facing Left, our next node is [Row][Col + 1]
+            // Our prev node is [Row][Col - 1]
+            nextCol = 1;
+            prevCol = -1;
+            break;
+    }
+    // Check Next node
+    if (CheckIfJunctionExistsAtRowCol(junctionToCheck, (currentRow + nextRow), (currentCol + nextCol)) == 1) {
+        // Next node aligns with current robot position,
+        // This means that we are behind a node
+        // So we have to call GetNextStep early(?)
+    }
+    
+    // Check Previous node
+    if (CheckIfJunctionExistsAtRowCol(junctionToCheck, (currentRow + prevRow), (currentCol + prevCol)) == 1) {
+        // Prev node aligns with current robot position,
+        // This means that we are ahead by a node
+        // So we have to update current row and current col accordingly then call GetNextStep
+    }
 }
 
 uint8 stoppedAfterTurn = 0;
