@@ -18,6 +18,8 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
+#define targetRow 9
+#define targetCol 1
 
 /*int map[15][19] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -211,7 +213,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
 void findPath(int map[MAX_ROWS][MAX_COLS]) {
     struct Location startLocation = {1,1};
-    struct Location targetLocation = {5,5};
+    struct Location targetLocation = {targetRow,targetCol};
     dijkstra(map, startLocation, targetLocation); // find shortest path
     //map[0][0] = 7;
 }

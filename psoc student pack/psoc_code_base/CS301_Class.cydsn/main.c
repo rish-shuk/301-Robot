@@ -293,7 +293,7 @@ enum DirectionState CheckSensorDirection() {
     
     // GET NEXT STEP * ========================================
     // intersection/ turn check
-    if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 || !s4)
+    if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
         && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
             previousDirection != TurnLeft && previousDirection != TurnRight)) {
             
