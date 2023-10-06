@@ -42,8 +42,8 @@ enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheR
 enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
-enum OrientationState currentOrientation = Right;
-enum OrientationState previousOrientation = Right;
+enum OrientationState currentOrientation = Down;
+enum OrientationState previousOrientation = Down;
 enum DirectionState GetNextStep();
 enum DirectionState RecheckPosition();
 // --- YIPPE
@@ -67,15 +67,14 @@ uint32 stopBuffer = 0;
 
 //char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
-CY_ISR (speedTimer) {
+CY_ISR (speedTimer) { 
     timerInt = 1;
     //quadDec_M1 used for turning macros
     quadDec2Count = QuadDec_M2_GetCounter();
     
+    //   currentDirection == waitForLeftTurn ||
+    //    currentDirection == waitForRightTurn ||
     if ((currentDirection == Forward || 
-        currentDirection == waitForTurn || 
-        currentDirection == waitForLeftTurn ||
-        currentDirection == waitForRightTurn ||
         currentDirection == ForwardAfterTurn ||
         currentDirection == AdjustToTheLeft ||
         currentDirection == AdjustToTheRight) &&
@@ -88,7 +87,7 @@ CY_ISR (speedTimer) {
     
     QuadDec_M2_SetCounter(0); // reset count
     QuadDec_M2_Start(); // restart counter
-    
+
     SpeedTimer_ReadStatusRegister(); // clear interrupt
 }
 
@@ -280,23 +279,25 @@ enum DirectionState GetNextStep() {
     return directionState;
 }
 
+enum DirectionState directionBeforeStop = Forward;
+
 enum DirectionState RecheckPosition() {
-    // Called when we are at intersection
+    // Called when we are at intersection/ turn
     // Check our position on the map and see if it aligns with the junction
     
     // CHECK FOR PATH
-    if (currentOrientation == Up || currentOrientation == Down) {
+    if (currentOrientation == Up || currentOrientation == Down) { // check left right for path
         if(map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol - 1] == 8 ||
             map[currentRow][currentCol + 1] == 9 || map[currentRow][currentCol - 1] == 9) {
-            return currentDirection;// if correct location, break
+            return directionBeforeStop;// if correct location, break
         } else {
             return GetNextStep(); // need to increment location
         }
     }
-    else if (currentOrientation == Left || currentOrientation == Right) {
+    else if (currentOrientation == Left || currentOrientation == Right) { // check up down for path
         if(map[currentRow + 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 8 ||
             map[currentRow + 1][currentCol] == 9 || map[currentRow - 1][currentCol] == 9) {
-            return currentDirection;// if correct location, break
+            return directionBeforeStop;// if correct location, break
         } else {
             return GetNextStep(); // need to increment location
         }
@@ -319,10 +320,9 @@ enum DirectionState CheckSensorDirection() {
     
     // GET NEXT STEP * ========================================
     // intersection/ turn check
-    if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
-        && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
-            previousDirection != TurnLeft && previousDirection != TurnRight)) {
-
+    if((currentDirection == Forward || currentDirection == AdjustToTheLeft || currentDirection == AdjustToTheRight ||
+        currentDirection == waitForLeftTurn || currentDirection == waitForRightTurn || currentDirection == Stop
+        ) && (!s3 || !s4) && (currentDirection != ForwardAfterTurn && currentDirection != TurnLeft && currentDirection != TurnRight)) {
         directionState = RecheckPosition(); // get next step at each block
         totalDistance = 0; // reset distance
         previousDirection = directionState;
@@ -331,19 +331,19 @@ enum DirectionState CheckSensorDirection() {
     if (stoppedAfterTurn == 1) {
         if (stopBuffer <= 50) {
             directionState = Stop; // stop buffer- prevents overturning
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         }
         directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
-        previousDirection = directionState;
+        previousDirection = currentDirection;
         stoppedAfterTurn = 0;
         return directionState;
     }
-    if (totalDistance >= blocksize) {
+    if (totalDistance >= blocksize && currentDirection != waitForLeftTurn && currentDirection != waitForRightTurn) {
         directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
-        previousDirection = directionState;
+        previousDirection = currentDirection;
         return directionState;
     }
     
@@ -351,7 +351,7 @@ enum DirectionState CheckSensorDirection() {
     if (previousDirection == Stop) {
         if (stopBuffer <= 50) {
             directionState = Stop; // stop buffer- prevents overturning
-            previousDirection = directionState;
+            previousDirection = currentDirection;
         } else {
             //directionState = ForwardAfterTurn;
         }
@@ -365,37 +365,38 @@ enum DirectionState CheckSensorDirection() {
             //ignoreSensor = 0;
             //usbPutString("Forward\n");
             directionState = Forward; // turns when robot has rotated 90º
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         }
     }
 
     if(previousDirection == waitForRightTurn) {
-        //ignoreSensor = 0;
+        //isr_speed_Stop();
         if(!s4) {
             //usbPutString("Turn Right\n");
             directionState = TurnRight;
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         } else {
             //usbPutString("Wait for Right Turn\n");
             directionState = waitForRightTurn;
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         }
     }
 
     if(previousDirection == waitForLeftTurn) {
+        //isr_speed_Stop();
         //ignoreSensor = 0;
         if(!s3) {
             //usbPutString("Turn Left\n");
             directionState = TurnLeft;
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         } else {
             //usbPutString("Wait for Left Turn\n");
             directionState = waitForLeftTurn;
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         }
     }
@@ -404,15 +405,16 @@ enum DirectionState CheckSensorDirection() {
         if(s5 && s6) {
             //usbPutString("Turn Right\n");
             directionState = TurnRight; // keep turning while s5 & s6 are high
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         } 
         else if (!s5 || !s6) {
+            //isr_speed_Start();
             //ignoreSensor = 1; // ignore turn check after turn completed
             //usbPutString("Stop after Right Turn");
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct/ RESET totalDistance
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
             return directionState;
         }
@@ -422,15 +424,16 @@ enum DirectionState CheckSensorDirection() {
         if(s5 && s6) {
             //usbPutString("Turn Left\n");
             directionState = TurnLeft; // keep turning while s5 & s6 are high
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             return directionState;
         } 
         else if (!s5 || !s6) {
+            //isr_speed_Start();
             //ignoreSensor = 1; // ignore sensor after turn
            // usbPutString("Stop after Left Turn\n");
             directionState = Stop; // stop turning when s5 & s6 are low
             totalDistance = 0; // correct/ RESET totalDistance
-            previousDirection = directionState;
+            previousDirection = currentDirection;
             stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
             return directionState;
         }
