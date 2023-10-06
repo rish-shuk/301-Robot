@@ -450,6 +450,149 @@ enum JunctionType ConvertJunctionTypeToUpOrientation(enum JunctionType junctionT
     return junctionToConvert;
 }
 
+uint8 CheckIfJunctionExistsAtRowCol(enum JunctionType junctionToCheck, uint8 rowToCheck, uint8 colToCheck);
+uint8 CheckIfJunctionExistsAtRowCol(enum JunctionType junctionToCheck, uint8 rowToCheck, uint8 colToCheck) {
+    // 1 for true, 0 for false, -1 for no conditions fulfilled
+    // node to check is at map[rowToCheck][colToCheck]
+    // 0 = path, 1 = wall, 7 = start, 8 = optimal path, 9 = target
+    // ASSUMING THAT THE JUCNTIONTYPE GIVEN IS RELATIVE TO UP ORIENTATION!!!!!!!!
+    // ALSO ASSUMING THAT JUNCTION TYPE GIVEN IS ACCURATE
+        // WITHOUT BACK SENSORS, THE JUNCTION TYPE GIVEN COULD BE INACCURATE
+    switch (junctionToCheck) {
+            case LeftJunction:
+                // Check UP if is WALL
+                // Check DOWN if is NOT WALL
+                // Check LEFT if is NOT WALL
+                // Check RIGHT if is WALL
+                if (map[rowToCheck - 1][colToCheck] == 0 && 
+                    map[rowToCheck + 1][colToCheck] != 0 &&
+                    map[rowToCheck][colToCheck - 1] != 0 &&
+                    map[rowToCheck][colToCheck + 1] == 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0; // Junction does NOT align with robot position
+                break;
+            case RightJunction:
+                // Check UP if is WALL
+                // Check DOWN if is NOT WALL
+                // Check LEFT if is WALL
+                // Check RIGHT if is NOT WALL
+                if (map[rowToCheck - 1][colToCheck] == 0 &&
+                    map[rowToCheck + 1][colToCheck] != 0 &&
+                    map[rowToCheck][colToCheck - 1] == 0 &&
+                    map[rowToCheck][colToCheck + 1] != 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0; // Junction does NOT align with robot position                
+                break;
+            case BranchLeft:
+                // Check UP if is NOT WALL
+                // Check DOWN if is NOT WALL
+                // Check LEFT if is NOT WALL
+                // Check RIGHT if is WALL
+                if (map[rowToCheck - 1][colToCheck] != 0 && 
+                    map[rowToCheck + 1][colToCheck] != 0 &&
+                    map[rowToCheck][colToCheck - 1] != 0 &&
+                    map[rowToCheck][colToCheck + 1] == 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0; // Junction does NOT align with robot position
+                break;
+            case BranchRight:
+                // Check UP if is NOT WALL
+                // Check DOWN if is NOT WALL
+                // Check LEFT if is WALL
+                // Check RIGHT if is NOT WALL
+                if (map[rowToCheck - 1][colToCheck] != 0 && 
+                    map[rowToCheck + 1][colToCheck] != 0 &&
+                    map[rowToCheck][colToCheck - 1] == 0 &&
+                    map[rowToCheck][colToCheck + 1] != 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0; // Junction does NOT align with robot position
+                break;
+            case TIntersection:
+                // Check UP if is WALL
+                // Check DOWN if is NOT WALL
+                // Check LEFT if is NOT WALL
+                // Check RIGHT if is NOT WALL
+                if (map[rowToCheck - 1][colToCheck] == 0 && 
+                    map[rowToCheck + 1][colToCheck] != 0 &&
+                    map[rowToCheck][colToCheck - 1] != 0 &&
+                    map[rowToCheck][colToCheck + 1] != 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0; // Junction does NOT align with robot 
+                break;
+            case InvertedTIntersection:
+                // At an inverted T intersection, we might also be at a fourway intersection, so check for that too.
+                // Check UP if is NOT WALL
+                // Check DOWN if is WALL
+                // Check LEFT if is NOT WALL
+                // Check RIGHT if is NOT WALL
+                if (map[rowToCheck - 1][colToCheck] != 0 && 
+                    map[rowToCheck + 1][colToCheck] == 0 &&
+                    map[rowToCheck][colToCheck - 1] != 0 &&
+                    map[rowToCheck][colToCheck + 1] != 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0; // Junction does NOT align with robot 
+                break;
+            case LeftJunctionAfterTurn:
+                // Check UP if is NOT WALL
+                // Check DOWN if is WALL
+                // Check LEFT if is NOT WALL
+                // Check RIGHT if is WALL
+                if (map[rowToCheck - 1][colToCheck] != 0 && 
+                    map[rowToCheck + 1][colToCheck] == 0 &&
+                    map[rowToCheck][colToCheck - 1] != 0 &&
+                    map[rowToCheck][colToCheck + 1] == 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0; // Junction does NOT align with robot position
+                break;
+            case RightJunctionAfterTurn:
+                // Check UP if is NOT WALL
+                // Check DOWN if is WALL
+                // Check LEFT if is WALL
+                // Check RIGHT if is NOT WALL
+                if (map[rowToCheck - 1][colToCheck] != 0 && 
+                    map[rowToCheck + 1][colToCheck] == 0 &&
+                    map[rowToCheck][colToCheck - 1] == 0 &&
+                    map[rowToCheck][colToCheck + 1] != 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0;
+                break;
+            case Straight:
+                // Check UP if is NOT WALL
+                // Check DOWN if is NOT WALL
+                // Check LEFT if is WALL
+                // Check RIGHT if is WALL
+                if (map[rowToCheck - 1][colToCheck] != 0 && 
+                    map[rowToCheck + 1][colToCheck] != 0 &&
+                    map[rowToCheck][colToCheck - 1] == 0 &&
+                    map[rowToCheck][colToCheck + 1] == 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                // OR OR OR OR OR OR OR OR OR OR OR OR OR OR
+                // Check UP if is WALL
+                // Check DOWN if is WALL
+                // Check LEFT if is NOT WALL
+                // Check RIGHT if is NOT WALL
+                if (map[rowToCheck - 1][colToCheck] == 0 && 
+                    map[rowToCheck + 1][colToCheck] == 0 &&
+                    map[rowToCheck][colToCheck - 1] != 0 &&
+                    map[rowToCheck][colToCheck + 1] != 0) {
+                    return 1; // Junction aligns with robot position
+                }
+                return 0;
+                break;
+        }
+    return -1; // no conditions fulfilled??
+}
+
+
 void ValidatePosition() {
     // Check robot position by checking what intersection/junction we are at
         // Use orientation and check Up, down, left, right
