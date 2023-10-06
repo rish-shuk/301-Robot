@@ -42,8 +42,8 @@ enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheR
 enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Stop;
 enum DirectionState previousDirection = Unknown;
-enum OrientationState currentOrientation = Down;
-enum OrientationState previousOrientation = Down;
+enum OrientationState currentOrientation = Right;
+enum OrientationState previousOrientation = Right;
 enum DirectionState GetNextStep();
 // --- YIPPE
 // ----------------------------------------
@@ -239,11 +239,9 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
                     currentOrientation = Left;
                     directionState = waitForRightTurn;
-                    //currentRow--;
                 } else if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
                     currentOrientation = Right;
                     directionState = waitForLeftTurn;
-                    //currentRow++; // update position
                 }
                 break;
             case Left:
@@ -254,11 +252,9 @@ enum DirectionState GetNextStep() {
                 } else if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
                     currentOrientation = Up;
                     directionState = waitForRightTurn;
-                    //currentRow++; // update position
                 } else if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
                     currentOrientation = Down;
                     directionState = waitForLeftTurn;
-                    //currentCol--; // update position
                 }
                 break;
             case Right:
@@ -400,7 +396,7 @@ enum DirectionState CheckSensorDirection() {
             previousDirection = directionState;
             return directionState;
         } 
-        else if (!s5 && !s6) {
+        else if (!s5 || !s6) {
             //ignoreSensor = 1; // ignore turn check after turn completed
             //usbPutString("Stop after Right Turn");
             directionState = Stop; // stop turning when s5 & s6 are low
@@ -418,7 +414,7 @@ enum DirectionState CheckSensorDirection() {
             previousDirection = directionState;
             return directionState;
         } 
-        else if (!s5 && !s6) {
+        else if (!s5 || !s6) {
             //ignoreSensor = 1; // ignore sensor after turn
            // usbPutString("Stop after Left Turn\n");
             directionState = Stop; // stop turning when s5 & s6 are low
