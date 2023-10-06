@@ -352,10 +352,10 @@ enum JunctionType ConvertJunctionTypeToUpOrientation(enum JunctionType junctionT
             switch (junctionToConvert) {
                 // {LeftJunction, RightJunction, BranchLeft, BranchRight, TIntersection, InvertedTIntersection, Straight}
                 case LeftJunction:
-                    return RightJunction;
+                    return RightJunctionAfterTurn;
                     break;
                 case RightJunction:
-                    return LeftJunction;
+                    return LeftJunctionAfterTurn;
                     break;
                 case BranchLeft:
                     return BranchRight;
@@ -370,35 +370,42 @@ enum JunctionType ConvertJunctionTypeToUpOrientation(enum JunctionType junctionT
                     return TIntersection;
                     break;
                 case LeftJunctionAfterTurn:
+                    return RightJunction;
                     break;
                 case RightJunctionAfterTurn:
+                    return LeftJunction;
                     break;
                 case Straight:
                     return junctionToConvert;
                     break;
             }
-            
             break;
         case Left:
             switch (junctionToConvert) {
                 // {LeftJunction, RightJunction, BranchLeft, BranchRight, TIntersection, InvertedTIntersection, Straight}
                 case LeftJunction:
-                    return TIntersection;
+                    return RightJunction;
                     break;
                 case RightJunction:
-                    return InvertedTIntersection;
+                    return RightJunctionAfterTurn;
                     break;
                 case BranchLeft:
+                    return TIntersection;
                     break;
                 case BranchRight:
+                    return InvertedTIntersection;
                     break;
                 case TIntersection:
+                    return BranchRight;
                     break;
                 case InvertedTIntersection:
+                    return BranchLeft;
                     break;
                 case LeftJunctionAfterTurn:
+                    return LeftJunction;
                     break;
                 case RightJunctionAfterTurn:
+                    return LeftJunctionAfterTurn;
                     break;
                 case Straight:
                     return junctionToConvert;
@@ -409,20 +416,28 @@ enum JunctionType ConvertJunctionTypeToUpOrientation(enum JunctionType junctionT
             switch (junctionToConvert) {
                 // {LeftJunction, RightJunction, BranchLeft, BranchRight, TIntersection, InvertedTIntersection, Straight}
                 case LeftJunction:
+                    return LeftJunctionAfterTurn;
                     break;
                 case RightJunction:
+                    return LeftJunction;
                     break;
                 case BranchLeft:
+                    return InvertedTIntersection;
                     break;
                 case BranchRight:
+                    return TIntersection;
                     break;
                 case TIntersection:
+                    return BranchLeft;
                     break;
                 case InvertedTIntersection:
+                    return BranchRight;
                     break;
                 case LeftJunctionAfterTurn:
+                    return RightJunctionAfterTurn;
                     break;
                 case RightJunctionAfterTurn:
+                    return RightJunction;
                     break;
                 case Straight:
                     return junctionToConvert;
