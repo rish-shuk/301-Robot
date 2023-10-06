@@ -45,6 +45,7 @@ enum DirectionState previousDirection = Unknown;
 enum OrientationState currentOrientation = Right;
 enum OrientationState previousOrientation = Right;
 enum DirectionState GetNextStep();
+enum DirectionState RecheckPosition();
 // --- YIPPE
 // ----------------------------------------
 uint8 s3 = 0;
@@ -279,6 +280,31 @@ enum DirectionState GetNextStep() {
     return directionState;
 }
 
+enum DirectionState RecheckPosition() {
+    // Called when we are at intersection
+    // Check our position on the map and see if it aligns with the junction
+    
+    // CHECK FOR PATH
+    if (currentOrientation == Up || currentOrientation == Down) {
+        if(map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol - 1] == 8 ||
+            map[currentRow][currentCol + 1] == 9 || map[currentRow][currentCol - 1] == 9) {
+            return currentDirection;// if correct location, break
+        } else {
+            return GetNextStep(); // need to increment location
+        }
+    }
+    else if (currentOrientation == Left || currentOrientation == Right) {
+        if(map[currentRow + 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 8 ||
+            map[currentRow + 1][currentCol] == 9 || map[currentRow - 1][currentCol] == 9) {
+            return currentDirection;// if correct location, break
+        } else {
+            return GetNextStep(); // need to increment location
+        }
+    }
+    
+    return currentDirection;
+}
+
 uint8 stoppedAfterTurn = 0;
 uint8 ignoreSensor = 0;
 
@@ -296,23 +322,8 @@ enum DirectionState CheckSensorDirection() {
     if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
         && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
             previousDirection != TurnLeft && previousDirection != TurnRight)) {
-            
-    //     // switch (currentOrientation) {
-    //     //     case Up:
-    //     //         currentRow++;
-    //     //         break;
-    //     //     case Down:
-    //     //         currentRow--;
-    //     //         break;
-    //     //     case Right:
-    //     //         currentCol++;
-    //     //         break;
-    //     //     case Left:
-    //     //         currentCol--;
-    //     //         break;
-    //     // }
-        
-        directionState = GetNextStep(); // get next step at each block
+
+        directionState = RecheckPosition(); // get next step at each block
         totalDistance = 0; // reset distance
         previousDirection = directionState;
         return directionState;

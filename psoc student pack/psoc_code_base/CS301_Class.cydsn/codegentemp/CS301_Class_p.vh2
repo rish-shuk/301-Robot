@@ -1,5 +1,5 @@
 -- Project:   CS301_Class
--- Generated: 10/06/2023 13:15:03
+-- Generated: 10/06/2023 15:01:07
 -- PSoC Creator  4.2
 
 ENTITY CS301_Class IS
@@ -4120,12 +4120,12 @@ BEGIN
             interrupt => Net_4413,
             clock => ClockBlock_BUS_CLK);
 
-    S3_detected:interrupt
+    S6_detected:interrupt
         GENERIC MAP(
             int_type => "10",
             is_nmi => 0)
         PORT MAP(
-            interrupt => Net_5435,
+            interrupt => Net_5444,
             clock => ClockBlock_BUS_CLK);
 
     \Timer_LED:TimerHW\:timercell
@@ -4141,14 +4141,6 @@ BEGIN
             cmp => \Timer_LED:Net_261\,
             irq => Net_5372);
 
-    S4_detected:interrupt
-        GENERIC MAP(
-            int_type => "10",
-            is_nmi => 0)
-        PORT MAP(
-            interrupt => Net_5438,
-            clock => ClockBlock_BUS_CLK);
-
     S5_detected:interrupt
         GENERIC MAP(
             int_type => "10",
@@ -4157,12 +4149,20 @@ BEGIN
             interrupt => Net_5441,
             clock => ClockBlock_BUS_CLK);
 
-    S6_detected:interrupt
+    S4_detected:interrupt
         GENERIC MAP(
             int_type => "10",
             is_nmi => 0)
         PORT MAP(
-            interrupt => Net_5444,
+            interrupt => Net_5438,
+            clock => ClockBlock_BUS_CLK);
+
+    S3_detected:interrupt
+        GENERIC MAP(
+            int_type => "10",
+            is_nmi => 0)
+        PORT MAP(
+            interrupt => Net_5435,
             clock => ClockBlock_BUS_CLK);
 
     isr_Timer_LED:interrupt

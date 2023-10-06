@@ -1,6 +1,6 @@
 // ======================================================================
 // CS301_Class.v generated from TopDesign.cysch
-// 10/06/2023 at 13:14
+// 10/06/2023 at 15:00
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -1437,9 +1437,9 @@ endmodule
 module top ;
 
           wire  CLK24M;
-          wire  Net_5444;
           wire  Net_5441;
           wire  Net_5438;
+          wire  Net_5435;
           wire  Net_5396;
           wire  Net_5393;
           wire  Net_5392;
@@ -1447,7 +1447,7 @@ module top ;
           wire  Net_5394;
           wire  Net_5430;
           wire  Net_5487;
-          wire  Net_5435;
+          wire  Net_5444;
           wire  Net_4429;
           wire  Net_5665;
           wire  Net_5664;
@@ -3343,8 +3343,8 @@ module top ;
 
 	cy_isr_v1_0
 		#(.int_type(2'b10))
-		S3_detected
-		 (.int_signal(Net_5435));
+		S6_detected
+		 (.int_signal(Net_5444));
 
 
 
@@ -3418,13 +3418,6 @@ module top ;
 
 	cy_isr_v1_0
 		#(.int_type(2'b10))
-		S4_detected
-		 (.int_signal(Net_5438));
-
-
-
-	cy_isr_v1_0
-		#(.int_type(2'b10))
 		S5_detected
 		 (.int_signal(Net_5441));
 
@@ -3432,8 +3425,15 @@ module top ;
 
 	cy_isr_v1_0
 		#(.int_type(2'b10))
-		S6_detected
-		 (.int_signal(Net_5444));
+		S4_detected
+		 (.int_signal(Net_5438));
+
+
+
+	cy_isr_v1_0
+		#(.int_type(2'b10))
+		S3_detected
+		 (.int_signal(Net_5435));
 
 
 
