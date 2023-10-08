@@ -36,7 +36,7 @@ struct Location getRandomLocation(char map[MAX_ROWS][MAX_COLS]);
 // Pathfinding functions
 bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]);
 void dijkstra(char map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
-void traverseMap(char map[MAX_ROWS][MAX_COLS]);
 void findPath(char map[MAX_ROWS][MAX_COLS], char *filePath);
+void clearMap(int map[MAX_ROWS][MAX_COLS])
 
 #endif /* MAP_FUNCTIONS_H */

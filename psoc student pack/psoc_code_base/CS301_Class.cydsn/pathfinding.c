@@ -159,6 +159,21 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     // printMap(map);
 }
 
+void clearMap(int map[MAX_ROWS][MAX_COLS]) {
+    for(int i = 0; i < MAX_ROWS; i++) {
+        for(int j = 0; j < MAX_COLS; j++) {
+            if((map[i][j] == 1 || map[i][j] != 0)) {
+                map[i][j] = 0; // reset map
+            } 
+        }
+    }
+}
+
+void processPath(int map[MAX_ROWS][MAX_COLS]) {
+    // function to get path and determine number of turns/ skip turns
+
+}
+
 void findPath(int map[MAX_ROWS][MAX_COLS]) {
     struct Location startLocation = {1,1};
     struct Location targetLocation = {1,5};
