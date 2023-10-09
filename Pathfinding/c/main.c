@@ -47,6 +47,8 @@ bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) 
     return (r >= 0 && r < rows && c >= 0 && c < cols && map[r][c] == 0);
 }
 
+
+
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation) {
 
     int visitedMap[MAX_ROWS][MAX_COLS];
@@ -177,8 +179,15 @@ enum OrientationState {Up, Down, Left, Right};
 enum OrientationState previousRobotOrientation;
 enum OrientationState currentRobotOrientation;
 enum InstructionDirection Instructions[285];
-void traversePath();
-void traversePath() {
+struct Instructions {
+    enum InstructionDirection direction;
+    int ignoreL;
+    int ignoreR;
+};
+struct Instructions instructionsList[285];
+
+void getPathInstructions();
+void getPathInstructions() {
     // given path, traverse it by calculating number of turns/ turns to skip between each junction
     for(int i = 0; i < MAX_ROWS; i++) {
         for(int j = 0; j < MAX_COLS; j++) {
@@ -187,53 +196,57 @@ void traversePath() {
                 int nextStep = checkPathDirection(i,j);  // check all four sides for next step in path
                 switch (nextStep) {
                     case 0: // next step is up
+                        currentRobotOrientation = Up;
                         if(previousRobotOrientation == Left) {
-                                // need left turn
-                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            print("Right Turn\n") ; // need left turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         } 
                         if(previousRobotOrientation == Right) {
-                                // need a right turn
-                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            print("Left Turn\n") ; // need a right turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         }
+                        i--; // jump to new location
                         break;
                     case 1: // next step is down
+                        currentRobotOrientation = Down;
                         if(previousRobotOrientation == Right) {
-                                // need left turn
-                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            print("Left Turn\n") ; // need left turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         } 
                         if(previousRobotOrientation == Left) {
-                                // need a right turn
-                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            print("Right Turn\n") ; // need a right turn// need a right turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         }
-                        break;
+                        i++;
                         break;
                     case 2: // next step is left
+                        currentRobotOrientation = Left;
                         if(previousRobotOrientation == Up) {
-                            // need left turn
+                            print("Left Turn\n") ; // need left turn
                             ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         } 
                         if(previousRobotOrientation == Down) {
-                            // need a right turn
+                            print("Right Turn\n") ; // need a right turn
                             ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         }
+                        j--;
                         break;
                     case 3: // next step is right
+                        currentRobotOrientation = Right;
                         if(previousRobotOrientation == Up) {
-                            // need right turn
+                            print("Right Turn\n") ; // need a right turn
                             ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         }
                         if(previousRobotOrientation == Down) {
-                            // need left turn
+                            print("Left Turn\n") ; // need left turn
                             ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
                         }
+                        j++;
                         break;
                     default:
                         break;
                 }
-                // if next step in path is not the same orientation, then a turn is needed
-                if(previousRobotOrientation == Left || previousRobotOrientation == Right) {
 
-                }
                 previousRobotOrientation = currentRobotOrientation; // store current direction, need to compare in next pass
             }
         }
@@ -271,7 +284,7 @@ void checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int
                 break; // ignore when going up and down
         }
     }
-    if (map[currentRow + 1][currentCol] == 0) {
+    if (map[currentRow + 1][currentCol] == 0) { // if row below is a 0
         switch (robotOrientation) {
             case Left:
                 ignoreL++;
@@ -283,7 +296,7 @@ void checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int
                 break;
         }
     }
-    if (map[currentRow][currentCol - 1] == 0) {
+    if (map[currentRow][currentCol - 1] == 0) { 
         switch (robotOrientation) {
             case Up:
                 ignoreL++;
