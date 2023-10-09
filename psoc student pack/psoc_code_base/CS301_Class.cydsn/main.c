@@ -296,22 +296,7 @@ enum DirectionState CheckSensorDirection() {
     if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
         && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
             previousDirection != TurnLeft && previousDirection != TurnRight)) {
-            
-    //     // switch (currentOrientation) {
-    //     //     case Up:
-    //     //         currentRow++;
-    //     //         break;
-    //     //     case Down:
-    //     //         currentRow--;
-    //     //         break;
-    //     //     case Right:
-    //     //         currentCol++;
-    //     //         break;
-    //     //     case Left:
-    //     //         currentCol--;
-    //     //         break;
-    //     // }
-        
+
         directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
         previousDirection = directionState;
@@ -472,6 +457,70 @@ enum DirectionState CheckSensorDirection() {
     // Possible reason
     previousDirection = currentDirection;
     return previousDirection;
+}
+
+void traversePath();
+void traversePath() {
+    // given path, traverse it by calculating number of turns/ turns to skip between each junction
+    for(int i = 0; i < MAX_ROWS; i++) {
+        for(int j = 0; j < MAX_COLS; j++) {
+            if(map[i][j] == 8 || map[i][j] == 2) {
+                // check all four sides for next step in path
+                // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts
+                // if next step in path is not the same orientation, then a turn is needed
+
+                //
+            }
+        }
+    }
+}
+uint8 checkPathDirection(int currentRow, int currentCol);
+uint8 checkPathDirection(int currentRow, int currentCol) {
+    // UP - 0
+    // DOWN - 1
+    // LEFT - 2
+    // RIGHT - 3
+    if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
+        return 0;   
+    }
+    if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
+        return 1;
+    }
+    if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
+        return 2;
+    }
+    if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
+        return 3;
+    }
+    return 5; // no direction found??
+}
+uint8 checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int currentCol);
+uint8 checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int currentCol) {
+    // UP - 0
+    // DOWN - 1
+    // LEFT - 2
+    // RIGHT - 3
+    if (map[currentRow - 1][currentCol] == 0) {
+        switch (robotOrientation) {
+            case Up:
+                break;
+            case Down:
+                break;
+            case Left:
+
+        }
+        return 0;   
+    }
+    if (map[currentRow + 1][currentCol] == 0) {
+        return 1;
+    }
+    if (map[currentRow][currentCol - 1] == 0) {
+        return 2;
+    }
+    if (map[currentRow][currentCol + 1] == 0) {
+        return 3;
+    }
+    return 5; // no direction found??
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check

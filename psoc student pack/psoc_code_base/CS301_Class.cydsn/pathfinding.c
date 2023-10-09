@@ -21,7 +21,7 @@
 #define targetRow 9
 #define targetCol 1
 
-/*int map[15][19] = {
+int map[15][19] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 {1,0,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1},
@@ -37,8 +37,9 @@
 {1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1},
 {1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1},
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-};*/
+};
 
+/*
 int map[15][19] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 {1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -56,7 +57,7 @@ int map[15][19] = {
 {1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1},
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 };
-
+*/
 
 
 int start_pos[2] = {1,1};
@@ -68,6 +69,8 @@ int food_list[5][2]= {
 {13,5},
 {9,9}
 };
+
+int path_of_coordinates[285][2];
 
 
 // MAP INITIALISATION CODE
@@ -210,12 +213,21 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     }
     // printMap(map);
 }
+void clearMap(int map[MAX_ROWS][MAX_COLS]) {
+    for(int i = 0; i < MAX_ROWS; i++) {
+        for(int j = 0; j < MAX_COLS; j++) {
+            if((map[i][j] == 1 || map[i][j] != 0)) {
+                map[i][j] = 0; // reset map
+            } 
+        }
+    }
+}
 
 void findPath(int map[MAX_ROWS][MAX_COLS]) {
+    clearMap(map); // clear map between each pass
     struct Location startLocation = {1,1};
-    struct Location targetLocation = {targetRow,targetCol};
+    struct Location targetLocation = {1,5};
     dijkstra(map, startLocation, targetLocation); // find shortest path
-    //map[0][0] = 7;
 }
 
 /* [] END OF FILE */

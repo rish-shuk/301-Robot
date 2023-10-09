@@ -23,6 +23,8 @@ struct Location {
     int col;
 };
 
+int list_of_optimal_coordinates[285][2]; // ROW, COL
+
 struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
     struct Location randomLocation;
     int isNotValid = 1; // true
@@ -138,6 +140,8 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     map[currentRow][currentCol] = 9; // mark finish location
     //printf("%d,%d\n", currentRow, currentCol); // print optimal step
     // reconstruct path by reversing paths array and taking shortest distance
+    int pathIndex = 0;
+
     while(shortestDist > 0) {    
         // make a move, check if valid and is the next step in path
         for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
@@ -146,6 +150,11 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
                 map[newRow][newCol] = 8; // mark optimal step
+                list_of_optimal_coordinates[pathIndex][0] = newRow;
+                list_of_optimal_coordinates[pathIndex][1] = newCol;
+                pathIndex++;
+                // reverse array somewhere
+
                 shortestDist--; // decrement distance
                 currentRow = newRow; 
                 currentCol = newCol; // change current location
@@ -179,6 +188,7 @@ int main() {
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
     dijkstra(map, startLocation, targetLocation); // find shortest path
+    // get list of coordinates of path
     printMap(map);
     // traverseMap(map, startLocation, targetLocation);
     return 0;
