@@ -181,7 +181,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     //return retSteps;
 }
 
-enum InstructionDirection {Forward, TurnLeft, TurnRight, uTurn, ForwardUntilTarget, StopAtTarget};
+enum InstructionDirection {Forward, TurnLeft, TurnRight, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
 enum OrientationState {Up, Down, Left, Right};
 enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
 enum InstructionDirection Instructions[285];
@@ -191,9 +191,12 @@ struct Instructions {
     int ignoreR;
 };
 
+// PATHFINDING PROCESSING *====================
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 int checkPathDirection(int currentRow, int currentCol);
 int getTargetOrientation(int targetRow, int targetCol); 
+void processInstructionList(int index);
+
 int ignoreR = 0, ignoreL = 0;
 struct Instructions instructionsList[285]; // list to store instructions
 // return a list of instructions for robot to execute
@@ -234,7 +237,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     // check if we only need to go forward to reach target
                     if(targetOrientation == nextStep && targetLocation.col == currentCol) {
                         newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n");
+                        printf("Forward until target\n"); // THIS WILL HAVE AN EDGE CASE
                     } else {
                         newDirection = Forward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -353,6 +356,18 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         listIndex++; // increment instruction list index
         numSteps--; // decrement numSteps
     }
+    processInstructionList(listIndex);
+}
+
+void processInstructionList(int index) {
+    // remove repeated forwards
+    for(int i = 0; i < index-1; i ++) {
+        if(instructionsList[i].direction == instructionsList[i+1].direction) {
+            instructionsList[i].direction = Skip;
+            instructionsList[i].ignoreL = 0;
+            instructionsList[i].ignoreR = 0;
+        }
+    }
 }
 
 int checkPathDirection(int currentRow, int currentCol) {
@@ -445,8 +460,8 @@ int main() {
     startLocation.row = 1;
     startLocation.col = 1;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 3;
-    targetLocation.col = 3;
+    targetLocation.row = 6;
+    targetLocation.col = 13;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
@@ -455,14 +470,14 @@ int main() {
     printMap(map);
     getPathInstructions(map, numSteps, startLocation, targetLocation); // edit list of instructions
     clearMap(map);
-    printf("\n");
+    /*printf("\n");
     startLocation.row = 3;
     startLocation.col = 3;
     targetLocation.row = 1;
     targetLocation.col = 1;
     dijkstra(map, startLocation, targetLocation);
     printMap(map);
-    getPathInstructions(map, numSteps, startLocation, targetLocation);
+    getPathInstructions(map, numSteps, startLocation, targetLocation);*/
 
     // can add some logic to skip multiple forward calls- only check the last one
 
