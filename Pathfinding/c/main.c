@@ -177,8 +177,8 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 int ignoreR, ignoreL = 0;
 enum InstructionDirection {Forward, TurnLeft, TurnRight};
 enum OrientationState {Up, Down, Left, Right};
-enum OrientationState previousRobotOrientation = Right;
-enum OrientationState currentRobotOrientation = Right;
+enum OrientationState previousRobotOrientation = Down;
+enum OrientationState currentRobotOrientation = Down;
 enum InstructionDirection Instructions[285];
 struct Instructions {
     enum InstructionDirection direction;
@@ -352,8 +352,8 @@ int main() {
     startLocation.row = 1;
     startLocation.col = 1;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 1;
-    targetLocation.col = 17;
+    targetLocation.row = 6;
+    targetLocation.col = 13;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
