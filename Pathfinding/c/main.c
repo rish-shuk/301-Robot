@@ -184,13 +184,13 @@ struct Instructions {
     int ignoreR;
 };
 
-struct Instructions instructionsList[285];
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 int checkPathDirection(int currentRow, int currentCol);
 int ignoreR = 0, ignoreL = 0;
-// return a list of instructions for robot ot execute
-void getPathInstructions(int map[MAX_ROWS][MAX_COLS]);
-void getPathInstructions(int map[MAX_ROWS][MAX_COLS]) {
+struct Instructions instructionsList[285]; // list to store instructions
+// return a list of instructions for robot to execute
+void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps);
+void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps) {
     int currentRow = 1; 
     int currentCol = 1; // initialise with start
     int listIndex = 0;
@@ -205,14 +205,14 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS]) {
             case 0: // next step is up
                 currentRobotOrientation = Up;
                 if(previousRobotOrientation == Left) {
-                    newDirection = TurnLeft;
+                    newDirection = TurnRight;
                     printf("Right Turn\n") ; // need right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 } 
                 if(previousRobotOrientation == Right) {
-                    newDirection = TurnRight;
-                    printf("Left Turn\n") ; // need a left turn
+                    newDirection = TurnLeft;
+                    printf("Turn Left\n") ; // need a right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
@@ -381,8 +381,8 @@ int main() {
     dijkstra(map, startLocation, targetLocation); // find shortest path
     // get list of coordinates of path
     printMap(map);
-    printf("testing instructionList");
-    getPathInstructions(map);
+    getPathInstructions(map, numSteps); // edit list of instructions
+    // can add some logic to skip multiple forward calls- only check the last one
     // traverseMap(map, startLocation, targetLocation);
     return 0;
 }
