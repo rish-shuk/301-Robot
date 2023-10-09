@@ -202,7 +202,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
     int currentRow = startLocation.row; 
     int currentCol = startLocation.col; // initialise with start
     int listIndex = 0;
-    
+    int targetOrientation = getTargetOrientation(targetLocation.row, targetLocation.col);
     // given path, traverse it by calculating number of turns/ turns to skip between each junction
     while(numSteps >= 0) {
         checkIgnoreTurn(currentRobotOrientation, currentRow, currentCol); // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts- check zeroes
@@ -210,10 +210,9 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         previousRobotOrientation = currentRobotOrientation;
         enum InstructionDirection newDirection;
         int nextStep = checkPathDirection(currentRow,currentCol);  // check all four sides for next step in path
-        int targetOrientation = getTargetOrientation(targetLocation.row, targetLocation.col);
         if(currentRow == targetLocation.row && currentCol == targetLocation.col) {
-            newDirection = ForwardUntilTarget; // if next step is the target, call forward until target
-            printf("Reached target\n");
+            newDirection = StopAtTarget; // if next step is the target, call forward until target
+            printf("Stop at target\n");
             nextStep = 5;
         }
         switch (nextStep) {
@@ -429,13 +428,13 @@ int getTargetOrientation(int targetRow, int targetCol) {
     if(map[targetRow + 1][targetCol] == 8) {
         return 0; // robot will be travelling up
     }
-    if(map[targetRow - 1][targetCol] == 9) {
+    if(map[targetRow - 1][targetCol] == 8) {
         return 1; // robot will be travelling down
     }
-    if(map[targetRow][targetCol - 1] == 9) {
+    if(map[targetRow][targetCol + 1] == 8) {
         return 2; // robot will be travelling left
     }
-    if(map[targetRow][targetCol + 1] == 9) {
+    if(map[targetRow][targetCol - 1] == 8) {
         return 3; // robot will be travelling right
     }
     return 5; // placeholder
