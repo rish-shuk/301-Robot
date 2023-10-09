@@ -171,6 +171,99 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     //printMap(map);
     //return retSteps;
 }
+int ignoreL;
+int ignoreR;
+enum InstructionDirection {Forward, TurnLeft, TurnRight};
+enum OrientationState {Up, Down, Left, Right};
+enum OrientationState robotOrientation;
+enum InstructionDirection Instructions[285];
+void traversePath();
+void traversePath() {
+    // given path, traverse it by calculating number of turns/ turns to skip between each junction
+    for(int i = 0; i < MAX_ROWS; i++) {
+        for(int j = 0; j < MAX_COLS; j++) {
+            if(map[i][j] == 8 || map[i][j] == 2) {
+                // check all four sides for next step in path
+                // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts
+                // if next step in path is not the same orientation, then a turn is needed
+
+                //
+            }
+        }
+    }
+}
+int checkPathDirection(int currentRow, int currentCol);
+int checkPathDirection(int currentRow, int currentCol) {
+    // UP - 0
+    // DOWN - 1
+    // LEFT - 2
+    // RIGHT - 3
+    if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
+        return 0;   
+    }
+    if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
+        return 1;
+    }
+    if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
+        return 2;
+    }
+    if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
+        return 3;
+    }
+    return 5; // no direction found??
+}
+void checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int currentCol);
+void checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int currentCol) {
+    // UP - 0 DOWN - 1 LEFT - 2 RIGHT - 3
+    if (map[currentRow - 1][currentCol] == 0) { // if the row above is a 0
+        switch (robotOrientation) {
+            case Left:
+                ignoreR++;
+                break;
+            case Right:
+                ignoreL++;
+                break;
+            default:
+                break; // ignore when going up and down
+        }
+    }
+    if (map[currentRow + 1][currentCol] == 0) {
+        switch (robotOrientation) {
+            case Left:
+                ignoreL++;
+                break;
+            case Right:
+                ignoreR++;
+                break;
+            default:
+                break;
+        }
+    }
+    if (map[currentRow][currentCol - 1] == 0) {
+        switch (robotOrientation) {
+            case Up:
+                ignoreL++;
+                break;
+            case Down:
+                ignoreR++;
+                break;
+            default:
+                break;
+        }
+    }
+    if (map[currentRow][currentCol + 1] == 0) {
+        switch (robotOrientation) {
+            case Up:
+                ignoreR++;
+                break;
+            case Down:
+                ignoreL++;
+                break;
+            default:
+                break;
+        }
+    }
+}
 
 int main() {
     srand(time(NULL)); // Seed the random number generator with the current time
