@@ -198,6 +198,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps) {
     // given path, traverse it by calculating number of turns/ turns to skip between each junction
     while(numSteps >= 0) {
         checkIgnoreTurn(currentRobotOrientation, currentRow, currentCol); // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts- check zeroes
+        map[currentRow][currentCol] = 0; // clear visited map location (for when we need to u-turn)
         previousRobotOrientation = currentRobotOrientation;
         enum InstructionDirection newDirection;
         int nextStep = checkPathDirection(currentRow,currentCol);  // check all four sides for next step in path
@@ -295,17 +296,17 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps) {
 }
 
 int checkPathDirection(int currentRow, int currentCol) {
-    // need to check currentOrientation, so we don't go backwards
-    if (previousRobotOrientation != Down && map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
+    // map is cleared beforehand, so no need to check- this code will allow for 180deg turns
+    if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
         return 0; // up 
     }
-    if (previousRobotOrientation != Up && map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
+    if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
         return 1; // down
     }
-    if (previousRobotOrientation != Right && map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
+    if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
         return 2; // left
     }
-    if (previousRobotOrientation != Left && map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
+    if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
         return 3; // right
     }
     return 5; // no direction found??
@@ -382,6 +383,7 @@ int main() {
     // get list of coordinates of path
     printMap(map);
     getPathInstructions(map, numSteps); // edit list of instructions
+
     // can add some logic to skip multiple forward calls- only check the last one
     // traverseMap(map, startLocation, targetLocation);
     return 0;
