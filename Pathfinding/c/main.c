@@ -194,8 +194,9 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS]) {
     int currentRow = 1; 
     int currentCol = 1;
     // given path, traverse it by calculating number of turns/ turns to skip between each junction
-    while(numSteps > 0) {
+    while(numSteps >= 0) {
         checkIgnoreTurn(currentRobotOrientation, currentRow, currentCol); // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts- check zeroes
+        previousRobotOrientation = currentRobotOrientation;
         int nextStep = checkPathDirection(currentRow,currentCol);  // check all four sides for next step in path
         switch (nextStep) {
             case 0: // next step is up
@@ -210,19 +211,25 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS]) {
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
+                if(previousRobotOrientation == Up) {
+                    printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                }
                 currentRow--; // jump to new location
                 break;
             case 1: // next step is down
                 currentRobotOrientation = Down;
                 if(previousRobotOrientation == Right) {
-                    printf("Left Turn\n") ; // need left turn
+                    printf("Right Turn\n") ; // need left turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 } 
                 if(previousRobotOrientation == Left) {
-                    printf("Right Turn\n") ; // need a right turn// need a right turn
+                    printf("Left Turn\n") ; // need a right turn// need a right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
+                }
+                if(previousRobotOrientation == Down) {
+                    printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
                 }
                 currentRow++;
                 break;
@@ -264,22 +271,22 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS]) {
                 break;
         }
         numSteps--; // decrement numSteps
-        previousRobotOrientation = currentRobotOrientation; // store current direction, need to compare in next pass
+        //previousRobotOrientation = currentRobotOrientation; // store current direction, need to compare in next pass
     }
 }
 
 int checkPathDirection(int currentRow, int currentCol) {
     // need to check currentOrientation, so we don't go backwards
-    if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9 && previousRobotOrientation != Down) {
+    if (previousRobotOrientation != Down && map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
         return 0; // up 
     }
-    if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9 && previousRobotOrientation != Up) {
+    if (previousRobotOrientation != Up && map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
         return 1; // down
     }
-    if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9 && previousRobotOrientation != Right) {
+    if (previousRobotOrientation != Right && map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
         return 2; // left
     }
-    if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9 && previousRobotOrientation != Left) {
+    if (previousRobotOrientation != Left && map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
         return 3; // right
     }
     return 5; // no direction found??
