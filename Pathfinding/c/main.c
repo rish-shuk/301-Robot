@@ -185,9 +185,11 @@ struct Instructions {
     int ignoreR;
 };
 struct Instructions instructionsList[285];
+void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
+int checkPathDirection(int currentRow, int currentCol);
 
-void getPathInstructions();
-void getPathInstructions() {
+void getPathInstructions(int map[MAX_ROWS][MAX_COLS]);
+void getPathInstructions(int map[MAX_ROWS][MAX_COLS]) {
     // given path, traverse it by calculating number of turns/ turns to skip between each junction
     for(int i = 0; i < MAX_ROWS; i++) {
         for(int j = 0; j < MAX_COLS; j++) {
@@ -198,48 +200,56 @@ void getPathInstructions() {
                     case 0: // next step is up
                         currentRobotOrientation = Up;
                         if(previousRobotOrientation == Left) {
-                            print("Right Turn\n") ; // need left turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Right Turn\n") ; // need left turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         } 
                         if(previousRobotOrientation == Right) {
-                            print("Left Turn\n") ; // need a right turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Left Turn\n") ; // need a right turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         }
                         i--; // jump to new location
                         break;
                     case 1: // next step is down
                         currentRobotOrientation = Down;
                         if(previousRobotOrientation == Right) {
-                            print("Left Turn\n") ; // need left turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Left Turn\n") ; // need left turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         } 
                         if(previousRobotOrientation == Left) {
-                            print("Right Turn\n") ; // need a right turn// need a right turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Right Turn\n") ; // need a right turn// need a right turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         }
                         i++;
                         break;
                     case 2: // next step is left
                         currentRobotOrientation = Left;
                         if(previousRobotOrientation == Up) {
-                            print("Left Turn\n") ; // need left turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Left Turn\n") ; // need left turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         } 
                         if(previousRobotOrientation == Down) {
-                            print("Right Turn\n") ; // need a right turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Right Turn\n") ; // need a right turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         }
                         j--;
                         break;
                     case 3: // next step is right
                         currentRobotOrientation = Right;
                         if(previousRobotOrientation == Up) {
-                            print("Right Turn\n") ; // need a right turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Right Turn\n") ; // need a right turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         }
                         if(previousRobotOrientation == Down) {
-                            print("Left Turn\n") ; // need left turn
-                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                            printf("Left Turn\n") ; // need left turn
+                            ignoreL = 0;
+                            ignoreR = 0; // reset ignoreL/ ignoreR
                         }
                         j++;
                         break;
@@ -252,7 +262,7 @@ void getPathInstructions() {
         }
     }
 }
-int checkPathDirection(int currentRow, int currentCol);
+
 int checkPathDirection(int currentRow, int currentCol) {
     // need to check currentOrientation, so we don't go backwards
     if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9 && previousRobotOrientation != Down) {
@@ -269,7 +279,7 @@ int checkPathDirection(int currentRow, int currentCol) {
     }
     return 5; // no direction found??
 }
-void checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int currentCol);
+
 void checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int currentCol) {
     // UP - 0 DOWN - 1 LEFT - 2 RIGHT - 3
     if (map[currentRow - 1][currentCol] == 0) { // if the row above is a 0
@@ -340,6 +350,7 @@ int main() {
     dijkstra(map, startLocation, targetLocation); // find shortest path
     // get list of coordinates of path
     printMap(map);
+    getPathInstructions(map);
     // traverseMap(map, startLocation, targetLocation);
     return 0;
 }
