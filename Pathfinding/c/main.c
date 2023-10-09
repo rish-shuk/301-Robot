@@ -171,11 +171,11 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     //printMap(map);
     //return retSteps;
 }
-int ignoreL;
-int ignoreR;
+int ignoreR, ignoreL = 0;
 enum InstructionDirection {Forward, TurnLeft, TurnRight};
 enum OrientationState {Up, Down, Left, Right};
-enum OrientationState robotOrientation;
+enum OrientationState previousRobotOrientation;
+enum OrientationState currentRobotOrientation;
 enum InstructionDirection Instructions[285];
 void traversePath();
 void traversePath() {
@@ -183,32 +183,76 @@ void traversePath() {
     for(int i = 0; i < MAX_ROWS; i++) {
         for(int j = 0; j < MAX_COLS; j++) {
             if(map[i][j] == 8 || map[i][j] == 2) {
-                // check all four sides for next step in path
-                // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts
+                checkIgnoreTurn(currentRobotOrientation, i, j); // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts- check zeroes
+                int nextStep = checkPathDirection(i,j);  // check all four sides for next step in path
+                switch (nextStep) {
+                    case 0: // next step is up
+                        if(previousRobotOrientation == Left) {
+                                // need left turn
+                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        } 
+                        if(previousRobotOrientation == Right) {
+                                // need a right turn
+                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        }
+                        break;
+                    case 1: // next step is down
+                        if(previousRobotOrientation == Right) {
+                                // need left turn
+                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        } 
+                        if(previousRobotOrientation == Left) {
+                                // need a right turn
+                                ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        }
+                        break;
+                        break;
+                    case 2: // next step is left
+                        if(previousRobotOrientation == Up) {
+                            // need left turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        } 
+                        if(previousRobotOrientation == Down) {
+                            // need a right turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        }
+                        break;
+                    case 3: // next step is right
+                        if(previousRobotOrientation == Up) {
+                            // need right turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        }
+                        if(previousRobotOrientation == Down) {
+                            // need left turn
+                            ignoreL, ignoreR = 0; // reset ignoreL/ ignoreR
+                        }
+                        break;
+                    default:
+                        break;
+                }
                 // if next step in path is not the same orientation, then a turn is needed
+                if(previousRobotOrientation == Left || previousRobotOrientation == Right) {
 
-                //
+                }
+                previousRobotOrientation = currentRobotOrientation; // store current direction, need to compare in next pass
             }
         }
     }
 }
 int checkPathDirection(int currentRow, int currentCol);
 int checkPathDirection(int currentRow, int currentCol) {
-    // UP - 0
-    // DOWN - 1
-    // LEFT - 2
-    // RIGHT - 3
-    if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
-        return 0;   
+    // need to check currentOrientation, so we don't go backwards
+    if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9 && previousRobotOrientation != Down) {
+        return 0;  // Up
     }
-    if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
-        return 1;
+    if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9 && previousRobotOrientation != Up) {
+        return 1; // Down
     }
-    if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
-        return 2;
+    if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9 && previousRobotOrientation != Right) {
+        return 2; // Left
     }
-    if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
-        return 3;
+    if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9 && previousRobotOrientation != Left) {
+        return 3; // Right
     }
     return 5; // no direction found??
 }
