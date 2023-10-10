@@ -38,19 +38,15 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-//enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
 //enum OrientationState {Up, Down, Left, Right};
-enum DirectionState currentDirection = {Skip, 0, 0};
+enum DirectionState currentDirection = Unknown;
 enum DirectionState previousDirection = Unknown;
 enum OrientationState currentOrientation = Right;
 enum OrientationState previousOrientation = Right;
 enum DirectionState GetNextStep();
-// --- YIPPE
 // ----------------------------------------
-uint8 s3 = 0;
-uint8 s4 = 0;
-uint8 s5 = 0;
-uint8 s6 = 0;
+uint8 s3, s4, s5, s6 = 0;
 //* ========================================
 // Calculating Distance
 #define WHEEL_DIAMETER_MM 64.5
@@ -142,7 +138,6 @@ int main()
     Timer_LED_Start();
 
     findPath(map);// find shortest path- store this in map wasn't being called before
-    GetNextStep();
 
 // ------USB SETUP ----------------    
 #ifdef USE_USB    

@@ -28,9 +28,9 @@ struct Location
     int col;
 };
 
-enum InstructionDirection {Forward, TurnLeft, TurnRight, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
+enum InstructionDirection {GoForward, waitForTurnLeft, waitForTurnRight, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
 enum OrientationState {Up, Down, Left, Right};
-enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
+enum OrientationState previousRobotOrientation, currentRobotOrientation;
 enum InstructionDirection Instructions[285];
 struct Instructions {
     enum InstructionDirection direction;
