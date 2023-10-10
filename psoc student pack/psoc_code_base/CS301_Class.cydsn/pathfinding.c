@@ -14,26 +14,22 @@
 #include <time.h>
 #include <stdbool.h>
 #include "map.h"
+#include "pathfinding.h"
 
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
+enum OrientationState previousRobotOrientation, currentRobotOrientation; // initialize 
 
-enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
-
-static Instructions instructionsList[285];
+static Instruction *instructionsList;
 static int numSteps = 0;
 
-int instructionsListLength();
+uint8_t instructionsListLength();
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 uint8_t checkPathDirection(int currentRow, int currentCol);
 uint8_t getTargetOrientation(int targetRow, int targetCol); 
-Instruction * processInstructionList(int index);
+struct Instruction * processInstructionList(int index);
 
-struct Location {
-    int row;
-    int col;
-};
 
 int map[15][19] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -502,11 +498,11 @@ uint8_t getTargetOrientation(int targetRow, int targetCol) {
     }
     return 5; // placeholder
 }
-int instructionsListLength() {
+uint8_t instructionsListLength() {
     return numSteps;
 }
 
-Instruction* findPath(int map[MAX_ROWS][MAX_COLS], int i) {
+Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int i) {
     clearMap(map); // clear map between each pass
     struct Location startLocation, targetLocation;
     startLocation.row = start_pos[0];

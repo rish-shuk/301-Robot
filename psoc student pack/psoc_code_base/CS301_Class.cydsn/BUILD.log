@@ -1,106 +1,22 @@
---------------- Build Started: 10/10/2023 21:56:01 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 10/10/2023 22:26:55 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
-arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c main.c -o .\CortexM3\ARM_GCC_541\Debug\main.o
-main.c: In function 'speedTimer':
-main.c:68:27: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if ((currentDirection == Forward || 
-                           ^
-main.c:69:26: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-         currentDirection == waitForTurn || 
-                          ^
-main.c:72:26: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-         currentDirection == ForwardAfterTurn ||
-                          ^
-main.c:73:26: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-         currentDirection == AdjustToTheLeft ||
-                          ^
-main.c:74:26: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-         currentDirection == AdjustToTheRight) &&
-                          ^
-main.c: In function 'TIMER_FINISH':
-main.c:113:26: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if (currentDirection == Stop) {
-                          ^
-main.c: In function 'main':
-main.c:137:21: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
-     instructionList = findPath(map, food_list);
-                     ^
-main.c: In function 'CheckSensorDirection':
-main.c:283:27: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
-                           ^
-main.c:283:59: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
-                                                           ^
-main.c:283:99: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if((previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) && (!s3 && !s4)
-                                                                                                   ^
-main.c:284:31: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-         && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
-                               ^
-main.c:285:31: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-             previousDirection != TurnLeft && previousDirection != TurnRight)) {
-                               ^
-main.c:285:64: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-             previousDirection != TurnLeft && previousDirection != TurnRight)) {
-                                                                ^
-main.c:287:26: warning: implicit declaration of function 'GetNextStep' [-Wimplicit-function-declaration]
-         directionState = GetNextStep(); // get next step at each block
-                          ^
-main.c:312:27: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if (previousDirection == Stop) {
-                           ^
+arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/initialise.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c initialise.c -o .\CortexM3\ARM_GCC_541\Debug\initialise.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/pathfinding.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c pathfinding.c -o .\CortexM3\ARM_GCC_541\Debug\pathfinding.o
+pathfinding.c: In function 'getPathInstructions':
+pathfinding.c:402:12: error: incompatible types when returning type 'Instruction {aka struct Instruction}' but 'Instruction * {aka struct Instruction *}' was expected
+     return * instructionsList;
+            ^
+pathfinding.c: At top level:
+pathfinding.c:505:15: error: conflicting types for 'findPath'
+ Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int i) {
+               ^
+In file included from pathfinding.c:17:0:
+pathfinding.h:48:15: note: previous declaration of 'findPath' was here
+ Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2]);
+               ^
+pathfinding.c: In function 'getPathInstructions':
+pathfinding.c:403:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
 The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
-main.c:323:27: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if (previousDirection == ForwardAfterTurn) {
-                           ^
-main.c:363:26: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if(previousDirection == TurnRight) {
-                          ^
-main.c:381:26: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if(previousDirection == TurnLeft) {
-                          ^
-main.c:400:27: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-                           ^
-main.c:400:59: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-                                                           ^
-main.c:400:99: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-                                                                                                   ^
-main.c:426:27: warning: comparison between 'enum InstructionDirection' and 'enum DirectionState' [-Wenum-compare]
-     if (previousDirection == Unknown) {
-                           ^
-main.c: In function 'SetRobotMovement':
-main.c:454:53: warning: passing argument 2 of 'getNextInstruction' from incompatible pointer type [-Wincompatible-pointer-types]
-     currentDirection = getNextInstruction(numSteps, instructionList); // get current/ next instruction
-                                                     ^
-main.c:438:13: note: expected 'Instruction * {aka struct Instruction *}' but argument is of type 'struct Instructions *'
- Instruction getNextInstruction(int numSteps, Instruction instructionList[numSteps]) {
-             ^
-main.c:454:22: error: incompatible types when assigning to type 'enum InstructionDirection' from type 'Instruction {aka struct Instruction}'
-     currentDirection = getNextInstruction(numSteps, instructionList); // get current/ next instruction
-                      ^
-main.c:485:9: error: duplicate case value
-         case waitForLeftTurn:
-         ^
-main.c:461:9: error: previously used here
-         case TurnRight:
-         ^
-main.c:488:9: error: duplicate case value
-         case waitForRightTurn:
-         ^
-main.c:464:9: error: previously used here
-         case TurnLeft:
-         ^
-main.c:476:9: warning: case value '7' not in enumerated type 'enum InstructionDirection' [-Wswitch]
-         case waitForTurn:
-         ^
-main.c:479:9: warning: case value '8' not in enumerated type 'enum InstructionDirection' [-Wswitch]
-         case ForwardAfterTurn:
-         ^
-main.c:482:9: warning: case value '9' not in enumerated type 'enum InstructionDirection' [-Wswitch]
-         case Backward:
-         ^
---------------- Build Failed: 10/10/2023 21:56:01 ---------------
+--------------- Build Failed: 10/10/2023 22:26:55 ---------------

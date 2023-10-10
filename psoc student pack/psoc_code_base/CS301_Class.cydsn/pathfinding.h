@@ -42,14 +42,15 @@ void printMap(int map[MAX_ROWS][MAX_COLS]);
 struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]);
 
 // Pathfinding functions
-bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]);
+bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]);
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
 void clearMap(int map[MAX_ROWS][MAX_COLS]);
-Instruction* findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2]);
+Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2]);
+Instruction * getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation);
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
-int checkPathDirection(int currentRow, int currentCol);
-int getTargetOrientation(int targetRow, int targetCol); 
-void processInstructionList(int index);
-int instructionsListLength(); 
+uint8_t checkPathDirection(int currentRow, int currentCol);
+uint8_t getTargetOrientation(int targetRow, int targetCol); 
+Instruction * processInstructionList(int index);
+uint8_t instructionsListLength(); 
 
 #endif /* MAP_FUNCTIONS_H */
