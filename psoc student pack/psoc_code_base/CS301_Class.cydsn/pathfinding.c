@@ -22,17 +22,20 @@
 enum InstructionDirection {GoForward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
 enum OrientationState {Up, Down, Left, Right};
 enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
-extern enum InstructionDirection instructionsList[285];
 typedef struct Instructions {
     enum InstructionDirection direction;
     int ignoreL;
     int ignoreR;
 } Instructions;
-int numSteps;
+
+Instructions instructionsList[285];
+int numSteps = 0;
+
+int instructionsListLength();
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 uint8_t checkPathDirection(int currentRow, int currentCol);
 uint8_t getTargetOrientation(int targetRow, int targetCol); 
-void processInstructionList(int index);
+Instructions * processInstructionList(int index);
 
 int map[15][19] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -250,8 +253,6 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
             }
         }
     }
-    //printMap(map);
-    //return retSteps;
 }
 
 
@@ -262,7 +263,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 int ignoreR = 0, ignoreL = 0;
 
 // return a list of instructions for robot to execute
-void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
+Instructions * getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
     int currentRow = startLocation.row; 
     int currentCol = startLocation.col; // initialise with start
     int listIndex = 0;
@@ -418,9 +419,10 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         numSteps--; // decrement numSteps
     }
     processInstructionList(listIndex);
+    return instructionsList;
 }
 
-void processInstructionList(int index) {
+Instructions * processInstructionList(int index) {
     // remove repeated forwards
     for(int i = 0; i < index-1; i ++) {
         if(instructionsList[i].direction == instructionsList[i+1].direction) {
@@ -429,6 +431,7 @@ void processInstructionList(int index) {
             instructionsList[i].ignoreR = 0;
         }
     }
+    return instructionsList;
 }
 
 uint8_t checkPathDirection(int currentRow, int currentCol) {
@@ -515,11 +518,24 @@ uint8_t getTargetOrientation(int targetRow, int targetCol) {
     }
     return 5; // placeholder
 }
-
-void findPath(int map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
+int instructionsListLength() {
+    int length;
+    for(int i = 0; i < 285; i++) {
+        if(instructionsList[i].direction != Skip) {
+            length++;
+        }
+    }
+    return length;
+}
+Instructions findPath(int map[MAX_ROWS][MAX_COLS], int i) {
     clearMap(map); // clear map between each pass
+    struct Location startLocation, targetLocation;
+    startLocation.row = start_pos[0];
+    startLocation.col = start_pos[1];
+    targetLocation.row = food_list[i][0];
+    targetLocation.col = food_list[i][1];
     dijkstra(map, startLocation, targetLocation); // find shortest path
-    getPathInstructions(map,numSteps,startLocation,targetLocation); // get list of instructions 
+    return * getPathInstructions(map,numSteps,startLocation,targetLocation); // get list of instructions 
 }
 
 /* [] END OF FILE */

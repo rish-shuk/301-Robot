@@ -39,10 +39,8 @@ void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
-enum DirectionState currentDirection = Unknown;
-enum DirectionState previousDirection = Unknown;
-enum OrientationState currentOrientation = Right;
-enum OrientationState previousOrientation = Right;
+enum DirectionState currentDirection, previousDirection = Forward;
+enum OrientationState currentOrientation, previousOrientation = Right;
 enum DirectionState GetNextStep();
 
 void traversePath(int numSteps, struct Instructions instructionList[]);
@@ -138,9 +136,8 @@ int main()
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-
-    findPath(map);// find shortest path- store this in map wasn't being called before
-
+    instructionList = findPath(map, food_list);
+    
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
@@ -457,12 +454,15 @@ enum DirectionState CheckSensorDirection() {
 }
 
 
-void traversePath(int numSteps, struct Instructions instructionList[]) {
+void traversePath(int numSteps, struct Instructions instructionList[numSteps]) {
     // input is list of instructions and robot will react accordingly
     for(int i = 0; i < numSteps; i++) {
         if(instructionList[i].direction != Skip) {
             switch (instructionList[i].direction) {
                 case GoForward:
+                    if(!s5 && !s6) {
+                        
+                    }
                     break;
                 case waitForTurnLeft:
                     break;
@@ -483,8 +483,7 @@ void traversePath(int numSteps, struct Instructions instructionList[]) {
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    currentDirection = CheckSensorDirection();   
-    
+    currentDirection = 0; //  traversePath(numSteps, instructionList[]);   
     switch (currentDirection) {
         //Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
         case Forward:

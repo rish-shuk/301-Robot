@@ -46,10 +46,11 @@ struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]);
 bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]);
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
 void clearMap(int map[MAX_ROWS][MAX_COLS]);
-void findPath(int map[MAX_ROWS][MAX_COLS]);
+void findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2]);
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 int checkPathDirection(int currentRow, int currentCol);
 int getTargetOrientation(int targetRow, int targetCol); 
 void processInstructionList(int index);
+int instructionsListLength(); 
 
 #endif /* MAP_FUNCTIONS_H */
