@@ -38,13 +38,13 @@ int16 quadCountToRPM(uint16 count);
 void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
-enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
+enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, ForwardAfterTurn, Backward};
 enum DirectionState currentDirection, previousDirection = Forward;
 enum OrientationState currentOrientation, previousOrientation = Right;
 enum DirectionState GetNextStep();
 
 void traversePath(int numSteps, struct Instructions instructionList[]);
-struct Instructions instructionList[285];
+struct Instructions *instructionList;
 // ----------------------------------------
 uint8 s3, s4, s5, s6 = 0;
 //* ========================================

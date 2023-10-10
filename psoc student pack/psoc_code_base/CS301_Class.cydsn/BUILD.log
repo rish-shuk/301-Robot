@@ -1,9 +1,46 @@
---------------- Build Started: 10/10/2023 14:55:32 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 10/10/2023 15:06:22 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c main.c -o .\CortexM3\ARM_GCC_541\Debug\main.o
-main.c: In function 'main':
-main.c:141:21: error: assignment to expression with array type
-     instructionList = findPath(map, food_list);
-                     ^
+main.c: In function 'speedTimer':
+main.c:72:26: warning: comparison between 'enum DirectionState' and 'enum InstructionDirection' [-Wenum-compare]
+         currentDirection == waitForLeftTurn ||
+                          ^
 The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
---------------- Build Failed: 10/10/2023 14:55:34 ---------------
+main.c:73:26: warning: comparison between 'enum DirectionState' and 'enum InstructionDirection' [-Wenum-compare]
+         currentDirection == waitForRightTurn ||
+                          ^
+main.c: In function 'CheckSensorDirection':
+main.c:291:72: warning: comparison between 'enum DirectionState' and 'enum InstructionDirection' [-Wenum-compare]
+         && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
+                                                                        ^
+main.c:291:112: warning: comparison between 'enum DirectionState' and 'enum InstructionDirection' [-Wenum-compare]
+         && (previousDirection != ForwardAfterTurn && previousDirection != waitForLeftTurn && previousDirection != waitForRightTurn &&
+                                                                                                                ^
+main.c:341:26: warning: comparison between 'enum DirectionState' and 'enum InstructionDirection' [-Wenum-compare]
+     if(previousDirection == waitForRightTurn) {
+                          ^
+main.c:356:26: warning: comparison between 'enum DirectionState' and 'enum InstructionDirection' [-Wenum-compare]
+     if(previousDirection == waitForLeftTurn) {
+                          ^
+main.c: In function 'traversePath':
+main.c:467:22: error: 'waitForTurnLeft' undeclared (first use in this function)
+                 case waitForTurnLeft:
+                      ^
+main.c:467:22: note: each undeclared identifier is reported only once for each function it appears in
+main.c:469:22: error: 'waitForTurnRight' undeclared (first use in this function)
+                 case waitForTurnRight:
+                      ^
+main.c: In function 'SetRobotMovement':
+main.c:516:9: error: duplicate case value
+         case waitForLeftTurn:
+         ^
+main.c:492:9: error: previously used here
+         case TurnRight:
+         ^
+main.c:519:9: error: duplicate case value
+         case waitForRightTurn:
+         ^
+main.c:495:9: error: previously used here
+         case TurnLeft:
+         ^
+--------------- Build Failed: 10/10/2023 15:06:24 ---------------

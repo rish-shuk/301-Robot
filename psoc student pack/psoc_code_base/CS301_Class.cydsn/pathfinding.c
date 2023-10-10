@@ -19,17 +19,11 @@
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
-enum InstructionDirection {GoForward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
 enum OrientationState {Up, Down, Left, Right};
 enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
-typedef struct Instructions {
-    enum InstructionDirection direction;
-    int ignoreL;
-    int ignoreR;
-} Instructions;
 
-Instructions instructionsList[285];
-int numSteps = 0;
+static Instructions instructionsList[285];
+static int numSteps = 0;
 
 int instructionsListLength();
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
@@ -527,7 +521,7 @@ int instructionsListLength() {
     }
     return length;
 }
-Instructions findPath(int map[MAX_ROWS][MAX_COLS], int i) {
+Instructions* findPath(int map[MAX_ROWS][MAX_COLS], int i) {
     clearMap(map); // clear map between each pass
     struct Location startLocation, targetLocation;
     startLocation.row = start_pos[0];
@@ -535,7 +529,7 @@ Instructions findPath(int map[MAX_ROWS][MAX_COLS], int i) {
     targetLocation.row = food_list[i][0];
     targetLocation.col = food_list[i][1];
     dijkstra(map, startLocation, targetLocation); // find shortest path
-    return * getPathInstructions(map,numSteps,startLocation,targetLocation); // get list of instructions 
+    return getPathInstructions(map,numSteps,startLocation,targetLocation); // get list of instructions 
 }
 
 /* [] END OF FILE */
