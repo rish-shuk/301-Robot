@@ -1,19 +1,3 @@
-/* ========================================
- * Fully working code: 
- * PWM      : 
- * Encoder  : 
- * ADC      :
- * USB      : port displays speed and position.
- * CMD: "PW xx"
- * Copyright Univ of Auckland, 2016
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF Univ of Auckland.
- *
- * ========================================
-*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -135,7 +119,7 @@ int main()
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-    instructionList = findPath(map, food_list);
+    instructionList = findPath(map, food_list, 0);
     numSteps = instructionsListLength();
     
 // ------USB SETUP ----------------    
@@ -286,14 +270,14 @@ enum RobotMovement CheckSensorDirection() {
             previousDirection = directionState;
             return directionState;
         }
-        directionState = GetNextStep(); // get next step at each block
+        //directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
         previousDirection = directionState;
         stoppedAfterTurn = 0;
         return directionState;
     }
     if (totalDistance >= blocksize) {
-        directionState = GetNextStep(); // get next step at each block
+        //directionState = GetNextStep(); // get next step at each block
         totalDistance = 0; // reset distance
         previousDirection = directionState;
         return directionState;
