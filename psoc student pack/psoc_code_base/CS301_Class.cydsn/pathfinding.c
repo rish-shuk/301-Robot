@@ -28,7 +28,7 @@ uint8_t instructionsListLength();
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 uint8_t checkPathDirection(int currentRow, int currentCol);
 uint8_t getTargetOrientation(int targetRow, int targetCol); 
-struct Instruction * processInstructionList(int index);
+Instruction * processInstructionList(int index);
 
 
 int map[15][19] = {
@@ -398,13 +398,8 @@ Instruction * getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, str
         listIndex++; // increment instruction list index
         numSteps--; // decrement numSteps
     }
-    processInstructionList(listIndex);
-    return instructionsList;
-}
-
-Instruction * processInstructionList(int index) {
-    // remove repeated forwards
-    for(int i = 0; i < index-1; i ++) {
+    // process list, remove repeated forward outputs
+    for(int i = 0; i < listIndex-1; i ++) {
         if(instructionsList[i].direction == instructionsList[i+1].direction) {
             instructionsList[i].direction = Skip;
             instructionsList[i].ignoreL = 0;
@@ -510,7 +505,8 @@ Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int i) {
     targetLocation.row = food_list[i][0];
     targetLocation.col = food_list[i][1];
     dijkstra(map, startLocation, targetLocation); // find shortest path
-    return getPathInstructions(map,numSteps,startLocation,targetLocation); // get list of instructions 
+    instructionsList = getPathInstructions(map,numSteps,startLocation,targetLocation); // get list of instructions 
+    return instructionsList;
 }
 
 /* [] END OF FILE */

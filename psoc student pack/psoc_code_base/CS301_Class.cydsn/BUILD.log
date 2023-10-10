@@ -1,22 +1,13 @@
---------------- Build Started: 10/10/2023 22:26:55 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 10/10/2023 22:32:44 Project: CS301_Class, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/initialise.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c initialise.c -o .\CortexM3\ARM_GCC_541\Debug\initialise.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_541\Debug/pathfinding.lst -g -D DEBUG -Wall -ffunction-sections -ffat-lto-objects -O0 -c pathfinding.c -o .\CortexM3\ARM_GCC_541\Debug\pathfinding.o
-pathfinding.c: In function 'getPathInstructions':
-pathfinding.c:402:12: error: incompatible types when returning type 'Instruction {aka struct Instruction}' but 'Instruction * {aka struct Instruction *}' was expected
-     return * instructionsList;
-            ^
-pathfinding.c: At top level:
-pathfinding.c:505:15: error: conflicting types for 'findPath'
+pathfinding.c:500:15: error: conflicting types for 'findPath'
  Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int i) {
                ^
 In file included from pathfinding.c:17:0:
 pathfinding.h:48:15: note: previous declaration of 'findPath' was here
  Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2]);
                ^
-pathfinding.c: In function 'getPathInstructions':
-pathfinding.c:403:1: warning: control reaches end of non-void function [-Wreturn-type]
- }
- ^
 The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
---------------- Build Failed: 10/10/2023 22:26:55 ---------------
+--------------- Build Failed: 10/10/2023 22:32:45 ---------------
