@@ -22,12 +22,12 @@
 enum InstructionDirection {GoForward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
 enum OrientationState {Up, Down, Left, Right};
 enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
-enum InstructionDirection Instructions[285];
-struct Instructions {
+extern enum InstructionDirection instructionsList[285];
+typedef struct Instructions {
     enum InstructionDirection direction;
     int ignoreL;
     int ignoreR;
-};
+} Instructions;
 int numSteps;
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 uint8_t checkPathDirection(int currentRow, int currentCol);
@@ -260,9 +260,8 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
 
 int ignoreR = 0, ignoreL = 0;
-struct Instructions instructionsList[285]; // list to store instructions
+
 // return a list of instructions for robot to execute
-void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation);
 void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
     int currentRow = startLocation.row; 
     int currentCol = startLocation.col; // initialise with start
@@ -520,6 +519,7 @@ uint8_t getTargetOrientation(int targetRow, int targetCol) {
 void findPath(int map[MAX_ROWS][MAX_COLS], struct Location startLocation, struct Location targetLocation) {
     clearMap(map); // clear map between each pass
     dijkstra(map, startLocation, targetLocation); // find shortest path
+    getPathInstructions(map,numSteps,startLocation,targetLocation); // get list of instructions 
 }
 
 /* [] END OF FILE */

@@ -39,12 +39,14 @@ void ResetSensorFlags();
 void SetRobotMovement();
 enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, waitForRightTurn, waitForLeftTurn, ForwardAfterTurn, Backward};
-//enum OrientationState {Up, Down, Left, Right};
 enum DirectionState currentDirection = Unknown;
 enum DirectionState previousDirection = Unknown;
 enum OrientationState currentOrientation = Right;
 enum OrientationState previousOrientation = Right;
 enum DirectionState GetNextStep();
+
+void traversePath(int numSteps, struct Instructions instructionList[]);
+struct Instructions instructionList[285];
 // ----------------------------------------
 uint8 s3, s4, s5, s6 = 0;
 //* ========================================
@@ -454,10 +456,29 @@ enum DirectionState CheckSensorDirection() {
     return previousDirection;
 }
 
-void traversePath();
-void traversePath() {
-    // given path, traverse it by calculating number of turns/ turns to skip between each junction
-    
+
+void traversePath(int numSteps, struct Instructions instructionList[]) {
+    // input is list of instructions and robot will react accordingly
+    for(int i = 0; i < numSteps; i++) {
+        if(instructionList[i].direction != Skip) {
+            switch (instructionList[i].direction) {
+                case GoForward:
+                    break;
+                case waitForTurnLeft:
+                    break;
+                case waitForTurnRight:
+                    break;
+                case uTurn:
+                    break;
+                case StopAtTarget:
+                    break;
+                case ForwardUntilTarget:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
