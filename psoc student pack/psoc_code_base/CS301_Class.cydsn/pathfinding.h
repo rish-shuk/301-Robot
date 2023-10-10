@@ -23,21 +23,19 @@
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 enum InstructionDirection {GoForward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
-    
-typedef struct Instructions {
+typedef struct Instruction {
     enum InstructionDirection direction;
     int ignoreL;
     int ignoreR;
-} Instructions;
-    
+} Instruction;
+
+enum OrientationState {Up, Down, Left, Right};
+
 struct Location
 {
     int row;
     int col;
 };
-
-enum OrientationState {Up, Down, Left, Right};
-enum OrientationState previousRobotOrientation, currentRobotOrientation;
 
 // MAP INITIALISATION CODE
 void printMap(int map[MAX_ROWS][MAX_COLS]);
@@ -47,7 +45,7 @@ struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]);
 bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS]);
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
 void clearMap(int map[MAX_ROWS][MAX_COLS]);
-Instructions* findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2]);
+Instruction* findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2]);
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 int checkPathDirection(int currentRow, int currentCol);
 int getTargetOrientation(int targetRow, int targetCol); 

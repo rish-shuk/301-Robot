@@ -37,13 +37,11 @@ int16 quadCountToRPM(uint16 count);
 // Sensors, Course correction and Movement Direction.
 void ResetSensorFlags();
 void SetRobotMovement();
-enum DirectionState CheckSensorDirection();
 enum DirectionState {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, ForwardAfterTurn, Backward};
-enum DirectionState currentDirection, previousDirection = Forward;
+enum InstructionDirection currentDirection, previousDirection = Forward;
 enum OrientationState currentOrientation, previousOrientation = Right;
-enum DirectionState GetNextStep();
-
-void traversePath(int numSteps, struct Instructions instructionList[]);
+int numSteps;
+void traversePath(int numSteps, Instruction instructionList[]);
 struct Instructions *instructionList;
 // ----------------------------------------
 uint8 s3, s4, s5, s6 = 0;
@@ -137,6 +135,7 @@ int main()
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
     instructionList = findPath(map, food_list);
+    numSteps = instructionsListLength();
     
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
@@ -192,7 +191,7 @@ float yBlocksize = 80; // 80
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
-enum DirectionState GetNextStep() {
+/*enum DirectionState GetNextStep() {
     enum DirectionState directionState;
     // Determines robot movement and orientation to follow optimal path
     // enum DirectionState directionState = Stop;
@@ -202,12 +201,6 @@ enum DirectionState GetNextStep() {
         directionState = Stop; // reached target
         return directionState;
     }
-    /*
-    if (totalDistance >= (yBlocksize)) {
-        directionState = Stop;
-        return directionState;
-    }
-    */
         
     switch (previousOrientation) {
             case Up:
@@ -272,10 +265,10 @@ enum DirectionState GetNextStep() {
     
     return directionState;
 }
-
+*/
 uint8 stoppedAfterTurn = 0;
 uint8 ignoreSensor = 0;
-
+// needs to make sure robot is going in the correct direction (supplied from instruction)
 enum DirectionState CheckSensorDirection() {
     float blocksize;
     if(currentOrientation == Up || currentOrientation == Down) {
@@ -328,7 +321,6 @@ enum DirectionState CheckSensorDirection() {
 
     // TURNING * ========================================    
     if (previousDirection == ForwardAfterTurn) {
-
         if (s3 || s4) {
             //ignoreSensor = 0;
             //usbPutString("Forward\n");
@@ -428,17 +420,6 @@ enum DirectionState CheckSensorDirection() {
         previousDirection = directionState;
         return directionState;   
     }
-    // SENSORS ALL HIGH CONDITION- waiting for a turn * ========================================
-    /*if(s5 && s6 && (previousDirection != waitForTurn)) {
-        directionState = waitForTurn; // need to keep going forward until s3 || s4 are low before turning
-        return directionState;
-    }
-
-    if (previousDirection == waitForTurn && (s3 || s4)) {
-        //usbPutString("Wait For Turn\n");
-        directionState = GetNextStep(); // determine which way to turn
-        return directionState;
-    }*/
 
     // If currentDirection is Unknown, we continue with the previous direction.
     // However, if the previous direction is also Unknown, we will just move forward.
@@ -453,37 +434,25 @@ enum DirectionState CheckSensorDirection() {
     return previousDirection;
 }
 
-
-void traversePath(int numSteps, struct Instructions instructionList[numSteps]) {
+// get next instruction
+Instruction getNextInstruction(int numSteps, Instruction instructionList[numSteps]) {
+    Instruction out;
     // input is list of instructions and robot will react accordingly
     for(int i = 0; i < numSteps; i++) {
         if(instructionList[i].direction != Skip) {
-            switch (instructionList[i].direction) {
-                case GoForward:
-                    if(!s5 && !s6) {
-                        
-                    }
-                    break;
-                case waitForTurnLeft:
-                    break;
-                case waitForTurnRight:
-                    break;
-                case uTurn:
-                    break;
-                case StopAtTarget:
-                    break;
-                case ForwardUntilTarget:
-                    break;
-                default:
-                    break;
-            }
+            out.direction = instructionList[i].direction;
+            out.ignoreL = instructionList[i].ignoreL;
+            out.ignoreR = instructionList[i].ignoreR;
+            return out; // return next instruction
         }
     }
+    return out;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    currentDirection = 0; //  traversePath(numSteps, instructionList[]);   
+    currentDirection = getNextInstruction(numSteps, instructionList); // get current/ next instruction
+    // move robot depending on sensors
     switch (currentDirection) {
         //Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
         case Forward:

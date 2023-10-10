@@ -19,7 +19,6 @@
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
-enum OrientationState {Up, Down, Left, Right};
 enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
 
 static Instructions instructionsList[285];
@@ -29,7 +28,12 @@ int instructionsListLength();
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 uint8_t checkPathDirection(int currentRow, int currentCol);
 uint8_t getTargetOrientation(int targetRow, int targetCol); 
-Instructions * processInstructionList(int index);
+Instruction * processInstructionList(int index);
+
+struct Location {
+    int row;
+    int col;
+};
 
 int map[15][19] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -84,17 +88,6 @@ int path_of_coordinates[285][2];
 
 
 // MAP INITIALISATION CODE
-
-/*void printMap(char map[MAX_ROWS][MAX_COLS]) {
-    // Print the map in a grid format
-    for (int i = 0; i < MAX_ROWS; i++) {
-        for (int j = 0; j < MAX_COLS; j++) {
-            printf("%c", map[i][j]);
-        }
-        printf("\n");
-    }
-}*/
-
 void printMap(int map[MAX_ROWS][MAX_COLS]) {
     // Print the map in a grid format
     for (int i = 0; i < MAX_ROWS; i++) {
@@ -112,10 +105,7 @@ void clearMap(int map[MAX_ROWS][MAX_COLS]) {
         }
     }
 }
-struct Location {
-    int row;
-    int col;
-};
+
 
 int list_of_optimal_coordinates[285][2]; // ROW, COL
 
@@ -257,7 +247,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 int ignoreR = 0, ignoreL = 0;
 
 // return a list of instructions for robot to execute
-Instructions * getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
+Instruction * getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
     int currentRow = startLocation.row; 
     int currentCol = startLocation.col; // initialise with start
     int listIndex = 0;
@@ -416,7 +406,7 @@ Instructions * getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, st
     return instructionsList;
 }
 
-Instructions * processInstructionList(int index) {
+Instruction * processInstructionList(int index) {
     // remove repeated forwards
     for(int i = 0; i < index-1; i ++) {
         if(instructionsList[i].direction == instructionsList[i+1].direction) {
@@ -513,15 +503,10 @@ uint8_t getTargetOrientation(int targetRow, int targetCol) {
     return 5; // placeholder
 }
 int instructionsListLength() {
-    int length;
-    for(int i = 0; i < 285; i++) {
-        if(instructionsList[i].direction != Skip) {
-            length++;
-        }
-    }
-    return length;
+    return numSteps;
 }
-Instructions* findPath(int map[MAX_ROWS][MAX_COLS], int i) {
+
+Instruction* findPath(int map[MAX_ROWS][MAX_COLS], int i) {
     clearMap(map); // clear map between each pass
     struct Location startLocation, targetLocation;
     startLocation.row = start_pos[0];
