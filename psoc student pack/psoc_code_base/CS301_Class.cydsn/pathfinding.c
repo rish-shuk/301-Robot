@@ -21,6 +21,20 @@
 #define targetRow 9
 #define targetCol 1
 
+enum InstructionDirection {Forward, TurnLeft, TurnRight, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
+enum OrientationState {Up, Down, Left, Right};
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
+enum InstructionDirection Instructions[285];
+struct Instructions {
+    enum InstructionDirection direction;
+    int ignoreL;
+    int ignoreR;
+};
+void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
+uint8_t checkPathDirection(int currentRow, int currentCol);
+uint8_t getTargetOrientation(int targetRow, int targetCol); 
+void processInstructionList(int index);
+
 int map[15][19] = {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -85,12 +99,30 @@ int path_of_coordinates[285][2];
     }
 }*/
 
+void printMap(int map[MAX_ROWS][MAX_COLS]) {
+    // Print the map in a grid format
+    for (int i = 0; i < MAX_ROWS; i++) {
+        for (int j = 0; j < MAX_COLS; j++) {
+            printf("%d", map[i][j]);
+        }
+        printf("\n");
+    }
+}
+void clearMap(int map[MAX_ROWS][MAX_COLS]) {
+    // Print the map in a grid format
+    for (int i = 0; i < MAX_ROWS; i++) {
+        for (int j = 0; j < MAX_COLS; j++) {
+            if(map[i][j] != 1) { map[i][j] = 0;} // clear map
+        }
+    }
+}
 struct Location {
     int row;
     int col;
 };
 
-// pathfinding 
+int list_of_optimal_coordinates[285][2]; // ROW, COL
+
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
 bool isValidMove(int r, int c, int rows, int cols, int map[MAX_ROWS][MAX_COLS]) {
@@ -180,6 +212,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     // PATH RECONSTRUCTION
     // initialise maximum distance- will be decremented
     int shortestDist = distances[targetlocation.row][targetlocation.col];
+    numSteps = shortestDist; // save number of steps
     // retsteps can be generated from here
     struct Location *retSteps = malloc(sizeof(struct Location) * shortestDist); // store every step of path- pointer to array
     int currentRow = targetlocation.row;
@@ -190,6 +223,8 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     map[currentRow][currentCol] = 9; // mark finish location
     //printf("%d,%d\n", currentRow, currentCol); // print optimal step
     // reconstruct path by reversing paths array and taking shortest distance
+    int pathIndex = 0;
+
     while(shortestDist > 0) {    
         // make a move, check if valid and is the next step in path
         for (int i = 0; i < sizeof(moves) / sizeof(moves[0]); i++) {
@@ -198,6 +233,11 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
                 map[newRow][newCol] = 8; // mark optimal step
+                list_of_optimal_coordinates[pathIndex][0] = newRow;
+                list_of_optimal_coordinates[pathIndex][1] = newCol;
+                pathIndex++;
+                // reverse array somewhere
+
                 shortestDist--; // decrement distance
                 currentRow = newRow; 
                 currentCol = newCol; // change current location
@@ -211,16 +251,271 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
             }
         }
     }
-    // printMap(map);
+    //printMap(map);
+    //return retSteps;
 }
-void clearMap(int map[MAX_ROWS][MAX_COLS]) {
-    for(int i = 0; i < MAX_ROWS; i++) {
-        for(int j = 0; j < MAX_COLS; j++) {
-            if((map[i][j] == 1 || map[i][j] != 0)) {
-                map[i][j] = 0; // reset map
-            } 
+
+
+
+// PATHFINDING PROCESSING *====================
+
+
+int ignoreR = 0, ignoreL = 0;
+struct Instructions instructionsList[285]; // list to store instructions
+// return a list of instructions for robot to execute
+void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation);
+void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
+    int currentRow = startLocation.row; 
+    int currentCol = startLocation.col; // initialise with start
+    int listIndex = 0;
+    int targetOrientation = getTargetOrientation(targetLocation.row, targetLocation.col);
+    // given path, traverse it by calculating number of turns/ turns to skip between each junction
+    while(numSteps >= 0) {
+        checkIgnoreTurn(currentRobotOrientation, currentRow, currentCol); // if a 0 is adjacent to path, need to update ignoreL/ ignoreR counts- check zeroes
+        map[currentRow][currentCol] = 0; // clear visited map location (for when we need to u-turn)
+        previousRobotOrientation = currentRobotOrientation;
+        enum InstructionDirection newDirection;
+        int nextStep = checkPathDirection(currentRow,currentCol);  // check all four sides for next step in path
+        if(currentRow == targetLocation.row && currentCol == targetLocation.col) {
+            newDirection = StopAtTarget; // if next step is the target, call forward until target
+            printf("Stop at target\n");
+            nextStep = 5;
+        }
+        switch (nextStep) {
+            case 0: // next step is up
+                currentRobotOrientation = Up;
+                if(previousRobotOrientation == Left) {
+                    newDirection = TurnRight;
+                    printf("Right Turn\n") ; // need right turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                } 
+                if(previousRobotOrientation == Right) {
+                    newDirection = TurnLeft;
+                    printf("Left Turn\n") ; // need a right turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                }
+                if(previousRobotOrientation == Up) {
+                    // check if we only need to go forward to reach target
+                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                        newDirection = ForwardUntilTarget;
+                        printf("Forward until target\n"); // THIS WILL HAVE AN EDGE CASE
+                    } else {
+                        newDirection = Forward;
+                        printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                    }
+                }
+                if(previousRobotOrientation == Down) {
+                    newDirection = uTurn;
+                    printf("U-turn\n");
+                }
+                currentRow--; // jump to new location
+                break;
+            case 1: // next step is down
+                currentRobotOrientation = Down;
+                if(previousRobotOrientation == Right) {
+                    newDirection = TurnRight;
+                    printf("Right Turn\n") ; // need Right turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                } 
+                if(previousRobotOrientation == Left) {
+                    newDirection = TurnLeft;
+                    printf("Left Turn\n") ; // need Left turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                }
+                if(previousRobotOrientation == Down) {
+                    // check if we only need to go forward to reach target
+                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                        newDirection = ForwardUntilTarget;
+                        printf("Forward until target\n");
+                    } else {
+                        newDirection = Forward;
+                        printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                    }                    
+                }
+                if(previousRobotOrientation == Up) {
+                    newDirection = uTurn;
+                    ignoreL = 0;
+                    ignoreR = 0;
+                    printf("U-turn\n");
+                }
+                currentRow++;
+                break;
+            case 2: // next step is left
+                currentRobotOrientation = Left;
+                if(previousRobotOrientation == Up) {
+                    newDirection = TurnLeft;
+                    printf("Left Turn\n") ; // need left turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                } 
+                if(previousRobotOrientation == Down) {
+                    newDirection = TurnRight;
+                    printf("Right Turn\n") ; // need a right turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                }
+                if(previousRobotOrientation == Left) {
+                    // check if we only need to go forward to reach target
+                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                        newDirection = ForwardUntilTarget;
+                        printf("Forward until target\n");
+                    } else {
+                        newDirection = Forward;
+                        printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                    }
+                }
+                if(previousRobotOrientation == Right) {
+                    newDirection = uTurn;
+                    ignoreL = 0;
+                    ignoreR = 0;
+                    printf("U-turn\n");
+                }
+                currentCol--;
+                break;
+            case 3: // next step is right
+                currentRobotOrientation = Right;
+                if(previousRobotOrientation == Up) {
+                    newDirection = TurnRight;
+                    printf("Right Turn\n") ; // need a right turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                }
+                if(previousRobotOrientation == Down) {
+                    newDirection = TurnLeft;
+                    printf("Left Turn\n") ; // need left turn
+                    ignoreL = 0;
+                    ignoreR = 0; // reset ignoreL/ ignoreR
+                }
+                if(previousRobotOrientation == Right) {
+                    // check if we only need to go forward to reach target
+                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                        newDirection = ForwardUntilTarget;
+                        printf("Forward until target\n");
+                    } else {
+                        newDirection = Forward;
+                        printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                    }
+                }
+                if(previousRobotOrientation == Left) {
+                    newDirection = uTurn;
+                    ignoreL = 0;
+                    ignoreR = 0;
+                    printf("U-turn\n");
+                }
+                currentCol++;
+                break;
+            default:
+                break;
+        }
+        
+        // add new direction to list
+        instructionsList[listIndex].direction = newDirection;
+        instructionsList[listIndex].ignoreL = ignoreL;
+        instructionsList[listIndex].ignoreR = ignoreR;
+        listIndex++; // increment instruction list index
+        numSteps--; // decrement numSteps
+    }
+    processInstructionList(listIndex);
+}
+
+void processInstructionList(int index) {
+    // remove repeated forwards
+    for(int i = 0; i < index-1; i ++) {
+        if(instructionsList[i].direction == instructionsList[i+1].direction) {
+            instructionsList[i].direction = Skip;
+            instructionsList[i].ignoreL = 0;
+            instructionsList[i].ignoreR = 0;
         }
     }
+}
+
+uint8_t checkPathDirection(int currentRow, int currentCol) {
+    // map is cleared beforehand, so no need to check- this code will allow for 180deg turns
+    if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
+        return 0; // up 
+    }
+    if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
+        return 1; // down
+    }
+    if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
+        return 2; // left
+    }
+    if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
+        return 3; // right
+    }
+    return 5; // default- will never reach this
+}
+
+void checkIgnoreTurn(enum OrientationState robotOrientation, int currentRow, int currentCol) {
+    // UP - 0 DOWN - 1 LEFT - 2 RIGHT - 3
+    if (map[currentRow - 1][currentCol] == 0) { // if the row above is a 0
+        switch (robotOrientation) {
+            case Left:
+                ignoreR++;
+                break;
+            case Right:
+                ignoreL++;
+                break;
+            default:
+                break; // ignore when going up and down
+        }
+    }
+    if (map[currentRow + 1][currentCol] == 0) { // if row below is a 0
+        switch (robotOrientation) {
+            case Left:
+                ignoreL++;
+                break;
+            case Right:
+                ignoreR++;
+                break;
+            default:
+                break;
+        }
+    }
+    if (map[currentRow][currentCol - 1] == 0) { 
+        switch (robotOrientation) {
+            case Up:
+                ignoreL++;
+                break;
+            case Down:
+                ignoreR++;
+                break;
+            default:
+                break;
+        }
+    }
+    if (map[currentRow][currentCol + 1] == 0) {
+        switch (robotOrientation) {
+            case Up:
+                ignoreR++;
+                break;
+            case Down:
+                ignoreL++;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+uint8_t getTargetOrientation(int targetRow, int targetCol) {
+    if(map[targetRow + 1][targetCol] == 8) {
+        return 0; // robot will be travelling up
+    }
+    if(map[targetRow - 1][targetCol] == 8) {
+        return 1; // robot will be travelling down
+    }
+    if(map[targetRow][targetCol + 1] == 8) {
+        return 2; // robot will be travelling left
+    }
+    if(map[targetRow][targetCol - 1] == 8) {
+        return 3; // robot will be travelling right
+    }
+    return 5; // placeholder
 }
 
 void findPath(int map[MAX_ROWS][MAX_COLS]) {

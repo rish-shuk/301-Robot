@@ -28,6 +28,16 @@ struct Location
     int col;
 };
 
+enum InstructionDirection {Forward, TurnLeft, TurnRight, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
+enum OrientationState {Up, Down, Left, Right};
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
+enum InstructionDirection Instructions[285];
+struct Instructions {
+    enum InstructionDirection direction;
+    int ignoreL;
+    int ignoreR;
+};
+
 // MAP INITIALISATION CODE
 void printMap(int map[MAX_ROWS][MAX_COLS]);
 struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]);
@@ -37,5 +47,9 @@ bool isValidMove(int r, int c, int rows, int cols, char map[MAX_ROWS][MAX_COLS])
 void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct Location targetlocation);
 void clearMap(int map[MAX_ROWS][MAX_COLS]);
 void findPath(int map[MAX_ROWS][MAX_COLS]);
+void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
+int checkPathDirection(int currentRow, int currentCol);
+int getTargetOrientation(int targetRow, int targetCol); 
+void processInstructionList(int index);
 
 #endif /* MAP_FUNCTIONS_H */
