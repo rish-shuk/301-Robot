@@ -23,11 +23,15 @@ void ResetSensorFlags();
 void SetRobotMovement();
 enum RobotMovement {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, ForwardAfterTurn, Backward};
 enum RobotMovement currentDirection, previousDirection = Forward; 
+enum RobotMovement GetMovementAccordingToInstruction();
 enum OrientationState currentOrientation, previousOrientation = Right;
 Instruction currentInstruction;
 int numSteps;
 void traversePath(int numSteps, Instruction instructionList[]);
 Instruction * instructionList; // pointer to array
+uint32 instructionIndex = 0;
+Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps], int instructionIndex);
+void MoveToNextInstruction();
 // ----------------------------------------
 uint8 s3, s4, s5, s6 = 0;
 //* ========================================
@@ -121,9 +125,6 @@ int main()
     Timer_LED_Start();
     instructionList = findPath(map, food_list, 0);
     numSteps = instructionsListLength();
-    Instruction one = instructionList[0];
-    Instruction two = instructionList[1];
-    Instruction three = instructionList[2];
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
@@ -411,25 +412,44 @@ enum RobotMovement CheckSensorDirection() {
     return previousDirection;
 }
 
-// get next instruction
-Instruction getNextInstruction(int numSteps, Instruction instructionList[numSteps]) {
-    Instruction out;
-    // input is list of instructions and robot will react accordingly
-    for(int i = 0; i < numSteps; i++) {
-        if(instructionList[i].direction != Skip) {
-            out.direction = instructionList[i].direction;
-            out.ignoreL = instructionList[i].ignoreL;
-            out.ignoreR = instructionList[i].ignoreR;
-            return out; // return next instruction
-        }
+enum RobotMovement GetMovementAccordingToInstruction() {
+    float blocksize;
+    if(currentOrientation == Up || currentOrientation == Down) {
+        blocksize = yBlocksize;
+    } else {
+        blocksize = xBlocksize;
     }
-    return out;
+    //if(currentInstruction)
+    
+    
+    return Stop;
+}
+// get next instruction
+
+void MoveToNextInstruction() {
+    instructionIndex++;
+}
+
+
+Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps], int instructionIndex) {
+    Instruction nextInstruction;
+    // input is list of instructions and robot will react accordingly
+    for(int i = instructionIndex; i < numSteps; i++) {
+        if(instructionList[i].direction != Skip) {
+            nextInstruction.direction = instructionList[i].direction;
+            nextInstruction.ignoreL = instructionList[i].ignoreL;
+            nextInstruction.ignoreR = instructionList[i].ignoreR;
+            return nextInstruction; // return next instruction
+        }
+        instructionIndex = i;
+    }
+    return nextInstruction;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    currentInstruction = getNextInstruction(numSteps, instructionList); // get current/ next instruction
-    currentDirection = CheckSensorDirection(); // check sensors, adjust robot movement
+    currentInstruction = GetInstructionAtIndex(numSteps, instructionList, instructionIndex); // get current/ next instruction
+    currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
     // move robot depending on sensors
     switch (currentDirection) {
         //Forward, TurnRight, TurnLeft, AdjustToTheRight, AdjustToTheLeft, Stop, Unknown
