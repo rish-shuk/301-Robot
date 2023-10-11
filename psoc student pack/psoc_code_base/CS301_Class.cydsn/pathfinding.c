@@ -493,7 +493,7 @@ uint8_t instructionsListLength() {
 }
 
 Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i) {
-    clearMap(map); // clear map between each pass
+    //clearMap(map); // clear map between each pass
     struct Location startLocation, targetLocation;
     startLocation.row = start_pos[0];
     startLocation.col = start_pos[1]; // need to change every pass

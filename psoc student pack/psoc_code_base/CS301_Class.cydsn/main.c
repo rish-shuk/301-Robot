@@ -31,6 +31,7 @@ void traversePath(int numSteps, Instruction instructionList[]);
 Instruction * instructionList; // pointer to array
 uint32 instructionIndex = 0;
 Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps], int instructionIndex);
+float CalculateDistanceToTravel(float blockSize);
 void MoveToNextInstruction();
 // ----------------------------------------
 uint8 s3, s4, s5, s6 = 0;
@@ -420,16 +421,21 @@ enum RobotMovement ForwardCourseCorrection();
 enum RobotMovement ForwardCourseCorrection() {
     // if S5 and S6 are on black, move forward
     if (!s5 && !s6) {
-        return Forward;
+        if (previousDirection != AdjustToTheLeft) {
+            return AdjustToTheLeft;
+        }
+        if (previousDirection != AdjustToTheRight) {
+            return AdjustToTheRight;    
+        }
     }
     
     // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
     if (s5 && s6) {
-        if (previousDirection == AdjustToTheLeft) {
-            return AdjustToTheRight;
+        if (previousDirection != AdjustToTheLeft) {
+            return AdjustToTheLeft;
         }
-        if (previousDirection == AdjustToTheRight) {
-            return AdjustToTheLeft;    
+        if (previousDirection != AdjustToTheRight) {
+            return AdjustToTheRight;    
         }
     }
 
@@ -580,10 +586,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (!forwardUntilTargetStartedFlag) {
                 forwardUntilTargetStartedFlag = 1;
                 totalDistance = 0;
-                // Depending on the robot orientation
-                // Check for Row, Col that target is in
-                // Check how many 8s lead up to nine (reset 8 count if consecutive broken otherwise save when 9 is hit)
-                // get blocksizetotal count
+
                 blockSizeTotal = blocksize * 6;
             }
             
@@ -616,9 +619,91 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     }
     return Stop;
 }
-    
-// get next instruction
 
+// Calculate total blocksize to travel until target
+float CalculateDistanceToTravel(float blockSize) {
+    float totalBlockSize;
+    
+    // Check for Row, Col that target is 
+    int targetRow = food_list[0][0];
+    int targetCol = food_list[0][1];
+    
+    int pathCount = 0;
+    
+    // Depending on the robot orientation
+    // count++ if row, col is 8
+    // count reset if row, col is 1 or 0
+    // save count if row, col is 9
+    switch (currentRobotOrientation) {
+        case Up:
+            // Column
+            // Start from Bottom (since we're facing up)
+            for (int i = MAX_ROWS; i >= 0; i--) {
+                if (map[i][targetCol] == 9) {
+                    break;    
+                }
+                if (map[i][targetCol] == 8) {
+                    pathCount++;    
+                }
+                if (map[i][targetCol] == 0 || map[i][targetCol] == 1) {
+                    pathCount = 0;
+                }
+            }
+            break;
+        case Down:
+            // Target Column, Check Row
+            // Start from Top
+            for (int i = 0; i < MAX_ROWS; i++) {
+                if (map[i][targetCol] == 9) {
+                    break;    
+                }
+                if (map[i][targetCol] == 8) {
+                    pathCount++;    
+                }
+                if (map[i][targetCol] == 0 || map[i][targetCol] == 1) {
+                    pathCount = 0;
+                }
+            }
+            break;
+        case Left:
+            // Target Row, Check Col
+            // Start from Right
+            for (int i = MAX_COLS; i >= 0; i--) {
+                if (map[targetRow][i] == 9) {
+                    break;    
+                }
+                if (map[targetRow][i] == 8) {
+                    pathCount++;    
+                }
+                if (map[targetRow][i] == 0 || map[i][targetCol] == 1) {
+                    pathCount = 0;
+                }
+            }
+            break;
+        
+        case Right:
+            // Target Row, Check Col
+            // Start from Left
+            for (int i = 0; i < MAX_COLS; i++) {
+                if (map[targetRow][i] == 9) {
+                    break;    
+                }
+                if (map[targetRow][i] == 8) {
+                    pathCount++;    
+                }
+                if (map[targetRow][i] == 0 || map[i][targetCol] == 1) {
+                    pathCount = 0;
+                }
+
+            }
+            break;
+        
+    }
+    totalBlockSize = blockSize * pathCount;
+    return totalBlockSize;
+}
+
+// get next instruction
 void MoveToNextInstruction() {
     instructionIndex++;
 }
