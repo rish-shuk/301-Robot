@@ -419,7 +419,51 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     } else {
         blocksize = xBlocksize;
     }
-    //if(currentInstruction)
+    
+    // This function makes it so that it will return a robotmovement direction according to the current instruction
+    // AND move to the next instruction when EITHER totalDistance >= blocksize, 
+        // OR an EVENT happens in the current instruction
+        // e.g. CurrentInstruction: GoForward 
+        //      S3 on BLACK
+        //      Check Ignore Count
+        //      If Ignore Count = 0, move to next instruction.
+    
+    enum InstructionDirection currentInstructionDirection = currentInstruction.direction;
+    
+    switch (currentInstructionDirection) {
+        case GoForward:
+            // if s3 or s4 go off, check ignoreCount
+            //      if ignoreCount == 0, go to next direction
+            //      return stop
+            if (!s3) {
+                if (currentInstruction.ignoreL == 0) {
+                    
+                }
+            }
+            
+            if (!s4) {
+                if (currentInstruction.ignoreR == 0) {
+                    
+                }
+            }
+        
+            // if S5 and S6 are on black, move forward
+            if (!s5 && !s6) {
+                return Forward;   
+            }
+            // if S5 or S6 are on white, adjust accordingly
+            if (s5) {
+                return AdjustToTheRight;    
+            }
+            if (s6) {
+                return AdjustToTheLeft;    
+            }
+            break;
+        default:
+            return Stop;
+            break;
+    }
+    
     
     
     return Stop;
