@@ -24,7 +24,7 @@ void SetRobotMovement();
 enum RobotMovement {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, ForwardAfterTurn, Backward};
 enum RobotMovement currentDirection, previousDirection = Forward; 
 enum RobotMovement GetMovementAccordingToInstruction();
-enum OrientationState currentOrientation, previousOrientation = Right;
+enum OrientationState currentRobotOrientation, previousOrientation = Down;
 Instruction currentInstruction;
 int numSteps;
 void traversePath(int numSteps, Instruction instructionList[]);
@@ -176,8 +176,8 @@ void ResetSensorFlags() {
     s6 = 0;
 }
 
-float xBlocksize = 127.5; // 127.5
-float yBlocksize = 80; // 80
+float xBlocksize = 122; // 122 mm
+float yBlocksize = 80; // 80 mm
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
@@ -259,9 +259,10 @@ uint8 currentCol = 1;
 uint8 stoppedAfterTurn = 0;
 uint8 ignoreSensor = 0;
 // needs to make sure robot is going in the correct direction (supplied from instruction)
+/*
 enum RobotMovement CheckSensorDirection() {
     float blocksize;
-    if(currentOrientation == Up || currentOrientation == Down) {
+    if(currentRobotOrientation == Up || currentRobotOrientation == Down) {
         blocksize = yBlocksize;
     } else {
         blocksize = xBlocksize;
@@ -413,12 +414,13 @@ enum RobotMovement CheckSensorDirection() {
     previousDirection = currentDirection;
     return previousDirection;
 }
+*/
 
 enum RobotMovement ForwardCourseCorrection();
 enum RobotMovement ForwardCourseCorrection() {
     // if S5 and S6 are on black, move forward
     if (!s5 && !s6) {
-        return Forward;  
+        return Forward;
     }
     
     // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
@@ -446,7 +448,7 @@ enum RobotMovement ForwardCourseCorrection() {
 
 enum RobotMovement GetMovementAccordingToInstruction() {
     float blocksize;
-    if(currentOrientation == Up || currentOrientation == Down) {
+    if(currentRobotOrientation == Up || currentRobotOrientation == Down) {
         blocksize = yBlocksize;
     } else {
         blocksize = xBlocksize;
@@ -582,36 +584,31 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 // Check for Row, Col that target is in
                 // Check how many 8s lead up to nine (reset 8 count if consecutive broken otherwise save when 9 is hit)
                 // get blocksizetotal count
-                //blockSizeTotal = 127.5 * 6;
-                blockSizeTotal = 765;
-            }
-            
-            if (totalDistance >= 765) {
-                return TurnLeft;    
-            }
-            
-            if (blockSizeTotal == 0) {
-                return Backward;    
+                blockSizeTotal = blocksize * 6;
             }
             
             // If totalDistance >= blockSizeTotal then we should be at target
             if (totalDistance >= blockSizeTotal) {
-                // Reset flags
-                totalDistance = 0;
-                forwardUntilTargetStartedFlag = 0;
-                blockSizeTotal = 0;
                 // Get next instruction
                 MoveToNextInstruction();
+
+                
                 return Stop;
             }
             
             return ForwardCourseCorrection();
             break;
         case StopAtTarget:
-            if (stopBuffer <= 100) {
+            // Reset Forward Until Target Flags (Had to move in here to make it work)
+            // Reset flags
+            totalDistance = 0;
+            forwardUntilTargetStartedFlag = 0;
+            blockSizeTotal = 0;
+            
+            if (stopBuffer <= 200) {
                 return Stop;    
             }
-            return Backward;
+            return TurnRight;
             break;
         default:
             return Stop;
@@ -619,6 +616,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     }
     return Stop;
 }
+    
 // get next instruction
 
 void MoveToNextInstruction() {
