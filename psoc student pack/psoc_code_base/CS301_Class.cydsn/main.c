@@ -480,6 +480,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     MoveToNextInstruction();
                     return Stop;
                 }
+                currentInstruction.ignoreL--; //decrement ignoreL
             }
             
             if (!s4) {
@@ -487,6 +488,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     MoveToNextInstruction();
                     return Stop;
                 }
+                currentInstruction.ignoreR--;
             }
             return ForwardCourseCorrection();
             break;
