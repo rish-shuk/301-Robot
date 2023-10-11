@@ -19,9 +19,9 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-enum OrientationState previousRobotOrientation, currentRobotOrientation; // initialize 
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
 
-static Instruction * instructionsList;
+static Instruction instructionsList[285];
 static int numSteps = 0;
 
 uint8_t instructionsListLength();

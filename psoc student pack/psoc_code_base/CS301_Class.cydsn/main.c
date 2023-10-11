@@ -27,7 +27,7 @@ enum OrientationState currentOrientation, previousOrientation = Right;
 Instruction currentInstruction;
 int numSteps;
 void traversePath(int numSteps, Instruction instructionList[]);
-Instruction * instructionList;
+Instruction * instructionList; // pointer to array
 // ----------------------------------------
 uint8 s3, s4, s5, s6 = 0;
 //* ========================================
@@ -52,7 +52,7 @@ CY_ISR (speedTimer) {
     
     if ((currentDirection == Forward || 
         currentDirection == waitForTurn || 
-        currentDirection == waitForLeftTurn ||
+        currentDirection == waitForTurn ||
         currentDirection == waitForRightTurn ||
         currentDirection == ForwardAfterTurn ||
         currentDirection == AdjustToTheLeft ||
@@ -121,7 +121,9 @@ int main()
     Timer_LED_Start();
     instructionList = findPath(map, food_list, 0);
     numSteps = instructionsListLength();
-    
+    Instruction one = instructionList[0];
+    Instruction two = instructionList[1];
+    Instruction three = instructionList[2];
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
