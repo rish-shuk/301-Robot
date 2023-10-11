@@ -437,13 +437,15 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             //      return stop
             if (!s3) {
                 if (currentInstruction.ignoreL == 0) {
-                    
+                    MoveToNextInstruction();
+                    return Stop;
                 }
             }
             
             if (!s4) {
                 if (currentInstruction.ignoreR == 0) {
-                    
+                    MoveToNextInstruction();
+                    return Stop;
                 }
             }
         
@@ -459,13 +461,16 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 return AdjustToTheLeft;    
             }
             break;
+        case waitForLeftTurn:
+            return TurnLeft; 
+            break;
+        case waitForRightTurn:
+            return TurnRight;
+            break;
         default:
             return Stop;
             break;
     }
-    
-    
-    
     return Stop;
 }
 // get next instruction
