@@ -45,8 +45,11 @@ char buffer[69];
 int quadDec2Count = 0;
 int timerInt = 0;
 int keepLedOn = 0;
+// ========================================= FLAGS
 uint32 stopBuffer = 0;
-
+uint8 turnFinishedFlag = 0;
+uint8 forwardUntilTargetStartedFlag = 0;
+float blockSizeTotal = 0;
 //char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
 CY_ISR (speedTimer) {
@@ -55,12 +58,11 @@ CY_ISR (speedTimer) {
     quadDec2Count = QuadDec_M2_GetCounter();
     
     if ((currentDirection == Forward || 
-        currentDirection == waitForTurn || 
-        currentDirection == waitForTurn ||
-        currentDirection == waitForRightTurn ||
         currentDirection == ForwardAfterTurn ||
+        currentDirection == waitForTurn || 
         currentDirection == AdjustToTheLeft ||
-        currentDirection == AdjustToTheRight) &&
+        currentDirection == AdjustToTheRight ||
+        currentDirection == Backward) &&
         quadDec2Count != 0) {
         //uint32 newDistance = ((abs(quadDec2Count) / 57.0) * CY_M_PI * WHEEL_DIAMETER_MM)/4;
         float newDistance = (abs(quadDec2Count) * CY_M_PI * WHEEL_DIAMETER_MM)/228;
@@ -412,6 +414,36 @@ enum RobotMovement CheckSensorDirection() {
     return previousDirection;
 }
 
+enum RobotMovement ForwardCourseCorrection();
+enum RobotMovement ForwardCourseCorrection() {
+    // if S5 and S6 are on black, move forward
+    if (!s5 && !s6) {
+        return Forward;  
+    }
+    
+    // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
+    if (s5 && s6) {
+        if (previousDirection == AdjustToTheLeft) {
+            return AdjustToTheRight;
+        }
+        if (previousDirection == AdjustToTheRight) {
+            return AdjustToTheLeft;    
+        }
+    }
+
+    // if S5 OR S6 are on white, adjust accordingly
+    if (s5) {
+        return AdjustToTheRight;    
+    }
+    if (s6) {
+        return AdjustToTheLeft;    
+    }
+   
+    // We should never actually get to this point
+    // If S5 and S6 condition are GONE, then we will reach this point.
+    return Stop;
+}
+
 enum RobotMovement GetMovementAccordingToInstruction() {
     float blocksize;
     if(currentOrientation == Up || currentOrientation == Down) {
@@ -448,24 +480,138 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     return Stop;
                 }
             }
-        
-            // if S5 and S6 are on black, move forward
-            if (!s5 && !s6) {
-                return Forward;   
-            }
-            // if S5 or S6 are on white, adjust accordingly
-            if (s5) {
-                return AdjustToTheRight;    
-            }
-            if (s6) {
-                return AdjustToTheLeft;    
-            }
+            return ForwardCourseCorrection();
             break;
         case waitForLeftTurn:
-            return TurnLeft; 
+            // continue moving forward until s3 goes on black
+            // if we are turning left already
+                // wait until s5 || s6 are on black
+                // return stop
+            if (turnFinishedFlag) {
+                if (turnFinishedFlag) {
+                    if (s3) {
+                        turnFinishedFlag = 0;
+                        MoveToNextInstruction();    
+                    }
+                    else {
+                        return ForwardCourseCorrection();        
+                    }
+                }
+            }
+            
+            if (currentDirection == Stop) {
+                // We should be facing a different direction now so we move to the next instruction.    
+                if (stopBuffer <= 50) {
+                    return Stop;   
+                }
+                return ForwardCourseCorrection();
+            }
+         
+            // if we are already turning left, then check if s5 && s6 are on black
+            if (currentDirection == TurnLeft) {
+                if (!s5 && !s6) {
+                    turnFinishedFlag = 1;
+                    return Stop;
+                }
+                else
+                {
+                    return TurnLeft;
+                }
+            }
+            
+            // If we are not already turning left then once s3 goes on BLACK, turn left
+            if (!s3) {
+                return TurnLeft;
+            }
+            
+            // Otherwise, keep going forward
+            return ForwardCourseCorrection(); 
             break;
         case waitForRightTurn:
-            return TurnRight;
+            // continue moving forward until s4 goes on black
+            // if we are turning left already
+                // wait until s5 || s6 are on black
+                // return stop
+            if (turnFinishedFlag) {
+                if (turnFinishedFlag) {
+                    if (s3) {
+                        turnFinishedFlag = 0;
+                        MoveToNextInstruction();    
+                    }
+                    else {
+                        return ForwardCourseCorrection();        
+                    }
+                }
+            }
+            
+            if (currentDirection == Stop) {
+                // We should be facing a different direction now so we move to the next instruction.    
+                if (stopBuffer <= 50) {
+                    return Stop;   
+                }
+
+                return ForwardCourseCorrection();
+            }
+                      
+            // if we are already turning right, then check if s5 && s6 are on black
+            if (currentDirection == TurnRight) {
+                if (!s5 && !s6) {
+                    turnFinishedFlag = 1;
+                    return Stop;
+                }
+                else
+                {
+                    return TurnRight;
+                }
+            }
+            
+            // If we are not already turning right then once s4 goes on BLACK, turn left
+            if (!s4) {
+                return TurnRight;
+            }
+            
+            // Otherwise, keep going forward
+            return ForwardCourseCorrection(); 
+            break;
+        case ForwardUntilTarget:
+            // Reset distance on first iteration of this instruction
+            if (!forwardUntilTargetStartedFlag) {
+                forwardUntilTargetStartedFlag = 1;
+                totalDistance = 0;
+                // Depending on the robot orientation
+                // Check for Row, Col that target is in
+                // Check how many 8s lead up to nine (reset 8 count if consecutive broken otherwise save when 9 is hit)
+                // get blocksizetotal count
+                //blockSizeTotal = 127.5 * 6;
+                blockSizeTotal = 765;
+            }
+            
+            if (totalDistance >= 765) {
+                return TurnLeft;    
+            }
+            
+            if (blockSizeTotal == 0) {
+                return Backward;    
+            }
+            
+            // If totalDistance >= blockSizeTotal then we should be at target
+            if (totalDistance >= blockSizeTotal) {
+                // Reset flags
+                totalDistance = 0;
+                forwardUntilTargetStartedFlag = 0;
+                blockSizeTotal = 0;
+                // Get next instruction
+                MoveToNextInstruction();
+                return Stop;
+            }
+            
+            return ForwardCourseCorrection();
+            break;
+        case StopAtTarget:
+            if (stopBuffer <= 100) {
+                return Stop;    
+            }
+            return Backward;
             break;
         default:
             return Stop;
@@ -498,6 +644,7 @@ Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numS
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
     currentInstruction = GetInstructionAtIndex(numSteps, instructionList, instructionIndex); // get current/ next instruction
+    previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
     // move robot depending on sensors
     switch (currentDirection) {
