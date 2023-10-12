@@ -20,7 +20,7 @@
 // CHANGE SPEED
 // max speed is 20.83cm/s
 // min speed is 11.69cm/s
-#define MOVEMENT_SPEED_MULTIPLIER 0.9
+#define MOVEMENT_SPEED_MULTIPLIER 1
 
 float rangeMovementMultiplier = 0.4;
 float minMovementMultiplier = 0.7;

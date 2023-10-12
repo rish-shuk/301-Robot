@@ -50,6 +50,7 @@ int keepLedOn = 0;
 uint32 stopBuffer = 0;
 uint8 turnFinishedFlag = 0;
 uint8 forwardUntilTargetStartedFlag = 0;
+uint8 turnStartedFlag = 0;
 float blockSizeTotal = 0;
 //char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
@@ -476,17 +477,19 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             //      if ignoreCount == 0, go to next direction
             //      return stop
             if (!s3) {
-                if (currentInstruction.ignoreL == 0) {
+                if (currentInstruction.ignoreL <= 0) {
                     MoveToNextInstruction();
                     return Stop;
                 }
+                currentInstruction.ignoreL--;
             }
             
             if (!s4) {
-                if (currentInstruction.ignoreR == 0) {
+                if (currentInstruction.ignoreR <= 0) {
                     MoveToNextInstruction();
                     return Stop;
                 }
+                currentInstruction.ignoreR--;
             }
             return ForwardCourseCorrection();
             break;
@@ -495,17 +498,17 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // if we are turning left already
                 // wait until s5 || s6 are on black
                 // return stop
+
             if (turnFinishedFlag) {
-                if (turnFinishedFlag) {
-                    if (s3) {
-                        turnFinishedFlag = 0;
-                        MoveToNextInstruction();    
-                    }
-                    else {
-                        return ForwardCourseCorrection();        
-                    }
+                if (s3) {
+                    turnFinishedFlag = 0;
+                    MoveToNextInstruction();    
+                }
+                else {
+                    return ForwardCourseCorrection();        
                 }
             }
+            
             
             if (currentDirection == Stop) {
                 // We should be facing a different direction now so we move to the next instruction.    
@@ -517,7 +520,14 @@ enum RobotMovement GetMovementAccordingToInstruction() {
          
             // if we are already turning left, then check if s5 && s6 are on black
             if (currentDirection == TurnLeft) {
-                if (!s5 && !s6) {
+                // If turn started and we are still on black, continue turning
+                // Otherwise, if all sensors are on white, turnStartedFlag = 0;
+                if (turnStartedFlag) {
+                    if (s3 && (s5 && s6)) {
+                        turnStartedFlag = 0;
+                    }
+                }
+                if (!turnStartedFlag && !s3 && (!s5 && !s6)) {
                     turnFinishedFlag = 1;
                     return Stop;
                 }
@@ -529,6 +539,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             
             // If we are not already turning left then once s3 goes on BLACK, turn left
             if (!s3) {
+                turnStartedFlag = 1;
                 return TurnLeft;
             }
             
@@ -540,17 +551,17 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // if we are turning left already
                 // wait until s5 || s6 are on black
                 // return stop
+
             if (turnFinishedFlag) {
-                if (turnFinishedFlag) {
-                    if (s3) {
-                        turnFinishedFlag = 0;
-                        MoveToNextInstruction();    
-                    }
-                    else {
-                        return ForwardCourseCorrection();        
-                    }
+                if (s4) {
+                    turnFinishedFlag = 0;
+                    MoveToNextInstruction();    
+                }
+                else {
+                    return ForwardCourseCorrection();        
                 }
             }
+            
             
             if (currentDirection == Stop) {
                 // We should be facing a different direction now so we move to the next instruction.    
@@ -563,7 +574,14 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                       
             // if we are already turning right, then check if s5 && s6 are on black
             if (currentDirection == TurnRight) {
-                if (!s5 && !s6) {
+                // If turn started and we are still on black, continue turning
+                // Otherwise, if all sensors are on white, turnStartedFlag = 0;
+                if (turnStartedFlag) {
+                    if (s4 && (s5 && s6)) {
+                        turnStartedFlag = 0;
+                    }
+                }
+                if (!turnStartedFlag && !s4 && (!s5 && !s6)) {
                     turnFinishedFlag = 1;
                     return Stop;
                 }
@@ -575,6 +593,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             
             // If we are not already turning right then once s4 goes on BLACK, turn left
             if (!s4) {
+                turnStartedFlag = 1;
                 return TurnRight;
             }
             
@@ -587,7 +606,23 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 forwardUntilTargetStartedFlag = 1;
                 totalDistance = 0;
 
-                blockSizeTotal = blocksize * 6;
+                blockSizeTotal = blocksize * 3;
+            }
+            
+            if (!s3) {
+                if (currentInstruction.ignoreL <= 0) {
+                    MoveToNextInstruction();
+                    return Stop;
+                }
+                currentInstruction.ignoreL--;
+            }
+            
+            if (!s4) {
+                if (currentInstruction.ignoreR <= 0) {
+                    MoveToNextInstruction();
+                    return Stop;
+                }
+                currentInstruction.ignoreR--;
             }
             
             // If totalDistance >= blockSizeTotal then we should be at target
