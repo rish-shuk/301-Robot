@@ -177,8 +177,6 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
             }
         }
     }
-    //printMap(map);
-    //return retSteps;
 }
 
 enum InstructionDirection {Forward, TurnLeft, TurnRight, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
@@ -189,6 +187,7 @@ struct Instructions {
     enum InstructionDirection direction;
     int ignoreL;
     int ignoreR;
+    int lastInstruction;
 };
 
 // PATHFINDING PROCESSING *====================
@@ -328,13 +327,23 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Right) {
-                    // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n");
-                    } else {
-                        newDirection = Forward;
-                        printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                     if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < targetLocation.col; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow][currentCol + i] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = Forward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
                     }
                 }
                 if(previousRobotOrientation == Left) {
@@ -366,6 +375,9 @@ void processInstructionList(int index) {
             instructionsList[i].direction = Skip;
             instructionsList[i].ignoreL = 0;
             instructionsList[i].ignoreR = 0;
+        }
+        if(instructionsList[i+1].direction == ForwardUntilTarget) {
+            instructionsList[i].lastInstruction = 1; // set next instruction as forward until target
         }
     }
 }
@@ -460,8 +472,8 @@ int main() {
     startLocation.row = 1;
     startLocation.col = 1;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 6;
-    targetLocation.col = 13;
+    targetLocation.row = 3;
+    targetLocation.col = 10;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
