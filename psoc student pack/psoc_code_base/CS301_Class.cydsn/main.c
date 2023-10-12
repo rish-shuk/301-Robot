@@ -257,8 +257,8 @@ uint8 currentCol = 1;
     return directionState;
 }
 */
-uint8 stoppedAfterTurn = 0;
-uint8 ignoreSensor = 0;
+//uint8 stoppedAfterTurn = 0;
+//uint8 ignoreSensor = 0;
 // needs to make sure robot is going in the correct direction (supplied from instruction)
 /*
 enum RobotMovement CheckSensorDirection() {
@@ -480,7 +480,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     MoveToNextInstruction();
                     return Stop;
                 } else {
-                currentInstruction.ignoreL--; // decrement ignoreL
+                    currentInstruction.ignoreL--; // decrement ignoreL
                 }
             }
             
@@ -489,8 +489,8 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     MoveToNextInstruction();
                     return Stop;
                 } else {
-                currentInstruction.ignoreR--; // decrement ignoreR
-                    }
+                    currentInstruction.ignoreR--; // decrement ignoreR
+                }
             }
             return ForwardCourseCorrection();
             break;
@@ -598,8 +598,6 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (totalDistance >= blockSizeTotal) {
                 // Get next instruction
                 MoveToNextInstruction();
-
-                
                 return Stop;
             }
             
@@ -721,9 +719,9 @@ Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numS
             nextInstruction.direction = instructionList[i].direction;
             nextInstruction.ignoreL = instructionList[i].ignoreL;
             nextInstruction.ignoreR = instructionList[i].ignoreR;
-            return nextInstruction; // return next instruction
+            return nextInstruction; // return next instruction and parameters
         }
-        instructionIndex = i;
+        instructionIndex++; // update instructionIndex = i;
     }
     return nextInstruction;
 }
