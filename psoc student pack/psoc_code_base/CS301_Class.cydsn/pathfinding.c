@@ -282,6 +282,10 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                                 atTarget = 0;
                                 break;
                             }
+                            if(map[currentRow][currentCol - i] == 9) {
+                                atTarget = 1; // found target with no obstacles before it 
+                                break;
+                            }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
@@ -323,6 +327,10 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                             // check columns in front to see if there are any obstacles
                             if(map[currentRow + i][currentCol] == 1) {
                                 atTarget = 0;
+                                break;
+                            }
+                            if(map[currentRow][currentCol+i] == 9) {
+                                atTarget = 1; // found target with no obstacles before it 
                                 break;
                             }
                         }
@@ -371,6 +379,10 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                                 atTarget = 0;
                                 break;
                             }
+                            if(map[currentRow][currentCol - i] == 1) {
+                                atTarget = 1; // found target with no obstacles before it
+                                break;
+                            }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
@@ -414,6 +426,10 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                             // check columns in front to see if there are any obstacles
                             if(map[currentRow][currentCol + i] == 1) {
                                 atTarget = 0;
+                                break;
+                            }
+                            if(map[currentRow][currentCol + i] == 9) {
+                                atTarget = 1; // found target with no obstacles before it
                                 break;
                             }
                         }

@@ -243,6 +243,10 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                                 atTarget = 0;
                                 break;
                             }
+                            if(map[currentRow][currentCol - i] == 9) {
+                                atTarget = 1;
+                                break;
+                            }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
