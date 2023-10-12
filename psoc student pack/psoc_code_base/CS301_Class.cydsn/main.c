@@ -464,6 +464,8 @@ enum RobotMovement SpinCourseCorrection();
 
 uint8 spinCourseCorrectionStarted = 0;
 enum RobotMovement lastDirectionAfter180 = Unknown;
+int currentIgnoreL = 0;
+int currentIgnoreR = 3;
 enum RobotMovement SpinCourseCorrection() {
     // Set first iteration flag.
     if (!spinCourseCorrectionStarted) {
@@ -499,6 +501,10 @@ enum RobotMovement SpinCourseCorrection() {
     // If S5 and S6 condition are GONE, then we will reach this point.
     return Stop;
 }
+
+int leftWingFlag = 0;
+int rightWingFlag = 0;
+
 enum RobotMovement GetMovementAccordingToInstruction() {
     float blocksize;
     if(currentRobotOrientation == Up || currentRobotOrientation == Down) {
@@ -519,24 +525,37 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     
     switch (currentInstructionDirection) {
         case GoForward:
-            // if s3 or s4 go off, check ignoreCount
-            //      if ignoreCount == 0, go to next direction
-            //      return stop
-            if (!s3) {
-                if (currentInstruction.ignoreL <= 0) {
-                    MoveToNextInstruction();
-                    return Stop;
-                }
-                currentInstruction.ignoreL--;
+        if(currentDirection == Stop) {
+            if(stopBuffer <= 50) {
+                return Stop;
+            } else {
+                stopBuffer = 60;
+            }
+        }
+            if (s3) {
+                leftWingFlag = 0;    
             }
             
-            if (!s4) {
-                if (currentInstruction.ignoreR <= 0) {
-                    MoveToNextInstruction();
+            if (s4) {
+                rightWingFlag = 0;    
+            }
+
+            if (!s3) {
+                if (!leftWingFlag) {
+                    // do ignore decrement and ignore check
+                    currentIgnoreL = currentIgnoreL - 1;
+                    if (currentIgnoreL <= 1) {
+                        MoveToNextInstruction();
+                    }
+                    leftWingFlag = 1;
                     return Stop;
                 }
-                currentInstruction.ignoreR--;
             }
+            if (!s4) {
+                MoveToNextInstruction();
+                return Stop;
+            }
+            
             return ForwardCourseCorrection();
             break;
         case waitForLeftTurn:
@@ -597,6 +616,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // if we are turning left already
                 // wait until s5 || s6 are on black
                 // return stop
+            return Backward;
 
             if (turnFinishedFlag) {
                 if (s4) {
@@ -827,8 +847,8 @@ Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numS
     for(int i = instructionIndex; i < numSteps; i++) {
         if(instructionList[i].direction != Skip) {
             nextInstruction.direction = instructionList[i].direction;
-            nextInstruction.ignoreL = instructionList[i].ignoreL;
-            nextInstruction.ignoreR = instructionList[i].ignoreR;
+            //currentIgnoreL = instructionList[i].ignoreL;
+            //currentIgnoreR = instructionList[i].ignoreR;
             nextInstruction.expectedOrientation = instructionList[i].expectedOrientation;
             return nextInstruction; // return next instruction
         }
