@@ -476,20 +476,18 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             //      if ignoreCount == 0, go to next direction
             //      return stop
             if (!s3) {
+                currentInstruction.ignoreL--; // decrement ignoreL
                 if (currentInstruction.ignoreL == 0) {
                     MoveToNextInstruction();
                     return Stop;
-                } else {
-                    currentInstruction.ignoreL--; // decrement ignoreL
-                }
+                } 
             }
             
             if (!s4) {
+                currentInstruction.ignoreR--; // decrement ignoreR
                 if (currentInstruction.ignoreR == 0) {
                     MoveToNextInstruction();
                     return Stop;
-                } else {
-                    currentInstruction.ignoreR--; // decrement ignoreR
                 }
             }
             return ForwardCourseCorrection();
