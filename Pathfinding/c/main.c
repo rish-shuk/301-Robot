@@ -234,9 +234,23 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                 }
                 if(previousRobotOrientation == Up) {
                     // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n"); // THIS WILL HAVE AN EDGE CASE
+                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < currentRow-targetLocation.row; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow][currentCol - i] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = Forward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
                     } else {
                         newDirection = Forward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -264,13 +278,28 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                 }
                 if(previousRobotOrientation == Down) {
                     // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n");
-                    } else {
+                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < targetLocation.row; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow + i][currentCol] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = Forward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
+                    }      
+                    else {
                         newDirection = Forward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
-                    }                    
+                    }        
                 }
                 if(previousRobotOrientation == Up) {
                     newDirection = uTurn;
@@ -296,9 +325,23 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                 }
                 if(previousRobotOrientation == Left) {
                     // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n");
+                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < currentCol-targetLocation.col; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow][currentCol - i] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = Forward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
                     } else {
                         newDirection = Forward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -344,6 +387,9 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
                         }
+                    } else {
+                        newDirection = Forward;
+                        printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
                     }
                 }
                 if(previousRobotOrientation == Left) {
