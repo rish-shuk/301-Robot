@@ -73,7 +73,7 @@ int map[15][19] = {
 int start_pos[2] = {1,1};
 
 int food_list[5][2]= {
-{9,13},
+{13,17},
 {5,5},
 {7,1},
 {13,5},
@@ -391,6 +391,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         instructionsList[listIndex].direction = newDirection;
         instructionsList[listIndex].ignoreL = ignoreL;
         instructionsList[listIndex].ignoreR = ignoreR;
+        instructionsList[listIndex].expectedOrientation = previousRobotOrientation;
         listIndex++; // increment instruction list index
         numSteps--; // decrement numSteps
     }

@@ -9,15 +9,18 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-
+    
+enum OrientationState {Up, Down, Left, Right};
 enum InstructionDirection {GoForward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
+
 typedef struct Instruction {
     enum InstructionDirection direction;
     int ignoreL;
     int ignoreR;
+    enum OrientationState expectedOrientation;
 } Instruction;
 
-enum OrientationState {Up, Down, Left, Right};
+
 
 struct Location
 {

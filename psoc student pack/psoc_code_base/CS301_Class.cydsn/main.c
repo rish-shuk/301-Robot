@@ -21,7 +21,7 @@ int16 quadCountToRPM(uint16 count);
 // Sensors, Course correction and Movement Direction.
 void ResetSensorFlags();
 void SetRobotMovement();
-enum RobotMovement {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, ForwardAfterTurn, Backward};
+enum RobotMovement {Forward, TurnRight, TurnLeft, AdjustToTheLeft, AdjustToTheRight, Stop, Unknown, waitForTurn, ForwardAfterTurn, Backward, Spin180};
 enum RobotMovement currentDirection, previousDirection = Forward; 
 enum RobotMovement GetMovementAccordingToInstruction();
 enum OrientationState currentRobotOrientation, previousOrientation = Down;
@@ -48,9 +48,16 @@ int timerInt = 0;
 int keepLedOn = 0;
 // ========================================= FLAGS
 uint32 stopBuffer = 0;
-uint8 turnFinishedFlag = 0;
-uint8 forwardUntilTargetStartedFlag = 0;
+
 uint8 turnStartedFlag = 0;
+uint8 turnFinishedFlag = 0;
+
+uint8 forwardUntilTargetStartedFlag = 0;
+uint8 uTurnStartedFlag = 0;
+uint8 uTurnFinishedFlag = 0;
+
+uint8 junctionConfiguration[4] = {0};
+
 float blockSizeTotal = 0;
 //char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
 
@@ -453,6 +460,45 @@ enum RobotMovement ForwardCourseCorrection() {
     return Stop;
 }
 
+enum RobotMovement SpinCourseCorrection();
+
+uint8 spinCourseCorrectionStarted = 0;
+enum RobotMovement lastDirectionAfter180 = Unknown;
+enum RobotMovement SpinCourseCorrection() {
+    // Set first iteration flag.
+    if (!spinCourseCorrectionStarted) {
+        spinCourseCorrectionStarted = 1;    
+        lastDirectionAfter180 = currentDirection;
+    }
+    
+    // if S5 and S6 are on black, stop
+    if (!s5 && !s6) {
+        spinCourseCorrectionStarted = 0;
+        return Backward;
+    }
+    
+    // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
+    if (s5 && s6) {
+        if (lastDirectionAfter180 != TurnLeft) {
+            return Forward;
+        }
+        if (lastDirectionAfter180 != TurnRight) {
+            return Forward;    
+        }
+    }
+
+    // if S5 OR S6 are on white, adjust accordingly
+    if (s5) {
+        return TurnRight;    
+    }
+    if (s6) {
+        return TurnLeft;    
+    }
+   
+    // We should never actually get to this point
+    // If S5 and S6 condition are GONE, then we will reach this point.
+    return Stop;
+}
 enum RobotMovement GetMovementAccordingToInstruction() {
     float blocksize;
     if(currentRobotOrientation == Up || currentRobotOrientation == Down) {
@@ -648,6 +694,37 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             }
             return TurnRight;
             break;
+        case uTurn:
+            if (stopBuffer <= 200) {
+                return Stop;    
+            }
+            
+            if (!uTurnStartedFlag) {
+                uTurnStartedFlag = 1;
+                return Spin180;
+            } else {
+                uTurnStartedFlag = 0;
+                stopBuffer = 0;
+                return Stop;
+                /*
+                // After 180, if we are not on black, then we course correct
+                if (!s5 && !s6) {
+                    uTurnFinishedFlag = 1;    
+                }
+                
+                if (!uTurnFinishedFlag) {
+                    return SpinCourseCorrection();    
+                }
+                
+                if (uTurnFinishedFlag) {
+                    // GetNextInstruction
+                    uTurnFinishedFlag = 0;
+                    uTurnStartedFlag = 0;
+                    return Backward;    
+                }*/
+                return Backward;
+            }
+            break;
         default:
             return Stop;
             break;
@@ -752,6 +829,7 @@ Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numS
             nextInstruction.direction = instructionList[i].direction;
             nextInstruction.ignoreL = instructionList[i].ignoreL;
             nextInstruction.ignoreR = instructionList[i].ignoreR;
+            nextInstruction.expectedOrientation = instructionList[i].expectedOrientation;
             return nextInstruction; // return next instruction
         }
         instructionIndex = i;
@@ -792,6 +870,9 @@ void SetRobotMovement() {
             moveBackward();
             break;
         case waitForTurn:
+            break;
+        case Spin180:
+            RotateClockwise180Degrees();
             break;
         /*case waitForLeftTurn:
             moveForward();
