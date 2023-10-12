@@ -477,7 +477,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             //      return stop
             if (!s3) {
                 currentInstruction.ignoreL--; // decrement ignoreL
-                if (currentInstruction.ignoreL == 0) {
+                if (currentInstruction.ignoreL <= 0) {
                     MoveToNextInstruction();
                     return Stop;
                 } 
@@ -485,7 +485,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             
             if (!s4) {
                 currentInstruction.ignoreR--; // decrement ignoreR
-                if (currentInstruction.ignoreR == 0) {
+                if (currentInstruction.ignoreR <= 0) {
                     MoveToNextInstruction();
                     return Stop;
                 }
@@ -719,7 +719,7 @@ Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numS
             nextInstruction.ignoreR = instructionList[i].ignoreR;
             return nextInstruction; // return next instruction and parameters
         }
-        instructionIndex++; // update instructionIndex = i;
+        instructionIndex = i; // update instructionIndex = i;
     }
     return nextInstruction;
 }
