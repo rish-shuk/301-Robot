@@ -105,4 +105,21 @@ void RotateClockwise180Degrees() {
     QuadDec_M1_SetCounter(0);
 }
 
+void HardForward() {
+    // totalMultiplier = 0.5 + (0.7 * movement_speed_multiplier)
+    float totalMultiplier = minMovementMultiplier + (rangeMovementMultiplier * MOVEMENT_SPEED_MULTIPLIER);
+    
+    uint16 count1 = (32767 + (maxForwardPWM * totalMultiplier));
+    uint16 count2 = (32767 - (maxForwardPWM * totalMultiplier * 0.5)); // left wheel is slower, so need to compensate
+    PWM_1_WriteCompare(count1); // 65% - Left Wheel Clockwise
+    PWM_2_WriteCompare(count2); // 35% - Right Wheel Clockwise
+    
+    int quadPulseCount = 0;
+    QuadDec_M1_SetCounter(0);
+    while(quadPulseCount < 50) {
+        quadPulseCount = QuadDec_M1_GetCounter();
+    }
+    QuadDec_M1_SetCounter(0);
+}
+
 /* [] END OF FILE */
