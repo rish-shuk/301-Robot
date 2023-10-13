@@ -61,7 +61,7 @@ volatile static uint8 rightStatusFlag = 0;
 
 volatile static uint8 spinCourseCorrectionStarted = 0;
 volatile static uint8 currentIgnoreL = 0;
-volatile static uint8 currentIgnoreR = 0;
+volatile static uint8 currentIgnoreR = 1;
 
 uint8 junctionConfiguration[4] = {0};
 
@@ -136,7 +136,6 @@ int main() {
     
     instructionList = findPath(map, food_list, 0);
     numSteps = instructionsListLength();
-
     
     currentInstruction = GetInstructionAtIndex(numSteps, instructionList);
     
@@ -299,10 +298,10 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     switch (currentInstructionDirection) {
         case GoForward:
             if(currentDirection == Stop) {
-                if(stopBuffer <= 100) {
+                if(stopBuffer <= 150) {
                     return Stop;
                 } else {
-                    stopBuffer = 110;
+                    stopBuffer = 170;
                 }
             }
             if (s3) {
@@ -379,7 +378,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 }
                 if (!turnStartedFlag && !s3 && (!s5 && !s6)) {
                     turnFinishedFlag = 1;
-                    return Stop;
+                    return ForwardAfterTurn;
                 }
                 else
                 {
@@ -434,7 +433,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 }
                 if (!turnStartedFlag && !s4 && (!s5 && !s6)) {
                     turnFinishedFlag = 1;
-                    return Stop;
+                    return ForwardAfterTurn;
                 }
                 else
                 {
@@ -457,7 +456,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 forwardUntilTargetStartedFlag = 1;
                 totalDistance = 0;
 
-                //blocksSizeTotal = CalculateDistanceToTravel();
+                //blockSizeTotal = CalculateDistanceToTravel(blocksize);
                 blockSizeTotal = blocksize * 2;
             }
             
@@ -611,8 +610,17 @@ void MoveToNextInstruction() {
     currentIgnoreL = 0;
     currentIgnoreR = 0;
     instructionIndex++;
-    currentIgnoreL = instructionList[instructionIndex].ignoreL;
-    currentIgnoreR = instructionList[instructionIndex].ignoreR;
+
+    for (int i = instructionIndex; i < numSteps; i++) {
+        if (instructionList[i].direction != Skip) {
+            instructionIndex = i;             
+            currentIgnoreL = instructionList[instructionIndex].ignoreL;
+            currentIgnoreR = instructionList[instructionIndex].ignoreR;
+            break;
+        }
+    }
+    
+    
 }
 
 Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps]) {
@@ -656,7 +664,7 @@ void SetRobotMovement() {
             stopMoving();
             break;
         case ForwardAfterTurn:
-            moveForward();
+            HardForward();
             break;
         case Backward:
             moveBackward();

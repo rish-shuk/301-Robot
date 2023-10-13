@@ -44,4 +44,6 @@ void turnLeft();
 void moveBackward();
 
 void RotateClockwise180Degrees();
+
+void HardForward();
 #endif /* MOVEMENT_FUNCTIONS_H */
