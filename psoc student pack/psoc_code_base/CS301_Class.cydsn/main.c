@@ -215,7 +215,7 @@ void ResetSensorFlags() {
 }
 
 float xBlocksize = 122; // 122 mm
-float yBlocksize = 77; // 80 mm
+float yBlocksize = 75; // 80 mm
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
@@ -536,7 +536,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             blockSizeTotal = 0;
             
             if (currentDirection == Stop) {
-                if (stopBuffer <= 200) {
+                if (stopBuffer <= 100) {
                     return Stop;    
                 } else {
                     stopBuffer = 250;

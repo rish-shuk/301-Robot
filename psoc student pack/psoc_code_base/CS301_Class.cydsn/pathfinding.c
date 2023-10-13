@@ -576,7 +576,7 @@ Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i) 
 }
 
 Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i, enum OrientationState orientation) {
-    //clearMap(map); // clear map between each pass
+    clearMap(map); // clear map between each pass
     // update pathfinding orientation with current robot orientation
     currentRobotOrientation = orientation;
     struct Location startLocation, targetLocation;
