@@ -257,7 +257,7 @@ enum RobotMovement SpinCourseCorrection() {
     // if S5 and S6 are on black, stop
     if (!s5 && !s6) {
         spinCourseCorrectionStarted = 0;
-        return Backward;
+        return Stop;
     }
     
     // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
@@ -489,11 +489,14 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             return TurnRight;
             break;
         case uTurn:
-            if (stopBuffer <= 200) {
-                return Stop;    
-            } else {
-                stopBuffer = 210;    
+            if (currentDirection == Stop) {
+                if (stopBuffer <= 50) {
+                    return Stop;    
+                } else {
+                    stopBuffer = 100;    
+                }
             }
+            
             
             if (!uTurnStartedFlag) {
                 uTurnStartedFlag = 1;

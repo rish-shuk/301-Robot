@@ -19,7 +19,7 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-enum OrientationState previousRobotOrientation, currentRobotOrientation = Right; // initialize 
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Up; // initialize 
 
 static Instruction instructionsList[285];
 static int numSteps = 0;
@@ -70,7 +70,7 @@ int map[15][19] = {
 */
 
 
-int start_pos[2] = {1,3};
+int start_pos[2] = {1,1};
 
 int food_list[5][2]= {
 {3,17},
