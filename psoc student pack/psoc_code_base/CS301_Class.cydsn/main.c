@@ -136,6 +136,7 @@ int main() {
     
     instructionList = findPath(map, food_list, 0);
     numSteps = instructionsListLength();
+
     
     currentInstruction = GetInstructionAtIndex(numSteps, instructionList);
     
@@ -254,12 +255,6 @@ enum RobotMovement SpinCourseCorrection() {
         lastDirectionAfter180 = currentDirection;
     }
     
-    // if S5 and S6 are on black, stop
-    if (!s5 && !s6) {
-        spinCourseCorrectionStarted = 0;
-        return Stop;
-    }
-    
     // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
     if (s5 && s6) {
         if (lastDirectionAfter180 != TurnLeft) {
@@ -322,12 +317,12 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
-                    if (currentIgnoreL > 0) {
-                        currentIgnoreL--;    
-                    }
                     if (currentIgnoreL == 0) {
                         MoveToNextInstruction();
                         return Stop;
+                    }
+                    if (currentIgnoreL > 0) {
+                        currentIgnoreL--;    
                     }
                 }
             }
@@ -335,14 +330,13 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (rightStatusFlag) {
                 if (!s4) {
                     rightStatusFlag = 0;
-                    if (currentIgnoreR > 0) {
-                        currentIgnoreR--;    
-                    }
                     if (currentIgnoreR == 0) {
                         MoveToNextInstruction();
                         return Stop;
                     }
-                    
+                    if (currentIgnoreR > 0) {
+                        currentIgnoreR--;    
+                    }
                 }
             }
           
@@ -358,6 +352,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 if (s3) {
                     turnFinishedFlag = 0;
                     MoveToNextInstruction();    
+                    return Stop;
                 }
                 else {
                     return ForwardCourseCorrection();        
@@ -410,7 +405,8 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (turnFinishedFlag) {
                 if (s4) {
                     turnFinishedFlag = 0;
-                    MoveToNextInstruction();    
+                    MoveToNextInstruction();   
+                    return Stop;
                 }
                 else {
                     return ForwardCourseCorrection();        
@@ -461,7 +457,8 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 forwardUntilTargetStartedFlag = 1;
                 totalDistance = 0;
 
-                blockSizeTotal = blocksize * 3;
+                //blocksSizeTotal = CalculateDistanceToTravel();
+                blockSizeTotal = blocksize * 2;
             }
             
             
@@ -506,12 +503,13 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             
             if (uTurnFinishedFlag) {
                 // MOVE TO NEXT INSTRUCTION
-                return Backward;    
+                MoveToNextInstruction();
+                return Stop;    
             }
             
             // Repeat SpinCourseCorrection until both or one on black
             if (uTurnStartedFlag) {
-                if (!s5 || !s6) {
+                if (!s5 && !s6) {
                     uTurnFinishedFlag = 1;    
                 }    
             }
@@ -602,7 +600,6 @@ float CalculateDistanceToTravel(float blockSize) {
 
             }
             break;
-        
     }
     totalBlockSize = blockSize * pathCount;
     clearMap(map); // clear map after calculating total block size to travel for forward until target.
@@ -611,6 +608,8 @@ float CalculateDistanceToTravel(float blockSize) {
 
 // get next instruction
 void MoveToNextInstruction() {
+    currentIgnoreL = 0;
+    currentIgnoreR = 0;
     instructionIndex++;
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
     currentIgnoreR = instructionList[instructionIndex].ignoreR;
