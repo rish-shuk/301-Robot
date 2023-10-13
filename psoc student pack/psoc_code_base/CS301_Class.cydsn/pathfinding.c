@@ -70,7 +70,7 @@ int map[15][19] = {
 */
 
 
-int start_pos[2] = {1,1};
+int start_pos[2] = {2,3};
 
 int food_list[5][2]= {
 {3,17},
@@ -273,7 +273,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                 }
                 if(previousRobotOrientation == Up) {
                     // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
                         for(int i = 0; i < currentRow-targetLocation.row; i++) {
@@ -320,7 +320,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Down) {
-                   if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                   if(targetOrientation == nextStep && targetLocation.col == currentCol) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
                         for(int i = 0; i < targetLocation.row; i++) {
@@ -370,7 +370,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Left) {
-                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
                         for(int i = 0; i < currentCol-targetLocation.col; i++) {
@@ -419,7 +419,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Right) {
-                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
                         for(int i = 0; i < targetLocation.col; i++) {
