@@ -207,7 +207,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         map[currentRow][currentCol] = 0; // clear visited map location (for when we need to u-turn)
         previousRobotOrientation = currentRobotOrientation;
         enum InstructionDirection newDirection;
-        int blocksToTarget = 0;
+        int distanceToTarget = 0;
         int nextStep = checkPathDirection(currentRow,currentCol);  // check all four sides for next step in path
         if(currentRow == targetLocation.row && currentCol == targetLocation.col) {
             newDirection = StopAtTarget; // if next step is the target, call forward until target
@@ -240,15 +240,15 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                                 atTarget = 0;
                                 break;
                             }
-                            if(map[currentRow][currentCol - i] == 9) {
+                            if(map[currentRow - i][currentCol] == 9) {
                                 atTarget = 1;
-                                blocksToTarget = i;
+                                distanceToTarget = i;
                                 break;
                             }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
+                            printf("Forward %d blocks until target\n", distanceToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -291,13 +291,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                             }
                             if(map[currentRow + i][currentCol] == 9) {
                                 atTarget = 1;
-                                blocksToTarget = i;
+                                distanceToTarget = i;
                                 break;
                             }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
+                            printf("Forward %d blocks until target\n", distanceToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -342,14 +342,14 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                                 break;
                             }
                             if(map[currentRow][currentCol - i] == 9) {
-                                blocksToTarget = i;
+                                distanceToTarget = i;
                                 atTarget = 1;
                                 break;
                             }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
+                            printf("Forward %d blocks until target\n", distanceToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -393,13 +393,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                             }
                             if(map[currentRow][currentCol + i] == 9) {
                                 atTarget = 1;
-                                blocksToTarget = i;
+                                distanceToTarget = i;
                                 break;
                             }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
+                            printf("Forward %d blocks until target\n", distanceToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
