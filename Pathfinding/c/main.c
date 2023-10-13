@@ -31,7 +31,6 @@ struct Location {
     int col;
 };
 
-int list_of_optimal_coordinates[285][2]; // ROW, COL
 
 struct Location getRandomLocation(int map[MAX_ROWS][MAX_COLS]) {
     struct Location randomLocation;
@@ -159,8 +158,6 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
                 map[newRow][newCol] = 8; // mark optimal step
-                list_of_optimal_coordinates[pathIndex][0] = newRow;
-                list_of_optimal_coordinates[pathIndex][1] = newCol;
                 pathIndex++;
                 // reverse array somewhere
 
@@ -179,16 +176,15 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     }
 }
 
-enum InstructionDirection {Forward, TurnLeft, TurnRight, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
+enum InstructionDirection {Forward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
 enum OrientationState {Up, Down, Left, Right};
-enum OrientationState previousRobotOrientation, currentRobotOrientation = Right; // initialize 
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Up; // initialize 
 enum InstructionDirection Instructions[285];
-struct Instructions {
+typedef struct Instruction {
     enum InstructionDirection direction;
-    int ignoreL;
     int ignoreR;
-    int lastInstruction;
-};
+    int ignoreL;
+} Instruction;
 
 // PATHFINDING PROCESSING *====================
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
@@ -197,7 +193,7 @@ int getTargetOrientation(int targetRow, int targetCol);
 void processInstructionList(int index);
 
 int ignoreR = 0, ignoreL = 0;
-struct Instructions instructionsList[285]; // list to store instructions
+static struct Instruction instructionsList[285]; // list to store instructions
 // return a list of instructions for robot to execute
 void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation);
 void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
@@ -211,6 +207,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         map[currentRow][currentCol] = 0; // clear visited map location (for when we need to u-turn)
         previousRobotOrientation = currentRobotOrientation;
         enum InstructionDirection newDirection;
+        int blocksToTarget = 0;
         int nextStep = checkPathDirection(currentRow,currentCol);  // check all four sides for next step in path
         if(currentRow == targetLocation.row && currentCol == targetLocation.col) {
             newDirection = StopAtTarget; // if next step is the target, call forward until target
@@ -221,13 +218,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             case 0: // next step is up
                 currentRobotOrientation = Up;
                 if(previousRobotOrientation == Left) {
-                    newDirection = TurnRight;
+                    newDirection = waitForRightTurn;
                     printf("Right Turn\n") ; // need right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 } 
                 if(previousRobotOrientation == Right) {
-                    newDirection = TurnLeft;
+                    newDirection = waitForLeftTurn;
                     printf("Left Turn\n") ; // need a right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
@@ -237,14 +234,15 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     if(targetOrientation == nextStep && targetLocation.col == currentCol) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
-                        for(int i = 0; i < currentCol-targetLocation.col; i++) {
+                        for(int i = 0; i < currentRow-targetLocation.row; i++) {
                             // check columns in front to see if there are any obstacles
-                            if(map[currentRow][currentCol - i] == 1) {
+                            if(map[currentRow - i][currentCol] == 1) {
                                 atTarget = 0;
                                 break;
                             }
                             if(map[currentRow][currentCol - i] == 9) {
                                 atTarget = 1;
+                                blocksToTarget = i;
                                 break;
                             }
                         }
@@ -269,13 +267,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             case 1: // next step is down
                 currentRobotOrientation = Down;
                 if(previousRobotOrientation == Right) {
-                    newDirection = TurnRight;
+                    newDirection = waitForRightTurn;
                     printf("Right Turn\n") ; // need Right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 } 
                 if(previousRobotOrientation == Left) {
-                    newDirection = TurnLeft;
+                    newDirection = waitForLeftTurn;
                     printf("Left Turn\n") ; // need Left turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
@@ -285,14 +283,15 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     if(targetOrientation == nextStep && targetLocation.col == currentCol) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
-                        for(int i = 0; i < targetLocation.col; i++) {
+                        for(int i = 0; i < targetLocation.row; i++) {
                             // check columns in front to see if there are any obstacles
-                            if(map[currentRow][currentCol + i] == 1) {
+                            if(map[currentRow + i][currentCol] == 1) {
                                 atTarget = 0;
                                 break;
                             }
-                            if(map[currentRow][currentCol + i] == 9) {
+                            if(map[currentRow + i][currentCol] == 9) {
                                 atTarget = 1;
+                                blocksToTarget = i;
                                 break;
                             }
                         }
@@ -320,13 +319,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             case 2: // next step is left
                 currentRobotOrientation = Left;
                 if(previousRobotOrientation == Up) {
-                    newDirection = TurnLeft;
+                    newDirection = waitForLeftTurn;
                     printf("Left Turn\n") ; // need left turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 } 
                 if(previousRobotOrientation == Down) {
-                    newDirection = TurnRight;
+                    newDirection = waitForRightTurn;
                     printf("Right Turn\n") ; // need a right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
@@ -343,13 +342,14 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                                 break;
                             }
                             if(map[currentRow][currentCol - i] == 9) {
+                                blocksToTarget = i;
                                 atTarget = 1;
                                 break;
                             }
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward until target\n");
+                            printf("Forward %d blocks until target\n", blocksToTarget);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -370,13 +370,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             case 3: // next step is right
                 currentRobotOrientation = Right;
                 if(previousRobotOrientation == Up) {
-                    newDirection = TurnRight;
+                    newDirection = waitForRightTurn;
                     printf("Right Turn\n") ; // need a right turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Down) {
-                    newDirection = TurnLeft;
+                    newDirection = waitForLeftTurn;
                     printf("Left Turn\n") ; // need left turn
                     ignoreL = 0;
                     ignoreR = 0; // reset ignoreL/ ignoreR
@@ -393,6 +393,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                             }
                             if(map[currentRow][currentCol + i] == 9) {
                                 atTarget = 1;
+                                blocksToTarget = i;
                                 break;
                             }
                         }
@@ -429,18 +430,18 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
     }
     processInstructionList(listIndex);
 }
+static Instruction finalInstructionList[285];
 
 void processInstructionList(int index) {
+    int j = 0;
     // remove repeated forwards
-    for(int i = 0; i < index-1; i ++) {
-        if(instructionsList[i].direction == instructionsList[i+1].direction) {
-            instructionsList[i].direction = Skip;
-            instructionsList[i].ignoreL = 0;
-            instructionsList[i].ignoreR = 0;
-        }
-        if(instructionsList[i+1].direction == ForwardUntilTarget) {
-            instructionsList[i].lastInstruction = 1; // set next instruction as forward until target
-        }
+        for(int i = 0; i < index; i ++) {
+            if(instructionsList[i].direction != instructionsList[i+1].direction) {
+                finalInstructionList[j].direction = instructionsList[i].direction;
+                finalInstructionList[j].ignoreL = instructionsList[i].ignoreL;
+                finalInstructionList[j].ignoreR = instructionsList[i].ignoreR; // skip all the repeated forwards
+                j++; // move to next element in finalInstructionList
+            }
     }
 }
 
@@ -531,11 +532,11 @@ int getTargetOrientation(int targetRow, int targetCol) {
 
 int main() {
     struct Location startLocation; 
-    startLocation.row = 1;
-    startLocation.col = 1;
+    startLocation.row = 2;
+    startLocation.col = 3;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 1;
-    targetLocation.col = 9;
+    targetLocation.row = 3;
+    targetLocation.col = 17;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
