@@ -240,7 +240,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 // PATHFINDING PROCESSING *====================
 
 int ignoreR = 0, ignoreL = 0;
-int distanceToTarget = 69696969;
+int distanceToTarget = 0;
 
 // edit global instructionsList variable, fill with instructions
 void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
@@ -254,10 +254,21 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         map[currentRow][currentCol] = 0; // clear visited map location (for when we need to u-turn)
         previousRobotOrientation = currentRobotOrientation;
         enum InstructionDirection newDirection;
+        int distanceToTarget = 0;
         int nextStep = checkPathDirection(currentRow,currentCol);  // check all four sides for next step in path
         if(currentRow == targetLocation.row && currentCol == targetLocation.col) {
             newDirection = StopAtTarget; // if next step is the target, call forward until target
-            nextStep = 5;
+            instructionsList[listIndex].direction = newDirection;
+            instructionsList[listIndex].distanceToTarget = 0;
+            instructionsList[listIndex].ignoreL = 0;
+            instructionsList[listIndex].ignoreR = 0;
+            listIndex++; // returned stop, no need for pathfinding anymore
+            break;
+        }
+        if(instructionsList[listIndex - 1].direction == ForwardUntilTarget && newDirection != StopAtTarget) {
+            currentRow = targetLocation.row;
+            currentCol = targetLocation.col;
+            nextStep = 5; // next instruction should be stop at target
         }
         switch (nextStep) {
             case 0: // next step is up                
@@ -277,15 +288,15 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     if(targetOrientation == nextStep && targetLocation.col == currentCol) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
-                        for(int i = 1; i < currentRow-targetLocation.row; i++) {
+                        for(int i = 1; i <= currentRow-targetLocation.row; i++) {
                             // check columns in front to see if there are any obstacles
                             if(map[currentRow - i][currentCol] == 1) {
                                 atTarget = 0;
                                 break;
                             }
-                            if(map[currentRow - i][currentCol] == 9) {
+                            if(currentRow - i == targetLocation.row) {
                                 atTarget = 1; // found target with no obstacles before it 
-                                distanceToTarget = i;
+                                distanceToTarget = i; 
                                 break;
                             }
                         }
@@ -319,13 +330,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
-                        for(int i = 1; i < targetLocation.row; i++) {
+                        for(int i = 1; i <= targetLocation.row; i++) {
                             // check columns in front to see if there are any obstacles
                             if(map[currentRow + i][currentCol] == 1) {
                                 atTarget = 0;
                                 break;
                             }
-                            if(map[currentRow + i][currentCol] == 9) {
+                            if(currentRow + i == targetLocation.row) {
                                 atTarget = 1; // found target with no obstacles before it 
                                 distanceToTarget = i;
                                 break;
@@ -364,13 +375,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     if(targetOrientation == nextStep && targetLocation.row == currentRow) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
-                        for(int i = 1; i < currentCol-targetLocation.col; i++) {
+                        for(int i = 1; i <= currentCol-targetLocation.col; i++) {
                             // check columns in front to see if there are any obstacles
                             if(map[currentRow][currentCol - i] == 1) {
                                 atTarget = 0;
                                 break;
                             }
-                            if(map[currentRow][currentCol - i] == 9) {
+                            if(currentCol - i == targetLocation.col) {
                                 atTarget = 1; // found target with no obstacles before it
                                 distanceToTarget = i;
                                 break;
@@ -408,13 +419,13 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     if(targetOrientation == nextStep && targetLocation.row == currentRow) {
                         int atTarget = 1;
                         // check if we only need to go forward to reach target
-                        for(int i = 1; i < targetLocation.col; i++) {
+                        for(int i = 1; i <= targetLocation.col; i++) {
                             // check columns in front to see if there are any obstacles
                             if(map[currentRow][currentCol + i] == 1) {
                                 atTarget = 0;
                                 break;
                             }
-                            if(map[currentRow][currentCol + i] == 9) {
+                            if(currentCol + i == targetLocation.col) {
                                 atTarget = 1; // found target with no obstacles before it
                                 distanceToTarget = i;
                                 break;
@@ -439,16 +450,15 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             default:
                 break;
         }
-        
-        // add new direction to list
-        instructionsList[listIndex].direction = newDirection;
-        instructionsList[listIndex].ignoreL = ignoreL;
-        instructionsList[listIndex].ignoreR = ignoreR;
-        instructionsList[listIndex].expectedOrientation = previousRobotOrientation;
-        instructionsList[listIndex].distanceToTarget = distanceToTarget;
-        distanceToTarget = 69;
-        listIndex++; // increment instruction list index
-        numSteps--; // decrement numSteps
+        if(nextStep != 5) {
+            instructionsList[listIndex].direction = newDirection;
+            instructionsList[listIndex].ignoreL = ignoreL;
+            instructionsList[listIndex].ignoreR = ignoreR;
+            instructionsList[listIndex].expectedOrientation = previousRobotOrientation;
+            instructionsList[listIndex].distanceToTarget = distanceToTarget + 1;
+            listIndex++;
+        }
+        numSteps--;
     }
     // process list, remove repeated forward outputs
     int j = 0;

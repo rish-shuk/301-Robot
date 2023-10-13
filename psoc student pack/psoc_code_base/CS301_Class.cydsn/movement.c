@@ -63,7 +63,7 @@ void adjustLeft() {
 // Anti-clockwise
 void turnLeft() {
     uint16 count1 = (32767 - (maxTurningPWM * 0.9));
-    uint16 count2 = (32767 - (maxTurningPWM * 0.9)); // try 45%
+    uint16 count2 = (32767 - (maxTurningPWM * 0.9 * 0.97)); // try 45%
     PWM_1_WriteCompare(count1); // 40% -- Left Wheel spins Clockwise
     PWM_2_WriteCompare(count2); // 40% -- Right wheel spins clockwise
 }
@@ -71,7 +71,7 @@ void turnLeft() {
 // Clockwise
 void turnRight() {
     uint16 count1 = (32767 + (maxTurningPWM * 0.9));
-    uint16 count2 = (32767 + (maxTurningPWM * 0.9));
+    uint16 count2 = (32767 + (maxTurningPWM * 0.9 * 0.8));
     PWM_1_WriteCompare(count1); // 60% -- Left wheel spins clockwise
     PWM_2_WriteCompare(count2); // 60% - Right wheel spins Anti Clockwise
 }
