@@ -22,6 +22,7 @@
 enum OrientationState previousRobotOrientation, currentRobotOrientation = Left; // initialize 
 
 static Instruction instructionsList[285];
+static Instruction finalInstructionList[285];
 static int numSteps = 0;
 
 uint8_t instructionsListLength();
@@ -466,12 +467,15 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         numSteps--; // decrement numSteps
     }
     // process list, remove repeated forward outputs
-    for(int i = 0; i < listIndex-1; i ++) {
-        if(instructionsList[i].direction == instructionsList[i+1].direction) {
-            instructionsList[i].direction = Skip;
-            instructionsList[i].ignoreL = 0;
-            instructionsList[i].ignoreR = 0;
-        }
+    int j = 0;
+    // remove repeated forwards
+        for(int i = 0; i < listIndex; i ++) {
+            if(instructionsList[i].direction != instructionsList[i+1].direction) {
+                finalInstructionList[j].direction = instructionsList[i].direction;
+                finalInstructionList[j].ignoreL = instructionsList[i].ignoreL;
+                finalInstructionList[j].ignoreR = instructionsList[i].ignoreR; // skip all the repeated forwards
+                j++; // move to next element in finalInstructionList
+            }
     }
 }
 
@@ -572,7 +576,7 @@ Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i) 
     targetLocation.col = food_list[i][1];
     dijkstra(map, startLocation, targetLocation); // find shortest path
     getPathInstructions(map,numSteps,startLocation,targetLocation); // populate global instructions list with instructions to traverse path
-    return instructionsList;
+    return finalInstructionList;
 }
 
 /* [] END OF FILE */
