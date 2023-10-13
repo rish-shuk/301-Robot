@@ -298,10 +298,10 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     switch (currentInstructionDirection) {
         case GoForward:
             if(currentDirection == Stop) {
-                if(stopBuffer <= 150) {
+                if(stopBuffer <= 50) {
                     return Stop;
                 } else {
-                    stopBuffer = 170;
+                    stopBuffer = 100;
                 }
             }
             if (s3) {
@@ -348,6 +348,20 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 // return stop
 
             if (turnFinishedFlag) {
+                if (!s3 && !s5 && !s6) {
+                    // we are correctly on the line so go forward until S4 on white
+                    return ForwardCourseCorrection();
+                }
+                if (s5 || s6) {
+                    return SpinCourseCorrection();
+                }
+                if (s3) {
+                    turnFinishedFlag = 0;
+                    MoveToNextInstruction();   
+                    return Stop;  
+                }
+                
+                /*
                 if (s3) {
                     turnFinishedFlag = 0;
                     MoveToNextInstruction();    
@@ -356,6 +370,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 else {
                     return ForwardCourseCorrection();        
                 }
+                */
             }
             
             
@@ -402,6 +417,21 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 // return stop
 
             if (turnFinishedFlag) {
+                if (!s4 && !s5 && !s6) {
+                    // we are correctly on the line so go forward until S4 on white
+                    return ForwardCourseCorrection();
+                }
+                if (s5 || s6) {
+                    return SpinCourseCorrection();
+                }
+                if (s4) {
+                    turnFinishedFlag = 0;
+                    MoveToNextInstruction();   
+                    return Stop;  
+                }
+                
+
+                /*
                 if (s4) {
                     turnFinishedFlag = 0;
                     MoveToNextInstruction();   
@@ -409,7 +439,8 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 }
                 else {
                     return ForwardCourseCorrection();        
-                }
+                }*/
+                
             }
             
             
@@ -610,15 +641,16 @@ void MoveToNextInstruction() {
     currentIgnoreL = 0;
     currentIgnoreR = 0;
     instructionIndex++;
-
-    for (int i = instructionIndex; i < numSteps; i++) {
+    currentIgnoreL = instructionList[instructionIndex].ignoreL;
+    currentIgnoreR = instructionList[instructionIndex].ignoreR;
+    /*for (int i = instructionIndex; i < numSteps; i++) {
         if (instructionList[i].direction != Skip) {
             instructionIndex = i;             
             currentIgnoreL = instructionList[instructionIndex].ignoreL;
             currentIgnoreR = instructionList[instructionIndex].ignoreR;
             break;
         }
-    }
+    }*/
     
     
 }
@@ -626,6 +658,10 @@ void MoveToNextInstruction() {
 Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps]) {
     Instruction nextInstruction;
     // input is list of instructions and robot will react accordingly
+    nextInstruction.direction = instructionList[instructionIndex].direction;        
+    nextInstruction.expectedOrientation = instructionList[instructionIndex].expectedOrientation;
+    
+    /*
     for(int i = instructionIndex; i < numSteps; i++) {
         if(instructionList[i].direction != Skip) {
             nextInstruction.direction = instructionList[i].direction;        
@@ -633,7 +669,7 @@ Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numS
             instructionIndex = i;
             return nextInstruction; // return next instruction
         }
-    }
+    }*/
     return nextInstruction;
 }
 
@@ -664,7 +700,7 @@ void SetRobotMovement() {
             stopMoving();
             break;
         case ForwardAfterTurn:
-            HardForward();
+            moveForward();
             break;
         case Backward:
             moveBackward();

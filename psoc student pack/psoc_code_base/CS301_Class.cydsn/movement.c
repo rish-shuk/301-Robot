@@ -116,7 +116,7 @@ void HardForward() {
     
     int quadPulseCount = 0;
     QuadDec_M1_SetCounter(0);
-    while(quadPulseCount < 50) {
+    while(quadPulseCount < 10) {
         quadPulseCount = QuadDec_M1_GetCounter();
     }
     QuadDec_M1_SetCounter(0);
