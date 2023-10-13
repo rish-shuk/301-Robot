@@ -29,8 +29,8 @@ Instruction currentInstruction;
 int numSteps;
 void traversePath(int numSteps, Instruction instructionList[]);
 Instruction * instructionList; // pointer to array
-uint32 instructionIndex = 0;
-Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps], int instructionIndex);
+volatile static uint32 instructionIndex = 0;
+Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps]);
 float CalculateDistanceToTravel(float blockSize);
 void MoveToNextInstruction();
 // ----------------------------------------
@@ -133,6 +133,15 @@ int main() {
     CYGlobalIntEnable;
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
+    
+    instructionList = findPath(map, food_list, 0);
+    numSteps = instructionsListLength();
+    
+    currentInstruction = GetInstructionAtIndex(numSteps, instructionList);
+    
+    currentIgnoreL = instructionList[instructionIndex].ignoreL;
+    currentIgnoreR = instructionList[instructionIndex].ignoreR;
+    
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
     S3_detected_StartEx(S3_DETECTED);
@@ -140,8 +149,8 @@ int main() {
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-    instructionList = findPath(map, food_list, 0);
-    numSteps = instructionsListLength();
+
+    
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
@@ -318,6 +327,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     }
                     if (currentIgnoreL == 0) {
                         MoveToNextInstruction();
+                        return Stop;
                     }
                 }
             }
@@ -330,35 +340,12 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     }
                     if (currentIgnoreR == 0) {
                         MoveToNextInstruction();
+                        return Stop;
                     }
                     
                 }
             }
-            
-            /*
-            if (!leftStatusFlag) {
-                
-                return Stop;
-                // do ignore decrement and ignore check when under dark 
-                currentIgnoreL = currentIgnoreL - 1;
-                if (currentIgnoreL <= 1) {
-                    MoveToNextInstruction();
-                }
-            }
-            
-            if (!rightStatusFlag) {
-                rightStatusFlag = 1;
-                return Stop;
-                // do ignore decrement and ignore check when under dark 
-                currentIgnoreR = currentIgnoreR - 1;
-                if (currentIgnoreR <= 1) {
-                    MoveToNextInstruction();
-                }    
-            }
-            */
-            
-            
-            
+          
             return ForwardCourseCorrection();
             break;
         case waitForLeftTurn:
@@ -419,7 +406,6 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // if we are turning left already
                 // wait until s5 || s6 are on black
                 // return stop
-            return Backward;
 
             if (turnFinishedFlag) {
                 if (s4) {
@@ -623,27 +609,27 @@ float CalculateDistanceToTravel(float blockSize) {
 // get next instruction
 void MoveToNextInstruction() {
     instructionIndex++;
-    //currentIgnoreL = instructionList[instructionIndex].ignoreL;
-    //currentIgnoreR = instructionList[instructionIndex].ignoreR;
+    currentIgnoreL = instructionList[instructionIndex].ignoreL;
+    currentIgnoreR = instructionList[instructionIndex].ignoreR;
 }
 
-Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps], int instructionIndex) {
+Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps]) {
     Instruction nextInstruction;
     // input is list of instructions and robot will react accordingly
     for(int i = instructionIndex; i < numSteps; i++) {
         if(instructionList[i].direction != Skip) {
             nextInstruction.direction = instructionList[i].direction;        
             nextInstruction.expectedOrientation = instructionList[i].expectedOrientation;
+            instructionIndex = i;
             return nextInstruction; // return next instruction
         }
-        instructionIndex = i;
     }
     return nextInstruction;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    currentInstruction = GetInstructionAtIndex(numSteps, instructionList, instructionIndex); // get current/ next instruction
+    currentInstruction = GetInstructionAtIndex(numSteps, instructionList); // get current/ next instruction
     previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
     // move robot depending on sensors
