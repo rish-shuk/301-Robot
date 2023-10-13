@@ -91,19 +91,7 @@ void moveBackward() {
     PWM_2_WriteCompare(42598); // 65% - Right Wheel Anti Clockwise
 }
 
-void RotateClockwise180Degrees() {
-    uint16 count1 = (32767 + (maxTurningPWM * 0.9));
-    uint16 count2 = (32767 + (maxTurningPWM * 0.9));
-    PWM_1_WriteCompare(count1);
-    PWM_2_WriteCompare(count2);
-    
-    int quadPulseCount = 0;
-    QuadDec_M1_SetCounter(0);
-    while(quadPulseCount < 210) {
-        quadPulseCount = QuadDec_M1_GetCounter();
-    }
-    QuadDec_M1_SetCounter(0);
-}
+
 
 void HardForward() {
     // totalMultiplier = 0.5 + (0.7 * movement_speed_multiplier)

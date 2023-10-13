@@ -48,7 +48,7 @@ int timerInt = 0;
 int keepLedOn = 0;
 // ========================================= FLAGS
 uint32 stopBuffer = 0;
-
+uint16 forwardBuffer = 0;
 volatile static uint8 turnStartedFlag = 0;
 volatile static uint8 turnFinishedFlag = 0;
 
@@ -63,7 +63,17 @@ volatile static uint8 spinCourseCorrectionStarted = 0;
 volatile static uint8 currentIgnoreL = 0;
 volatile static uint8 currentIgnoreR = 1;
 
+void RotateClockwise180Degrees();
+
+volatile static uint8 totalLineCount = 0;
+volatile static uint8 lineCount = 0;
+volatile static uint8 onLineFlag = 0;
+
+volatile static uint8 tooEarlyFlag = 0;
+volatile static uint8 tooLateFlag = 0;
+
 uint8 junctionConfiguration[4] = {0};
+uint8 currentFoodListIndex = 0;
 
 float blockSizeTotal = 0;
 //char map[MAX_ROWS][MAX_COLS]; // global map array- stores the map
@@ -122,6 +132,11 @@ CY_ISR(TIMER_FINISH) {
     } else {
         stopBuffer = 0;
     }
+    if (currentDirection == Forward || currentDirection == AdjustToTheLeft || currentDirection ==  AdjustToTheRight) {
+        forwardBuffer = forwardBuffer + 1;
+    } else {
+        forwardBuffer = 0;    
+    }
     SetRobotMovement(); 
     ResetSensorFlags(); // Reset Sensor Flags for Next rising Eddge
     Timer_LED_ReadStatusRegister();
@@ -134,7 +149,7 @@ int main() {
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     
-    instructionList = findPath(map, food_list, 0);
+    instructionList = findPath(map, food_list, currentFoodListIndex);
     numSteps = instructionsListLength();
     
     currentInstruction = GetInstructionAtIndex(numSteps, instructionList);
@@ -298,7 +313,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     switch (currentInstructionDirection) {
         case GoForward:
             if(currentDirection == Stop) {
-                if(stopBuffer <= 50) {
+                if(stopBuffer <= 25) {
                     return Stop;
                 } else {
                     stopBuffer = 100;
@@ -346,7 +361,12 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // if we are turning left already
                 // wait until s5 || s6 are on black
                 // return stop
-
+            if (!turnStartedFlag) {
+                if (s3) {
+                    return Backward;    
+                }
+            }
+            
             if (turnFinishedFlag) {
                 if (!s3 && !s5 && !s6) {
                     // we are correctly on the line so go forward until S4 on white
@@ -355,28 +375,23 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 if (s5 || s6) {
                     return SpinCourseCorrection();
                 }
-                if (s3) {
-                    turnFinishedFlag = 0;
-                    MoveToNextInstruction();   
-                    return Stop;  
+                if (forwardBuffer <= 10) {
+                    return ForwardCourseCorrection();    
+
+                } else {
+                    forwardBuffer = 100;
+                    if (s3) {
+                        turnFinishedFlag = 0;
+                        MoveToNextInstruction();   
+                        return Stop;  
+                    }
                 }
-                
-                /*
-                if (s3) {
-                    turnFinishedFlag = 0;
-                    MoveToNextInstruction();    
-                    return Stop;
-                }
-                else {
-                    return ForwardCourseCorrection();        
-                }
-                */
             }
             
             
             if (currentDirection == Stop) {
                 // We should be facing a different direction now so we move to the next instruction.    
-                if (stopBuffer <= 50) {
+                if (stopBuffer <= 25) {
                     return Stop;   
                 }
                 return ForwardCourseCorrection();
@@ -415,6 +430,11 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // if we are turning left already
                 // wait until s5 || s6 are on black
                 // return stop
+            if (!turnStartedFlag) {
+                if (s4) {
+                    return Backward;    
+                }
+            }
 
             if (turnFinishedFlag) {
                 if (!s4 && !s5 && !s6) {
@@ -424,29 +444,22 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 if (s5 || s6) {
                     return SpinCourseCorrection();
                 }
-                if (s4) {
-                    turnFinishedFlag = 0;
-                    MoveToNextInstruction();   
-                    return Stop;  
-                }
-                
+                if (forwardBuffer <= 10) {
+                    return ForwardCourseCorrection();    
 
-                /*
-                if (s4) {
-                    turnFinishedFlag = 0;
-                    MoveToNextInstruction();   
-                    return Stop;
+                } else {
+                    forwardBuffer = 100;
+                    if (s4) {
+                        turnFinishedFlag = 0;
+                        MoveToNextInstruction();   
+                        return Stop;  
+                    }
                 }
-                else {
-                    return ForwardCourseCorrection();        
-                }*/
-                
             }
-            
             
             if (currentDirection == Stop) {
                 // We should be facing a different direction now so we move to the next instruction.    
-                if (stopBuffer <= 50) {
+                if (stopBuffer <= 25) {
                     return Stop;   
                 }
 
@@ -488,7 +501,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 totalDistance = 0;
 
                 //blockSizeTotal = CalculateDistanceToTravel(blocksize);
-                blockSizeTotal = blocksize * 2;
+                blockSizeTotal = blocksize * 4;
             }
             
             
@@ -510,10 +523,27 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             forwardUntilTargetStartedFlag = 0;
             blockSizeTotal = 0;
             
-            if (stopBuffer <= 200) {
-                return Stop;    
+            if (currentDirection == Stop) {
+                if (stopBuffer <= 200) {
+                    return Stop;    
+                } else {
+                    stopBuffer = 250;
+                    return TurnRight;
+                }
             }
-            return TurnRight;
+            
+            // RESET EVERYTHING AND FIND NEW PATH FOR NEXT FOOD LIST
+            currentFoodListIndex++;
+            instructionIndex = 0;
+            instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, currentInstruction.expectedOrientation);
+            numSteps = instructionsListLength();
+    
+            currentInstruction = GetInstructionAtIndex(numSteps, instructionList);
+
+            currentIgnoreL = instructionList[instructionIndex].ignoreL;
+            currentIgnoreR = instructionList[instructionIndex].ignoreR;
+            
+            return Stop;
             break;
         case uTurn:
             if (currentDirection == Stop) {
@@ -540,6 +570,10 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // Repeat SpinCourseCorrection until both or one on black
             if (uTurnStartedFlag) {
                 if (!s5 && !s6) {
+                    totalLineCount = 0;
+                    lineCount = 0;
+                    tooEarlyFlag = 0;
+                    tooLateFlag = 0;
                     uTurnFinishedFlag = 1;    
                 }    
             }
@@ -552,7 +586,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     }
     return Stop;
 }
-
+/*
 // Calculate total blocksize to travel until target
 float CalculateDistanceToTravel(float blockSize) {
     float totalBlockSize;
@@ -562,7 +596,7 @@ float CalculateDistanceToTravel(float blockSize) {
     int targetCol = food_list[0][1];
     
     int pathCount = 0;
-    
+    currentRobotOrientation = currentInstruction.expectedOrientation;
     // Depending on the robot orientation
     // count++ if row, col is 8
     // count reset if row, col is 1 or 0
@@ -575,10 +609,10 @@ float CalculateDistanceToTravel(float blockSize) {
                 if (map[i][targetCol] == 9) {
                     break;    
                 }
-                if (map[i][targetCol] == 8) {
+                if (map[i][targetCol] == 0) {
                     pathCount++;    
                 }
-                if (map[i][targetCol] == 0 || map[i][targetCol] == 1) {
+                if (map[i][targetCol] == 1) {
                     pathCount = 0;
                 }
             }
@@ -590,10 +624,10 @@ float CalculateDistanceToTravel(float blockSize) {
                 if (map[i][targetCol] == 9) {
                     break;    
                 }
-                if (map[i][targetCol] == 8) {
+                if (map[i][targetCol] == 0) {
                     pathCount++;    
                 }
-                if (map[i][targetCol] == 0 || map[i][targetCol] == 1) {
+                if (map[i][targetCol] == 1) {
                     pathCount = 0;
                 }
             }
@@ -605,10 +639,10 @@ float CalculateDistanceToTravel(float blockSize) {
                 if (map[targetRow][i] == 9) {
                     break;    
                 }
-                if (map[targetRow][i] == 8) {
+                if (map[targetRow][i] == 0) {
                     pathCount++;    
                 }
-                if (map[targetRow][i] == 0 || map[i][targetCol] == 1) {
+                if (map[i][targetCol] == 1) {
                     pathCount = 0;
                 }
             }
@@ -621,10 +655,10 @@ float CalculateDistanceToTravel(float blockSize) {
                 if (map[targetRow][i] == 9) {
                     break;    
                 }
-                if (map[targetRow][i] == 8) {
+                if (map[targetRow][i] == 0) {
                     pathCount++;    
                 }
-                if (map[targetRow][i] == 0 || map[i][targetCol] == 1) {
+                if (map[i][targetCol] == 1) {
                     pathCount = 0;
                 }
 
@@ -635,7 +669,7 @@ float CalculateDistanceToTravel(float blockSize) {
     clearMap(map); // clear map after calculating total block size to travel for forward until target.
     return totalBlockSize;
 }
-
+*/
 // get next instruction
 void MoveToNextInstruction() {
     currentIgnoreL = 0;
@@ -671,6 +705,59 @@ Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numS
         }
     }*/
     return nextInstruction;
+}
+
+void RotateClockwise180Degrees() {
+    uint16 count1 = (32767 + (6553 * 0.9));
+    uint16 count2 = (32767 + (6553 * 0.9));
+    PWM_1_WriteCompare(count1);
+    PWM_2_WriteCompare(count2);
+    
+    int quadPulseCount = 0;
+    QuadDec_M1_SetCounter(0);
+    // Before 180, save initial configuration
+    if (!s3) {
+        totalLineCount++;    
+    }
+    if (!s4) {
+        totalLineCount++;    
+    }
+    if (!s5 || !s6) {
+        totalLineCount++;    
+    }
+    
+    // During 180
+    while(quadPulseCount < 210) {
+        quadPulseCount = QuadDec_M1_GetCounter();
+        if (!s3) {
+            onLineFlag = 1;    
+        }
+        
+        if (onLineFlag) {
+            lineCount++;    
+        }
+        
+        if (!onLineFlag) {
+            if (s3) {
+                onLineFlag = 0;    
+            }
+        }
+    }
+    
+    // After 180
+    if (totalLineCount == 0) {
+        // we are on no lines
+        tooEarlyFlag = 1;
+        QuadDec_M1_SetCounter(0);
+        return;
+    }
+    else if (lineCount > totalLineCount) {
+        tooLateFlag = 1;    
+    }
+    else if (lineCount < totalLineCount) {
+        tooEarlyFlag = 1;    
+    }
+    QuadDec_M1_SetCounter(0);
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
@@ -721,3 +808,4 @@ void SetRobotMovement() {
             break;  
     }
 }
+
