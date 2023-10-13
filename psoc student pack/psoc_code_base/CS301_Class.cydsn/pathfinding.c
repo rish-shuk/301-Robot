@@ -19,7 +19,7 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Up; // initialize 
 
 static Instruction instructionsList[285];
 static int numSteps = 0;
@@ -73,7 +73,7 @@ int map[15][19] = {
 int start_pos[2] = {1,1};
 
 int food_list[5][2]= {
-{13,17},
+{3,17},
 {5,5},
 {7,1},
 {13,5},
@@ -273,9 +273,27 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                 }
                 if(previousRobotOrientation == Up) {
                     // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n"); // THIS WILL HAVE AN EDGE CASE
+                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < currentRow-targetLocation.row; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow][currentCol - i] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                            if(map[currentRow][currentCol - i] == 9) {
+                                atTarget = 1; // found target with no obstacles before it 
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = GoForward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
                     } else {
                         newDirection = GoForward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -302,14 +320,32 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Down) {
-                    // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n");
-                    } else {
+                   if(targetOrientation == nextStep && targetLocation.row == currentRow) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < targetLocation.row; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow + i][currentCol] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                            if(map[currentRow][currentCol+i] == 9) {
+                                atTarget = 1; // found target with no obstacles before it 
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = GoForward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
+                    }      
+                    else {
                         newDirection = GoForward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
-                    }                    
+                    }
                 }
                 if(previousRobotOrientation == Up) {
                     newDirection = uTurn;
@@ -334,10 +370,27 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Left) {
-                    // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n");
+                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < currentCol-targetLocation.col; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow][currentCol - i] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                            if(map[currentRow][currentCol - i] == 1) {
+                                atTarget = 1; // found target with no obstacles before it
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = GoForward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
                     } else {
                         newDirection = GoForward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -366,10 +419,27 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     ignoreR = 0; // reset ignoreL/ ignoreR
                 }
                 if(previousRobotOrientation == Right) {
-                    // check if we only need to go forward to reach target
-                    if(targetOrientation == nextStep && targetLocation.row == currentRow) {
-                        newDirection = ForwardUntilTarget;
-                        printf("Forward until target\n");
+                    if(targetOrientation == nextStep && targetLocation.col == currentCol) {
+                        int atTarget = 1;
+                        // check if we only need to go forward to reach target
+                        for(int i = 0; i < targetLocation.col; i++) {
+                            // check columns in front to see if there are any obstacles
+                            if(map[currentRow][currentCol + i] == 1) {
+                                atTarget = 0;
+                                break;
+                            }
+                            if(map[currentRow][currentCol + i] == 9) {
+                                atTarget = 1; // found target with no obstacles before it
+                                break;
+                            }
+                        }
+                        if(atTarget) {
+                            newDirection = ForwardUntilTarget;
+                            printf("Forward until target\n");
+                        } else {
+                            newDirection = GoForward;
+                            printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
+                        }
                     } else {
                         newDirection = GoForward;
                         printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);

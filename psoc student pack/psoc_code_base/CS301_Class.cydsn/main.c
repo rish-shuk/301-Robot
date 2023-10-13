@@ -29,8 +29,8 @@ Instruction currentInstruction;
 int numSteps;
 void traversePath(int numSteps, Instruction instructionList[]);
 Instruction * instructionList; // pointer to array
-uint32 instructionIndex = 0;
-Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps], int instructionIndex);
+volatile static uint32 instructionIndex = 0;
+Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps]);
 float CalculateDistanceToTravel(float blockSize);
 void MoveToNextInstruction();
 // ----------------------------------------
@@ -49,12 +49,19 @@ int keepLedOn = 0;
 // ========================================= FLAGS
 uint32 stopBuffer = 0;
 
-uint8 turnStartedFlag = 0;
-uint8 turnFinishedFlag = 0;
+volatile static uint8 turnStartedFlag = 0;
+volatile static uint8 turnFinishedFlag = 0;
 
-uint8 forwardUntilTargetStartedFlag = 0;
-uint8 uTurnStartedFlag = 0;
-uint8 uTurnFinishedFlag = 0;
+volatile static uint8 forwardUntilTargetStartedFlag = 0;
+volatile static uint8 uTurnStartedFlag = 0;
+volatile static uint8 uTurnFinishedFlag = 0;
+
+volatile static uint8 leftStatusFlag = 0;
+volatile static uint8 rightStatusFlag = 0;
+
+volatile static uint8 spinCourseCorrectionStarted = 0;
+volatile static uint8 currentIgnoreL = 0;
+volatile static uint8 currentIgnoreR = 0;
 
 uint8 junctionConfiguration[4] = {0};
 
@@ -121,12 +128,20 @@ CY_ISR(TIMER_FINISH) {
 }
 
 
-int main()
-{
+int main() {
 // ----- INITIALIZATIONS ----------
     CYGlobalIntEnable;
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
+    
+    instructionList = findPath(map, food_list, 0);
+    numSteps = instructionsListLength();
+    
+    currentInstruction = GetInstructionAtIndex(numSteps, instructionList);
+    
+    currentIgnoreL = instructionList[instructionIndex].ignoreL;
+    currentIgnoreR = instructionList[instructionIndex].ignoreR;
+    
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
     S3_detected_StartEx(S3_DETECTED);
@@ -134,8 +149,8 @@ int main()
     S5_detected_StartEx(S5_DETECTED);
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
-    instructionList = findPath(map, food_list, 0);
-    numSteps = instructionsListLength();
+
+    
 // ------USB SETUP ----------------    
 #ifdef USE_USB    
     USBUART_Start(0,USBUART_5V_OPERATION);
@@ -167,8 +182,7 @@ int main()
 
 // Calculations
 //* ========================================
-int16 quadCountToRPM(uint16 count)
-{
+int16 quadCountToRPM(uint16 count) {
     float cps = count/57.00;
     int16 rpm = (int16)(cps*15); // rpm value
     //sprintf(buffer, "%d", rpm); // store in buffer
@@ -190,240 +204,9 @@ float yBlocksize = 80; // 80 mm
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
-/*enum DirectionState GetNextStep() {
-    enum DirectionState directionState;
-    // Determines robot movement and orientation to follow optimal path
-    // enum DirectionState directionState = Stop;
-    previousOrientation = currentOrientation;
-    
-    if(map[currentRow][currentCol] == 9) {
-        directionState = Stop; // reached target
-        return directionState;
-    }
-        
-    switch (previousOrientation) {
-            case Up:
-                if(map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
-                    currentOrientation = Up; 
-                    directionState = Forward;
-                    currentRow--;// update position
-                } else if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
-                    currentOrientation = Left;
-                    directionState = waitForLeftTurn;
-                    //currentRow--;
-                } else if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
-                    currentOrientation = Right;
-                    directionState = waitForRightTurn;
-                    //currentRow++; // update position
-                }
-                break;
-            case Down:
-                if(map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
-                    currentOrientation = Down;
-                    directionState = Forward;
-                    currentRow++;
-                } else if (map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
-                    currentOrientation = Left;
-                    directionState = waitForRightTurn;
-                } else if (map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
-                    currentOrientation = Right;
-                    directionState = waitForLeftTurn;
-                }
-                break;
-            case Left:
-                if(map[currentRow][currentCol - 1] == 8 || map[currentRow][currentCol - 1] == 9) {
-                    currentOrientation = Left;
-                    directionState = Forward;
-                    currentCol--; // update position
-                } else if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
-                    currentOrientation = Up;
-                    directionState = waitForRightTurn;
-                } else if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
-                    currentOrientation = Down;
-                    directionState = waitForLeftTurn;
-                }
-                break;
-            case Right:
-                if(map[currentRow][currentCol + 1] == 8 || map[currentRow][currentCol + 1] == 9) {
-                    currentOrientation = Right;
-                    directionState = Forward;
-                    currentCol++; // update position
-                } else if (map[currentRow - 1][currentCol] == 8 || map[currentRow - 1][currentCol] == 9) {
-                    currentOrientation = Up;
-                    directionState = waitForLeftTurn;
-                    //currentCol++; // update position
-                } else if (map[currentRow + 1][currentCol] == 8 || map[currentRow + 1][currentCol] == 9) {
-                    currentOrientation = Down;
-                    directionState = waitForRightTurn;
-                    //currentCol--; // update position
-                }
-                break;
-            default:
-                break;
-        }
-    
-    return directionState;
-}
-*/
 uint8 stoppedAfterTurn = 0;
 uint8 ignoreSensor = 0;
 // needs to make sure robot is going in the correct direction (supplied from instruction)
-/*
-enum RobotMovement CheckSensorDirection() {
-    float blocksize;
-    if(currentRobotOrientation == Up || currentRobotOrientation == Down) {
-        blocksize = yBlocksize;
-    } else {
-        blocksize = xBlocksize;
-    }
-    //if(currentInstruction)
-    enum RobotMovement directionState = Stop; // initialise state as stop
-    
-    if (stoppedAfterTurn == 1) {
-        if (stopBuffer <= 50) {
-            directionState = Stop; // stop buffer- prevents overturning
-            previousDirection = directionState;
-            return directionState;
-        }
-        //directionState = GetNextStep(); // get next step at each block
-        totalDistance = 0; // reset distance
-        previousDirection = directionState;
-        stoppedAfterTurn = 0;
-        return directionState;
-    }
-    if (totalDistance >= blocksize) {
-        //directionState = GetNextStep(); // get next step at each block
-        totalDistance = 0; // reset distance
-        previousDirection = directionState;
-        return directionState;
-    }
-    
-    // STOP BUFFER * ========================================
-    if (previousDirection == Stop) {
-        if (stopBuffer <= 50) {
-            directionState = Stop; // stop buffer- prevents overturning
-            previousDirection = directionState;
-        } else {
-            //directionState = ForwardAfterTurn;
-        }
-        return directionState;
-    }
-
-    // TURNING * ========================================    
-    if (previousDirection == ForwardAfterTurn) {
-        if (s3 || s4) {
-            //ignoreSensor = 0;
-            //usbPutString("Forward\n");
-            directionState = Forward; // turns when robot has rotated 90º
-            previousDirection = directionState;
-            return directionState;
-        }
-    }
-
-    if(previousDirection == waitForRightTurn) {
-        //ignoreSensor = 0;
-        if(!s4) {
-            //usbPutString("Turn Right\n");
-            directionState = TurnRight;
-            previousDirection = directionState;
-            return directionState;
-        } else {
-            //usbPutString("Wait for Right Turn\n");
-            directionState = waitForRightTurn;
-            previousDirection = directionState;
-            return directionState;
-        }
-    }
-
-    if(previousDirection == waitForLeftTurn) {
-        //ignoreSensor = 0;
-        if(!s3) {
-            //usbPutString("Turn Left\n");
-            directionState = TurnLeft;
-            previousDirection = directionState;
-            return directionState;
-        } else {
-            //usbPutString("Wait for Left Turn\n");
-            directionState = waitForLeftTurn;
-            previousDirection = directionState;
-            return directionState;
-        }
-    }
-
-    if(previousDirection == TurnRight) {
-        if(s5 && s6) {
-            //usbPutString("Turn Right\n");
-            directionState = TurnRight; // keep turning while s5 & s6 are high
-            previousDirection = directionState;
-            return directionState;
-        } 
-        else if (!s5 || !s6) {
-            //ignoreSensor = 1; // ignore turn check after turn completed
-            //usbPutString("Stop after Right Turn");
-            directionState = Stop; // stop turning when s5 & s6 are low
-            totalDistance = 0; // correct/ RESET totalDistance
-            previousDirection = directionState;
-            stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
-            return directionState;
-        }
-    }    
-
-    if(previousDirection == TurnLeft) {
-        if(s5 && s6) {
-            //usbPutString("Turn Left\n");
-            directionState = TurnLeft; // keep turning while s5 & s6 are high
-            previousDirection = directionState;
-            return directionState;
-        } 
-        else if (!s5 || !s6) {
-            //ignoreSensor = 1; // ignore sensor after turn
-           // usbPutString("Stop after Left Turn\n");
-            directionState = Stop; // stop turning when s5 & s6 are low
-            totalDistance = 0; // correct/ RESET totalDistance
-            previousDirection = directionState;
-            stoppedAfterTurn = 1; // set flag- differentiate from stop at targetLocation
-            return directionState;
-        }
-    }
-    
-    // COURSE CORRECTION * ========================================
-    if (previousDirection == Forward || previousDirection == AdjustToTheLeft || previousDirection == AdjustToTheRight) {
-        //ignoreSensor = 0;
-        if(s6) {
-            //usbPutString("Adjust to the left\n");
-            directionState = AdjustToTheLeft; // keep adjusting to the left
-            previousDirection = directionState;
-            return directionState;
-        }
-        if(s5) {
-            //usbPutString("Adjust to the right\n");
-            directionState = AdjustToTheRight; // keep adjusting to the right
-            previousDirection = directionState;
-            return directionState;
-        }
-    }
-    
-    // FORWARD * ========================================
-    if (s3 && s4 && !s5 && !s6) {
-        //usbPutString("Forward\n");
-        directionState = Forward;
-        previousDirection = directionState;
-        return directionState;   
-    }
-
-    // If currentDirection is Unknown, we continue with the previous direction.
-    // However, if the previous direction is also Unknown, we will just move forward.
-    if (previousDirection == Unknown) {
-        directionState = Forward;
-        previousDirection = directionState;
-        return directionState;
-    }
-
-    // Possible reason
-    previousDirection = currentDirection;
-    return previousDirection;
-}
-*/
 
 enum RobotMovement ForwardCourseCorrection();
 enum RobotMovement ForwardCourseCorrection() {
@@ -462,8 +245,8 @@ enum RobotMovement ForwardCourseCorrection() {
 
 enum RobotMovement SpinCourseCorrection();
 
-uint8 spinCourseCorrectionStarted = 0;
 enum RobotMovement lastDirectionAfter180 = Unknown;
+
 enum RobotMovement SpinCourseCorrection() {
     // Set first iteration flag.
     if (!spinCourseCorrectionStarted) {
@@ -474,16 +257,16 @@ enum RobotMovement SpinCourseCorrection() {
     // if S5 and S6 are on black, stop
     if (!s5 && !s6) {
         spinCourseCorrectionStarted = 0;
-        return Backward;
+        return Stop;
     }
     
     // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
     if (s5 && s6) {
         if (lastDirectionAfter180 != TurnLeft) {
-            return Forward;
+            return TurnLeft;
         }
         if (lastDirectionAfter180 != TurnRight) {
-            return Forward;    
+            return TurnRight;    
         }
     }
 
@@ -499,6 +282,7 @@ enum RobotMovement SpinCourseCorrection() {
     // If S5 and S6 condition are GONE, then we will reach this point.
     return Stop;
 }
+
 enum RobotMovement GetMovementAccordingToInstruction() {
     float blocksize;
     if(currentRobotOrientation == Up || currentRobotOrientation == Down) {
@@ -519,24 +303,49 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     
     switch (currentInstructionDirection) {
         case GoForward:
-            // if s3 or s4 go off, check ignoreCount
-            //      if ignoreCount == 0, go to next direction
-            //      return stop
-            if (!s3) {
-                if (currentInstruction.ignoreL <= 0) {
-                    MoveToNextInstruction();
+            if(currentDirection == Stop) {
+                if(stopBuffer <= 100) {
                     return Stop;
+                } else {
+                    stopBuffer = 110;
                 }
-                currentInstruction.ignoreL--;
+            }
+            if (s3) {
+                leftStatusFlag = 1;
             }
             
-            if (!s4) {
-                if (currentInstruction.ignoreR <= 0) {
-                    MoveToNextInstruction();
-                    return Stop;
-                }
-                currentInstruction.ignoreR--;
+            if (s4) {
+                rightStatusFlag = 1;
             }
+            
+            // LEFT WING CHECK =-=-=-=-=-=-=-=-=-=-=
+            if (leftStatusFlag) {
+                if (!s3) {
+                    leftStatusFlag = 0;    
+                    if (currentIgnoreL > 0) {
+                        currentIgnoreL--;    
+                    }
+                    if (currentIgnoreL == 0) {
+                        MoveToNextInstruction();
+                        return Stop;
+                    }
+                }
+            }
+            // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
+            if (rightStatusFlag) {
+                if (!s4) {
+                    rightStatusFlag = 0;
+                    if (currentIgnoreR > 0) {
+                        currentIgnoreR--;    
+                    }
+                    if (currentIgnoreR == 0) {
+                        MoveToNextInstruction();
+                        return Stop;
+                    }
+                    
+                }
+            }
+          
             return ForwardCourseCorrection();
             break;
         case waitForLeftTurn:
@@ -655,21 +464,6 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 blockSizeTotal = blocksize * 3;
             }
             
-            if (!s3) {
-                if (currentInstruction.ignoreL <= 0) {
-                    MoveToNextInstruction();
-                    return Stop;
-                }
-                currentInstruction.ignoreL--;
-            }
-            
-            if (!s4) {
-                if (currentInstruction.ignoreR <= 0) {
-                    MoveToNextInstruction();
-                    return Stop;
-                }
-                currentInstruction.ignoreR--;
-            }
             
             // If totalDistance >= blockSizeTotal then we should be at target
             if (totalDistance >= blockSizeTotal) {
@@ -695,35 +489,34 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             return TurnRight;
             break;
         case uTurn:
-            if (stopBuffer <= 200) {
-                return Stop;    
+            if (currentDirection == Stop) {
+                if (stopBuffer <= 50) {
+                    return Stop;    
+                } else {
+                    stopBuffer = 100;    
+                }
             }
+            
             
             if (!uTurnStartedFlag) {
                 uTurnStartedFlag = 1;
+                spinCourseCorrectionStarted = 0;
                 return Spin180;
-            } else {
-                uTurnStartedFlag = 0;
-                stopBuffer = 0;
-                return Stop;
-                /*
-                // After 180, if we are not on black, then we course correct
-                if (!s5 && !s6) {
-                    uTurnFinishedFlag = 1;    
-                }
-                
-                if (!uTurnFinishedFlag) {
-                    return SpinCourseCorrection();    
-                }
-                
-                if (uTurnFinishedFlag) {
-                    // GetNextInstruction
-                    uTurnFinishedFlag = 0;
-                    uTurnStartedFlag = 0;
-                    return Backward;    
-                }*/
-                return Backward;
+            } 
+            
+            if (uTurnFinishedFlag) {
+                // MOVE TO NEXT INSTRUCTION
+                return Backward;    
             }
+            
+            // Repeat SpinCourseCorrection until both or one on black
+            if (uTurnStartedFlag) {
+                if (!s5 || !s6) {
+                    uTurnFinishedFlag = 1;    
+                }    
+            }
+            
+            return SpinCourseCorrection();
             break;
         default:
             return Stop;
@@ -812,34 +605,34 @@ float CalculateDistanceToTravel(float blockSize) {
         
     }
     totalBlockSize = blockSize * pathCount;
+    clearMap(map); // clear map after calculating total block size to travel for forward until target.
     return totalBlockSize;
 }
 
 // get next instruction
 void MoveToNextInstruction() {
     instructionIndex++;
+    currentIgnoreL = instructionList[instructionIndex].ignoreL;
+    currentIgnoreR = instructionList[instructionIndex].ignoreR;
 }
 
-
-Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps], int instructionIndex) {
+Instruction GetInstructionAtIndex(int numSteps, Instruction instructionList[numSteps]) {
     Instruction nextInstruction;
     // input is list of instructions and robot will react accordingly
     for(int i = instructionIndex; i < numSteps; i++) {
         if(instructionList[i].direction != Skip) {
-            nextInstruction.direction = instructionList[i].direction;
-            nextInstruction.ignoreL = instructionList[i].ignoreL;
-            nextInstruction.ignoreR = instructionList[i].ignoreR;
+            nextInstruction.direction = instructionList[i].direction;        
             nextInstruction.expectedOrientation = instructionList[i].expectedOrientation;
+            instructionIndex = i;
             return nextInstruction; // return next instruction
         }
-        instructionIndex = i;
     }
     return nextInstruction;
 }
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    currentInstruction = GetInstructionAtIndex(numSteps, instructionList, instructionIndex); // get current/ next instruction
+    currentInstruction = GetInstructionAtIndex(numSteps, instructionList); // get current/ next instruction
     previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
     // move robot depending on sensors
