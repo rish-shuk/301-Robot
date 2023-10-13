@@ -17,6 +17,7 @@ typedef struct Instruction {
     enum InstructionDirection direction;
     int ignoreL;
     int ignoreR;
+    int distanceToTarget;
     enum OrientationState expectedOrientation;
 } Instruction;
 
