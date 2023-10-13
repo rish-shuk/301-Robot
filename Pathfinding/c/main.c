@@ -248,7 +248,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward until target\n");
+                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -297,7 +297,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward until target\n");
+                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -349,7 +349,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward %d blocks until target\n", blocksToTarget);
+                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
@@ -399,7 +399,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                         }
                         if(atTarget) {
                             newDirection = ForwardUntilTarget;
-                            printf("Forward until target\n");
+                            printf("Forward %d blocks until target\n", blocksToTarget + 1);
                         } else {
                             newDirection = Forward;
                             printf("Forward; ignore %dL, ignore %dR\n",  ignoreL, ignoreR);
