@@ -2,7 +2,7 @@
 --	Conversion of CS301_Class.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Wed Oct 11 18:08:41 2023
+--	Sat Oct 14 12:50:46 2023
 --
 
 USE cypress.cypress.all;
@@ -1046,7 +1046,7 @@ SIGNAL \SpeedTimer:Net_57\ : bit;
 SIGNAL Net_4413 : bit;
 SIGNAL Net_5665 : bit;
 SIGNAL \SpeedTimer:Net_102\ : bit;
-SIGNAL Net_5435 : bit;
+SIGNAL Net_5444 : bit;
 SIGNAL Net_5666 : bit;
 SIGNAL Net_5389 : bit;
 SIGNAL Net_5391 : bit;
@@ -1059,12 +1059,12 @@ SIGNAL Net_5372 : bit;
 SIGNAL Net_5396 : bit;
 SIGNAL \Timer_LED:Net_102\ : bit;
 SIGNAL \EdgeDetect_3:last\ : bit;
+SIGNAL Net_5435 : bit;
 SIGNAL \EdgeDetect_4:last\ : bit;
 SIGNAL Net_5438 : bit;
 SIGNAL \EdgeDetect_5:last\ : bit;
 SIGNAL Net_5441 : bit;
 SIGNAL \EdgeDetect_6:last\ : bit;
-SIGNAL Net_5444 : bit;
 SIGNAL \QuadDec_M1:Net_1251\\D\ : bit;
 SIGNAL \QuadDec_M1:Cnt16:CounterUDB:prevCapture\\D\ : bit;
 SIGNAL \QuadDec_M1:Cnt16:CounterUDB:overflow_reg_i\\D\ : bit;
@@ -3939,10 +3939,10 @@ SpeedClock:cy_clock_v1_0
 		is_digital=>'1')
 	PORT MAP(clock_out=>Net_4410,
 		dig_domain_out=>open);
-S3_detected:cy_isr_v1_0
+S6_detected:cy_isr_v1_0
 	GENERIC MAP(int_type=>"10",
 		is_nmi=>'0')
-	PORT MAP(int_signal=>Net_5435);
+	PORT MAP(int_signal=>Net_5444);
 Clock_1:cy_clock_v1_0
 	GENERIC MAP(cy_registers=>"",
 		id=>"538b0a8a-8b84-4a2c-ab91-c1c9dc93faf8",
@@ -3973,18 +3973,18 @@ timer_clock:cy_clock_v1_0
 		tc=>\Timer_LED:Net_51\,
 		compare=>\Timer_LED:Net_261\,
 		interrupt=>Net_5372);
-S4_detected:cy_isr_v1_0
-	GENERIC MAP(int_type=>"10",
-		is_nmi=>'0')
-	PORT MAP(int_signal=>Net_5438);
 S5_detected:cy_isr_v1_0
 	GENERIC MAP(int_type=>"10",
 		is_nmi=>'0')
 	PORT MAP(int_signal=>Net_5441);
-S6_detected:cy_isr_v1_0
+S4_detected:cy_isr_v1_0
 	GENERIC MAP(int_type=>"10",
 		is_nmi=>'0')
-	PORT MAP(int_signal=>Net_5444);
+	PORT MAP(int_signal=>Net_5438);
+S3_detected:cy_isr_v1_0
+	GENERIC MAP(int_type=>"10",
+		is_nmi=>'0')
+	PORT MAP(int_signal=>Net_5435);
 isr_Timer_LED:cy_isr_v1_0
 	GENERIC MAP(int_type=>"10",
 		is_nmi=>'0')

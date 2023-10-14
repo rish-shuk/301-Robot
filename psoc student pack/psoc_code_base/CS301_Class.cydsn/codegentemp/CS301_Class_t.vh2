@@ -1,5 +1,5 @@
--- Project:   H:\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CS301_Class.cyprj
--- Generated: 10/11/2023 18:09:53
+-- Project:   H:\Documents\GitHub\301-Robot\psoc student pack\psoc_code_base\CS301_Class.cydsn\CS301_Class.cyprj
+-- Generated: 10/14/2023 12:52:04
 -- PSoC Creator  4.2
 
 ENTITY CS301_Class IS
@@ -600,11 +600,11 @@ ARCHITECTURE __DEFAULT__ OF CS301_Class IS
     ATTRIBUTE Location OF \RF_BT_SELECT:Sync:ctrl_reg\ : LABEL IS "U(0,2)";
     ATTRIBUTE Location OF \SpeedTimer:TimerHW\ : LABEL IS "F(Timer,2)";
     ATTRIBUTE Location OF isr_speed : LABEL IS "[IntrContainer=(0)][IntrId=(19)]";
-    ATTRIBUTE Location OF S3_detected : LABEL IS "[IntrContainer=(0)][IntrId=(0)]";
-    ATTRIBUTE Location OF \Timer_LED:TimerHW\ : LABEL IS "F(Timer,3)";
-    ATTRIBUTE Location OF S4_detected : LABEL IS "[IntrContainer=(0)][IntrId=(1)]";
-    ATTRIBUTE Location OF S5_detected : LABEL IS "[IntrContainer=(0)][IntrId=(2)]";
     ATTRIBUTE Location OF S6_detected : LABEL IS "[IntrContainer=(0)][IntrId=(3)]";
+    ATTRIBUTE Location OF \Timer_LED:TimerHW\ : LABEL IS "F(Timer,3)";
+    ATTRIBUTE Location OF S5_detected : LABEL IS "[IntrContainer=(0)][IntrId=(2)]";
+    ATTRIBUTE Location OF S4_detected : LABEL IS "[IntrContainer=(0)][IntrId=(1)]";
+    ATTRIBUTE Location OF S3_detected : LABEL IS "[IntrContainer=(0)][IntrId=(0)]";
     ATTRIBUTE Location OF isr_Timer_LED : LABEL IS "[IntrContainer=(0)][IntrId=(20)]";
     ATTRIBUTE lib_model OF \QuadDec_M1:Net_1251\ : LABEL IS "macrocell43";
     ATTRIBUTE Location OF \QuadDec_M1:Net_1251\ : LABEL IS "U(3,2)";
@@ -4324,12 +4324,12 @@ BEGIN
             interrupt => Net_4413,
             clock => ClockBlock_BUS_CLK);
 
-    S3_detected:interrupt
+    S6_detected:interrupt
         GENERIC MAP(
             int_type => "10",
             is_nmi => 0)
         PORT MAP(
-            interrupt => Net_5435,
+            interrupt => Net_5444,
             clock => ClockBlock_BUS_CLK);
 
     \Timer_LED:TimerHW\:timercell
@@ -4345,14 +4345,6 @@ BEGIN
             cmp => \Timer_LED:Net_261\,
             irq => Net_5372);
 
-    S4_detected:interrupt
-        GENERIC MAP(
-            int_type => "10",
-            is_nmi => 0)
-        PORT MAP(
-            interrupt => Net_5438,
-            clock => ClockBlock_BUS_CLK);
-
     S5_detected:interrupt
         GENERIC MAP(
             int_type => "10",
@@ -4361,12 +4353,20 @@ BEGIN
             interrupt => Net_5441,
             clock => ClockBlock_BUS_CLK);
 
-    S6_detected:interrupt
+    S4_detected:interrupt
         GENERIC MAP(
             int_type => "10",
             is_nmi => 0)
         PORT MAP(
-            interrupt => Net_5444,
+            interrupt => Net_5438,
+            clock => ClockBlock_BUS_CLK);
+
+    S3_detected:interrupt
+        GENERIC MAP(
+            int_type => "10",
+            is_nmi => 0)
+        PORT MAP(
+            interrupt => Net_5435,
             clock => ClockBlock_BUS_CLK);
 
     isr_Timer_LED:interrupt

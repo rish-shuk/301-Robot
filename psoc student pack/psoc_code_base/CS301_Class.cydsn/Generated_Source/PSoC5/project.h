@@ -77,12 +77,12 @@
 #include "SpeedTimer.h"
 #include "isr_speed.h"
 #include "SpeedClock.h"
-#include "S3_detected.h"
+#include "S6_detected.h"
 #include "timer_clock.h"
 #include "Timer_LED.h"
-#include "S4_detected.h"
 #include "S5_detected.h"
-#include "S6_detected.h"
+#include "S4_detected.h"
+#include "S3_detected.h"
 #include "isr_Timer_LED.h"
 #include "QuadDec_M1_Cnt16.h"
 #include "QuadDec_M2_Cnt16.h"
@@ -91,7 +91,6 @@
 #include "USBUART_Dp_aliases.h"
 #include "USBUART_Dp.h"
 #include "UART_IntClock.h"
-#include "cy_em_eeprom.h"
 #include "core_cm3_psoc5.h"
 #include "CyDmac.h"
 #include "CyFlash.h"
@@ -100,6 +99,7 @@
 #include "cyPm.h"
 #include "CySpc.h"
 #include "cytypes.h"
+#include "cy_em_eeprom.h"
 
 /*[]*/
 

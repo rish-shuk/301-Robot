@@ -44,6 +44,5 @@ uint8_t getTargetOrientation(int targetRow, int targetCol);
 Instruction * processInstructionList(int index);
 uint8_t instructionsListLength(); 
 
-Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i);
-Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i, enum OrientationState orientation);
+Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation);
 #endif /* MAP_FUNCTIONS_H */

@@ -19,7 +19,7 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
+enum OrientationState previousRobotOrientation, currentRobotOrientation; // initialised by function call
 
 static Instruction instructionsList[285];
 static Instruction finalInstructionList[285];
@@ -29,7 +29,6 @@ uint8_t instructionsListLength();
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 uint8_t checkPathDirection(int currentRow, int currentCol);
 uint8_t getTargetOrientation(int targetRow, int targetCol); 
-Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i);
 
 
 int map[15][19] = {
@@ -72,7 +71,8 @@ int map[15][19] = {
 
 
 int start_pos[2] = {1,1};
-int food_list[5][2]= {
+int food_list[6][2]= {
+{1,1},
 {9,1},
 {5,5},
 {1,7},
@@ -106,9 +106,6 @@ void clearMap(int map[MAX_ROWS][MAX_COLS]) {
         }
     }
 }
-
-
-int list_of_optimal_coordinates[285][2]; // ROW, COL
 
 struct Location moves[] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
 
@@ -218,8 +215,6 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
             if (isValidMove(newRow, newCol, MAX_ROWS, MAX_COLS, map) && distances[newRow][newCol] == shortestDist - 1) {
                 map[newRow][newCol] = 8; // mark optimal step
-                list_of_optimal_coordinates[pathIndex][0] = newRow;
-                list_of_optimal_coordinates[pathIndex][1] = newCol;
                 pathIndex++;
                 // reverse array somewhere
 
@@ -260,6 +255,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             newDirection = StopAtTarget; // if next step is the target, call forward until target
             instructionsList[listIndex].direction = newDirection;
             instructionsList[listIndex].distanceToTarget = 0;
+            instructionsList[listIndex].expectedOrientation = previousRobotOrientation;
             instructionsList[listIndex].ignoreL = 0;
             instructionsList[listIndex].ignoreR = 0;
             listIndex++; // returned stop, no need for pathfinding anymore
@@ -454,8 +450,8 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             instructionsList[listIndex].direction = newDirection;
             instructionsList[listIndex].ignoreL = ignoreL;
             instructionsList[listIndex].ignoreR = ignoreR;
-            instructionsList[listIndex].expectedOrientation = previousRobotOrientation;
             instructionsList[listIndex].distanceToTarget = distanceToTarget + 1;
+            instructionsList[listIndex].expectedOrientation = previousRobotOrientation;
             listIndex++;
         }
         numSteps--;
@@ -563,27 +559,15 @@ uint8_t instructionsListLength() {
     return numSteps;
 }
 
-Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i) {
-    //clearMap(map); // clear map between each pass
-    struct Location startLocation, targetLocation;
-    startLocation.row = start_pos[0];
-    startLocation.col = start_pos[1]; // need to change every pass
-    targetLocation.row = food_list[i][0];
-    targetLocation.col = food_list[i][1];
-    dijkstra(map, startLocation, targetLocation); // find shortest path
-    getPathInstructions(map,numSteps,startLocation,targetLocation); // populate global instructions list with instructions to traverse path
-    return finalInstructionList;
-}
-
-Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[5][2], int i, enum OrientationState orientation) {
+Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation) {
     clearMap(map); // clear map between each pass
     // update pathfinding orientation with current robot orientation
     currentRobotOrientation = orientation;
     struct Location startLocation, targetLocation;
-    startLocation.row = food_list[i - 1][0];
-    startLocation.col = food_list[i - 1][1]; // need to change every pass
-    targetLocation.row = food_list[i][0];
-    targetLocation.col = food_list[i][1];
+    startLocation.row = food_list[i][0];
+    startLocation.col = food_list[1][1]; // need to change every pass
+    targetLocation.row = food_list[i + 1][0];
+    targetLocation.col = food_list[i + 1][1];
     dijkstra(map, startLocation, targetLocation); // find shortest path
     getPathInstructions(map,numSteps,startLocation,targetLocation); // populate global instructions list with instructions to traverse path
     return finalInstructionList;

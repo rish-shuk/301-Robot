@@ -30,7 +30,7 @@ int numSteps;
 void traversePath(int numSteps, Instruction instructionList[]);
 Instruction * instructionList; // pointer to array
 volatile static uint32 instructionIndex = 0;
-Instruction GetInstructionAtIndex(int numSteps);
+Instruction GetInstructionAtIndex();
 float CalculateDistanceToTravel(float blockSize);
 void MoveToNextInstruction();
 // ----------------------------------------
@@ -149,10 +149,11 @@ int main() {
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     
-    instructionList = findPath(map, food_list, currentFoodListIndex);
+    // MAKE SURE TO CHANGE ORIENTATION
+    instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, Down); // initialise with starting orientation
     numSteps = instructionsListLength();
     
-    currentInstruction = GetInstructionAtIndex(numSteps);
+    currentInstruction = GetInstructionAtIndex();
     
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
     currentIgnoreR = instructionList[instructionIndex].ignoreR;
@@ -215,7 +216,7 @@ void ResetSensorFlags() {
 }
 
 float xBlocksize = 122; // 122 mm
-float yBlocksize = 75; // 80 mm
+float yBlocksize = 72; // 80 mm
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
@@ -368,7 +369,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     return Stop;    
                 }
                 if (s3) {
-                    return Backward;    
+                    //return Backward;    
                 }
             }
             
@@ -411,7 +412,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                         turnStartedFlag = 0;
                     }
                 }
-                if (!turnStartedFlag && !s3 && (!s5 && !s6)) {
+                if (!turnStartedFlag && !s3 && (!s5 || !s6)) {
                     turnFinishedFlag = 1;
                     firstTurnIteration = 0;
                     return ForwardAfterTurn;
@@ -442,7 +443,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     return Stop;
                 }
                 if (s4) {
-                    return Backward;    
+                    //return Backward;    
                 }
             }
 
@@ -486,7 +487,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                         turnStartedFlag = 0;
                     }
                 }
-                if (!turnStartedFlag && !s4 && (!s5 && !s6)) {
+                if (!turnStartedFlag && !s4 && (!s5 || !s6)) {
                     turnFinishedFlag = 1;
                     return ForwardAfterTurn;
                 }
@@ -536,7 +537,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             blockSizeTotal = 0;
             
             if (currentDirection == Stop) {
-                if (stopBuffer <= 100) {
+                if (stopBuffer <= 1) {
                     return Stop;    
                 } else {
                     stopBuffer = 250;
@@ -544,12 +545,18 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             }
             
             // RESET EVERYTHING AND FIND NEW PATH FOR NEXT FOOD LIST
+            // Make sure index doesn't go over cap
+            // Stop at final location
+            if (currentFoodListIndex == 4) {
+                return Stop;    
+            }
+            
             currentFoodListIndex++;
             instructionIndex = 0;
             instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, currentInstruction.expectedOrientation);
             numSteps = instructionsListLength();
     
-            currentInstruction = GetInstructionAtIndex(numSteps);
+            currentInstruction = GetInstructionAtIndex();
 
             currentIgnoreL = instructionList[instructionIndex].ignoreL;
             currentIgnoreR = instructionList[instructionIndex].ignoreR;
@@ -691,7 +698,7 @@ void MoveToNextInstruction() {
 
 }
 
-Instruction GetInstructionAtIndex(int numSteps) {
+Instruction GetInstructionAtIndex() {
     Instruction nextInstruction;
     // input is list of instructions and robot will react accordingly
     nextInstruction.direction = instructionList[instructionIndex].direction;        
@@ -755,7 +762,8 @@ void RotateClockwise180Degrees() {
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    currentInstruction = GetInstructionAtIndex(numSteps); // get current/ next instruction
+    MoveToNextInstruction();
+    currentInstruction = GetInstructionAtIndex(); // get current/ next instruction
     previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
     // move robot depending on sensors
