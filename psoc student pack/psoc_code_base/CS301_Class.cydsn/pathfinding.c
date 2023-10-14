@@ -73,11 +73,11 @@ int map[15][19] = {
 int start_pos[2] = {1,1};
 int food_list[6][2]= {
 {1,1},
-{9,1},
-{5,5},
-{1,7},
-{5,13},
-{9,9}
+{3,3},
+{1,1},
+{3,3},
+{1,1},
+{3,3}
 };
 /*
 int food_list[5][2]= {
@@ -568,7 +568,7 @@ Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[
     currentRobotOrientation = orientation;
     struct Location startLocation, targetLocation;
     startLocation.row = food_list[i][0];
-    startLocation.col = food_list[1][1]; // need to change every pass
+    startLocation.col = food_list[i][1]; // need to change every pass
     targetLocation.row = food_list[i + 1][0];
     targetLocation.col = food_list[i + 1][1];
     dijkstra(map, startLocation, targetLocation); // find shortest path
