@@ -166,14 +166,6 @@ int main() {
     S6_detected_StartEx(S6_DETECTED);
     Timer_LED_Start();
 
-    
-// ------USB SETUP ----------------    
-#ifdef USE_USB    
-    USBUART_Start(0,USBUART_5V_OPERATION);
-#endif        
-    RF_BT_SELECT_Write(0);
-    
-    //usbPutString("Initialised UART");
     for(;;)
     {
         if(timerInt == 1) {
@@ -184,14 +176,6 @@ int main() {
             //usbPutString(buffer);
             //usbPutString(" ");
         }
-        //handle_usb();
-        if (flag_KB_string == 1)
-        {
-            //usbPutString("Total Distance: ");
-            //sprintf(buffer, "%lu", totalDistance);
-            //usbPutString(buffer);
-            flag_KB_string = 0;
-        }           
     }
     return 0;
 }
@@ -276,6 +260,40 @@ enum RobotMovement SpinCourseCorrection() {
             return TurnLeft;
         }
         if (lastDirectionAfter180 != TurnRight) {
+            return TurnRight;    
+        }
+    }
+
+    // if S5 OR S6 are on white, adjust accordingly
+    if (s5) {
+        return TurnRight;    
+    }
+    if (s6) {
+        return TurnLeft;    
+    }
+   
+    // We should never actually get to this point
+    // If S5 and S6 condition are GONE, then we will reach this point.
+    return Stop;
+}
+enum RobotMovement SpinTurnCourseCorrection();
+enum RobotMovement SpinTurnCourseCorrection() {
+    // if S5 and S6 are on black, move forward
+    if (!s5 && !s6) {
+        if (previousDirection != AdjustToTheLeft) {
+            return TurnLeft;
+        }
+        if (previousDirection != AdjustToTheRight) {
+            return TurnRight;    
+        }
+    }
+    
+    // ATTEMPTED COURSE CORRECTION WHEN BOTH ON WHITE
+    if (s5 && s6) {
+        if (previousDirection != AdjustToTheLeft) {
+            return TurnLeft;
+        }
+        if (previousDirection != AdjustToTheRight) {
             return TurnRight;    
         }
     }

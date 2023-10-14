@@ -466,6 +466,9 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                 finalInstructionList[j].ignoreR = instructionsList[i].ignoreR; // skip all the repeated forwards
                 finalInstructionList[j].expectedOrientation = instructionsList[i].expectedOrientation;
                 finalInstructionList[j].distanceToTarget = instructionsList[i].distanceToTarget;
+                /*if(instructionsList[listIndex-1].direction == StopAtTarget) {
+                    break; // break after 1 StopAtTarget
+                }*/
                 j++; // move to next element in finalInstructionList
             }
     }

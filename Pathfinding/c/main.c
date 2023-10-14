@@ -548,10 +548,10 @@ int getTargetOrientation(int targetRow, int targetCol) {
 int main() {
     struct Location startLocation; 
     startLocation.row = 5;
-    startLocation.col = 13;
+    startLocation.col = 5;
     struct Location targetLocation; // generate random start and target location
-    targetLocation.row = 9;
-    targetLocation.col = 9;
+    targetLocation.row = 1;
+    targetLocation.col = 7;
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
