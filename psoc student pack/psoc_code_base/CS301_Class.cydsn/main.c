@@ -697,7 +697,7 @@ void RotateClockwise180Degrees() {
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    //MoveToNextInstruction(); // debug purposes
+    MoveToNextInstruction(); // debug purposes
     currentInstruction = GetInstructionAtIndex(); // get current/ next instruction
     previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
