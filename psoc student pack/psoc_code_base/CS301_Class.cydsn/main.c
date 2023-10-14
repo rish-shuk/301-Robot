@@ -507,7 +507,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 if (s5 || s6) {
                     return SpinCourseCorrection();
                 }
-                if (forwardBuffer <= 10) {
+                if (forwardBuffer <= 9) {
                     return ForwardCourseCorrection();    
 
                 } else {
@@ -619,7 +619,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             blockSizeTotal = 0;
             
             if (currentDirection == Stop) {
-                if (stopBuffer <= 50) {
+                if (stopBuffer <= 100) {
                     return Stop;    
                 } else {
                     stopBuffer = 250;
