@@ -199,7 +199,7 @@ void ResetSensorFlags() {
     s6 = 0;
 }
 
-float xBlocksize = 122; // 122 mm
+float xBlocksize = 116; // 122 mm
 float yBlocksize = 72; // 80 mm
 uint8 currentRow = 1;
 uint8 currentCol = 1;
@@ -329,6 +329,15 @@ enum RobotMovement GetMovementAccordingToInstruction() {
         //      If Ignore Count = 0, move to next instruction.
     
     enum InstructionDirection currentInstructionDirection = currentInstruction.direction;
+    
+    /*
+    if (instructionList[instructionIndex + 1].direction == uTurn && currentInstructionDirection == ForwardUntilTarget) {
+        if (s5 && s6) {
+            MoveToNextInstruction(); // case to start uTurns when needed. prevents uTurn overshooting
+            return Stop;
+        }
+    }
+    */
     
     switch (currentInstructionDirection) {
         case GoForward:
@@ -697,7 +706,7 @@ void RotateClockwise180Degrees() {
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    MoveToNextInstruction(); // debug purposes
+    //MoveToNextInstruction(); // debug purposes
     currentInstruction = GetInstructionAtIndex(); // get current/ next instruction
     previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
