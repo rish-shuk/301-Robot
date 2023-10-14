@@ -622,90 +622,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
     }
     return Stop;
 }
-/*
-// Calculate total blocksize to travel until target
-float CalculateDistanceToTravel(float blockSize) {
-    float totalBlockSize;
-    
-    // Check for Row, Col that target is 
-    int targetRow = food_list[0][0];
-    int targetCol = food_list[0][1];
-    
-    int pathCount = 0;
-    currentRobotOrientation = currentInstruction.expectedOrientation;
-    // Depending on the robot orientation
-    // count++ if row, col is 8
-    // count reset if row, col is 1 or 0
-    // save count if row, col is 9
-    switch (currentRobotOrientation) {
-        case Up:
-            // Column
-            // Start from Bottom (since we're facing up)
-            for (int i = MAX_ROWS; i >= 0; i--) {
-                if (map[i][targetCol] == 9) {
-                    break;    
-                }
-                if (map[i][targetCol] == 0) {
-                    pathCount++;    
-                }
-                if (map[i][targetCol] == 1) {
-                    pathCount = 0;
-                }
-            }
-            break;
-        case Down:
-            // Target Column, Check Row
-            // Start from Top
-            for (int i = 0; i < MAX_ROWS; i++) {
-                if (map[i][targetCol] == 9) {
-                    break;    
-                }
-                if (map[i][targetCol] == 0) {
-                    pathCount++;    
-                }
-                if (map[i][targetCol] == 1) {
-                    pathCount = 0;
-                }
-            }
-            break;
-        case Left:
-            // Target Row, Check Col
-            // Start from Right
-            for (int i = MAX_COLS; i >= 0; i--) {
-                if (map[targetRow][i] == 9) {
-                    break;    
-                }
-                if (map[targetRow][i] == 0) {
-                    pathCount++;    
-                }
-                if (map[i][targetCol] == 1) {
-                    pathCount = 0;
-                }
-            }
-            break;
-        
-        case Right:
-            // Target Row, Check Col
-            // Start from Left
-            for (int i = 0; i < MAX_COLS; i++) {
-                if (map[targetRow][i] == 9) {
-                    break;    
-                }
-                if (map[targetRow][i] == 0) {
-                    pathCount++;    
-                }
-                if (map[i][targetCol] == 1) {
-                    pathCount = 0;
-                }
 
-            }
-            break;
-    }
-    totalBlockSize = blockSize * pathCount;
-    clearMap(map); // clear map after calculating total block size to travel for forward until target.
-    return totalBlockSize;
-}
-*/
 // get next instruction
 void MoveToNextInstruction() {
     currentIgnoreL = 0;
@@ -780,7 +697,7 @@ void RotateClockwise180Degrees() {
 
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
-    MoveToNextInstruction();
+    //MoveToNextInstruction(); // debug purposes
     currentInstruction = GetInstructionAtIndex(); // get current/ next instruction
     previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
@@ -816,14 +733,7 @@ void SetRobotMovement() {
         case Spin180:
             RotateClockwise180Degrees();
             break;
-        /*case waitForLeftTurn:
-            moveForward();
-            break;
-        case waitForRightTurn:
-            moveForward();
-            break;*/
         case Unknown:
-            // UNKNOWN CONFIGURATION
             break;  
     }
 }
