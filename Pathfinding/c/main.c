@@ -8,7 +8,7 @@
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 int numSteps = 0;
-
+int finalListIndex = 0;
 void printMap(int map[MAX_ROWS][MAX_COLS]) {
     // Print the map in a grid format
     for (int i = 0; i < MAX_ROWS; i++) {
@@ -178,20 +178,21 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
 
 enum InstructionDirection {Forward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
 enum OrientationState {Up, Down, Left, Right};
-enum OrientationState previousRobotOrientation, currentRobotOrientation = Up; // initialize 
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Down; // initialize 
 enum InstructionDirection Instructions[285];
 typedef struct Instruction {
     enum InstructionDirection direction;
     int ignoreR;
     int ignoreL;
     int distanceToTarget;
+    enum OrientationState orientation;
 } Instruction;
 
 // PATHFINDING PROCESSING *====================
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 int checkPathDirection(int currentRow, int currentCol);
 int getTargetOrientation(int targetRow, int targetCol); 
-void processInstructionList(int index);
+void processInstructionList();
 
 int ignoreR = 0, ignoreL = 0;
 static struct Instruction instructionsList[285]; // list to store instructions
@@ -274,6 +275,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     printf("U-turn\n");
                 }
                 currentRow--; // jump to new location
+                instructionsList[listIndex].orientation = Down;
                 break;
             case 1: // next step is down
                 currentRobotOrientation = Down;
@@ -326,6 +328,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     printf("U-turn\n");
                 }
                 currentRow++;
+                instructionsList[listIndex].orientation = Down;
                 break;
             case 2: // next step is left
                 currentRobotOrientation = Left;
@@ -377,6 +380,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     printf("U-turn\n");
                 }
                 currentCol--;
+                instructionsList[listIndex].direction = Left;
                 break;
             case 3: // next step is right
                 currentRobotOrientation = Right;
@@ -428,6 +432,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
                     printf("U-turn\n");
                 }
                 currentCol++;
+                instructionsList[listIndex].orientation = Right;
                 break;
             default:
                 break;
@@ -442,21 +447,23 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         }
         numSteps--; // decrement numSteps
     }
-    processInstructionList(listIndex);
+    processInstructionList();
 }
 static Instruction finalInstructionList[285];
 
-void processInstructionList(int index) {
-    int j = 0;
+void processInstructionList() {
     // remove repeated forwards
-        for(int i = 0; i < index; i ++) {
-            if(instructionsList[i].direction != instructionsList[i+1].direction) {
-                finalInstructionList[j].direction = instructionsList[i].direction;
-                finalInstructionList[j].ignoreL = instructionsList[i].ignoreL;
-                finalInstructionList[j].ignoreR = instructionsList[i].ignoreR; // skip all the repeated forwards
-                finalInstructionList[j].distanceToTarget = instructionsList[i].distanceToTarget; // accounts for the block we're currently in
-                j++; // move to next element in finalInstructionList
+    for(int i = finalListIndex; i < 285; i ++) {
+        if(instructionsList[i].direction != instructionsList[i+1].direction) {
+            finalInstructionList[finalListIndex].direction = instructionsList[i].direction;
+            finalInstructionList[finalListIndex].ignoreL = instructionsList[i].ignoreL;
+            finalInstructionList[finalListIndex].ignoreR = instructionsList[i].ignoreR; // skip all the repeated forwards
+            finalInstructionList[finalListIndex].distanceToTarget = instructionsList[i].distanceToTarget; // accounts for the block we're currently in
+            finalListIndex++; // update list index for future additions to list
+            if(finalInstructionList[finalListIndex-1].direction == StopAtTarget) {
+                break; // no need to continue after stop at target direction is given
             }
+        }
     }
 }
 
@@ -547,29 +554,22 @@ int getTargetOrientation(int targetRow, int targetCol) {
 
 int main() {
     struct Location startLocation; 
-    startLocation.row = 5;
-    startLocation.col = 5;
+    startLocation.row = food_list[0][0];
+    startLocation.col = food_list[0][1];
     struct Location targetLocation; // generate random start and target location
     targetLocation.row = 1;
     targetLocation.col = 7;
-    printf("\n");
-    printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
-    printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
-    dijkstra(map, startLocation, targetLocation); // find shortest path
-    // get list of coordinates of path
-    printMap(map);
-    getPathInstructions(map, numSteps, startLocation, targetLocation); // edit list of instructions
-    clearMap(map);
-    /*printf("\n");
-    startLocation.row = 3;
-    startLocation.col = 3;
-    targetLocation.row = 1;
-    targetLocation.col = 1;
-    dijkstra(map, startLocation, targetLocation);
-    printMap(map);
-    getPathInstructions(map, numSteps, startLocation, targetLocation);*/
 
-    // can add some logic to skip multiple forward calls- only check the last one
-
-    return 0;
+    for(int i = 0; i < 5; i++) {
+        startLocation.row = food_list[i][0];
+        startLocation.col = food_list[i][1];
+        targetLocation.row = food_list[i+1][0];
+        targetLocation.col = food_list[i+1][1]; // set start and target orientations
+        // make sure to pass the current orientation into every pass
+        clearMap(map); // clear map in between each pass
+        dijkstra(map, startLocation, targetLocation); // calculate path
+        getPathInstructions(map, numSteps, startLocation, targetLocation); // get instructions
+        processInstructionList();
+    }
+    return finalInstructionList;
 }

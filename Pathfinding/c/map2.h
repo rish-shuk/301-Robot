@@ -38,8 +38,9 @@ int map[15][19] = {
 
 //unsigned int start_pos[2] = {1,1};
 
-unsigned int food_list[5][2]= {
-	{1,9},
+unsigned int food_list[6][2]= {
+	{1,1},
+	{9,1},
 	{5,5},
 	{7,1},
 	{13,5},
