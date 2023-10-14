@@ -62,7 +62,7 @@ volatile static uint8 rightStatusFlag = 0;
 
 volatile static uint8 spinCourseCorrectionStarted = 0;
 volatile static uint8 currentIgnoreL = 0;
-volatile static uint8 currentIgnoreR = 1;
+volatile static uint8 currentIgnoreR = 0;
 
 void RotateClockwise180Degrees();
 
@@ -72,6 +72,9 @@ volatile static uint8 onLineFlag = 0;
 
 volatile static uint8 tooEarlyFlag = 0;
 volatile static uint8 tooLateFlag = 0;
+
+volatile static uint8 dontOverwriteRightIgnore = 0;
+volatile static uint8 dontOverwriteLeftIgnore = 0;
 
 uint8 junctionConfiguration[4] = {0};
 uint8 currentFoodListIndex = 0;
@@ -316,8 +319,8 @@ enum RobotMovement SpinTurnCourseCorrection() {
 }
 
 uint8 firstTurnIteration = 0;
-volatile static uint8 uTurnIgnoreL = 0;
-volatile static uint8 uTurnIgnoreR = 0;
+volatile static uint8 forwardAfterTurnLIgnore = 0;
+volatile static uint8 forwardAfterTurnRIgnore = 0;
 
 enum RobotMovement GetMovementAccordingToInstruction() {
     float blocksize;
@@ -368,48 +371,39 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
-                    if (previousInstruction.direction == uTurn) {
-                        if (uTurnIgnoreR == 0) {
+                    if (forwardAfterTurnLIgnore > 0) {
+                        forwardAfterTurnLIgnore--;
+                    } else {
+                        if (currentIgnoreL == 0) {
                             MoveToNextInstruction();
                             return Stop;
                         }
-                        if (uTurnIgnoreR > 0) {
-                            uTurnIgnoreR--;    
+                        if (currentIgnoreL > 0) {
+                            currentIgnoreL--;    
                         }
-                    }
-                    
-                    if (currentIgnoreL == 0) {
-                        MoveToNextInstruction();
-                        return Stop;
-                    }
-                    if (currentIgnoreL > 0) {
-                        currentIgnoreL--;    
                     }
                 }
             }
             // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
             if (rightStatusFlag) {
                 if (!s4) {
-                    rightStatusFlag = 0;
-                    if (previousInstruction.direction == uTurn) {
-                        if (uTurnIgnoreL == 0) {
+                    rightStatusFlag = 0;           
+                    if (forwardAfterTurnRIgnore > 0) {
+                        forwardAfterTurnRIgnore--;
+                    } else {
+                        if (currentIgnoreR == 0) {
                             MoveToNextInstruction();
                             return Stop;
                         }
-                        if (uTurnIgnoreL > 0) {
-                            uTurnIgnoreL--;    
+                        if (currentIgnoreR > 0) {
+                            currentIgnoreR--;   
                         }
                     }
                     
-                    if (currentIgnoreR == 0) {
-                        MoveToNextInstruction();
-                        return Stop;
-                    }
-                    if (currentIgnoreR > 0) {
-                        currentIgnoreR--;    
-                    }
                 }
+                   
             }
+            
           
             return ForwardCourseCorrection();
             break;
@@ -419,6 +413,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 // wait until s5 || s6 are on black
                 // return stop
             if (!firstTurnIteration) {
+                
                 if (!s3) {
                     firstTurnIteration = 1;
                     return Stop;    
@@ -494,6 +489,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 // wait until s5 || s6 are on black
                 // return stop
             if (!firstTurnIteration) {
+                
                 if (!s4) {
                     firstTurnIteration = 1; 
                     return Stop;
@@ -563,7 +559,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // Otherwise, keep going forward
             return ForwardCourseCorrection(); 
             break;
-        case ForwardUntilTarget:
+        case ForwardUntilTarget:       
             // Reset distance on first iteration of this instruction
             if (!forwardUntilTargetStartedFlag) {
                 forwardUntilTargetStartedFlag = 1;
@@ -586,14 +582,16 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
-                    uTurnIgnoreR++;
+                    forwardAfterTurnRIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
+                    return Backward;
                 }
             }
             // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
             if (rightStatusFlag) {
                 if (!s4) {
                     rightStatusFlag = 0;
-                    uTurnIgnoreL++;
+                    forwardAfterTurnLIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
+                    return Backward; // CHEECK IF CONDITION IS ACTUALLY BEING FULFILLED
                 }
             }
             // FLAG CHECKS FOR UTURN STATE
@@ -621,7 +619,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             blockSizeTotal = 0;
             
             if (currentDirection == Stop) {
-                if (stopBuffer <= 1) {
+                if (stopBuffer <= 50) {
                     return Stop;    
                 } else {
                     stopBuffer = 250;
@@ -695,7 +693,9 @@ enum RobotMovement GetMovementAccordingToInstruction() {
 void MoveToNextInstruction() {
     currentIgnoreL = 0;
     currentIgnoreR = 0;
+
     instructionIndex++;
+    
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
     currentIgnoreR = instructionList[instructionIndex].ignoreR;
 
