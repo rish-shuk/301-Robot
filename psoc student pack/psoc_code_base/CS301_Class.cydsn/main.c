@@ -26,6 +26,7 @@ enum RobotMovement currentDirection, previousDirection = Forward;
 enum RobotMovement GetMovementAccordingToInstruction();
 enum OrientationState currentRobotOrientation, previousOrientation = Down;
 Instruction currentInstruction;
+Instruction previousInstruction;
 int numSteps;
 void traversePath(int numSteps, Instruction instructionList[]);
 Instruction * instructionList; // pointer to array
@@ -132,7 +133,10 @@ CY_ISR(TIMER_FINISH) {
     } else {
         stopBuffer = 0;
     }
-    if (currentDirection == Forward || currentDirection == AdjustToTheLeft || currentDirection ==  AdjustToTheRight) {
+    if (currentDirection == Forward || 
+        currentDirection == AdjustToTheLeft ||
+        currentDirection ==  AdjustToTheRight || 
+        currentDirection == ForwardAfterTurn) {
         forwardBuffer = forwardBuffer + 1;
     } else {
         forwardBuffer = 0;    
@@ -312,6 +316,9 @@ enum RobotMovement SpinTurnCourseCorrection() {
 }
 
 uint8 firstTurnIteration = 0;
+volatile static uint8 uTurnIgnoreL = 0;
+volatile static uint8 uTurnIgnoreR = 0;
+
 enum RobotMovement GetMovementAccordingToInstruction() {
     float blocksize;
     if(currentInstruction.expectedOrientation == Up || currentInstruction.expectedOrientation == Down) {
@@ -356,10 +363,21 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 rightStatusFlag = 1;
             }
             
+            
             // LEFT WING CHECK =-=-=-=-=-=-=-=-=-=-=
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
+                    if (previousInstruction.direction == uTurn) {
+                        if (uTurnIgnoreR == 0) {
+                            MoveToNextInstruction();
+                            return Stop;
+                        }
+                        if (uTurnIgnoreR > 0) {
+                            uTurnIgnoreR--;    
+                        }
+                    }
+                    
                     if (currentIgnoreL == 0) {
                         MoveToNextInstruction();
                         return Stop;
@@ -373,6 +391,16 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (rightStatusFlag) {
                 if (!s4) {
                     rightStatusFlag = 0;
+                    if (previousInstruction.direction == uTurn) {
+                        if (uTurnIgnoreL == 0) {
+                            MoveToNextInstruction();
+                            return Stop;
+                        }
+                        if (uTurnIgnoreL > 0) {
+                            uTurnIgnoreL--;    
+                        }
+                    }
+                    
                     if (currentIgnoreR == 0) {
                         MoveToNextInstruction();
                         return Stop;
@@ -442,6 +470,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 if (!turnStartedFlag && !s3 && (!s5 || !s6)) {
                     turnFinishedFlag = 1;
                     firstTurnIteration = 0;
+                    totalDistance = 0;
                     return ForwardAfterTurn;
                 }
                 else
@@ -516,6 +545,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 }
                 if (!turnStartedFlag && !s4 && (!s5 || !s6)) {
                     turnFinishedFlag = 1;
+                    totalDistance = 0;
                     return ForwardAfterTurn;
                 }
                 else
@@ -537,20 +567,47 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // Reset distance on first iteration of this instruction
             if (!forwardUntilTargetStartedFlag) {
                 forwardUntilTargetStartedFlag = 1;
-                totalDistance = 0;
-
+                //uTurnIgnoreL = 0;
+                //uTurnIgnoreR = 0;
                 //blockSizeTotal = CalculateDistanceToTravel(blocksize);
                 int blocksToTarget = currentInstruction.distanceToTarget;
                 blockSizeTotal = blocksize * blocksToTarget;
             }
             
+            if (s3) {
+                leftStatusFlag = 1;
+            }
+            
+            if (s4) {
+                rightStatusFlag = 1;
+            }
+            // FLAG CHECKS FOR UTURN STATE
+            // LEFT WING CHECK =-=-=-=-=-=-=-=-=-=-=
+            if (leftStatusFlag) {
+                if (!s3) {
+                    leftStatusFlag = 0;    
+                    uTurnIgnoreR++;
+                }
+            }
+            // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
+            if (rightStatusFlag) {
+                if (!s4) {
+                    rightStatusFlag = 0;
+                    uTurnIgnoreL++;
+                }
+            }
+            // FLAG CHECKS FOR UTURN STATE
             
             // If totalDistance >= blockSizeTotal then we should be at target
-            if (totalDistance >= blockSizeTotal) {
+            if (totalDistance >= blockSizeTotal && (currentInstruction.ignoreL > 0 && currentInstruction.ignoreR > 0)) {
                 // Get next instruction
                 MoveToNextInstruction();
 
                 
+                return Stop;
+            }
+            else if (totalDistance >= blockSizeTotal || (currentInstruction.ignoreL == 0 || currentInstruction.ignoreR == 0)) {
+                MoveToNextInstruction();
                 return Stop;
             }
             
@@ -608,6 +665,8 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             
             if (uTurnFinishedFlag) {
                 // MOVE TO NEXT INSTRUCTION
+                uTurnFinishedFlag = 0;
+                uTurnStartedFlag = 0;
                 MoveToNextInstruction();
                 return Stop;    
             }
@@ -707,6 +766,7 @@ void RotateClockwise180Degrees() {
 // Sets robot movement direction state according to currentDirection which is set by Check
 void SetRobotMovement() {
     //MoveToNextInstruction(); // debug purposes
+    previousInstruction = currentInstruction;
     currentInstruction = GetInstructionAtIndex(); // get current/ next instruction
     previousDirection = currentDirection;
     currentDirection = GetMovementAccordingToInstruction(); // check sensors, adjust robot movement
