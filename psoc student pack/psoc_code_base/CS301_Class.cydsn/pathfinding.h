@@ -41,7 +41,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
 uint8_t checkPathDirection(int currentRow, int currentCol);
 uint8_t getTargetOrientation(int targetRow, int targetCol); 
-Instruction * processInstructionList(int index);
+void processInstructionList();
 uint8_t instructionsListLength(); 
 
 Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation);

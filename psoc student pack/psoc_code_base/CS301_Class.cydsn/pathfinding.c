@@ -461,21 +461,20 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         }
         numSteps--;
     }
-    // process list, remove repeated forward outputs
-    int j = 0;
-    // remove repeated forwards
-        for(int i = 0; i < listIndex; i ++) {
-            if(instructionsList[i].direction != instructionsList[i+1].direction) {
-                finalInstructionList[j].direction = instructionsList[i].direction;
-                finalInstructionList[j].ignoreL = instructionsList[i].ignoreL;
-                finalInstructionList[j].ignoreR = instructionsList[i].ignoreR; // skip all the repeated forwards
-                finalInstructionList[j].expectedOrientation = instructionsList[i].expectedOrientation;
-                finalInstructionList[j].distanceToTarget = instructionsList[i].distanceToTarget;
-                /*if(instructionsList[listIndex-1].direction == StopAtTarget) {
-                    break; // break after 1 StopAtTarget
-                }*/
-                j++; // move to next element in finalInstructionList
-            }
+}
+
+void processInstructionList() {
+    // process instruction list, remove repeated forwards
+    int finalListIndex = 0;
+    for(int i = 0; i < 285; i++) {
+        if(instructionsList[i].direction != instructionsList[i+1].direction) {
+            finalInstructionList[finalListIndex].direction = instructionsList[i].direction; // update direction
+            finalInstructionList[finalListIndex].expectedOrientation = instructionsList[i].expectedOrientation; // update orientation
+            finalInstructionList[finalListIndex].ignoreL = instructionsList[i].ignoreL;
+            finalInstructionList[finalListIndex].ignoreR = instructionsList[i].ignoreR; // update ignores
+            finalInstructionList[finalListIndex].distanceToTarget = instructionsList[i].distanceToTarget; // accounts for the block we're currently in
+            finalListIndex++; // only increment if an instruction is added
+        }
     }
 }
 
@@ -568,16 +567,18 @@ uint8_t instructionsListLength() {
 }
 
 Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation) {
-    clearMap(map); // clear map between each pass
-    // update pathfinding orientation with current robot orientation
-    currentRobotOrientation = orientation;
     struct Location startLocation, targetLocation;
-    startLocation.row = food_list[i][0];
-    startLocation.col = food_list[i][1]; // need to change every pass
-    targetLocation.row = food_list[i + 1][0];
-    targetLocation.col = food_list[i + 1][1];
-    dijkstra(map, startLocation, targetLocation); // find shortest path
-    getPathInstructions(map,numSteps,startLocation,targetLocation); // populate global instructions list with instructions to traverse path
+    for(int i = 0; i < 5; i++) {
+        clearMap(map);
+        currentRobotOrientation = orientation;
+        startLocation.row = food_list[i][0];
+        startLocation.col = food_list[i][1]; // need to change every pass
+        targetLocation.row = food_list[i + 1][0];
+        targetLocation.col = food_list[i + 1][1];
+        dijkstra(map, startLocation, targetLocation); // find shortest path
+        getPathInstructions(map,numSteps,startLocation,targetLocation); // populate global instructions list with instructions to traverse path
+    }
+    processInstructionList(); // process list, clean up repeated and redundant forward instructions
     return finalInstructionList;
 }
 
