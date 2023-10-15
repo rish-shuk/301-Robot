@@ -371,7 +371,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
-                    if (forwardAfterTurnLIgnore > 0) {
+                    if (currentIgnoreL != 0 && forwardAfterTurnLIgnore > 0) {
                         forwardAfterTurnLIgnore--;
                     } else {
                         if (currentIgnoreL == 0) {
@@ -388,7 +388,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (rightStatusFlag) {
                 if (!s4) {
                     rightStatusFlag = 0;           
-                    if (forwardAfterTurnRIgnore > 0) {
+                    if (currentIgnoreR != 0 && forwardAfterTurnRIgnore > 0) {
                         forwardAfterTurnRIgnore--;
                     } else {
                         if (currentIgnoreR == 0) {
@@ -580,7 +580,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             // FLAG CHECKS FOR UTURN STATE
             // LEFT WING CHECK =-=-=-=-=-=-=-=-=-=-=
             if (leftStatusFlag) {
-                if (!s3) {
+                if (currentInstruction.ignoreL == 0 && !s3) {
                     leftStatusFlag = 0;    
                     forwardAfterTurnRIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
                     return Backward;
@@ -588,7 +588,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             }
             // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
             if (rightStatusFlag) {
-                if (!s4) {
+                if (currentInstruction.ignoreR == 0 && !s4) {
                     rightStatusFlag = 0;
                     forwardAfterTurnLIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
                     return Backward; // CHEECK IF CONDITION IS ACTUALLY BEING FULFILLED
