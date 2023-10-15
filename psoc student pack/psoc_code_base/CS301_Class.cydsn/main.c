@@ -155,9 +155,9 @@ int main() {
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     
     // MAKE SURE TO INITIALISE CORRECT ORIENTATION
-    instructionList = findPath(map, food_list, currentFoodListIndex, Down); // initialise with starting orientation
+    instructionList = findPath(map, food_list, currentFoodListIndex, Up); // initialise with starting orientation
     
-    currentInstruction = GetInstructionAtIndex(); // initialise instructiony
+    currentInstruction = GetInstructionAtIndex(); // initialise instruction
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
     currentIgnoreR = instructionList[instructionIndex].ignoreR; // initialise ignores
     
@@ -360,7 +360,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                             if (forwardAfterTurnLIgnore > 0) {
                                 forwardAfterTurnLIgnore--;
                             } else {
-                                //MoveToNextInstruction();
+                                //MoveToNextInstruction(); // uncommented
                                 return Stop;
                             }
                         }
@@ -381,7 +381,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                             if (forwardAfterTurnRIgnore > 0) {
                                 forwardAfterTurnRIgnore--;
                             } else {
-                                //MoveToNextInstruction();
+                                //MoveToNextInstruction(); // uncommented
                                 return Stop;
                             }
                         }

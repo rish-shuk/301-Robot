@@ -19,7 +19,7 @@
 #define MAX_ROWS 15
 #define MAX_COLS 19
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
-enum OrientationState previousRobotOrientation, currentRobotOrientation; // initialised by function call
+enum OrientationState previousRobotOrientation, currentRobotOrientation = Down;
 
 static Instruction instructionsList[285];
 static Instruction finalInstructionList[285];
@@ -55,11 +55,11 @@ int map[15][19] = {
 
 int food_list[6][2]= {
 {1,1}, // first element is our start position
-{9,1},
-{5,5},
-{1,7},
-{5,13},
-{9,9}
+{2,17},
+{1,1},
+{2,17},
+{1,1},
+{2,17}
 };
 
 // MAP INITIALISATION CODE
@@ -537,11 +537,11 @@ uint8_t instructionsListLength() {
 Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation) {
     struct Location startLocation, targetLocation;
     for(int i = 0; i < 5; i++) {
-        clearMap(map);
-        currentRobotOrientation = orientation;
+        clearMap(map); // clear map on every pass
+        currentRobotOrientation = previousRobotOrientation; // get current orientation
         startLocation.row = food_list[i][0];
         startLocation.col = food_list[i][1]; // need to change every pass
-        targetLocation.row = food_list[i + 1][0];
+        targetLocation.row = food_list[i + 1][0]; 
         targetLocation.col = food_list[i + 1][1];
         dijkstra(map, startLocation, targetLocation); // find shortest path
         getPathInstructions(map,numSteps,startLocation,targetLocation); // populate global instructions list with instructions to traverse path
