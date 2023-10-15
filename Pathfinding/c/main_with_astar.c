@@ -527,8 +527,10 @@ int main() {
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
-    astar(map, start, target); // find shortest path
-    //dijkstra(map, startLocation, targetLocation);
+    //printf("a*:\n");
+    //astar(map, start, target); // find shortest path
+    printf("dijkstra's:\n");
+    dijkstra(map, startLocation, targetLocation);
     // traverseMap(map, startLocation, targetLocation);
     return 0;
 }
