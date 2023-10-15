@@ -514,16 +514,21 @@ int main() {
     char map[MAX_ROWS][MAX_COLS];
     readMap("map_1.txt", map);
     //printMap(map);
-    struct Location startLocation = getRandomLocation(map); 
-    struct Location targetLocation = getRandomLocation(map); // generate random start and target location
+    //struct Location startLocation = getRandomLocation(map); 
+    //struct Location targetLocation = getRandomLocation(map); // generate random start and target location
+    struct Location startLocation, targetLocation;
+    startLocation.row = 1;
+    startLocation.col = 1;
+    targetLocation.row = 7;
+    targetLocation.col = 1;
     Position start = {.x = startLocation.col, .y = startLocation.row};
     Position target = {.x = targetLocation.col, .y = targetLocation.row};
     printf("\n");
     printf("Start location: %d , %d\n", startLocation.row, startLocation.col);
     printf("Target location: %d , %d\n", targetLocation.row, targetLocation.col); // print start and target location
 
-    //astar(map, start, target); // find shortest path
-    dijkstra(map, startLocation, targetLocation);
+    astar(map, start, target); // find shortest path
+    //dijkstra(map, startLocation, targetLocation);
     // traverseMap(map, startLocation, targetLocation);
     return 0;
 }

@@ -7,7 +7,7 @@
 % plotmap(m,s) 
 
 % write your own function for the DFS algorithm.
-function [retmap,retvisited,retsteps] = dfs( mapfile,startlocation,targetlocation)
+function [retmap,retvisited,retsteps] = dfs(mapfile,startlocation,targetlocation)
     map = map_convert(mapfile);
     [rows, cols] = size(map);
     visitedMap = ones(rows, cols);
