@@ -176,7 +176,7 @@ void dijkstra(int map[MAX_ROWS][MAX_COLS], struct Location startlocation, struct
     }
 }
 
-enum InstructionDirection {Forward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget, Skip};
+enum InstructionDirection {Forward, waitForLeftTurn, waitForRightTurn, uTurn, ForwardUntilTarget, StopAtTarget};
 enum OrientationState {Up, Down, Left, Right};
 enum OrientationState previousRobotOrientation, currentRobotOrientation = Up; // initialize 
 enum InstructionDirection Instructions[285];
@@ -185,6 +185,7 @@ typedef struct Instruction {
     int ignoreR;
     int ignoreL;
     int distanceToTarget;
+    enum OrientationState orientation;
 } Instruction;
 
 // PATHFINDING PROCESSING *====================
@@ -216,6 +217,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             instructionsList[listIndex].distanceToTarget = 0;
             instructionsList[listIndex].ignoreL = 0;
             instructionsList[listIndex].ignoreR = 0;
+            instructionsList[listIndex].orientation = previousRobotOrientation;
             listIndex++;
             printf("Stop at target\n");
             break;
@@ -438,6 +440,7 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
             instructionsList[listIndex].ignoreL = ignoreL;
             instructionsList[listIndex].ignoreR = ignoreR;
             instructionsList[listIndex].distanceToTarget = distanceToTarget + 1;
+            instructionsList[listIndex].orientation = previousRobotOrientation;
             listIndex++; // increment instruction list index
         }
         numSteps--; // decrement numSteps
@@ -455,6 +458,7 @@ void processInstructionList(int index) {
                 finalInstructionList[j].ignoreL = instructionsList[i].ignoreL;
                 finalInstructionList[j].ignoreR = instructionsList[i].ignoreR; // skip all the repeated forwards
                 finalInstructionList[j].distanceToTarget = instructionsList[i].distanceToTarget; // accounts for the block we're currently in
+                finalInstructionList[j].orientation = instructionsList[i].orientation;
                 j++; // move to next element in finalInstructionList
             }
     }
