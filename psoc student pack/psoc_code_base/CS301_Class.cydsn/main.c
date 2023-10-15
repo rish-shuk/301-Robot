@@ -158,9 +158,8 @@ int main() {
     instructionList = findPath(map, food_list, currentFoodListIndex, Up); // initialise with starting orientation
     
     currentInstruction = GetInstructionAtIndex(); // initialise instruction
-    
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
-    currentIgnoreR = instructionList[instructionIndex].ignoreR;
+    currentIgnoreR = instructionList[instructionIndex].ignoreR; // initialise ignores
     
     isr_speed_StartEx(speedTimer); // start interrupt
     isr_Timer_LED_StartEx(TIMER_FINISH);
@@ -349,7 +348,6 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (s4) {
                 rightStatusFlag = 1;
             }
-            
             
             // LEFT WING CHECK =-=-=-=-=-=-=-=-=-=-=
             if (leftStatusFlag) {
@@ -685,7 +683,6 @@ void MoveToNextInstruction() {
     instructionIndex++; // increment instruction index
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
     currentIgnoreR = instructionList[instructionIndex].ignoreR; // update ignores
-
 }
 
 Instruction GetInstructionAtIndex() {
