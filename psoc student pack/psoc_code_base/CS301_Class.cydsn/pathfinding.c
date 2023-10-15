@@ -24,6 +24,7 @@ enum OrientationState previousRobotOrientation, currentRobotOrientation; // init
 static Instruction instructionsList[285];
 static Instruction finalInstructionList[285];
 static int numSteps = 0;
+int listIndex = 0;
 
 uint8_t instructionsListLength();
 void checkIgnoreTurn(enum OrientationState currentRobotOrientation, int currentRow, int currentCol);
@@ -53,12 +54,12 @@ int map[15][19] = {
 */
 
 int food_list[6][2]= {
-{7,17}, // first element is our start position
-{1,17},
+{1,1}, // first element is our start position
+{9,1},
+{5,5},
+{1,7},
 {5,13},
-{5,17},
-{3,9},
-{3,13}
+{9,9}
 };
 
 // MAP INITIALISATION CODE
@@ -214,7 +215,6 @@ int distanceToTarget = 0;
 void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Location startLocation, struct Location targetLocation) {
     int currentRow = startLocation.row; 
     int currentCol = startLocation.col; // initialise with start
-    int listIndex = 0;
     int targetOrientation = getTargetOrientation(targetLocation.row, targetLocation.col);
     // given path, traverse it by calculating number of turns/ turns to skip between each junction
     while(numSteps >= 0) {

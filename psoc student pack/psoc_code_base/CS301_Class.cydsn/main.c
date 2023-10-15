@@ -155,9 +155,9 @@ int main() {
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     
     // MAKE SURE TO INITIALISE CORRECT ORIENTATION
-    instructionList = findPath(map, food_list, currentFoodListIndex, Up); // initialise with starting orientation
+    instructionList = findPath(map, food_list, currentFoodListIndex, Down); // initialise with starting orientation
     
-    currentInstruction = GetInstructionAtIndex(); // initialise instruction
+    currentInstruction = GetInstructionAtIndex(); // initialise instructiony
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
     currentIgnoreR = instructionList[instructionIndex].ignoreR; // initialise ignores
     
