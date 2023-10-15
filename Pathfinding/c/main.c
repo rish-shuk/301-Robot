@@ -446,13 +446,12 @@ void getPathInstructions(int map[MAX_ROWS][MAX_COLS], int numSteps, struct Locat
         }
         numSteps--; // decrement numSteps
     }
-    processInstructionList();
 }
 static Instruction finalInstructionList[285];
 
 void processInstructionList() {
     // remove repeated forwards and add other instructions to one list
-    for(int i = finalListIndex; i < 285; i ++) {
+    for(int i = 0; i < 285; i ++) {
         if(instructionsList[i].direction != instructionsList[i+1].direction) {
             finalInstructionList[finalListIndex].direction = instructionsList[i].direction;
             finalInstructionList[finalListIndex].ignoreL = instructionsList[i].ignoreL;
@@ -460,9 +459,6 @@ void processInstructionList() {
             finalInstructionList[finalListIndex].distanceToTarget = instructionsList[i].distanceToTarget; // accounts for the block we're currently in
             finalInstructionList[finalListIndex].orientation = instructionsList[i].orientation;
             finalListIndex++; // update list index for future additions to list
-            if(finalInstructionList[finalListIndex-1].direction == StopAtTarget) {
-                break; // no need to continue after stop at target direction is given
-            }
         }
     }
 }
@@ -566,8 +562,8 @@ int main() {
         clearMap(map); // clear map in between each pass
         dijkstra(map, startLocation, targetLocation); // calculate path
         getPathInstructions(map, numSteps, startLocation, targetLocation); // get instructions
-        processInstructionList();
     }
-
+    processInstructionList();
+    printf("test\n");
     return 0;
 }
