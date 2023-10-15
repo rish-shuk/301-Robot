@@ -157,7 +157,7 @@ int main() {
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     
     // MAKE SURE TO CHANGE ORIENTATION
-    instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, Down); // initialise with starting orientation
+    instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, Up); // initialise with starting orientation
     numSteps = instructionsListLength();
     
     currentInstruction = GetInstructionAtIndex();
@@ -371,12 +371,16 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
-                    if (currentIgnoreL != 0 && forwardAfterTurnLIgnore > 0) {
+                    if (currentIgnoreR != 0 && forwardAfterTurnLIgnore > 0) {
                         forwardAfterTurnLIgnore--;
                     } else {
                         if (currentIgnoreL == 0) {
-                            MoveToNextInstruction();
-                            return Stop;
+                            if (forwardAfterTurnLIgnore > 0) {
+                                forwardAfterTurnLIgnore--;
+                            } else {
+                                //MoveToNextInstruction();
+                                return Stop;
+                            }
                         }
                         if (currentIgnoreL > 0) {
                             currentIgnoreL--;    
@@ -392,8 +396,12 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                         forwardAfterTurnRIgnore--;
                     } else {
                         if (currentIgnoreR == 0) {
-                            MoveToNextInstruction();
-                            return Stop;
+                            if (forwardAfterTurnRIgnore > 0) {
+                                forwardAfterTurnRIgnore--;
+                            } else {
+                                //MoveToNextInstruction();
+                                return Stop;
+                            }
                         }
                         if (currentIgnoreR > 0) {
                             currentIgnoreR--;   
@@ -404,6 +412,11 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                    
             }
             
+            if (currentIgnoreL == 0 || currentIgnoreR == 0) {
+                if (forwardAfterTurnLIgnore == 0 || forwardAfterTurnRIgnore == 0) {
+                    MoveToNextInstruction();                    
+                }
+            }
           
             return ForwardCourseCorrection();
             break;
@@ -565,6 +578,8 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 forwardUntilTargetStartedFlag = 1;
                 //uTurnIgnoreL = 0;
                 //uTurnIgnoreR = 0;
+                forwardAfterTurnLIgnore = 0;
+                forwardAfterTurnRIgnore = 0;
                 //blockSizeTotal = CalculateDistanceToTravel(blocksize);
                 int blocksToTarget = currentInstruction.distanceToTarget;
                 blockSizeTotal = blocksize * blocksToTarget;
@@ -583,7 +598,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 if (currentInstruction.ignoreL == 0 && !s3) {
                     leftStatusFlag = 0;    
                     forwardAfterTurnRIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
-                    return Backward;
+                    return ForwardCourseCorrection();
                 }
             }
             // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
@@ -591,7 +606,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 if (currentInstruction.ignoreR == 0 && !s4) {
                     rightStatusFlag = 0;
                     forwardAfterTurnLIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
-                    return Backward; // CHEECK IF CONDITION IS ACTUALLY BEING FULFILLED
+                    return ForwardCourseCorrection(); // CHEECK IF CONDITION IS ACTUALLY BEING FULFILLED
                 }
             }
             // FLAG CHECKS FOR UTURN STATE
