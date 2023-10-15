@@ -27,7 +27,6 @@ enum RobotMovement GetMovementAccordingToInstruction();
 enum OrientationState currentRobotOrientation, previousOrientation = Down;
 Instruction currentInstruction;
 Instruction previousInstruction;
-int numSteps;
 Instruction * instructionList; // pointer to array
 volatile static uint32 instructionIndex = 0;
 Instruction GetInstructionAtIndex();
@@ -155,11 +154,10 @@ int main() {
     ResetSensorFlags();
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     
-    // MAKE SURE TO CHANGE ORIENTATION
-    instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, Up); // initialise with starting orientation
-    numSteps = instructionsListLength();
+    // MAKE SURE TO INITIALISE CORRECT ORIENTATION
+    instructionList = findPath(map, food_list, currentFoodListIndex, Up); // initialise with starting orientation
     
-    currentInstruction = GetInstructionAtIndex();
+    currentInstruction = GetInstructionAtIndex(); // initialise instruction
     
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
     currentIgnoreR = instructionList[instructionIndex].ignoreR;
@@ -176,11 +174,7 @@ int main() {
     {
         if(timerInt == 1) {
             timerInt = 0;
-            // calculate RPM of M2
-            quadCountToRPM(quadDec2Count);
-            //sprintf(buffer, "%lu", totalDistance);
-            //usbPutString(buffer);
-            //usbPutString(" ");
+            quadCountToRPM(quadDec2Count); // calculate RPM of M2
         }
     }
     return 0;
@@ -338,15 +332,6 @@ enum RobotMovement GetMovementAccordingToInstruction() {
         //      If Ignore Count = 0, move to next instruction.
     
     enum InstructionDirection currentInstructionDirection = currentInstruction.direction;
-    
-    /*
-    if (instructionList[instructionIndex + 1].direction == uTurn && currentInstructionDirection == ForwardUntilTarget) {
-        if (s5 && s6) {
-            MoveToNextInstruction(); // case to start uTurns when needed. prevents uTurn overshooting
-            return Stop;
-        }
-    }
-    */
     
     switch (currentInstructionDirection) {
         case GoForward:
@@ -572,6 +557,15 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             return ForwardCourseCorrection(); 
             break;
         case ForwardUntilTarget:       
+            /*
+            TEST THIS- FIX DEAD END OVERSHOOT
+            if (instructionList[instructionIndex + 1].direction == uTurn && currentInstructionDirection == ForwardUntilTarget) {
+                if (s5 && s6) {
+                    MoveToNextInstruction(); // case to start uTurns when needed. prevents uTurn overshooting
+                    return Stop;
+                }
+            }
+            */
             // Reset distance on first iteration of this instruction
             if (!forwardUntilTargetStartedFlag) {
                 forwardUntilTargetStartedFlag = 1;
@@ -614,8 +608,6 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (totalDistance >= blockSizeTotal && (currentInstruction.ignoreL > 0 && currentInstruction.ignoreR > 0)) {
                 // Get next instruction
                 MoveToNextInstruction();
-
-                
                 return Stop;
             }
             else if (totalDistance >= blockSizeTotal || (currentInstruction.ignoreL == 0 || currentInstruction.ignoreR == 0)) {
@@ -651,7 +643,6 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     stopBuffer = 100;    
                 }
             }
-            
             
             if (!uTurnStartedFlag) {
                 uTurnStartedFlag = 1;
@@ -691,11 +682,9 @@ enum RobotMovement GetMovementAccordingToInstruction() {
 void MoveToNextInstruction() {
     currentIgnoreL = 0;
     currentIgnoreR = 0;
-
-    instructionIndex++;
-    
+    instructionIndex++; // increment instruction index
     currentIgnoreL = instructionList[instructionIndex].ignoreL;
-    currentIgnoreR = instructionList[instructionIndex].ignoreR;
+    currentIgnoreR = instructionList[instructionIndex].ignoreR; // update ignores
 
 }
 

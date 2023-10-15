@@ -534,7 +534,7 @@ uint8_t instructionsListLength() {
     return numSteps;
 }
 
-Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation) {
+Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation) {
     struct Location startLocation, targetLocation;
     for(int i = 0; i < 5; i++) {
         clearMap(map);

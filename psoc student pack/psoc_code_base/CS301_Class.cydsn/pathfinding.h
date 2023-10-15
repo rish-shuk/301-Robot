@@ -21,8 +21,6 @@ typedef struct Instruction {
     enum OrientationState expectedOrientation;
 } Instruction;
 
-
-
 struct Location
 {
     int row;
@@ -44,5 +42,5 @@ uint8_t getTargetOrientation(int targetRow, int targetCol);
 void processInstructionList();
 uint8_t instructionsListLength(); 
 
-Instruction * findPathNewOrientation(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation);
+Instruction * findPath(int map[MAX_ROWS][MAX_COLS], int food_list[6][2], int i, enum OrientationState orientation);
 #endif /* MAP_FUNCTIONS_H */
