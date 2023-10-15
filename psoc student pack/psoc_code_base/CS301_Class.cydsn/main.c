@@ -28,7 +28,6 @@ enum OrientationState currentRobotOrientation, previousOrientation = Down;
 Instruction currentInstruction;
 Instruction previousInstruction;
 int numSteps;
-void traversePath(int numSteps, Instruction instructionList[]);
 Instruction * instructionList; // pointer to array
 volatile static uint32 instructionIndex = 0;
 Instruction GetInstructionAtIndex();
@@ -626,12 +625,11 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             
             return ForwardCourseCorrection();
             break;
-        case StopAtTarget:
-            // Reset Forward Until Target Flags (Had to move in here to make it work)
-            // Reset flags
-            totalDistance = 0;
-            forwardUntilTargetStartedFlag = 0;
-            blockSizeTotal = 0;
+
+        case StopAtTarget: // just need to move to next instruction
+            totalDistance = 0; // reset distance 
+            forwardUntilTargetStartedFlag = 0; // reset flag
+            blockSizeTotal = 0; // reset block size
             
             if (currentDirection == Stop) {
                 if (stopBuffer <= 100) {
@@ -640,26 +638,11 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                     stopBuffer = 250;
                 }
             }
-            
-            // RESET EVERYTHING AND FIND NEW PATH FOR NEXT FOOD LIST
-            // Make sure index doesn't go over cap
-            // Stop at final location
-            if (currentFoodListIndex == 4) {
-                return Stop;    
-            }
-            
-            currentFoodListIndex++;
-            instructionIndex = 0;
-            instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, currentInstruction.expectedOrientation);
-            numSteps = instructionsListLength();
     
-            currentInstruction = GetInstructionAtIndex();
-
-            currentIgnoreL = instructionList[instructionIndex].ignoreL;
-            currentIgnoreR = instructionList[instructionIndex].ignoreR;
-            
+            MoveToNextInstruction(); // simply move to next instruction
             return Stop;
             break;
+
         case uTurn:
             if (currentDirection == Stop) {
                 if (stopBuffer <= 50) {
