@@ -371,43 +371,27 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
-                    if (currentIgnoreR != 0 && forwardAfterTurnLIgnore > 0) {
-                        forwardAfterTurnLIgnore--;
-                    } else {
-                        if (currentIgnoreL == 0) {
-                            if (forwardAfterTurnLIgnore > 0) {
-                                forwardAfterTurnLIgnore--;
-                            } else {
-                                //MoveToNextInstruction();
-                                return Stop;
-                            }
-                        }
-                        if (currentIgnoreL > 0) {
-                            currentIgnoreL--;    
-                        }
+                    if (currentIgnoreL == 0) {
+                        MoveToNextInstruction();
+                        return Stop;
                     }
+                    if (currentIgnoreL > 0) {
+                        currentIgnoreL--;    
+                    }
+                    
                 }
             }
             // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
             if (rightStatusFlag) {
                 if (!s4) {
                     rightStatusFlag = 0;           
-                    if (currentIgnoreR != 0 && forwardAfterTurnRIgnore > 0) {
-                        forwardAfterTurnRIgnore--;
-                    } else {
-                        if (currentIgnoreR == 0) {
-                            if (forwardAfterTurnRIgnore > 0) {
-                                forwardAfterTurnRIgnore--;
-                            } else {
-                                //MoveToNextInstruction();
-                                return Stop;
-                            }
-                        }
-                        if (currentIgnoreR > 0) {
-                            currentIgnoreR--;   
-                        }
+                    if (currentIgnoreR == 0) {
+                        MoveToNextInstruction();
+                        return Stop;
                     }
-                    
+                    if (currentIgnoreR > 0) {
+                        currentIgnoreR--;   
+                    }
                 }
                    
             }
@@ -585,42 +569,12 @@ enum RobotMovement GetMovementAccordingToInstruction() {
                 blockSizeTotal = blocksize * blocksToTarget;
             }
             
-            if (s3) {
-                leftStatusFlag = 1;
-            }
-            
-            if (s4) {
-                rightStatusFlag = 1;
-            }
-            // FLAG CHECKS FOR UTURN STATE
-            // LEFT WING CHECK =-=-=-=-=-=-=-=-=-=-=
-            if (leftStatusFlag) {
-                if (currentInstruction.ignoreL == 0 && !s3) {
-                    leftStatusFlag = 0;    
-                    forwardAfterTurnRIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
-                    return ForwardCourseCorrection();
-                }
-            }
-            // RIGHT WING CHECK =-=-=-=-=-=-=-=-=-=-=
-            if (rightStatusFlag) {
-                if (currentInstruction.ignoreR == 0 && !s4) {
-                    rightStatusFlag = 0;
-                    forwardAfterTurnLIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
-                    return ForwardCourseCorrection(); // CHEECK IF CONDITION IS ACTUALLY BEING FULFILLED
-                }
-            }
-            // FLAG CHECKS FOR UTURN STATE
-            
             // If totalDistance >= blockSizeTotal then we should be at target
-            if (totalDistance >= blockSizeTotal && (currentInstruction.ignoreL > 0 && currentInstruction.ignoreR > 0)) {
+            if (totalDistance >= blockSizeTotal) {
                 // Get next instruction
                 MoveToNextInstruction();
 
                 
-                return Stop;
-            }
-            else if (totalDistance >= blockSizeTotal || (currentInstruction.ignoreL == 0 || currentInstruction.ignoreR == 0)) {
-                MoveToNextInstruction();
                 return Stop;
             }
             
