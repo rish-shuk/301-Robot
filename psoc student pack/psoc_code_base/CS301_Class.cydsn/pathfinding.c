@@ -63,12 +63,12 @@ int food_list[6][2]= {
 */
 
 int food_list[6][2]= {
-{1,1}, // first element is our start position
-{9,1},
-{5,5},
-{1,7},
-{5,13},
-{9,9}
+{9,7}, // first element is our start position
+{3,5},
+{3,1},
+{7,11},
+{1,17},
+{13,15}
 };
 
 
