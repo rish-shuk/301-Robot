@@ -51,16 +51,6 @@ int map[15][19] = {
 /*
 *0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,
 */
-/*
-int food_list[6][2]= {
-{1,1}, // first element is our start position
-{3,3},
-{1,1},
-{3,3},
-{1,1},
-{3,3}
-};
-*/
 
 int food_list[6][2]= {
 {9,7}, // first element is our start position

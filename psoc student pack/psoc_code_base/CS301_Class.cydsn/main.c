@@ -157,7 +157,7 @@ int main() {
     init(); // initialise clocks, pwms, adc, dac etc- done in header file
     
     // MAKE SURE TO CHANGE ORIENTATION
-    instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, Down); // initialise with starting orientation
+    instructionList = findPathNewOrientation(map, food_list, currentFoodListIndex, Right); // initialise with starting orientation
     numSteps = instructionsListLength();
     
     currentInstruction = GetInstructionAtIndex();
