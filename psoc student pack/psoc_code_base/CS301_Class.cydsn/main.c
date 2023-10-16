@@ -207,7 +207,7 @@ void ResetSensorFlags() {
 }
 
 float xBlocksize = 116; // 122 mm
-float yBlocksize = 72; // 80 mm
+float yBlocksize = 75; // 80 mm
 uint8 currentRow = 1;
 uint8 currentCol = 1;
 
@@ -582,7 +582,7 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (leftStatusFlag) {
                 if (!s3) {
                     leftStatusFlag = 0;    
-                    forwardAfterTurnRIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
+                    //forwardAfterTurnRIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
                     return Backward;
                 }
             }
@@ -590,18 +590,17 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             if (rightStatusFlag) {
                 if (!s4) {
                     rightStatusFlag = 0;
-                    forwardAfterTurnLIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
+                    //forwardAfterTurnLIgnore++; // TRYING TO FIX UTURN EDGE CASE BY INCREMENTING OPPOSITE IGNORE COUNT
                     return Backward; // CHEECK IF CONDITION IS ACTUALLY BEING FULFILLED
                 }
             }
             // FLAG CHECKS FOR UTURN STATE
             
             // If totalDistance >= blockSizeTotal then we should be at target
-            if (totalDistance >= blockSizeTotal && (currentInstruction.ignoreL > 0 && currentInstruction.ignoreR > 0)) {
+            if ((totalDistance >= blockSizeTotal && (currentInstruction.ignoreL > 0 && currentInstruction.ignoreR > 0)) || (totalDistance >= blockSizeTotal * 0.95 && (s3 || s4))) {
+                // added new move to next instruction condition- will move to next instruction if within 1 block of target and it hits dark, ie a t junction
                 // Get next instruction
                 MoveToNextInstruction();
-
-                
                 return Stop;
             }
             else if (totalDistance >= blockSizeTotal || (currentInstruction.ignoreL == 0 || currentInstruction.ignoreR == 0)) {
@@ -663,14 +662,37 @@ enum RobotMovement GetMovementAccordingToInstruction() {
             
             if (uTurnFinishedFlag) {
                 // MOVE TO NEXT INSTRUCTION
-                uTurnFinishedFlag = 0;
-                uTurnStartedFlag = 0;
-                MoveToNextInstruction();
-                return Stop;    
+
+                // if wing sensors are still on black after a uturn
+                // move forward buffer until we are no longer on black
+                // once both sensors are on white, move to next instruction
+                
+                if ((!s3 || !s4) && forwardBuffer <= 9) {
+                    return ForwardCourseCorrection();    
+
+                } else if (!s3 || !s4) {
+                    forwardBuffer = 0;   
+                } else {
+                    forwardBuffer = 100;
+                    uTurnFinishedFlag = 0;
+                    uTurnStartedFlag = 0;
+                    MoveToNextInstruction();   
+                    return Stop;  
+                }
             }
             
             // Repeat SpinCourseCorrection until both or one on black
             if (uTurnStartedFlag) {
+                if ((instructionList[instructionIndex + 1].direction == waitForLeftTurn ||
+                    instructionList[instructionIndex + 1].direction == waitForRightTurn) && (s5 && s6)) {
+                        totalLineCount = 0;
+                        lineCount = 0;
+                        tooEarlyFlag = 0;
+                        tooLateFlag = 0;
+                        uTurnFinishedFlag = 1;
+                        return Stop;
+                    }
+                
                 if (!s5 && !s6) {
                     totalLineCount = 0;
                     lineCount = 0;
